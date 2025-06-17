@@ -51,9 +51,9 @@ export default function LoginPage() {
       alert(message)
 
       if (user.role === "lawyer") {
-        router.push("/lawyer/dashboard")
+        router.push("/")
       } else {
-        router.push("/user/dashboard")
+        router.push("/")
       }
     } catch (error: any) {
       alert(error.response?.data?.message || "Login failed")
