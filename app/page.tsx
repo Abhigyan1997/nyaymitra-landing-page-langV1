@@ -94,7 +94,7 @@ export default function HomePage() {
         home: "Home",
         services: "Services",
         lawyers: "Find Lawyers",
-        legalGPT: "Legal AI",
+        legalGPT: "Legal GPT",
         about: "About",
         contact: "Contact",
         login: "Login",
@@ -268,10 +268,10 @@ export default function HomePage() {
         quickLinks: "Quick Links",
         legal: "Legal",
         contact: "Contact Us",
-        address: "123 Legal Plaza, Connaught Place, New Delhi - 110001",
-        email: "support@nyaymitra.com",
+        address: "Ramsar, Bhagalpur, Bihar - 812002",
+        email: "nyaymitra.ai@gmail.com",
         phone: "+91 11 4567 8900",
-        whatsapp: "+91 98765 43210",
+        whatsapp: "+91 79705 96183",
         privacy: "Privacy Policy",
         terms: "Terms of Service",
         disclaimer: "Legal Disclaimer",
@@ -286,7 +286,7 @@ export default function HomePage() {
         home: "होम",
         services: "सेवाएं",
         lawyers: "वकील खोजें",
-        legalGPT: "लीगल AI",
+        legalGPT: "लीगल GPT",
         about: "हमारे बारे में",
         contact: "संपर्क",
         login: "लॉगिन",
@@ -460,10 +460,10 @@ export default function HomePage() {
         quickLinks: "त्वरित लिंक",
         legal: "कानूनी",
         contact: "संपर्क करें",
-        address: "123 लीगल प्लाजा, कनॉट प्लेस, नई दिल्ली - 110001",
-        email: "support@nyaymitra.com",
+        address: "रामसर, भागलपुर, बिहार - 812002",
+        email: "nyaymitra.ai@gmail.com",
         phone: "+91 11 4567 8900",
-        whatsapp: "+91 98765 43210",
+        whatsapp: "+91 79705 96183",
         privacy: "गोपनीयता नीति",
         terms: "सेवा की शर्तें",
         disclaimer: "कानूनी अस्वीकरण",
@@ -536,7 +536,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center space-x-1">
                   <TrendingUp className="h-3 w-3" />
-                  <span>1M+ Active Users</span>
+                  <span>1k+ Active Users</span>
                 </div>
               </div>
             </div>
@@ -607,7 +607,11 @@ export default function HomePage() {
                   .map(([key, value], index) => (
                     <Link
                       key={key}
-                      href={key === "home" ? "/" : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`}
+                      href={
+                        key === "home" ? "/" :
+                          key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
+                            `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
+                      }
                       className="relative text-white/70 hover:text-white px-4 py-3 text-sm font-medium transition-all duration-500 group"
                     >
                       <div className="relative z-10 flex items-center space-x-2">
@@ -886,7 +890,7 @@ export default function HomePage() {
               <div className="flex items-center space-x-8 pt-4">
                 <div className="flex items-center space-x-3">
                   <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-white/70 text-sm">Trusted by 1M+ users</span>
+                  <span className="text-white/70 text-sm">Trusted by 1K+ users</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="h-5 w-5 text-blue-400" />
@@ -1302,10 +1306,10 @@ export default function HomePage() {
                   <Mail className="h-5 w-5 text-blue-400" />
                   <span className="text-white/80">{t.footer.email}</span>
                 </div>
-                <div className="flex items-center space-x-3">
+                {/* <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-blue-400" />
                   <span className="text-white/80">{t.footer.email}</span>
-                </div>
+                </div> */}
                 <div className="flex items-center space-x-3">
                   <PhoneCall className="h-5 w-5 text-blue-400" />
                   <span className="text-white/80">{t.footer.phone}</span>
