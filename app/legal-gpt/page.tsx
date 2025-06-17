@@ -1,11 +1,25 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Scale } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 
 export default function LegalGPTPage() {
+  const router = useRouter()
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (!token) {
+      router.push("/auth/login")
+    } else {
+      setIsLoggedIn(true)
+    }
+  }, [router])
+
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
       {/* Background Effects */}
@@ -29,9 +43,11 @@ export default function LegalGPTPage() {
                   Find Lawyers
                 </Button>
               </Link>
-              <Link href="/auth/login">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-500">Login</Button>
-              </Link>
+              {!isLoggedIn && (
+                <Link href="/auth/login">
+                  <Button className="bg-gradient-to-r from-blue-500 to-purple-500">Login</Button>
+                </Link>
+              )}
             </div>
           </div>
         </div>

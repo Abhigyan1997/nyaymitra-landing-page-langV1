@@ -1,11 +1,12 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useCallback } from "react"
+import { useRouter } from "next/navigation" // Import useRouter for redirection
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import axios from "axios"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -13,13 +14,91 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Scale, Eye, EyeOff, Mail, Lock, User, Shield, Phone, MapPin, Award } from "lucide-react"
 import Link from "next/link"
 
+// --- Type Definitions ---
+interface BaseFormData {
+  fullName: string // Changed from firstName and lastName
+  email: string
+  phone: string
+  password: string
+  confirmPassword: string
+  agreeToTerms: boolean
+  subscribeNewsletter: boolean
+}
+
+interface UserFormData extends BaseFormData { }
+
+interface LawyerFormData extends BaseFormData {
+  barCouncilNumber: string
+  specialization: string
+  experience: string
+  state: string
+  city: string
+}
+
+type UserType = "user" | "lawyer"
+
+// --- Constants ---
+const BASE_API_URL = "https://nyaymitra-backend.onrender.com/api/v1/auth"
+
+const SPECIALIZATIONS = [
+  "Criminal Law",
+  "Family Law",
+  "Property Law",
+  "Corporate Law",
+  "Consumer Rights",
+  "Cyber Law",
+  "Labor Law",
+  "Tax Law",
+  "Immigration Law",
+  "Intellectual Property",
+  "Environmental Law",
+  "Constitutional Law",
+]
+
+const INDIAN_STATES = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+]
+
+// --- Main Signup Page Component ---
 export default function SignupPage() {
+  const router = useRouter() // Initialize the router for navigation
+
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [userType, setUserType] = useState<"user" | "lawyer">("user")
-  const [userFormData, setUserFormData] = useState({
-    firstName: "",
-    lastName: "",
+  const [userType, setUserType] = useState<UserType>("user")
+
+  const [userFormData, setUserFormData] = useState<UserFormData>({
+    fullName: "",
     email: "",
     phone: "",
     password: "",
@@ -27,9 +106,9 @@ export default function SignupPage() {
     agreeToTerms: false,
     subscribeNewsletter: false,
   })
-  const [lawyerFormData, setLawyerFormData] = useState({
-    firstName: "",
-    lastName: "",
+
+  const [lawyerFormData, setLawyerFormData] = useState<LawyerFormData>({
+    fullName: "",
     email: "",
     phone: "",
     password: "",
@@ -43,68 +122,91 @@ export default function SignupPage() {
     subscribeNewsletter: false,
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const formData = userType === "user" ? userFormData : lawyerFormData
-    console.log("Signup attempt:", { ...formData, userType })
-  }
+  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false) // New loading state
 
-  const handleUserInputChange = (field: string, value: string | boolean) => {
-    setUserFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  // Unified input change handler
+  const handleInputChange = useCallback(
+    (form: UserType, field: keyof UserFormData | keyof LawyerFormData, value: string | boolean) => {
+      if (form === "user") {
+        setUserFormData((prev) => ({ ...prev, [field]: value }))
+      } else {
+        setLawyerFormData((prev) => ({ ...prev, [field]: value }))
+      }
+    },
+    [],
+  )
 
-  const handleLawyerInputChange = (field: string, value: string | boolean) => {
-    setLawyerFormData((prev) => ({ ...prev, [field]: value }))
-  }
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault()
+      setMessage("")
+      setError("")
+      setIsLoading(true) // Set loading true on submission
 
-  const specializations = [
-    "Criminal Law",
-    "Family Law",
-    "Property Law",
-    "Corporate Law",
-    "Consumer Rights",
-    "Cyber Law",
-    "Labor Law",
-    "Tax Law",
-    "Immigration Law",
-    "Intellectual Property",
-    "Environmental Law",
-    "Constitutional Law",
-  ]
+      try {
+        const url = userType === "user" ? `${BASE_API_URL}/register-user` : `${BASE_API_URL}/register-lawyer`
+        const data = userType === "user" ? userFormData : lawyerFormData
 
-  const states = [
-    "Andhra Pradesh",
-    "Arunachal Pradesh",
-    "Assam",
-    "Bihar",
-    "Chhattisgarh",
-    "Goa",
-    "Gujarat",
-    "Haryana",
-    "Himachal Pradesh",
-    "Jharkhand",
-    "Karnataka",
-    "Kerala",
-    "Madhya Pradesh",
-    "Maharashtra",
-    "Manipur",
-    "Meghalaya",
-    "Mizoram",
-    "Nagaland",
-    "Odisha",
-    "Punjab",
-    "Rajasthan",
-    "Sikkim",
-    "Tamil Nadu",
-    "Telangana",
-    "Tripura",
-    "Uttar Pradesh",
-    "Uttarakhand",
-    "West Bengal",
-    "Delhi",
-    "Jammu and Kashmir",
-    "Ladakh",
-  ]
+        // Basic client-side validation for passwords
+        if (data.password !== data.confirmPassword) {
+          setError("Passwords do not match.")
+          setIsLoading(false)
+          return
+        }
+
+        const response = await axios.post(url, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+
+        if (response.status === 201) {
+          setMessage(response.data.message || "Registration successful! Redirecting to login...")
+          // Reset form data after successful submission
+          if (userType === "user") {
+            setUserFormData({
+              fullName: "",
+              email: "",
+              phone: "",
+              password: "",
+              confirmPassword: "",
+              agreeToTerms: false,
+              subscribeNewsletter: false,
+            })
+          } else {
+            setLawyerFormData({
+              fullName: "",
+              email: "",
+              phone: "",
+              password: "",
+              confirmPassword: "",
+              barCouncilNumber: "",
+              specialization: "",
+              experience: "",
+              state: "",
+              city: "",
+              agreeToTerms: false,
+              subscribeNewsletter: false,
+            })
+          }
+          // Redirect to login page after a short delay
+          setTimeout(() => {
+            router.push("/auth/login")
+          }, 1500) // Redirect after 1.5 seconds, giving the user time to read the success message
+        } else {
+          setError("Unexpected response from server.")
+        }
+      } catch (err: any) {
+        setError(err?.response?.data?.message || "Registration failed. Please try again.")
+        console.error("Signup error:", err) // Log error for debugging
+      } finally {
+        setIsLoading(false) // Always reset loading state
+      }
+    },
+    [userType, userFormData, lawyerFormData, router], // Add router to dependencies
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -126,7 +228,7 @@ export default function SignupPage() {
           <CardContent>
             <Tabs
               value={userType}
-              onValueChange={(value) => setUserType(value as "user" | "lawyer")}
+              onValueChange={(value) => setUserType(value as UserType)}
               className="w-full"
             >
               <TabsList className="grid w-full grid-cols-2">
@@ -148,10 +250,13 @@ export default function SignupPage() {
                   formData={userFormData}
                   showPassword={showPassword}
                   showConfirmPassword={showConfirmPassword}
-                  onInputChange={handleUserInputChange}
+                  onInputChange={(field, value) => handleInputChange("user", field, value)}
                   onTogglePassword={() => setShowPassword(!showPassword)}
                   onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
                   onSubmit={handleSubmit}
+                  isLoading={isLoading} // Pass loading state
+                  message={message}
+                  error={error}
                 />
               </TabsContent>
 
@@ -163,12 +268,15 @@ export default function SignupPage() {
                   formData={lawyerFormData}
                   showPassword={showPassword}
                   showConfirmPassword={showConfirmPassword}
-                  onInputChange={handleLawyerInputChange}
+                  onInputChange={(field, value) => handleInputChange("lawyer", field, value)}
                   onTogglePassword={() => setShowPassword(!showPassword)}
                   onToggleConfirmPassword={() => setShowConfirmPassword(!showConfirmPassword)}
                   onSubmit={handleSubmit}
-                  specializations={specializations}
-                  states={states}
+                  specializations={SPECIALIZATIONS}
+                  states={INDIAN_STATES}
+                  isLoading={isLoading} // Pass loading state
+                  message={message}
+                  error={error}
                 />
               </TabsContent>
             </Tabs>
@@ -181,9 +289,8 @@ export default function SignupPage() {
             Already have an account?{" "}
             <Link href="/auth/login" className="text-blue-600 hover:underline font-medium">
               Sign in here
-            </Link>
-          </p>
-          <p className="text-sm text-gray-600">
+            </Link>{" "}
+            or{" "}
             <Link href="/" className="text-blue-600 hover:underline">
               Back to Home
             </Link>
@@ -194,6 +301,74 @@ export default function SignupPage() {
   )
 }
 
+// --- Common Input Field Component for Reusability ---
+interface FormInputFieldProps {
+  id: string
+  label: string
+  type?: React.HTMLInputTypeAttribute
+  placeholder: string
+  value: string
+  onChange: (value: string) => void
+  icon?: React.ElementType
+  required?: boolean
+  showPasswordToggle?: boolean
+  onTogglePassword?: () => void
+}
+
+function FormInputField({
+  id,
+  label,
+  type = "text",
+  placeholder,
+  value,
+  onChange,
+  icon: Icon,
+  required = false,
+  showPasswordToggle = false,
+  onTogglePassword,
+}: FormInputFieldProps) {
+  return (
+    <div className="space-y-2">
+      <Label htmlFor={id}>{label}</Label>
+      <div className="relative">
+        {Icon && <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />}
+        <Input
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={Icon ? "pl-10" : ""}
+          required={required}
+        />
+        {showPasswordToggle && (
+          <button
+            type="button"
+            onClick={onTogglePassword}
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            {type === "password" ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// --- User Signup Form Component ---
+interface UserSignupFormProps {
+  formData: UserFormData
+  showPassword: boolean
+  showConfirmPassword: boolean
+  onInputChange: (field: keyof UserFormData, value: string | boolean) => void
+  onTogglePassword: () => void
+  onToggleConfirmPassword: () => void
+  onSubmit: (e: React.FormEvent) => void
+  isLoading: boolean // Added isLoading prop
+  message: string
+  error: string
+}
+
 function UserSignupForm({
   formData,
   showPassword,
@@ -202,126 +377,77 @@ function UserSignupForm({
   onTogglePassword,
   onToggleConfirmPassword,
   onSubmit,
-}: {
-  formData: any
-  showPassword: boolean
-  showConfirmPassword: boolean
-  onInputChange: (field: string, value: string | boolean) => void
-  onTogglePassword: () => void
-  onToggleConfirmPassword: () => void
-  onSubmit: (e: React.FormEvent) => void
-}) {
+  isLoading,
+  message,
+  error,
+}: UserSignupFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            placeholder="Enter first name"
-            value={formData.firstName}
-            onChange={(e) => onInputChange("firstName", e.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            placeholder="Enter last name"
-            value={formData.lastName}
-            onChange={(e) => onInputChange("lastName", e.target.value)}
-            required
-          />
-        </div>
-      </div>
+      <FormInputField
+        id="fullName"
+        label="Full Name"
+        placeholder="Enter your full name"
+        value={formData.fullName}
+        onChange={(value) => onInputChange("fullName", value)}
+        required
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="email"
-            type="email"
-            placeholder="Enter your email"
-            value={formData.email}
-            onChange={(e) => onInputChange("email", e.target.value)}
-            className="pl-10"
-            required
-          />
-        </div>
-      </div>
+      <FormInputField
+        id="email"
+        label="Email Address"
+        type="email"
+        placeholder="Enter your email"
+        value={formData.email}
+        onChange={(value) => onInputChange("email", value)}
+        icon={Mail}
+        required
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="phone">Phone Number</Label>
-        <div className="relative">
-          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="phone"
-            placeholder="+91 98765 43210"
-            value={formData.phone}
-            onChange={(e) => onInputChange("phone", e.target.value)}
-            className="pl-10"
-            required
-          />
-        </div>
-      </div>
+      <FormInputField
+        id="phone"
+        label="Phone Number"
+        placeholder="+91 98765 43210"
+        value={formData.phone}
+        onChange={(value) => onInputChange("phone", value)}
+        icon={Phone}
+        required
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Create a strong password"
-            value={formData.password}
-            onChange={(e) => onInputChange("password", e.target.value)}
-            className="pl-10 pr-10"
-            required
-          />
-          <button
-            type="button"
-            onClick={onTogglePassword}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
+      <FormInputField
+        id="password"
+        label="Password"
+        type={showPassword ? "text" : "password"}
+        placeholder="Create a strong password"
+        value={formData.password}
+        onChange={(value) => onInputChange("password", value)}
+        icon={Lock}
+        showPasswordToggle
+        onTogglePassword={onTogglePassword}
+        required
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={(e) => onInputChange("confirmPassword", e.target.value)}
-            className="pl-10 pr-10"
-            required
-          />
-          <button
-            type="button"
-            onClick={onToggleConfirmPassword}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
+      <FormInputField
+        id="confirmPassword"
+        label="Confirm Password"
+        type={showConfirmPassword ? "text" : "password"}
+        placeholder="Confirm your password"
+        value={formData.confirmPassword}
+        onChange={(value) => onInputChange("confirmPassword", value)}
+        icon={Lock}
+        showPasswordToggle
+        onTogglePassword={onToggleConfirmPassword}
+        required
+      />
 
       <div className="space-y-3">
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="agreeToTerms"
+            id="agreeToTermsUser"
             checked={formData.agreeToTerms}
             onCheckedChange={(checked) => onInputChange("agreeToTerms", checked as boolean)}
             required
           />
-          <Label htmlFor="agreeToTerms" className="text-sm">
+          <Label htmlFor="agreeToTermsUser" className="text-sm">
             I agree to the{" "}
             <Link href="/terms" className="text-blue-600 hover:underline">
               Terms of Service
@@ -334,21 +460,40 @@ function UserSignupForm({
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="subscribeNewsletter"
+            id="subscribeNewsletterUser"
             checked={formData.subscribeNewsletter}
             onCheckedChange={(checked) => onInputChange("subscribeNewsletter", checked as boolean)}
           />
-          <Label htmlFor="subscribeNewsletter" className="text-sm">
+          <Label htmlFor="subscribeNewsletterUser" className="text-sm">
             Subscribe to our newsletter for legal updates and tips
           </Label>
         </div>
       </div>
 
-      <Button type="submit" className="w-full" size="lg" disabled={!formData.agreeToTerms}>
-        Create User Account
+      {message && <p className="text-green-600 text-center">{message}</p>}
+      {error && <p className="text-red-600 text-center">{error}</p>}
+
+      <Button type="submit" className="w-full" size="lg" disabled={!formData.agreeToTerms || isLoading}>
+        {isLoading ? "Creating Account..." : "Create User Account"}
       </Button>
     </form>
   )
+}
+
+// --- Lawyer Signup Form Component ---
+interface LawyerSignupFormProps {
+  formData: LawyerFormData
+  showPassword: boolean
+  showConfirmPassword: boolean
+  onInputChange: (field: keyof LawyerFormData, value: string | boolean) => void
+  onTogglePassword: () => void
+  onToggleConfirmPassword: () => void
+  onSubmit: (e: React.FormEvent) => void
+  specializations: string[]
+  states: string[]
+  isLoading: boolean // Added isLoading prop
+  message: string
+  error: string
 }
 
 function LawyerSignupForm({
@@ -361,94 +506,58 @@ function LawyerSignupForm({
   onSubmit,
   specializations,
   states,
-}: {
-  formData: any
-  showPassword: boolean
-  showConfirmPassword: boolean
-  onInputChange: (field: string, value: string | boolean) => void
-  onTogglePassword: () => void
-  onToggleConfirmPassword: () => void
-  onSubmit: (e: React.FormEvent) => void
-  specializations: string[]
-  states: string[]
-}) {
+  isLoading,
+  message,
+  error,
+}: LawyerSignupFormProps) {
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="firstName"
-            placeholder="Enter first name"
-            value={formData.firstName}
-            onChange={(e) => onInputChange("firstName", e.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="lastName">Last Name</Label>
-          <Input
-            id="lastName"
-            placeholder="Enter last name"
-            value={formData.lastName}
-            onChange={(e) => onInputChange("lastName", e.target.value)}
-            required
-          />
-        </div>
-      </div>
+      <FormInputField
+        id="fullNameLawyer"
+        label="Full Name"
+        placeholder="Enter your full name"
+        value={formData.fullName}
+        onChange={(value) => onInputChange("fullName", value)}
+        required
+      />
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              id="email"
-              type="email"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={(e) => onInputChange("email", e.target.value)}
-              className="pl-10"
-              required
-            />
-          </div>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone Number</Label>
-          <div className="relative">
-            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              id="phone"
-              placeholder="+91 98765 43210"
-              value={formData.phone}
-              onChange={(e) => onInputChange("phone", e.target.value)}
-              className="pl-10"
-              required
-            />
-          </div>
-        </div>
+        <FormInputField
+          id="emailLawyer"
+          label="Email Address"
+          type="email"
+          placeholder="Enter your email"
+          value={formData.email}
+          onChange={(value) => onInputChange("email", value)}
+          icon={Mail}
+          required
+        />
+        <FormInputField
+          id="phoneLawyer"
+          label="Phone Number"
+          placeholder="+91 98765 43210"
+          value={formData.phone}
+          onChange={(value) => onInputChange("phone", value)}
+          icon={Phone}
+          required
+        />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="barCouncilNumber">Bar Council Registration Number</Label>
-        <div className="relative">
-          <Award className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="barCouncilNumber"
-            placeholder="Enter your Bar Council number"
-            value={formData.barCouncilNumber}
-            onChange={(e) => onInputChange("barCouncilNumber", e.target.value)}
-            className="pl-10"
-            required
-          />
-        </div>
-      </div>
+      <FormInputField
+        id="barCouncilNumber"
+        label="Bar Council Registration Number"
+        placeholder="Enter your Bar Council number"
+        value={formData.barCouncilNumber}
+        onChange={(value) => onInputChange("barCouncilNumber", value)}
+        icon={Award}
+        required
+      />
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="specialization">Primary Specialization</Label>
           <Select value={formData.specialization} onValueChange={(value) => onInputChange("specialization", value)}>
-            <SelectTrigger>
+            <SelectTrigger id="specialization">
               <SelectValue placeholder="Select specialization" />
             </SelectTrigger>
             <SelectContent>
@@ -463,7 +572,7 @@ function LawyerSignupForm({
         <div className="space-y-2">
           <Label htmlFor="experience">Years of Experience</Label>
           <Select value={formData.experience} onValueChange={(value) => onInputChange("experience", value)}>
-            <SelectTrigger>
+            <SelectTrigger id="experience">
               <SelectValue placeholder="Select experience" />
             </SelectTrigger>
             <SelectContent>
@@ -482,7 +591,7 @@ function LawyerSignupForm({
         <div className="space-y-2">
           <Label htmlFor="state">State</Label>
           <Select value={formData.state} onValueChange={(value) => onInputChange("state", value)}>
-            <SelectTrigger>
+            <SelectTrigger id="state">
               <SelectValue placeholder="Select state" />
             </SelectTrigger>
             <SelectContent>
@@ -494,77 +603,52 @@ function LawyerSignupForm({
             </SelectContent>
           </Select>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="city">City</Label>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <Input
-              id="city"
-              placeholder="Enter your city"
-              value={formData.city}
-              onChange={(e) => onInputChange("city", e.target.value)}
-              className="pl-10"
-              required
-            />
-          </div>
-        </div>
+        <FormInputField
+          id="city"
+          label="City"
+          placeholder="Enter your city"
+          value={formData.city}
+          onChange={(value) => onInputChange("city", value)}
+          icon={MapPin}
+          required
+        />
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            placeholder="Create a strong password"
-            value={formData.password}
-            onChange={(e) => onInputChange("password", e.target.value)}
-            className="pl-10 pr-10"
-            required
-          />
-          <button
-            type="button"
-            onClick={onTogglePassword}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
+      <FormInputField
+        id="passwordLawyer"
+        label="Password"
+        type={showPassword ? "text" : "password"}
+        placeholder="Create a strong password"
+        value={formData.password}
+        onChange={(value) => onInputChange("password", value)}
+        icon={Lock}
+        showPasswordToggle
+        onTogglePassword={onTogglePassword}
+        required
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="confirmPassword">Confirm Password</Label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            id="confirmPassword"
-            type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm your password"
-            value={formData.confirmPassword}
-            onChange={(e) => onInputChange("confirmPassword", e.target.value)}
-            className="pl-10 pr-10"
-            required
-          />
-          <button
-            type="button"
-            onClick={onToggleConfirmPassword}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-          >
-            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </button>
-        </div>
-      </div>
+      <FormInputField
+        id="confirmPasswordLawyer"
+        label="Confirm Password"
+        type={showConfirmPassword ? "text" : "password"}
+        placeholder="Confirm your password"
+        value={formData.confirmPassword}
+        onChange={(value) => onInputChange("confirmPassword", value)}
+        icon={Lock}
+        showPasswordToggle
+        onTogglePassword={onToggleConfirmPassword}
+        required
+      />
 
       <div className="space-y-3">
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="agreeToTerms"
+            id="agreeToTermsLawyer"
             checked={formData.agreeToTerms}
             onCheckedChange={(checked) => onInputChange("agreeToTerms", checked as boolean)}
             required
           />
-          <Label htmlFor="agreeToTerms" className="text-sm">
+          <Label htmlFor="agreeToTermsLawyer" className="text-sm">
             I agree to the{" "}
             <Link href="/terms" className="text-blue-600 hover:underline">
               Terms of Service
@@ -577,11 +661,11 @@ function LawyerSignupForm({
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="subscribeNewsletter"
+            id="subscribeNewsletterLawyer"
             checked={formData.subscribeNewsletter}
             onCheckedChange={(checked) => onInputChange("subscribeNewsletter", checked as boolean)}
           />
-          <Label htmlFor="subscribeNewsletter" className="text-sm">
+          <Label htmlFor="subscribeNewsletterLawyer" className="text-sm">
             Subscribe to our newsletter for legal updates and tips
           </Label>
         </div>
@@ -597,8 +681,11 @@ function LawyerSignupForm({
         </div>
       </div>
 
-      <Button type="submit" className="w-full" size="lg" disabled={!formData.agreeToTerms}>
-        Create Lawyer Account
+      {message && <p className="text-green-600 text-center">{message}</p>}
+      {error && <p className="text-red-600 text-center">{error}</p>}
+
+      <Button type="submit" className="w-full" size="lg" disabled={!formData.agreeToTerms || isLoading}>
+        {isLoading ? "Creating Account..." : "Create Lawyer Account"}
       </Button>
     </form>
   )
