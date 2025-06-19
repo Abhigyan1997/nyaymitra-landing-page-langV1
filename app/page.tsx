@@ -1384,9 +1384,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-12 pt-8 text-center">
-            <p className="text-white/60">© 2024 {t.footer.company}. All rights reserved. Powered by AI.</p>
+          <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm">
+            <p className="text-white/60 mb-2">
+              © 2024 {t.footer.company}. All rights reserved. Powered by AI.
+            </p>
+
+            <div className="flex justify-center gap-4 text-white/50 mb-2">
+              <a href="/terms" className="hover:text-white underline">Terms & Conditions</a>
+              <a href="/privacy-policy" className="hover:text-white underline">Privacy Policy</a>
+              <a href="/cancellation" className="hover:text-white underline">Cancellation & Refund</a>
+            </div>
+
+            <p className="text-white/40 text-xs max-w-2xl mx-auto px-4">
+              <strong>Disclaimer:</strong> NyayMitra is an AI-powered legal assistant intended for informational purposes only.
+              It does not constitute formal legal advice or establish a lawyer-client relationship.
+              For personalized legal counsel, always consult with a licensed advocate. NyayMitra is not responsible
+              for any decisions made based on AI-generated responses.
+            </p>
           </div>
+
         </div>
       </footer>
     </div>
