@@ -1365,26 +1365,27 @@ export default function HomePage() {
       {/* Get Started Section */}
       <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">{t.getStarted.title}</h2>
-            <p className="text-xl text-white/80 mb-4 max-w-2xl mx-auto">{t.getStarted.subtitle}</p>
-            <p className="text-lg text-white/70 mb-8 max-w-2xl mx-auto">{t.getStarted.description}</p>
+          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-12">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">{t.getStarted.title}</h2>
+            <p className="text-base sm:text-xl text-white/80 mb-3 sm:mb-4 max-w-2xl mx-auto">{t.getStarted.subtitle}</p>
+            <p className="text-sm sm:text-lg text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto">{t.getStarted.description}</p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/legal-gpt">
+              <Link href="/legal-gpt" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="text-lg px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 shadow-2xl shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 group"
+                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 shadow-2xl shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 group"
                 >
-                  <Sparkles className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                  <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
                   {t.getStarted.cta}
-                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
               </Link>
-              <Link href="/lawyers">
+              <Link href="/lawyers" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="text-lg px-8 py-4 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
                 >
                   {t.getStarted.secondary}
                 </Button>
@@ -1393,6 +1394,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* Footer */}
       <footer className="relative z-10 bg-black/40 backdrop-blur-xl border-t border-white/10 py-16">
