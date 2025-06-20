@@ -1319,40 +1319,45 @@ export default function HomePage() {
       {/* Testimonials Section */}
       <section className="relative z-10 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <div className="text-center mb-14 sm:mb-20">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               {t.testimonials.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.testimonials.subtitle}</p>
+            <p className="text-base sm:text-xl text-white/80 max-w-3xl mx-auto">{t.testimonials.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Responsive container: scroll on mobile, grid on larger screens */}
+          <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 scrollbar-hide">
             {t.testimonials.items.map((testimonial, index) => (
               <Card
                 key={index}
-                className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
+                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
               >
-                <CardContent className="p-8">
-                  <div className="flex mb-6">
+                <CardContent className="p-5 sm:p-6">
+                  {/* Star rating */}
+                  <div className="flex mb-4 sm:mb-6">
                     {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                      <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
                     ))}
                   </div>
 
-                  <blockquote className="text-white/80 text-lg mb-6 leading-relaxed group-hover:text-white transition-colors duration-300">
+                  {/* Quote */}
+                  <blockquote className="text-sm sm:text-lg text-white/80 mb-4 sm:mb-6 leading-relaxed group-hover:text-white transition-colors duration-300">
                     "{testimonial.text}"
                   </blockquote>
 
+                  {/* User info */}
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {/* Avatar fallback */}
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
                       {testimonial.avatar}
                     </div>
-                    <div>
-                      <div className="font-semibold text-white group-hover:text-blue-300 transition-colors duration-300">
+                    <div className="text-left">
+                      <div className="font-semibold text-white group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
                         {testimonial.name}
                       </div>
-                      <div className="text-white/60 text-sm">{testimonial.role}</div>
-                      <div className="text-white/40 text-sm">{testimonial.location}</div>
+                      <div className="text-white/60 text-xs sm:text-sm">{testimonial.role}</div>
+                      <div className="text-white/40 text-xs sm:text-sm">{testimonial.location}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -1451,14 +1456,14 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
+                  {/* <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
                     {t.footer.careers}
-                  </Link>
+                  </Link> */}
                 </li>
                 <li>
-                  <Link href="/blog" className="text-white/60 hover:text-white transition-colors duration-300">
+                  {/* <Link href="/blog" className="text-white/60 hover:text-white transition-colors duration-300">
                     {t.footer.blog}
-                  </Link>
+                  </Link> */}
                 </li>
               </ul>
             </div>
@@ -1467,8 +1472,8 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold text-white mb-6">{t.footer.legal}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/privacy" className="text-white/60 hover:text-white transition-colors duration-300">
-                    {t.footer.privacy}
+                  <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
+                    {t.footer.careers}
                   </Link>
                 </li>
                 <li>
@@ -1477,9 +1482,9 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/disclaimer" className="text-white/60 hover:text-white transition-colors duration-300">
+                  {/* <Link href="/disclaimer" className="text-white/60 hover:text-white transition-colors duration-300">
                     {t.footer.disclaimer}
-                  </Link>
+                  </Link> */}
                 </li>
                 <li>
                   <Link href="/contact" className="text-white/60 hover:text-white transition-colors duration-300">
@@ -1487,9 +1492,6 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/press" className="text-white/60 hover:text-white transition-colors duration-300">
-                    {t.footer.press}
-                  </Link>
                 </li>
               </ul>
             </div>
@@ -1497,7 +1499,7 @@ export default function HomePage() {
 
           <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm">
             <p className="text-white/60 mb-2">
-              © 2024 {t.footer.company}. All rights reserved. Powered by AI.
+              © 2025 {t.footer.company}. All rights reserved. Powered by AI.
             </p>
 
             <div className="flex justify-center gap-4 text-white/50 mb-2">
