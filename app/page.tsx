@@ -3,6 +3,15 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { User } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+
 import {
   Scale,
   MessageCircle,
@@ -50,6 +59,15 @@ export default function HomePage() {
     delay: string
     duration: string
   }>>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Add this near your other state declarations
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true); // Set mounted to true when component mounts on client
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   useEffect(() => {
     // Only run on client side
@@ -476,6 +494,7 @@ export default function HomePage() {
   }
 
   const t = content[language]
+  if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden relative">
@@ -646,29 +665,67 @@ export default function HomePage() {
                 <span className="relative z-10 font-medium">{language === "en" ? "हिं" : "EN"}</span>
               </Button>
 
-              {/* Login Button */}
-              <Link href="/auth/login">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
-                >
-                  {t.nav.login}
-                </Button>
-              </Link>
+              {mounted && isLoggedIn ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      size="sm"
+                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                    >
+                      <User className="h-4 w-4 mr-2" />
+                      Profile
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="mt-2 w-48 bg-black/90 border border-white/10 rounded-md shadow-lg p-2 text-white"
+                    sideOffset={5}
+                  >
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="block px-3 py-2 hover:bg-white/10 rounded">
+                        My Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <button
+                        onClick={() => {
+                          localStorage.removeItem("token");
+                          window.location.reload();
+                        }}
+                        className="block w-full text-left px-3 py-2 hover:bg-white/10 rounded"
+                      >
+                        Logout
+                      </button>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : mounted && (
+                <>
+                  {/* Login Button */}
+                  <Link href="/auth/login">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
+                    >
+                      {t.nav.login}
+                    </Button>
+                  </Link>
 
-              {/* Signup Button */}
-              <Link href="/auth/signup">
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 border-0 shadow-xl shadow-blue-500/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 group relative overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform duration-500" />
-                  <span className="relative z-10">{t.nav.signup}</span>
-                </Button>
-              </Link>
+                  {/* Signup Button */}
+                  <Link href="/auth/signup">
+                    <Button
+                      size="sm"
+                      className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 border-0 shadow-xl shadow-blue-500/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 group relative overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform duration-500" />
+                      <span className="relative z-10">{t.nav.signup}</span>
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
+
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
