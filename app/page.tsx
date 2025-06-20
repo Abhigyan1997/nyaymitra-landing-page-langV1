@@ -535,7 +535,7 @@ export default function HomePage() {
       {/* Navigation remains the same... */}
       <nav className="relative z-50 bg-black/5 backdrop-blur-3xl border-b border-white/5 sticky top-0">
         {/* Top Status Bar */}
-        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
+        {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-8 text-xs">
               <div className="flex items-center space-x-4">
@@ -560,7 +560,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
