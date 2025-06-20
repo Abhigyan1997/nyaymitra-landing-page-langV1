@@ -82,7 +82,7 @@ export default function ProfilePage() {
                     return
                 }
 
-                const response = await fetch('https://nyaymitra-backend.onrender.com/api/v1/auth/profile', {
+                const response = await fetch('http://localhost:5000/api/v1/auth/profile', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
