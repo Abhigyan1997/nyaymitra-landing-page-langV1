@@ -727,7 +727,6 @@ export default function HomePage() {
             </div>
 
 
-            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <Button
                 variant="ghost"
@@ -742,18 +741,70 @@ export default function HomePage() {
         </div>
 
         {/* Mobile Navigation */}
+        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-3xl border-b border-white/10 animate-fade-in">
             <div className="px-4 pt-4 pb-6 space-y-2">
-              {Object.entries(t.nav).map(([key, value]) => (
-                <Link
-                  key={key}
-                  href={key === "home" ? "/" : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`}
-                  className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
-                >
-                  {value}
-                </Link>
-              ))}
+              {/* Show regular nav links */}
+              {Object.entries(t.nav)
+                .filter(([key]) => !['login', 'signup'].includes(key)) // Filter out login/signup when logged in
+                .map(([key, value]) => (
+                  <Link
+                    key={key}
+                    href={key === "home" ? "/" : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`}
+                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    {value}
+                  </Link>
+                ))}
+
+              {/* Show profile and logout when logged in */}
+              {mounted && isLoggedIn && (
+                <>
+                  <Link
+                    href="/profile"
+                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    My Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      localStorage.removeItem("token");
+                      window.location.reload();
+                    }}
+                    className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+
+              {/* Show login/signup when not logged in */}
+              {mounted && !isLoggedIn && (
+                <>
+                  <Link
+                    href="/auth/login"
+                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    {t.nav.login}
+                  </Link>
+                  <Link
+                    href="/auth/signup"
+                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    {t.nav.signup}
+                  </Link>
+                </>
+              )}
+
+              {/* Language toggle for mobile */}
+              <button
+                onClick={() => setLanguage(language === "en" ? "hi" : "en")}
+                className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10 flex items-center"
+              >
+                <Globe className="h-5 w-5 mr-3" />
+                {language === "en" ? "हिंदी" : "English"}
+              </button>
             </div>
           </div>
         )}
@@ -791,24 +842,25 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left Column - Content */}
+            {/* Left Column - Content */}
             <div
-              className={`space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
+              className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
-              {/* Elegant Badge */}
-              <div className="inline-flex items-center px-6 py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 backdrop-blur-sm group hover:scale-105 transition-all duration-300">
-                <Award className="h-5 w-5 text-blue-400 mr-3" />
-                <span className="text-blue-300 font-medium text-sm tracking-wide">India's #1 Legal AI Platform</span>
-                <div className="ml-3 flex space-x-1">
+              {/* Elegant Badge - Responsive */}
+              <div className="inline-flex items-center px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 backdrop-blur-sm group hover:scale-105 transition-all duration-300">
+                <Award className="h-4 w-4 md:h-5 md:w-5 text-blue-400 mr-2 md:mr-3" />
+                <span className="text-blue-300 font-medium text-xs md:text-sm tracking-wide">India's #1 Legal AI Platform</span>
+                <div className="ml-2 md:ml-3 flex space-x-0.5 md:space-x-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-3 w-3 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-2.5 w-2.5 md:h-3 md:w-3 text-yellow-400 fill-current" />
                   ))}
                 </div>
               </div>
 
-              {/* Sophisticated Title */}
-              <div className="space-y-6">
-                <h1 className="text-6xl md:text-7xl lg:text-8xl font-black leading-none">
-                  <span className="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-4">
+              {/* Sophisticated Title - Responsive */}
+              <div className="space-y-4 md:space-y-6">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight md:leading-none">
+                  <span className="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2 md:mb-4">
                     {t.hero.title.split(" ")[0]}
                   </span>
                   <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
@@ -817,43 +869,43 @@ export default function HomePage() {
                 </h1>
 
                 <div className="relative">
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white/90 tracking-wide">
+                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 tracking-wide">
                     {t.hero.subtitle}
                   </h2>
-                  <div className="absolute -bottom-2 left-0 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
+                  <div className="absolute -bottom-1 left-0 w-16 md:w-24 h-0.5 md:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
                 </div>
               </div>
 
-              {/* Elegant Description */}
-              <p className="text-xl md:text-2xl text-white/80 leading-relaxed font-light max-w-2xl">
+              {/* Elegant Description - Responsive */}
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed font-light max-w-2xl">
                 <span className="bg-gradient-to-r from-white/95 via-blue-100/85 to-purple-100/75 bg-clip-text text-transparent">
                   {t.hero.description}
                 </span>
               </p>
 
-              {/* Premium Free Consultation Banner - New Position */}
+              {/* Premium Free Consultation Banner - Responsive */}
               <div className="relative">
                 {/* Floating Notification Badge */}
-                <div className="absolute -top-3 -right-3 z-10">
-                  <div className="w-8 h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+                <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 z-10">
+                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
                     <span className="text-white text-xs font-bold">🔥</span>
                   </div>
                 </div>
 
                 <Link href="/lawyers">
-                  <div className="group cursor-pointer transform hover:scale-105 transition-all duration-500">
-                    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-teal-500/15 border-2 border-emerald-400/40 backdrop-blur-xl p-8 shadow-2xl shadow-emerald-500/10">
+                  <div className="group cursor-pointer transform hover:scale-[1.02] md:hover:scale-105 transition-all duration-500">
+                    <div className="relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-teal-500/15 border-2 border-emerald-400/40 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-lg md:shadow-2xl shadow-emerald-500/10">
                       {/* Animated Background Glow */}
                       <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                       {/* Sparkle Effects */}
-                      <div className="absolute inset-0 overflow-hidden rounded-3xl">
+                      <div className="absolute inset-0 overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
                         {Array(8).fill(0).map((_, i) => (
                           <div
                             key={i}
                             className="absolute w-1 h-1 bg-emerald-300 rounded-full animate-ping"
                             style={{
-                              left: `${10 + (i * 10)}%`, // Fixed positions instead of random
+                              left: `${10 + (i * 10)}%`,
                               top: `${10 + (i * 10)}%`,
                               animationDelay: `${i * 0.5}s`,
                               animationDuration: "3s"
@@ -862,71 +914,71 @@ export default function HomePage() {
                         ))}
                       </div>
 
-                      <div className="relative flex items-center justify-between">
-                        <div className="flex items-center space-x-6">
+                      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
+                        <div className="flex items-center space-x-4 md:space-x-6">
                           {/* Icon Container */}
                           <div className="relative">
-                            <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 shadow-xl">
-                              <Heart className="h-8 w-8 text-white group-hover:scale-110 transition-transform duration-300" />
+                            <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl md:rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 shadow-lg md:shadow-xl">
+                              <Heart className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white group-hover:scale-110 transition-transform duration-300" />
                             </div>
                             {/* Floating Badge */}
-                            <div className="absolute -top-2 -right-2 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
-                              <span className="text-xs">✨</span>
+                            <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+                              <span className="text-[8px] md:text-xs">✨</span>
                             </div>
                           </div>
 
                           {/* Content */}
-                          <div className="space-y-2">
-                            <div className="flex items-center space-x-3">
-                              <span className="text-2xl md:text-3xl font-black bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">
+                          <div className="space-y-1 md:space-y-2">
+                            <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 md:space-x-3">
+                              <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">
                                 🎉 First Consultation
                               </span>
-                              <div className="px-4 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full">
-                                <span className="text-black font-bold text-lg">FREE</span>
+                              <div className="px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full w-fit">
+                                <span className="text-black font-bold text-sm sm:text-base md:text-lg">FREE</span>
                               </div>
                             </div>
-                            <div className="flex items-center space-x-4 text-emerald-200/90">
-                              <div className="flex items-center space-x-2">
-                                <CheckCircle className="h-4 w-4 text-green-400" />
-                                <span className="text-sm font-medium">No hidden charges</span>
+                            <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-4 text-emerald-200/90">
+                              <div className="flex items-center space-x-1 md:space-x-2">
+                                <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-green-400" />
+                                <span className="text-xs md:text-sm font-medium">No hidden charges</span>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <Clock className="h-4 w-4 text-blue-400" />
-                                <span className="text-sm font-medium">Instant access</span>
+                              <div className="flex items-center space-x-1 md:space-x-2">
+                                <Clock className="h-3 w-3 md:h-4 md:w-4 text-blue-400" />
+                                <span className="text-xs md:text-sm font-medium">Instant access</span>
                               </div>
-                              <div className="flex items-center space-x-2">
-                                <Shield className="h-4 w-4 text-purple-400" />
-                                <span className="text-sm font-medium">100% Confidential</span>
+                              <div className="flex items-center space-x-1 md:space-x-2">
+                                <Shield className="h-3 w-3 md:h-4 md:w-4 text-purple-400" />
+                                <span className="text-xs md:text-sm font-medium">100% Confidential</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        {/* Arrow with Glow */}
-                        <div className="relative">
+                        {/* Arrow with Glow - Hidden on small screens */}
+                        <div className="relative hidden sm:block">
                           <div className="absolute inset-0 bg-emerald-400/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-                          <ArrowRight className="relative h-8 w-8 text-emerald-400 group-hover:translate-x-3 group-hover:scale-110 transition-all duration-300" />
+                          <ArrowRight className="relative h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-emerald-400 group-hover:translate-x-3 group-hover:scale-110 transition-all duration-300" />
                         </div>
                       </div>
 
                       {/* Bottom Highlight */}
-                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 rounded-b-3xl" />
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 md:h-1 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 rounded-b-xl md:rounded-b-2xl lg:rounded-b-3xl" />
                     </div>
                   </div>
                 </Link>
               </div>
 
-              {/* Sophisticated CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-6">
+              {/* Sophisticated CTA Buttons - Responsive */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6">
                 <Link href="/legal-gpt">
                   <Button
                     size="lg"
-                    className="text-lg px-10 py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 border-0 shadow-2xl shadow-blue-500/25 hover:shadow-purple-500/40 transition-all duration-500 group relative overflow-hidden"
+                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 border-0 shadow-lg md:shadow-xl lg:shadow-2xl shadow-blue-500/25 hover:shadow-purple-500/40 transition-all duration-500 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    <MessageCircle className="mr-3 h-6 w-6 group-hover:scale-110 transition-transform duration-300" />
+                    <MessageCircle className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6 group-hover:scale-110 transition-transform duration-300" />
                     <span className="relative z-10 font-semibold">{t.hero.ctaPrimary}</span>
-                    <ArrowRight className="ml-3 h-6 w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
                   </Button>
                 </Link>
 
@@ -934,28 +986,28 @@ export default function HomePage() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="text-lg px-10 py-6 bg-white/5 border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-500 group relative overflow-hidden"
+                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-white/5 border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-500 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <Play className="mr-3 h-5 w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
+                    <Play className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
                     <span className="relative z-10 font-semibold">Watch Demo</span>
                   </Button>
                 </Link>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="flex items-center space-x-8 pt-4">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="h-5 w-5 text-green-400" />
-                  <span className="text-white/70 text-sm">Trusted by 1K+ users</span>
+              {/* Trust Indicators - Responsive */}
+              <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-6 md:space-x-0 pt-2 md:pt-4">
+                <div className="flex items-center space-x-2 md:space-x-3">
+                  <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-green-400" />
+                  <span className="text-white/70 text-xs md:text-sm">Trusted by 1K+ users</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Shield className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/70 text-sm">Bank-grade security</span>
+                <div className="flex items-center space-x-2 md:space-x-3">
+                  <Shield className="h-4 w-4 md:h-5 md:w-5 text-blue-400" />
+                  <span className="text-white/70 text-xs md:text-sm">Bank-grade security</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Award className="h-5 w-5 text-purple-400" />
-                  <span className="text-white/70 text-sm">Award winning</span>
+                <div className="flex items-center space-x-2 md:space-x-3">
+                  <Award className="h-4 w-4 md:h-5 md:w-5 text-purple-400" />
+                  <span className="text-white/70 text-xs md:text-sm">Award winning</span>
                 </div>
               </div>
             </div>
