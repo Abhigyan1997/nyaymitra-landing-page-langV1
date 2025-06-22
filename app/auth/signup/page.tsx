@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import axios from "axios"
+import { toast } from "sonner"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -143,15 +144,20 @@ export default function SignupPage() {
       e.preventDefault()
       setMessage("")
       setError("")
-      setIsLoading(true) // Set loading true on submission
+      setIsLoading(true)
 
       try {
-        const url = userType === "user" ? `${BASE_API_URL}/register-user` : `${BASE_API_URL}/register-lawyer`
+        const url =
+          userType === "user"
+            ? `${BASE_API_URL}/register-user`
+            : `${BASE_API_URL}/register-lawyer`
         const data = userType === "user" ? userFormData : lawyerFormData
 
-        // Basic client-side validation for passwords
+        // ✅ Password match validation
         if (data.password !== data.confirmPassword) {
-          setError("Passwords do not match.")
+          const errorMessage = "Passwords do not match."
+          setError(errorMessage)
+          toast.error(errorMessage)
           setIsLoading(false)
           return
         }
@@ -163,8 +169,12 @@ export default function SignupPage() {
         })
 
         if (response.status === 201) {
-          setMessage(response.data.message || "Registration successful! Redirecting to login...")
-          // Reset form data after successful submission
+          const successMessage =
+            response.data.message || "Registration successful! Redirecting..."
+          setMessage(successMessage)
+          toast.success(successMessage)
+
+          // ✅ Reset form after success
           if (userType === "user") {
             setUserFormData({
               fullName: "",
@@ -191,22 +201,29 @@ export default function SignupPage() {
               subscribeNewsletter: false,
             })
           }
-          // Redirect to login page after a short delay
+
+          // ✅ Delayed redirect with toast
           setTimeout(() => {
             router.push("/auth/login")
-          }, 1500) // Redirect after 1.5 seconds, giving the user time to read the success message
+          }, 1500)
         } else {
-          setError("Unexpected response from server.")
+          const unexpectedError = "Unexpected response from server."
+          setError(unexpectedError)
+          toast.error(unexpectedError)
         }
       } catch (err: any) {
-        setError(err?.response?.data?.message || "Registration failed. Please try again.")
-        console.error("Signup error:", err) // Log error for debugging
+        const errorMsg =
+          err?.response?.data?.message || "Registration failed. Please try again."
+        setError(errorMsg)
+        toast.error(errorMsg)
+        console.error("Signup error:", err)
       } finally {
-        setIsLoading(false) // Always reset loading state
+        setIsLoading(false)
       }
     },
-    [userType, userFormData, lawyerFormData, router], // Add router to dependencies
+    [userType, userFormData, lawyerFormData, router]
   )
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">

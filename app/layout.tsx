@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
   keywords: "legal advice, lawyers India, AI legal help, legal consultation, Indian law",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({

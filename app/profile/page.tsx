@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
+import axios from "axios"
 import { cn } from "@/lib/utils"
 import {
     User,
@@ -24,17 +25,33 @@ import {
     Lock,
     LogOut,
     Edit,
-    ChevronRight,
     Gavel,
     Users as UsersIcon,
     FileSearch,
     Bookmark,
     FileSignature,
     Landmark,
-    GraduationCap
+    GraduationCap,
+    Globe,
+    Linkedin,
+    Briefcase,
+    Languages,
+    Award,
+    Clock,
+    Banknote,
+    BookOpen,
+    Home,
+    BriefcaseBusiness,
+    Scale,
+    FileLock,
+    FileKey,
+    ChevronRight
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 
 interface Address {
     street?: string
@@ -42,6 +59,29 @@ interface Address {
     state?: string
     country?: string
     pincode?: string
+}
+
+interface BankDetails {
+    accountHolder?: string
+    accountNumber?: string
+    ifsc?: string
+    bankName?: string
+    branch?: string
+    upiId?: string
+}
+
+interface ConsultationMode {
+    video?: boolean
+    call?: boolean
+    chat?: boolean
+    inPerson?: boolean
+}
+
+interface Document {
+    name: string
+    url: string
+    verified: boolean
+    uploadDate: string
 }
 
 interface UserProfile {
@@ -56,13 +96,71 @@ interface UserProfile {
     profileImage?: string
     address?: Address
     createdAt: string
+    updatedAt: string
+
+    // Common fields
+    language?: string
+    timezone?: string
+    emergencyContact?: {
+        name?: string
+        phone?: string
+        relation?: string
+    }
+    preferredConsultationMode?: string
+    notificationPreferences?: {
+        email?: boolean
+        sms?: boolean
+        push?: boolean
+    }
+    kycStatus?: 'pending' | 'approved' | 'rejected'
+    accountStatus?: 'active' | 'suspended' | 'pending'
+    profileCompletedPercentage?: number
+
+    // User-specific fields
+    occupation?: string
+    education?: string
+    maritalStatus?: string
+    incomeRange?: string
+    preferredLanguage?: string
+
+    // Lawyer-specific fields
     barCouncilId?: string
+    barMembershipNumber?: string
     specialization?: string[]
+    practiceAreas?: string[]
+    courtType?: string[]
+    city?: string
+    state?: string
     bio?: string
     experience?: number
+    yearsPracticing?: number
     rating?: number
     consultationCount?: number
     clientCount?: number
+    consultationFee?: number
+    languagesSpoken?: string[]
+    linkedinUrl?: string
+    website?: string
+    portfolio?: string[]
+    badges?: string[]
+    lawFirm?: string
+    licenseIssuedDate?: string
+    licenseExpiryDate?: string
+    verifiedByPlatform?: boolean
+    consultationModes?: ConsultationMode
+    maxBookingsPerDay?: number
+    advanceNoticeHours?: number
+    consultationDurationMinutes?: number
+    status?: 'online' | 'offline' | 'busy'
+    averageRating?: number
+    totalReviews?: number
+    profileViews?: number
+    lastConsultationAt?: string
+    bankDetails?: BankDetails
+    panNumber?: string
+    documents?: Document[]
+    kycVerifiedAt?: string
+    kycRejectedReason?: string
 }
 
 export default function ProfilePage() {
@@ -82,25 +180,25 @@ export default function ProfilePage() {
                     return
                 }
 
-                const response = await fetch('https://nyaymitra-backend.onrender.com/api/v1/auth/profile', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
+                const response = await axios.get(
+                    'https://nyaymitra-backend.onrender.com/api/v1/auth/profile',
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        withCredentials: true,
                     }
-                })
+                )
 
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch profile: ${response.status}`)
-                }
-
-                const data: UserProfile = await response.json()
-                setProfile(data)
-            } catch (err) {
+                setProfile(response.data)
+            } catch (err: any) {
                 let errorMessage = 'An unknown error occurred'
-                if (err instanceof Error) {
+                if (err?.response?.data?.message) {
+                    errorMessage = err.response.data.message
+                } else if (err instanceof Error) {
                     errorMessage = err.message
-                } else if (typeof err === 'string') {
-                    errorMessage = err
                 }
+
                 setError(errorMessage)
                 console.error('Error fetching profile:', err)
             } finally {
@@ -111,7 +209,128 @@ export default function ProfilePage() {
         fetchProfile()
     }, [router])
 
-    const formatDate = (dateString: string) => {
+    const handleSaveChanges = async () => {
+        const token = localStorage.getItem("token");
+        if (!token || !profile) return;
+
+        const getInputValue = (id: string) => {
+            const element = document.getElementById(id) as HTMLInputElement;
+            return element?.value;
+        };
+
+        const getNumberValue = (id: string) => {
+            const value = getInputValue(id);
+            return value ? Number(value) : undefined;
+        };
+
+        const getBooleanValue = (id: string) => {
+            const element = document.getElementById(id) as HTMLInputElement;
+            return element?.checked;
+        };
+
+        const getSelectValue = (id: string) => {
+            const element = document.getElementById(id) as HTMLSelectElement;
+            return element?.value;
+        };
+
+        const updatedData: any = {
+            // Common fields
+            fullName: getInputValue("name"),
+            phone: getInputValue("phone"),
+            gender: getSelectValue("gender"),
+            dob: getInputValue("dob"),
+            address: {
+                street: getInputValue("street"),
+                city: getInputValue("city"),
+                state: getInputValue("state"),
+                country: getInputValue("country"),
+                pincode: getInputValue("pincode"),
+            },
+            language: getSelectValue("language"),
+            timezone: getInputValue("timezone"),
+            emergencyContact: {
+                name: getInputValue("emergencyContactName"),
+                phone: getInputValue("emergencyContactPhone"),
+                relation: getInputValue("emergencyContactRelation"),
+            },
+        };
+
+        if (profile.role === 'user') {
+            updatedData.occupation = getInputValue("occupation");
+            updatedData.education = getSelectValue("education");
+            updatedData.maritalStatus = getSelectValue("maritalStatus");
+            updatedData.incomeRange = getSelectValue("incomeRange");
+            updatedData.preferredLanguage = getInputValue("preferredLanguage");
+        }
+
+        if (profile.role === 'lawyer') {
+            // Professional details
+            updatedData.barCouncilId = getInputValue("barCouncilId");
+            updatedData.barMembershipNumber = getInputValue("barMembershipNumber");
+            updatedData.specialization = getInputValue("specialization")?.split(',').map((s: string) => s.trim());
+            updatedData.practiceAreas = getInputValue("practiceAreas")?.split(',').map((s: string) => s.trim());
+            updatedData.courtType = getInputValue("courtType")?.split(',').map((s: string) => s.trim());
+            updatedData.city = getInputValue("city");
+            updatedData.state = getInputValue("state");
+            updatedData.bio = getInputValue("bio");
+            updatedData.experience = getNumberValue("experience");
+            updatedData.yearsPracticing = getNumberValue("yearsPracticing");
+            updatedData.consultationFee = getNumberValue("consultationFee");
+            updatedData.languagesSpoken = getInputValue("languagesSpoken")?.split(',').map((s: string) => s.trim());
+            updatedData.linkedinUrl = getInputValue("linkedinUrl");
+            updatedData.website = getInputValue("website");
+            updatedData.lawFirm = getInputValue("lawFirm");
+            updatedData.licenseIssuedDate = getInputValue("licenseIssuedDate");
+            updatedData.licenseExpiryDate = getInputValue("licenseExpiryDate");
+            updatedData.panNumber = getInputValue("panNumber");
+
+            // Consultation settings
+            updatedData.consultationModes = {
+                video: getBooleanValue("consultationModeVideo"),
+                call: getBooleanValue("consultationModeCall"),
+                chat: getBooleanValue("consultationModeChat"),
+                inPerson: getBooleanValue("consultationModeInPerson"),
+            };
+
+            updatedData.maxBookingsPerDay = getNumberValue("maxBookingsPerDay");
+            updatedData.advanceNoticeHours = getNumberValue("advanceNoticeHours");
+            updatedData.consultationDurationMinutes = getNumberValue("consultationDurationMinutes");
+
+            // Financial details
+            updatedData.bankDetails = {
+                accountHolder: getInputValue("bankAccountHolder"),
+                accountNumber: getInputValue("bankAccountNumber"),
+                ifsc: getInputValue("bankIFSC"),
+                bankName: getInputValue("bankName"),
+                branch: getInputValue("bankBranch"),
+                upiId: getInputValue("upiId"),
+            };
+        }
+
+        try {
+            const endpoint = profile.role === 'lawyer'
+                ? "http://localhost:5000/api/v1/auth/edit_lawyer"
+                : "http://localhost:5000/api/v1/auth/edit_user";
+
+            const response = await axios.put(
+                endpoint,
+                updatedData,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                }
+            );
+
+            setProfile(response.data?.user || profile);
+            setIsEditing(false);
+        } catch (error: any) {
+            console.error("Error updating profile:", error);
+            alert(error?.response?.data?.message || "Failed to update profile");
+        }
+    };
+
+    const formatDate = (dateString?: string) => {
+        if (!dateString) return 'Not specified';
         try {
             const date = new Date(dateString)
             return date.toLocaleDateString('en-US', {
@@ -176,6 +395,702 @@ export default function ProfilePage() {
         return null
     }
 
+    const renderUserProfile = () => (
+        <div className="space-y-4">
+            <div className="flex items-center gap-4">
+                <User className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Full Name</p>
+                    <p className="font-medium">{profile.fullName}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Mail className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-medium">{profile.email}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Phone className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="font-medium">{profile.phone || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <User className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Gender</p>
+                    <p className="font-medium">{profile.gender || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Calendar className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Date of Birth</p>
+                    <p className="font-medium">{formatDate(profile.dob)}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Briefcase className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Occupation</p>
+                    <p className="font-medium">{profile.occupation || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <BookOpen className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Education</p>
+                    <p className="font-medium">{profile.education || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Home className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Marital Status</p>
+                    <p className="font-medium">{profile.maritalStatus || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Banknote className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Income Range</p>
+                    <p className="font-medium">{profile.incomeRange || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Languages className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Preferred Language</p>
+                    <p className="font-medium">{profile.preferredLanguage || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <MapPin className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Address</p>
+                    <p className="font-medium">{getAddressString()}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Calendar className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Member Since</p>
+                    <p className="font-medium">{formatDate(profile.createdAt)}</p>
+                </div>
+            </div>
+        </div>
+    );
+
+    const renderLawyerProfile = () => (
+        <div className="space-y-4">
+            <div className="flex items-center gap-4">
+                <Mail className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Email</p>
+                    <p className="font-medium">{profile.email}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Phone className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Phone</p>
+                    <p className="font-medium">{profile.phone || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Landmark className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Bar Council ID</p>
+                    <p className="font-medium">{profile.barCouncilId || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <FileKey className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Bar Membership Number</p>
+                    <p className="font-medium">{profile.barMembershipNumber || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <GraduationCap className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Specialization</p>
+                    <p className="font-medium">
+                        {profile.specialization?.join(', ') || 'Not specified'}
+                    </p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Scale className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Practice Areas</p>
+                    <p className="font-medium">
+                        {profile.practiceAreas?.join(', ') || 'Not specified'}
+                    </p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Briefcase className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Experience</p>
+                    <p className="font-medium">
+                        {profile.experience || 0} years ({profile.yearsPracticing || 0} years practicing)
+                    </p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Award className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Consultation Fee</p>
+                    <p className="font-medium">
+                        ₹{profile.consultationFee || 0}
+                    </p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <Languages className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Languages Spoken</p>
+                    <p className="font-medium">
+                        {profile.languagesSpoken?.join(', ') || 'Not specified'}
+                    </p>
+                </div>
+            </div>
+            <Separator />
+            {profile.bio && (
+                <>
+                    <div className="flex items-start gap-4">
+                        <FileText className="h-5 w-5 text-gray-400 mt-1" />
+                        <div>
+                            <p className="text-sm text-gray-500">Professional Bio</p>
+                            <p className="font-medium whitespace-pre-line">{profile.bio}</p>
+                        </div>
+                    </div>
+                    <Separator />
+                </>
+            )}
+            <div className="flex items-center gap-4">
+                <BriefcaseBusiness className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Law Firm</p>
+                    <p className="font-medium">{profile.lawFirm || 'Not specified'}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <FileLock className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">License Issued Date</p>
+                    <p className="font-medium">{formatDate(profile.licenseIssuedDate)}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <FileLock className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">License Expiry Date</p>
+                    <p className="font-medium">{formatDate(profile.licenseExpiryDate)}</p>
+                </div>
+            </div>
+            <Separator />
+            <div className="flex items-center gap-4">
+                <MapPin className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Address</p>
+                    <p className="font-medium">{getAddressString()}</p>
+                </div>
+            </div>
+            <Separator />
+            {(profile.linkedinUrl || profile.website) && (
+                <>
+                    <div className="flex items-center gap-4">
+                        <Linkedin className="h-5 w-5 text-gray-400" />
+                        <div>
+                            <p className="text-sm text-gray-500">LinkedIn</p>
+                            <p className="font-medium">
+                                {profile.linkedinUrl ? (
+                                    <a href={profile.linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                        {profile.linkedinUrl}
+                                    </a>
+                                ) : 'Not specified'}
+                            </p>
+                        </div>
+                    </div>
+                    <Separator />
+                    <div className="flex items-center gap-4">
+                        <Globe className="h-5 w-5 text-gray-400" />
+                        <div>
+                            <p className="text-sm text-gray-500">Website</p>
+                            <p className="font-medium">
+                                {profile.website ? (
+                                    <a href={profile.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                                        {profile.website}
+                                    </a>
+                                ) : 'Not specified'}
+                            </p>
+                        </div>
+                    </div>
+                    <Separator />
+                </>
+            )}
+            <div className="flex items-center gap-4">
+                <Calendar className="h-5 w-5 text-gray-400" />
+                <div>
+                    <p className="text-sm text-gray-500">Member Since</p>
+                    <p className="font-medium">{formatDate(profile.createdAt)}</p>
+                </div>
+            </div>
+        </div>
+    );
+
+    const renderUserEditForm = () => (
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input id="name" defaultValue={profile.fullName} />
+                </div>
+                <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" defaultValue={profile.email} disabled />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" defaultValue={profile.phone || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="gender">Gender</Label>
+                    <Select defaultValue={profile.gender || ''}>
+                        <SelectTrigger id="gender">
+                            <SelectValue placeholder="Select gender" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="dob">Date of Birth</Label>
+                    <Input id="dob" type="date" defaultValue={profile.dob || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="occupation">Occupation</Label>
+                    <Input id="occupation" defaultValue={profile.occupation || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="education">Education</Label>
+                    <Select defaultValue={profile.education || ''}>
+                        <SelectTrigger id="education">
+                            <SelectValue placeholder="Select education level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="high_school">High School</SelectItem>
+                            <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
+                            <SelectItem value="master">Master's Degree</SelectItem>
+                            <SelectItem value="phd">PhD</SelectItem>
+                            <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div>
+                    <Label htmlFor="maritalStatus">Marital Status</Label>
+                    <Select defaultValue={profile.maritalStatus || ''}>
+                        <SelectTrigger id="maritalStatus">
+                            <SelectValue placeholder="Select marital status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="single">Single</SelectItem>
+                            <SelectItem value="married">Married</SelectItem>
+                            <SelectItem value="divorced">Divorced</SelectItem>
+                            <SelectItem value="widowed">Widowed</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="incomeRange">Income Range</Label>
+                    <Select defaultValue={profile.incomeRange || ''}>
+                        <SelectTrigger id="incomeRange">
+                            <SelectValue placeholder="Select income range" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="0-5L">0-5 Lakhs</SelectItem>
+                            <SelectItem value="5-10L">5-10 Lakhs</SelectItem>
+                            <SelectItem value="10-20L">10-20 Lakhs</SelectItem>
+                            <SelectItem value="20-50L">20-50 Lakhs</SelectItem>
+                            <SelectItem value="50L+">50 Lakhs+</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <div>
+                    <Label htmlFor="preferredLanguage">Preferred Language</Label>
+                    <Input id="preferredLanguage" defaultValue={profile.preferredLanguage || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+                <div>
+                    <Label htmlFor="street">Street Address</Label>
+                    <Input id="street" defaultValue={profile.address?.street || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <Label htmlFor="city">City</Label>
+                    <Input id="city" defaultValue={profile.address?.city || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="state">State</Label>
+                    <Input id="state" defaultValue={profile.address?.state || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="country">Country</Label>
+                    <Input id="country" defaultValue={profile.address?.country || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="pincode">Pincode</Label>
+                    <Input id="pincode" defaultValue={profile.address?.pincode || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <Label htmlFor="emergencyContactName">Emergency Contact Name</Label>
+                    <Input id="emergencyContactName" defaultValue={profile.emergencyContact?.name || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="emergencyContactPhone">Emergency Contact Phone</Label>
+                    <Input id="emergencyContactPhone" defaultValue={profile.emergencyContact?.phone || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="emergencyContactRelation">Relation</Label>
+                    <Input id="emergencyContactRelation" defaultValue={profile.emergencyContact?.relation || ''} />
+                </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button onClick={handleSaveChanges}>Save Changes</Button>
+            </div>
+        </div>
+    );
+
+    const renderLawyerEditForm = () => (
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="name">Full Name</Label>
+                    <Input id="name" defaultValue={profile.fullName} />
+                </div>
+                <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" defaultValue={profile.email} disabled />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input id="phone" defaultValue={profile.phone || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="barCouncilId">Bar Council ID</Label>
+                    <Input id="barCouncilId" defaultValue={profile.barCouncilId || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="barMembershipNumber">Bar Membership Number</Label>
+                    <Input id="barMembershipNumber" defaultValue={profile.barMembershipNumber || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="panNumber">PAN Number</Label>
+                    <Input id="panNumber" defaultValue={profile.panNumber || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="experience">Experience (years)</Label>
+                    <Input
+                        id="experience"
+                        type="number"
+                        defaultValue={profile.experience || 0}
+                        min="0"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="yearsPracticing">Years Practicing</Label>
+                    <Input
+                        id="yearsPracticing"
+                        type="number"
+                        defaultValue={profile.yearsPracticing || 0}
+                        min="0"
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="consultationFee">Consultation Fee (₹)</Label>
+                    <Input
+                        id="consultationFee"
+                        type="number"
+                        defaultValue={profile.consultationFee || 0}
+                        min="0"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="lawFirm">Law Firm</Label>
+                    <Input
+                        id="lawFirm"
+                        defaultValue={profile.lawFirm || ''}
+                    />
+                </div>
+            </div>
+            <div>
+                <Label htmlFor="specialization">Specialization (comma separated)</Label>
+                <Input
+                    id="specialization"
+                    defaultValue={profile.specialization?.join(', ') || ''}
+                    placeholder="e.g. Criminal Law, Corporate Law, Family Law"
+                />
+            </div>
+            <div>
+                <Label htmlFor="practiceAreas">Practice Areas (comma separated)</Label>
+                <Input
+                    id="practiceAreas"
+                    defaultValue={profile.practiceAreas?.join(', ') || ''}
+                    placeholder="e.g. Civil Litigation, Corporate Law, Intellectual Property"
+                />
+            </div>
+            <div>
+                <Label htmlFor="courtType">Court Types (comma separated)</Label>
+                <Input
+                    id="courtType"
+                    defaultValue={profile.courtType?.join(', ') || ''}
+                    placeholder="e.g. Supreme Court, High Court, District Court"
+                />
+            </div>
+            <div>
+                <Label htmlFor="languagesSpoken">Languages Spoken (comma separated)</Label>
+                <Input
+                    id="languagesSpoken"
+                    defaultValue={profile.languagesSpoken?.join(', ') || ''}
+                    placeholder="e.g. English, Hindi, Tamil"
+                />
+            </div>
+            <div>
+                <Label htmlFor="bio">Professional Bio</Label>
+                <Textarea
+                    id="bio"
+                    defaultValue={profile.bio || ''}
+                    rows={4}
+                    placeholder="Tell clients about your expertise and approach..."
+                />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="licenseIssuedDate">License Issued Date</Label>
+                    <Input
+                        id="licenseIssuedDate"
+                        type="date"
+                        defaultValue={profile.licenseIssuedDate || ''}
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="licenseExpiryDate">License Expiry Date</Label>
+                    <Input
+                        id="licenseExpiryDate"
+                        type="date"
+                        defaultValue={profile.licenseExpiryDate || ''}
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <Label htmlFor="linkedinUrl">LinkedIn Profile URL</Label>
+                    <Input
+                        id="linkedinUrl"
+                        defaultValue={profile.linkedinUrl || ''}
+                        placeholder="https://linkedin.com/in/yourprofile"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="website">Website</Label>
+                    <Input
+                        id="website"
+                        defaultValue={profile.website || ''}
+                        placeholder="https://yourwebsite.com"
+                    />
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label>Consultation Modes</Label>
+                <div className="flex flex-wrap gap-4">
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            id="consultationModeVideo"
+                            defaultChecked={profile.consultationModes?.video || false}
+                        />
+                        <Label htmlFor="consultationModeVideo">Video</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            id="consultationModeCall"
+                            defaultChecked={profile.consultationModes?.call || false}
+                        />
+                        <Label htmlFor="consultationModeCall">Call</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            id="consultationModeChat"
+                            defaultChecked={profile.consultationModes?.chat || false}
+                        />
+                        <Label htmlFor="consultationModeChat">Chat</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Switch
+                            id="consultationModeInPerson"
+                            defaultChecked={profile.consultationModes?.inPerson || false}
+                        />
+                        <Label htmlFor="consultationModeInPerson">In Person</Label>
+                    </div>
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <Label htmlFor="maxBookingsPerDay">Max Bookings Per Day</Label>
+                    <Input
+                        id="maxBookingsPerDay"
+                        type="number"
+                        defaultValue={profile.maxBookingsPerDay || 5}
+                        min="1"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="advanceNoticeHours">Advance Notice (hours)</Label>
+                    <Input
+                        id="advanceNoticeHours"
+                        type="number"
+                        defaultValue={profile.advanceNoticeHours || 24}
+                        min="1"
+                    />
+                </div>
+                <div>
+                    <Label htmlFor="consultationDurationMinutes">Session Duration (minutes)</Label>
+                    <Input
+                        id="consultationDurationMinutes"
+                        type="number"
+                        defaultValue={profile.consultationDurationMinutes || 30}
+                        min="15"
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
+                <div>
+                    <Label htmlFor="street">Street Address</Label>
+                    <Input id="street" defaultValue={profile.address?.street || ''} />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <Label htmlFor="city">City</Label>
+                    <Input id="city" defaultValue={profile.address?.city || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="state">State</Label>
+                    <Input id="state" defaultValue={profile.address?.state || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="country">Country</Label>
+                    <Input id="country" defaultValue={profile.address?.country || ''} />
+                </div>
+                <div>
+                    <Label htmlFor="pincode">Pincode</Label>
+                    <Input id="pincode" defaultValue={profile.address?.pincode || ''} />
+                </div>
+            </div>
+            <div className="space-y-2">
+                <Label className="block">Bank Details</Label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <Label htmlFor="bankAccountHolder">Account Holder Name</Label>
+                        <Input
+                            id="bankAccountHolder"
+                            defaultValue={profile.bankDetails?.accountHolder || ''}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="bankAccountNumber">Account Number</Label>
+                        <Input
+                            id="bankAccountNumber"
+                            defaultValue={profile.bankDetails?.accountNumber || ''}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="bankIFSC">IFSC Code</Label>
+                        <Input
+                            id="bankIFSC"
+                            defaultValue={profile.bankDetails?.ifsc || ''}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="bankName">Bank Name</Label>
+                        <Input
+                            id="bankName"
+                            defaultValue={profile.bankDetails?.bankName || ''}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="bankBranch">Branch</Label>
+                        <Input
+                            id="bankBranch"
+                            defaultValue={profile.bankDetails?.branch || ''}
+                        />
+                    </div>
+                    <div>
+                        <Label htmlFor="upiId">UPI ID</Label>
+                        <Input
+                            id="upiId"
+                            defaultValue={profile.bankDetails?.upiId || ''}
+                            placeholder="yourname@upi"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="flex justify-end gap-2 pt-4">
+                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
+                <Button onClick={handleSaveChanges}>Save Changes</Button>
+            </div>
+        </div>
+    );
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
             {/* Profile Header */}
@@ -227,8 +1142,8 @@ export default function ProfilePage() {
                                             <p className="text-2xl font-bold text-purple-900">{profile.consultationCount || 0}</p>
                                         </div>
                                         <div className="bg-green-50 p-4 rounded-lg">
-                                            <p className="text-sm text-green-600">Success Rate</p>
-                                            <p className="text-2xl font-bold text-green-900">-</p>
+                                            <p className="text-sm text-green-600">Profile Completion</p>
+                                            <p className="text-2xl font-bold text-green-900">{profile.profileCompletedPercentage || 0}%</p>
                                         </div>
                                         <div className="bg-amber-50 p-4 rounded-lg">
                                             <p className="text-sm text-amber-600">Membership</p>
@@ -308,7 +1223,7 @@ export default function ProfilePage() {
                             <Card className="lg:col-span-2">
                                 <CardHeader>
                                     <CardTitle className="flex items-center justify-between">
-                                        <span>Personal Information</span>
+                                        <span>{profile.role === 'lawyer' ? 'Professional' : 'Personal'} Information</span>
                                         <Button variant="ghost" size="sm" onClick={() => setIsEditing(!isEditing)}>
                                             <Edit className="h-4 w-4 mr-2" />
                                             {isEditing ? 'Cancel' : 'Edit'}
@@ -317,106 +1232,9 @@ export default function ProfilePage() {
                                 </CardHeader>
                                 <CardContent>
                                     {isEditing ? (
-                                        <div className="space-y-4">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <Label htmlFor="name">Full Name</Label>
-                                                    <Input id="name" defaultValue={profile.fullName} />
-                                                </div>
-                                                <div>
-                                                    <Label htmlFor="email">Email</Label>
-                                                    <Input id="email" type="email" defaultValue={profile.email} disabled />
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div>
-                                                    <Label htmlFor="phone">Phone</Label>
-                                                    <Input id="phone" defaultValue={profile.phone || ''} />
-                                                </div>
-                                                <div>
-                                                    <Label htmlFor="address">Address</Label>
-                                                    <Input id="address" defaultValue={getAddressString()} />
-                                                </div>
-                                            </div>
-                                            {profile.role === 'lawyer' && (
-                                                <>
-                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                        <div>
-                                                            <Label htmlFor="barCouncilId">Bar Council ID</Label>
-                                                            <Input id="barCouncilId" defaultValue={profile.barCouncilId || ''} disabled />
-                                                        </div>
-                                                        <div>
-                                                            <Label htmlFor="specialization">Specialization</Label>
-                                                            <Input id="specialization" defaultValue={profile.specialization?.join(', ') || ''} />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <Label htmlFor="bio">Bio</Label>
-                                                        <Input id="bio" defaultValue={profile.bio || ''} />
-                                                    </div>
-                                                </>
-                                            )}
-                                            <div className="flex justify-end gap-2 pt-4">
-                                                <Button variant="outline" onClick={() => setIsEditing(false)}>Cancel</Button>
-                                                <Button>Save Changes</Button>
-                                            </div>
-                                        </div>
+                                        profile.role === 'lawyer' ? renderLawyerEditForm() : renderUserEditForm()
                                     ) : (
-                                        <div className="space-y-4">
-                                            <div className="flex items-center gap-4">
-                                                <Mail className="h-5 w-5 text-gray-400" />
-                                                <div>
-                                                    <p className="text-sm text-gray-500">Email</p>
-                                                    <p className="font-medium">{profile.email}</p>
-                                                </div>
-                                            </div>
-                                            <Separator />
-                                            <div className="flex items-center gap-4">
-                                                <Phone className="h-5 w-5 text-gray-400" />
-                                                <div>
-                                                    <p className="text-sm text-gray-500">Phone</p>
-                                                    <p className="font-medium">{profile.phone || 'Not specified'}</p>
-                                                </div>
-                                            </div>
-                                            <Separator />
-                                            <div className="flex items-center gap-4">
-                                                <MapPin className="h-5 w-5 text-gray-400" />
-                                                <div>
-                                                    <p className="text-sm text-gray-500">Address</p>
-                                                    <p className="font-medium">{getAddressString()}</p>
-                                                </div>
-                                            </div>
-                                            <Separator />
-                                            {profile.role === 'lawyer' && (
-                                                <>
-                                                    <div className="flex items-center gap-4">
-                                                        <Landmark className="h-5 w-5 text-gray-400" />
-                                                        <div>
-                                                            <p className="text-sm text-gray-500">Bar Council ID</p>
-                                                            <p className="font-medium">{profile.barCouncilId || 'Not specified'}</p>
-                                                        </div>
-                                                    </div>
-                                                    <Separator />
-                                                    <div className="flex items-center gap-4">
-                                                        <GraduationCap className="h-5 w-5 text-gray-400" />
-                                                        <div>
-                                                            <p className="text-sm text-gray-500">Specialization</p>
-                                                            <p className="font-medium">
-                                                                {profile.specialization?.join(', ') || 'Not specified'}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                    <Separator />
-                                                </>
-                                            )}
-                                            <div className="flex items-center gap-4">
-                                                <Calendar className="h-5 w-5 text-gray-400" />
-                                                <div>
-                                                    <p className="text-sm text-gray-500">Member Since</p>
-                                                    <p className="font-medium">{formatDate(profile.createdAt)}</p>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        profile.role === 'lawyer' ? renderLawyerProfile() : renderUserProfile()
                                     )}
                                 </CardContent>
                             </Card>

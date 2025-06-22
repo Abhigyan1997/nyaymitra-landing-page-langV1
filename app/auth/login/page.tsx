@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Scale, Eye, EyeOff, Mail, Lock, User, Shield } from "lucide-react"
+import { toast } from "sonner"
 import Link from "next/link"
 
 export default function LoginPage() {
@@ -27,6 +28,7 @@ export default function LoginPage() {
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -48,15 +50,17 @@ export default function LoginPage() {
 
       localStorage.setItem("token", token)
       localStorage.setItem("user", JSON.stringify(user))
-      alert(message)
+      localStorage.setItem("userId", response.data.user.userId) // ✅ FIX THIS
+      localStorage.setItem("userName", response.data.user.fullName)
+      localStorage.setItem("userEmail", response.data.user.email)
+      // ✅ Show success toast
+      toast.success(message || "Logged in successfully!")
 
-      if (user.role === "lawyer") {
-        router.push("/")
-      } else {
-        router.push("/")
-      }
+      // Redirect based on role
+      router.push("/")
     } catch (error: any) {
-      alert(error.response?.data?.message || "Login failed")
+      // ❌ Show error toast
+      toast.error(error.response?.data?.message || "Login failed")
     } finally {
       setLoading(false)
     }
