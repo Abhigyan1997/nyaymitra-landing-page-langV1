@@ -29,7 +29,7 @@ export const authOptions: AuthOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const res = await fetch("http://localhost:5000/api/v1/auth/login", {
+                    const res = await fetch("https://nyaymitra-backend.onrender.com/api/v1/auth/login", {
                         method: "POST",
                         body: JSON.stringify(credentials),
                         headers: { "Content-Type": "application/json" },

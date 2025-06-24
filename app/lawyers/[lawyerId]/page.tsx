@@ -83,7 +83,7 @@ export default function LawyerDetailsPage() {
                 }
 
                 const response = await axios.get(
-                    `http://localhost:5000/api/v1/lawyer/details/${lawyerId}`
+                    `https://nyaymitra-backend.onrender.com/api/v1/lawyer/details/${lawyerId}`
                 )
 
                 // Transform the response data to match our interface
