@@ -900,7 +900,6 @@ export default function LawyersPage() {
       </div>
 
       {/* Booking Dialog */}
-      {/* Booking Dialog */}
       <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -1008,6 +1007,14 @@ export default function LawyersPage() {
               )}
 
               <div className="pt-4">
+                {/* <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm text-gray-600">Consultation Fee</span>
+                  <span className="font-medium">₹{selectedLawyer.consultationFee}</span>
+                </div>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-sm text-gray-600">Platform Fee (30%)</span>
+                  <span className="font-medium">₹{Math.round(selectedLawyer.consultationFee * 0.3)}</span>
+                </div> */}
                 <div className="flex justify-between items-center border-t pt-4">
                   <span className="font-medium">Total Amount</span>
                   <span className="text-lg font-bold">₹{selectedLawyer.consultationFee}</span>

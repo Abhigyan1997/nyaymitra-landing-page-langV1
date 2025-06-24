@@ -1,8 +1,9 @@
 "use client"
-
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { BarChart2, ChevronRight } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -46,8 +47,21 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 
+interface Profile {
+  id: string;
+  name: string;
+  email: string;
+  role: 'lawyer' | 'user';
+  avatar?: string;
+  phoneNumber?: string;
+  // Add any other fields you need
+}
+
+
 export default function HomePage() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null)
   const [language, setLanguage] = useState<"en" | "hi">("en");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
@@ -60,8 +74,9 @@ export default function HomePage() {
     duration: string
   }>>([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // Add this near your other state declarations
   const [mounted, setMounted] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+
 
   useEffect(() => {
     setMounted(true); // Set mounted to true when component mounts on client
@@ -671,9 +686,19 @@ export default function HomePage() {
                     <Button
                       size="sm"
                       className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                      disabled={isProfileLoading}
                     >
-                      <User className="h-4 w-4 mr-2" />
-                      Profile
+                      {isProfileLoading ? (
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Loading...
+                        </div>
+                      ) : (
+                        <>
+                          <User className="h-4 w-4 mr-2" />
+                          Profile
+                        </>
+                      )}
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -685,6 +710,61 @@ export default function HomePage() {
                         My Profile
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        const token = localStorage.getItem('token');
+                        console.log('Current token:', token); // ✅ debug log
+
+                        if (!token) {
+                          router.push('/auth/login');
+                          return;
+                        }
+
+                        try {
+                          setIsProfileLoading(true);
+
+                          let role = profile?.role;
+
+                          if (!role) {
+                            const response = await fetch('/api/profile', {
+                              headers: {
+                                'Authorization': `Bearer ${token}`
+                              }
+                            });
+
+                            if (!response.ok) {
+                              throw new Error('Failed to fetch profile');
+                            }
+
+                            const data = await response.json();
+                            setProfile(data);
+                            role = data.role;
+                          }
+
+                          const dashboardPath = role === 'lawyer'
+                            ? '/dashboard/lawyer'
+                            : '/dashboard/user';
+
+                          console.log("Redirecting to:", dashboardPath); // ✅ check this in dev tools
+                          router.push(dashboardPath);
+                        } catch (error) {
+                          console.error('Redirect failed:', error);
+                          router.push('/auth/login');
+                        } finally {
+                          setIsProfileLoading(false);
+                        }
+                      }}
+                      disabled={isProfileLoading}
+                    >
+                      <div className="flex items-center gap-3 w-full justify-between">
+                        <div className="flex items-center gap-3">
+                          <BarChart2 className="h-5 w-5 text-green-500" />
+                          <span>{isProfileLoading ? 'Loading...' : 'My Dashboard'}</span>
+                        </div>
+                        <ChevronRight className="h-4 w-4" />
+                      </div>
+                    </DropdownMenuItem>
+
                     <DropdownMenuItem asChild>
                       <button
                         onClick={() => {
@@ -740,7 +820,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-3xl border-b border-white/10 animate-fade-in">

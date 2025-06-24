@@ -309,8 +309,8 @@ export default function ProfilePage() {
 
         try {
             const endpoint = profile.role === 'lawyer'
-                ? "http://localhost:5000/api/v1/auth/edit_lawyer"
-                : "http://localhost:5000/api/v1/auth/edit_user";
+                ? "https://nyaymitra-backend.onrender.com/api/v1/auth/edit_lawyer"
+                : "https://nyaymitra-backend.onrender.com/api/v1/auth/edit_user";
 
             const response = await axios.put(
                 endpoint,
