@@ -86,6 +86,19 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => {
+    const storedProfile = localStorage.getItem("userProfile");
+    if (storedProfile) {
+      try {
+        const parsed = JSON.parse(storedProfile);
+        setProfile(parsed);
+      } catch (error) {
+        console.error("Failed to parse userProfile from localStorage", error);
+      }
+    }
+  }, []);
+
+
+  useEffect(() => {
     // Only run on client side
     setIsLoaded(true);
     setCurrentTime(new Date().toLocaleTimeString());
@@ -616,7 +629,7 @@ export default function HomePage() {
 
                 <div className="flex flex-col">
                   <span className="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-white group-hover:via-blue-200 group-hover:to-purple-200 transition-all duration-500">
-                    NyayMitra
+                    Nyay Mitra
                   </span>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs text-white/60 font-medium tracking-wider uppercase">
@@ -745,11 +758,14 @@ export default function HomePage() {
                         Logout
                       </button>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
-                        My Bookings
-                      </Link>
-                    </DropdownMenuItem>
+                    {profile?.role !== "lawyer" && (
+                      <DropdownMenuItem asChild>
+                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
+                          My Bookings
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+
 
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -860,12 +876,14 @@ export default function HomePage() {
                     My Dashboard
                   </button>
 
-                  <Link
-                    href="/all-bookings"
-                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
-                  >
-                    My Bookings
-                  </Link>
+                  {profile?.role !== "lawyer" && (
+                    <Link
+                      href="/all-bookings"
+                      className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    >
+                      My Bookings
+                    </Link>
+                  )}
 
                   <button
                     onClick={() => {

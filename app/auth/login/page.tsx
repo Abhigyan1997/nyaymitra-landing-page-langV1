@@ -54,6 +54,7 @@ export default function LoginPage() {
       localStorage.setItem("userId", response.data.user.userId) // ✅ FIX THIS
       localStorage.setItem("userName", response.data.user.fullName)
       localStorage.setItem("userEmail", response.data.user.email)
+      localStorage.setItem("userProfile", JSON.stringify(user));
       // ✅ Show success toast
       toast.success(message || "Logged in successfully!")
 
