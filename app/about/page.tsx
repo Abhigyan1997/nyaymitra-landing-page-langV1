@@ -360,7 +360,6 @@ export default function AboutPage() {
                 <p className="text-blue-600 font-medium mb-2">AI/ML Engineer</p>
                 <div className="space-y-1 text-sm text-gray-600 mb-4">
                   <p>2+ years in Machine Learning</p>
-                  <p>M.Tech in Computer Science</p>
                   <Badge variant="secondary" className="text-xs">
                     AI/ML
                   </Badge>
