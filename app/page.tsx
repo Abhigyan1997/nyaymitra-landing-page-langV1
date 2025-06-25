@@ -801,11 +801,18 @@ export default function HomePage() {
                 .map(([key, value]) => (
                   <Link
                     key={key}
-                    href={key === "home" ? "/" : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`}
+                    href={
+                      key === "home"
+                        ? "/"
+                        : key === "legalGPT"
+                          ? "/legal-ai"
+                          : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
+                    }
                     className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
                     {value}
                   </Link>
+
                 ))}
 
               {/* Show profile and logout when logged in */}
