@@ -46,6 +46,7 @@ import {
   CheckCircle,
 } from "lucide-react"
 import Link from "next/link"
+import { sign } from 'crypto';
 
 interface Profile {
   id: string;
@@ -312,6 +313,8 @@ export default function HomePage() {
         careers: "Careers",
         press: "Press",
         blog: "Blog",
+        signup: "Sign Up",
+        signin: "Login",
       },
     },
     hi: {
@@ -504,6 +507,8 @@ export default function HomePage() {
         careers: "करियर",
         press: "प्रेस",
         blog: "ब्लॉग",
+        signup: "साइन अप",
+        signin: "लॉगिन",
       },
     },
   }
@@ -1281,7 +1286,7 @@ export default function HomePage() {
           </div>
 
           {/* Elegant Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
             <div className="flex flex-col items-center space-y-2">
               <span className="text-white/60 text-sm font-medium">Discover More</span>
               <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
@@ -1289,6 +1294,7 @@ export default function HomePage() {
               </div>
             </div>
           </div>
+
         </div>
       </section>
 
@@ -1551,14 +1557,14 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  {/* <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
-                    {t.footer.careers}
-                  </Link> */}
+                  <Link href="/auth/signup" className="text-white/60 hover:text-white transition-colors duration-300">
+                    {t.footer.signup}
+                  </Link>
                 </li>
                 <li>
-                  {/* <Link href="/blog" className="text-white/60 hover:text-white transition-colors duration-300">
-                    {t.footer.blog}
-                  </Link> */}
+                  <Link href="/auth/login" className="text-white/60 hover:text-white transition-colors duration-300">
+                    {t.footer.signin}
+                  </Link>
                 </li>
               </ul>
             </div>
