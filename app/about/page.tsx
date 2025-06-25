@@ -328,7 +328,7 @@ export default function AboutPage() {
                 <p className="text-blue-600 font-medium mb-2">Head of Legal Operations</p>
                 <div className="space-y-1 text-sm text-gray-600 mb-4">
                   <p>25+ years in Legal Practice</p>
-                  <p>M.Com(LLB) from T.N.B University</p>
+                  <p>M.Com(LLB) from T.M.B Law University</p>
                   <Badge variant="secondary" className="text-xs">
                     Civil & Criminal Law Specialist
                   </Badge>
@@ -356,17 +356,17 @@ export default function AboutPage() {
                 <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">AI Researcher</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Alok Abhigyan</h3>
                 <p className="text-blue-600 font-medium mb-2">AI/ML Engineer</p>
                 <div className="space-y-1 text-sm text-gray-600 mb-4">
-                  <p>4+ years in Machine Learning</p>
+                  <p>2+ years in Machine Learning</p>
                   <p>M.Tech in Computer Science</p>
                   <Badge variant="secondary" className="text-xs">
-                    NLP Specialist
+                    AI/ML
                   </Badge>
                 </div>
                 <p className="text-gray-600 text-sm mb-4">
-                  Specializes in natural language processing and legal document analysis.
+                  Specializes in AI/ML and natural language processing and legal document analysis.
                 </p>
                 <div className="flex justify-center space-x-3">
                   <Button variant="outline" size="sm">
@@ -388,10 +388,10 @@ export default function AboutPage() {
                 <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">UX Designer</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Shweta Upadhya</h3>
                 <p className="text-blue-600 font-medium mb-2">Product Designer</p>
                 <div className="space-y-1 text-sm text-gray-600 mb-4">
-                  <p>6+ years in UI/UX Design</p>
+                  <p>3+ years in UI/UX Design</p>
                   <p>B.Des from NID</p>
                   <Badge variant="secondary" className="text-xs">
                     User Experience
