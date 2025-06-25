@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Scale, MapPin, Phone, Mail, Clock, Send, MessageCircle, Users, CheckCircle } from "lucide-react"
+import { Scale, MapPin, Phone, Mail, Clock, Send, MessageCircle, Users, CheckCircle, AlertCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
 
 export default function ContactPage() {
@@ -22,11 +20,36 @@ export default function ContactPage() {
     message: "",
   })
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // In real app, this would submit to your backend
-    setIsSubmitted(true)
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send message')
+      }
+
+      setIsSubmitted(true)
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      setError(error instanceof Error ? error.message : 'An unknown error occurred')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -116,9 +139,21 @@ export default function ContactPage() {
               <CheckCircle className="h-8 w-8 text-green-600" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">Message Sent!</h2>
-            <p className="text-gray-600 mb-6">Thank you for contacting us. We'll get back to you within 24 hours.</p>
+            <p className="text-gray-600 mb-6">
+              Thank you for contacting us. We've sent a confirmation to your email and our team will get back to you within 24 hours.
+            </p>
             <div className="space-y-3">
-              <Button className="w-full" onClick={() => setIsSubmitted(false)}>
+              <Button className="w-full" onClick={() => {
+                setIsSubmitted(false)
+                setFormData({
+                  name: "",
+                  email: "",
+                  phone: "",
+                  subject: "",
+                  category: "",
+                  message: "",
+                })
+              }}>
                 Send Another Message
               </Button>
               <Link href="/">
@@ -256,10 +291,27 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full" size="lg">
-                    <Send className="h-4 w-4 mr-2" />
-                    Send Message
-                  </Button>
+                  <div className="space-y-3">
+                    <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4 mr-2" />
+                          Send Message
+                        </>
+                      )}
+                    </Button>
+                    {error && (
+                      <div className="flex items-center gap-2 text-red-600 text-sm p-3 bg-red-50 rounded-md">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+                  </div>
                 </form>
               </CardContent>
             </Card>

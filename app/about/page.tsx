@@ -275,6 +275,7 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
+      {/* Team */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -283,36 +284,135 @@ export default function AboutPage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
-              <Card key={index} className="text-center overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <Users className="h-16 w-16 text-gray-400" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-1">{member.name}</h3>
-                  <p className="text-blue-600 font-medium mb-2">{member.role}</p>
-                  <div className="space-y-1 text-sm text-gray-600 mb-4">
-                    <p>{member.experience}</p>
-                    <p>{member.education}</p>
-                    <Badge variant="secondary" className="text-xs">
-                      {member.specialization}
-                    </Badge>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-4">{member.bio}</p>
-                  <div className="flex justify-center space-x-3">
-                    <Button variant="outline" size="sm">
+            {/* Mune Alok Abhigyan */}
+            <Card className="text-center overflow-hidden">
+              <CardContent className="p-6">
+                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Users className="h-16 w-16 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1"> Alok Abhigyan</h3>
+                <p className="text-blue-600 font-medium mb-2">Founder & Full Stack Developer</p>
+                <div className="space-y-1 text-sm text-gray-600 mb-4">
+                  <p>2+ years in Web Development</p>
+                  <p>Jadavpur University</p>
+                  <Badge variant="secondary" className="text-xs">
+                    MERN Stack Specialist
+                  </Badge>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Full stack developer with expertise in building scalable web applications and AI integrations.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="https://www.linkedin.com/in/alok-abhigyan" target="_blank">
                       <Linkedin className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Twitter className="h-4 w-4" />
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Twitter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Mail className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Placeholder for Team Member 2 */}
+            <Card className="text-center overflow-hidden">
+              <CardContent className="p-6">
+                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Users className="h-16 w-16 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Bharat Rajak</h3>
+                <p className="text-blue-600 font-medium mb-2">Head of Legal Operations</p>
+                <div className="space-y-1 text-sm text-gray-600 mb-4">
+                  <p>25+ years in Legal Practice</p>
+                  <p>M.Com(LLB) from T.N.B University</p>
+                  <Badge variant="secondary" className="text-xs">
+                    Civil & Criminal Law Specialist
+                  </Badge>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Experienced legal professional with expertise in civil and criminal law.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <Button variant="outline" size="sm">
+                    <Linkedin className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Twitter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Mail className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Placeholder for Team Member 3 */}
+            <Card className="text-center overflow-hidden">
+              <CardContent className="p-6">
+                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Users className="h-16 w-16 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">AI Researcher</h3>
+                <p className="text-blue-600 font-medium mb-2">AI/ML Engineer</p>
+                <div className="space-y-1 text-sm text-gray-600 mb-4">
+                  <p>4+ years in Machine Learning</p>
+                  <p>M.Tech in Computer Science</p>
+                  <Badge variant="secondary" className="text-xs">
+                    NLP Specialist
+                  </Badge>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Specializes in natural language processing and legal document analysis.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <Button variant="outline" size="sm">
+                    <Linkedin className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Twitter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Mail className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Placeholder for Team Member 4 */}
+            <Card className="text-center overflow-hidden">
+              <CardContent className="p-6">
+                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <Users className="h-16 w-16 text-gray-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">UX Designer</h3>
+                <p className="text-blue-600 font-medium mb-2">Product Designer</p>
+                <div className="space-y-1 text-sm text-gray-600 mb-4">
+                  <p>6+ years in UI/UX Design</p>
+                  <p>B.Des from NID</p>
+                  <Badge variant="secondary" className="text-xs">
+                    User Experience
+                  </Badge>
+                </div>
+                <p className="text-gray-600 text-sm mb-4">
+                  Focused on creating intuitive and accessible interfaces for legal technology.
+                </p>
+                <div className="flex justify-center space-x-3">
+                  <Button variant="outline" size="sm">
+                    <Linkedin className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Twitter className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Mail className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

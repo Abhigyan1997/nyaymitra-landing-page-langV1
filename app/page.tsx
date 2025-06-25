@@ -711,59 +711,23 @@ export default function HomePage() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={async () => {
-                        const token = localStorage.getItem('token');
-                        console.log('Current token:', token); // ✅ debug log
+                      onClick={() => {
+                        const dashboardURL = profile?.role === 'lawyer'
+                          ? 'https://nyaymitra-dashboard.com/dashboard/lawyer'
+                          : 'https://nyaymitra-dashboard.com/dashboard/user';
 
-                        if (!token) {
-                          router.push('/auth/login');
-                          return;
-                        }
-
-                        try {
-                          setIsProfileLoading(true);
-
-                          let role = profile?.role;
-
-                          if (!role) {
-                            const response = await fetch('/api/profile', {
-                              headers: {
-                                'Authorization': `Bearer ${token}`
-                              }
-                            });
-
-                            if (!response.ok) {
-                              throw new Error('Failed to fetch profile');
-                            }
-
-                            const data = await response.json();
-                            setProfile(data);
-                            role = data.role;
-                          }
-
-                          const dashboardPath = role === 'lawyer'
-                            ? '/dashboard/lawyer'
-                            : '/dashboard/user';
-
-                          console.log("Redirecting to:", dashboardPath); // ✅ check this in dev tools
-                          router.push(dashboardPath);
-                        } catch (error) {
-                          console.error('Redirect failed:', error);
-                          router.push('/auth/login');
-                        } finally {
-                          setIsProfileLoading(false);
-                        }
+                        window.location.href = dashboardURL;
                       }}
-                      disabled={isProfileLoading}
                     >
                       <div className="flex items-center gap-3 w-full justify-between">
                         <div className="flex items-center gap-3">
                           <BarChart2 className="h-5 w-5 text-green-500" />
-                          <span>{isProfileLoading ? 'Loading...' : 'My Dashboard'}</span>
+                          <span>My Dashboard</span>
                         </div>
                         <ChevronRight className="h-4 w-4" />
                       </div>
                     </DropdownMenuItem>
+
 
                     <DropdownMenuItem asChild>
                       <button
@@ -776,6 +740,12 @@ export default function HomePage() {
                         Logout
                       </button>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
+                        My Bookings
+                      </Link>
+                    </DropdownMenuItem>
+
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : mounted && (
@@ -847,6 +817,44 @@ export default function HomePage() {
                   >
                     My Profile
                   </Link>
+                  <button
+                    onClick={() => {
+                      const token = localStorage.getItem('token');
+                      if (!token) {
+                        router.push('/auth/login');
+                        return;
+                      }
+
+                      const storedProfile = localStorage.getItem("userProfile");
+                      let role = profile?.role;
+
+                      if (!role && storedProfile) {
+                        try {
+                          const parsed = JSON.parse(storedProfile);
+                          role = parsed.role;
+                        } catch (e) {
+                          console.error("Failed to parse stored profile");
+                        }
+                      }
+
+                      const dashboardURL = role === 'lawyer'
+                        ? 'https://nyaymitra-dashboard.com/dashboard/lawyer'
+                        : 'https://nyaymitra-dashboard.com/dashboard/user';
+
+                      window.location.href = dashboardURL;
+                    }}
+                    className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    My Dashboard
+                  </button>
+
+                  <Link
+                    href="/all-bookings"
+                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                  >
+                    My Bookings
+                  </Link>
+
                   <button
                     onClick={() => {
                       localStorage.removeItem("token");
@@ -1063,7 +1071,7 @@ export default function HomePage() {
                 </Link>
 
                 <Link href="/lawyers">
-                  <Button
+                  {/* <Button
                     variant="outline"
                     size="lg"
                     className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-white/5 border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-500 group relative overflow-hidden"
@@ -1071,7 +1079,7 @@ export default function HomePage() {
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <Play className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
                     <span className="relative z-10 font-semibold">Watch Demo</span>
-                  </Button>
+                  </Button> */}
                 </Link>
               </div>
 

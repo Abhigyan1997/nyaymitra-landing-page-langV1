@@ -175,6 +175,52 @@ For any queries, please contact support@legalconnect.in
         URL.revokeObjectURL(url)
     }
 
+    const getStatusBadge = () => {
+        const statusSteps = [
+            { id: 'pending', label: 'Pending', icon: <Clock className="w-4 h-4" />, color: 'text-yellow-500' },
+            { id: 'confirmed', label: 'Confirmed', icon: <CheckCircle2 className="w-4 h-4" />, color: 'text-green-500' },
+            { id: 'completed', label: 'Completed', icon: <Star className="w-4 h-4" />, color: 'text-blue-500' },
+            { id: 'cancelled', label: 'Cancelled', icon: <XCircle className="w-4 h-4" />, color: 'text-destructive' },
+        ]
+
+        const status = statusSteps.find(step => step.id === booking?.status.toLowerCase()) ||
+            { icon: <Clock className="w-4 h-4" />, color: 'text-muted-foreground', label: 'Unknown' }
+
+        return (
+            <Badge
+                variant={
+                    booking?.status === 'confirmed' ? 'default' :
+                        booking?.status === 'completed' ? 'secondary' :
+                            booking?.status === 'cancelled' ? 'destructive' : 'outline'
+                }
+                className="gap-2 px-3 py-1.5 rounded-lg"
+            >
+                <span className={status.color}>{status.icon}</span>
+                <span>{status.label}</span>
+            </Badge>
+        )
+    }
+
+    const getModeBadge = () => {
+        if (!booking) return null;
+
+        const modeConfig = {
+            video: { icon: <Video className="w-4 h-4" />, color: 'bg-purple-100 text-purple-800' },
+            phone: { icon: <Phone className="w-4 h-4" />, color: 'bg-blue-100 text-blue-800' },
+            chat: { icon: <MessageSquare className="w-4 h-4" />, color: 'bg-green-100 text-green-800' },
+            default: { icon: <MessageSquare className="w-4 h-4" />, color: 'bg-gray-100 text-gray-800' }
+        }
+
+        const mode = modeConfig[booking.mode as keyof typeof modeConfig] || modeConfig.default
+
+        return (
+            <Badge className={`gap-2 ${mode.color}`}>
+                {mode.icon}
+                <span className="capitalize">{booking.mode}</span>
+            </Badge>
+        )
+    }
+
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20">
@@ -201,14 +247,11 @@ For any queries, please contact support@legalconnect.in
                         The booking you're looking for doesn't exist or may have been removed.
                     </p>
                 </div>
-                <Button
-                    onClick={() => router.push(isLawyer ? '/dashboard/lawyer' : '/dashboard/user')}
-                    variant="outline"
-                    className="mt-4"
-                >
-                    <ArrowLeft className="mr-2 h-4 w-4" />
-                    Go to Dashboard
+                <Button onClick={() => router.push("/all-bookings")}>
+                    View All Bookings
                 </Button>
+
+
             </div>
         )
     }
@@ -222,39 +265,6 @@ For any queries, please contact support@legalconnect.in
 
     const currentStatusIndex = statusSteps.findIndex(step => step.id === booking.status.toLowerCase())
     const progressValue = (currentStatusIndex / (statusSteps.length - 1)) * 100
-
-    const getStatusBadge = () => {
-        const status = statusSteps.find(step => step.id === booking.status.toLowerCase())
-        return (
-            <Badge
-                variant={
-                    booking.status === 'confirmed' ? 'default' :
-                        booking.status === 'completed' ? 'secondary' :
-                            booking.status === 'cancelled' ? 'destructive' : 'outline'
-                }
-                className="gap-2 px-3 py-1.5 rounded-lg"
-            >
-                <span className={status?.color}>{status?.icon}</span>
-                <span>{booking.status}</span>
-            </Badge>
-        )
-    }
-
-    const getModeBadge = () => {
-        const modeConfig = {
-            video: { icon: <Video className="w-4 h-4" />, color: 'bg-purple-100 text-purple-800' },
-            phone: { icon: <Phone className="w-4 h-4" />, color: 'bg-blue-100 text-blue-800' },
-            chat: { icon: <MessageSquare className="w-4 h-4" />, color: 'bg-green-100 text-green-800' }
-        }
-        const mode = modeConfig[booking.mode]
-
-        return (
-            <Badge className={`gap-2 ${mode.color}`}>
-                {mode.icon}
-                <span className="capitalize">{booking.mode}</span>
-            </Badge>
-        )
-    }
 
     return (
         <div className="max-w-6xl mx-auto my-8 px-4 sm:px-6 lg:px-8 space-y-8">
@@ -270,14 +280,10 @@ For any queries, please contact support@legalconnect.in
                     <ArrowLeft className="w-4 h-4" />
                     Back
                 </Button>
-                <Button
-                    onClick={() => router.push(isLawyer ? '/dashboard/lawyer' : '/dashboard/user')}
-                    variant="outline"
-                    className="gap-2"
-                >
-                    {isLawyer ? <Briefcase className="w-4 h-4" /> : <User className="w-4 h-4" />}
-                    {isLawyer ? 'Lawyer Dashboard' : 'My Dashboard'}
+                <Button onClick={() => router.push("/all-bookings")}>
+                    View All Bookings
                 </Button>
+
             </div>
 
             {/* Booking Header */}
@@ -533,8 +539,10 @@ For any queries, please contact support@legalconnect.in
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+
                                         {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
                                     </h3>
+
                                     <p className="text-muted-foreground">
                                         {isLawyer ? "Client" : "Criminal Lawyer | Supreme Court of India"}
                                     </p>
@@ -847,7 +855,6 @@ For any queries, please contact support@legalconnect.in
         </div>
     )
 }
-
 function InfoRow({
     icon,
     label,
