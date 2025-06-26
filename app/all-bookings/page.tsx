@@ -19,7 +19,9 @@ import {
     CheckCircle2,
     XCircle,
     Clock4,
-    Gavel
+    Gavel,
+    ChevronLeft,
+    ChevronRight as ChevronRightIcon
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Badge } from "@/components/ui/badge"
@@ -42,6 +44,14 @@ interface Booking {
     paymentId: string
     paymentMode: string
     createdAt: string
+}
+
+interface ApiResponse {
+    success: boolean
+    currentPage: number
+    totalPages: number
+    totalBookings: number
+    bookings: Booking[]
 }
 
 const modeIcons = {
@@ -74,33 +84,57 @@ export default function AllBookingsPage() {
     const [bookings, setBookings] = useState<Booking[]>([])
     const [loading, setLoading] = useState(true)
     const [activeTab, setActiveTab] = useState("all")
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalBookings: 0,
+        limit: 10
+    })
     const router = useRouter()
 
-    useEffect(() => {
-        const fetchBookings = async () => {
-            const userId = localStorage.getItem("userId")
-            const token = localStorage.getItem("token")
+    const fetchBookings = async (page = 1) => {
+        const userId = localStorage.getItem("userId")
+        const token = localStorage.getItem("token")
 
-            try {
-                const response = await axios.get(
-                    `https://nyaymitra-backend.onrender.com/api/v1/booking/allOrders/${userId}`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+        try {
+            setLoading(true)
+            const response = await axios.get<ApiResponse>(
+                `https://nyaymitra-backend.onrender.com/api/v1/booking/allOrders/${userId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    params: {
+                        page,
+                        limit: pagination.limit
                     }
-                )
-                setBookings(response.data.bookings || [])
-            } catch (error) {
-                console.error("Error fetching bookings:", error)
-                toast.error("Failed to load bookings")
-            } finally {
-                setLoading(false)
-            }
-        }
+                }
+            )
 
+            setBookings(response.data.bookings || [])
+            setPagination({
+                currentPage: response.data.currentPage,
+                totalPages: response.data.totalPages,
+                totalBookings: response.data.totalBookings,
+                limit: pagination.limit
+            })
+        } catch (error) {
+            console.error("Error fetching bookings:", error)
+            toast.error("Failed to load bookings")
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
         fetchBookings()
-    }, [])
+    }, [activeTab]) // Refetch when tab changes
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 1 && newPage <= pagination.totalPages) {
+            fetchBookings(newPage)
+        }
+    }
 
     const filteredBookings = bookings.filter(booking => {
         if (activeTab === "all") return true
@@ -176,7 +210,10 @@ export default function AllBookingsPage() {
                     </p>
                 </div>
 
-                <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <Tabs value={activeTab} onValueChange={(value) => {
+                    setActiveTab(value)
+                    fetchBookings(1) // Reset to first page when tab changes
+                }}>
                     <TabsList className="bg-white border border-gray-200 p-1 rounded-lg">
                         <TabsTrigger value="all" className="px-4 py-1 rounded-md data-[state=active]:bg-gray-100">All</TabsTrigger>
                         <TabsTrigger value="confirmed" className="px-4 py-1 rounded-md data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700">Confirmed</TabsTrigger>
@@ -205,96 +242,165 @@ export default function AllBookingsPage() {
                                 </Button>
                             </div>
                         ) : (
-                            <div className="space-y-6">
-                                {filteredBookings.map((booking) => {
-                                    const ModeIcon = modeIcons[booking.mode as keyof typeof modeIcons] || Video
-                                    const StatusIcon = statusIcons[booking.status as keyof typeof statusIcons] || CheckCircle2
-                                    const formattedDate = format(new Date(booking.date), "EEE, MMM dd, yyyy")
-                                    const formattedTime = booking.slot.replace(/([AP]M)/, " $1")
+                            <>
+                                <div className="space-y-6">
+                                    {filteredBookings.map((booking) => {
+                                        const ModeIcon = modeIcons[booking.mode as keyof typeof modeIcons] || Video
+                                        const StatusIcon = statusIcons[booking.status as keyof typeof statusIcons] || CheckCircle2
+                                        const formattedDate = format(new Date(booking.date), "EEE, MMM dd, yyyy")
+                                        const formattedTime = booking.slot.replace(/([AP]M)/, " $1")
 
-                                    return (
-                                        <div key={booking._id} className="group relative">
-                                            {/* Timeline dot */}
-                                            <div className="absolute left-0 top-6 -ml-1.5 h-3 w-3 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors"></div>
+                                        return (
+                                            <div key={booking._id} className="group relative">
+                                                {/* Timeline dot */}
+                                                <div className="absolute left-0 top-6 -ml-1.5 h-3 w-3 rounded-full bg-gray-300 group-hover:bg-indigo-500 transition-colors"></div>
 
-                                            <div className="relative pl-8">
-                                                <div className="flex flex-col border rounded-xl p-6 hover:border-indigo-300 hover:shadow-sm transition-all bg-white">
-                                                    <div className="flex justify-between items-start">
-                                                        <div>
-                                                            <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                                                                <User className="w-5 h-5 text-gray-400" />
-                                                                {booking.lawyerName}
-                                                            </h3>
-                                                            <div className="flex items-center gap-2 mt-1">
-                                                                <ModeIcon className={`w-4 h-4 ${modeColors[booking.mode as keyof typeof modeColors]}`} />
-                                                                <span className="text-sm text-gray-600 capitalize">{booking.mode} consultation</span>
+                                                <div className="relative pl-8">
+                                                    <div className="flex flex-col border rounded-xl p-6 hover:border-indigo-300 hover:shadow-sm transition-all bg-white">
+                                                        <div className="flex justify-between items-start">
+                                                            <div>
+                                                                <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                                                                    <User className="w-5 h-5 text-gray-400" />
+                                                                    {booking.lawyerName}
+                                                                </h3>
+                                                                <div className="flex items-center gap-2 mt-1">
+                                                                    <ModeIcon className={`w-4 h-4 ${modeColors[booking.mode as keyof typeof modeColors]}`} />
+                                                                    <span className="text-sm text-gray-600 capitalize">{booking.mode} consultation</span>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <Badge
-                                                            className={`${statusColors[booking.status as keyof typeof statusColors]} rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1`}
-                                                        >
-                                                            <StatusIcon className="w-3 h-3" />
-                                                            {booking.status}
-                                                        </Badge>
-                                                    </div>
-
-                                                    <Separator className="my-4" />
-
-                                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                                        <div className="space-y-1">
-                                                            <p className="text-xs text-gray-500">Date</p>
-                                                            <div className="flex items-center gap-2">
-                                                                <CalendarDays className="w-4 h-4 text-gray-400" />
-                                                                <p className="text-gray-900">{formattedDate}</p>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="space-y-1">
-                                                            <p className="text-xs text-gray-500">Time</p>
-                                                            <div className="flex items-center gap-2">
-                                                                <Clock className="w-4 h-4 text-gray-400" />
-                                                                <p className="text-gray-900">{formattedTime}</p>
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="space-y-1">
-                                                            <p className="text-xs text-gray-500">Amount</p>
-                                                            <div className="flex items-center gap-2">
-                                                                <CreditCard className="w-4 h-4 text-gray-400" />
-                                                                <p className="text-gray-900">₹{booking.amount}</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="flex justify-between mt-6">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="sm"
-                                                            onClick={() => navigateToBookingDetails(booking._id)}
-                                                            className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50"
-                                                        >
-                                                            View details
-                                                            <ChevronRight className="w-4 h-4 ml-1" />
-                                                        </Button>
-                                                        {booking.status === "confirmed" && (
-                                                            <Button
-                                                                size="sm"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    toast.info("Connecting to your consultation...")
-                                                                }}
-                                                                className="bg-indigo-600 hover:bg-indigo-700"
+                                                            <Badge
+                                                                className={`${statusColors[booking.status as keyof typeof statusColors]} rounded-full px-3 py-1 text-xs font-medium flex items-center gap-1`}
                                                             >
-                                                                Join Now
+                                                                <StatusIcon className="w-3 h-3" />
+                                                                {booking.status}
+                                                            </Badge>
+                                                        </div>
+
+                                                        <Separator className="my-4" />
+
+                                                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                                            <div className="space-y-1">
+                                                                <p className="text-xs text-gray-500">Date</p>
+                                                                <div className="flex items-center gap-2">
+                                                                    <CalendarDays className="w-4 h-4 text-gray-400" />
+                                                                    <p className="text-gray-900">{formattedDate}</p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-1">
+                                                                <p className="text-xs text-gray-500">Time</p>
+                                                                <div className="flex items-center gap-2">
+                                                                    <Clock className="w-4 h-4 text-gray-400" />
+                                                                    <p className="text-gray-900">{formattedTime}</p>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="space-y-1">
+                                                                <p className="text-xs text-gray-500">Amount</p>
+                                                                <div className="flex items-center gap-2">
+                                                                    <CreditCard className="w-4 h-4 text-gray-400" />
+                                                                    <p className="text-gray-900">₹{booking.amount}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex justify-between mt-6">
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                onClick={() => navigateToBookingDetails(booking._id)}
+                                                                className="text-indigo-600 hover:text-indigo-800 hover:bg-indigo-50"
+                                                            >
+                                                                View details
+                                                                <ChevronRight className="w-4 h-4 ml-1" />
                                                             </Button>
-                                                        )}
+                                                            {booking.status === "confirmed" && (
+                                                                <Button
+                                                                    size="sm"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation()
+                                                                        toast.info("Connecting to your consultation...")
+                                                                    }}
+                                                                    className="bg-indigo-600 hover:bg-indigo-700"
+                                                                >
+                                                                    Join Now
+                                                                </Button>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                        )
+                                    })}
+                                </div>
+
+                                {/* Pagination controls */}
+                                <div className="flex items-center justify-between mt-8">
+                                    <div className="text-sm text-gray-600">
+                                        Showing {(pagination.currentPage - 1) * pagination.limit + 1} to{" "}
+                                        {Math.min(pagination.currentPage * pagination.limit, pagination.totalBookings)} of{" "}
+                                        {pagination.totalBookings} bookings
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handlePageChange(pagination.currentPage - 1)}
+                                            disabled={pagination.currentPage === 1}
+                                        >
+                                            <ChevronLeft className="h-4 w-4" />
+                                            Previous
+                                        </Button>
+                                        <div className="flex items-center space-x-1">
+                                            {Array.from({ length: Math.min(5, pagination.totalPages) }, (_, i) => {
+                                                // Show pages around current page
+                                                let pageNum
+                                                if (pagination.totalPages <= 5) {
+                                                    pageNum = i + 1
+                                                } else if (pagination.currentPage <= 3) {
+                                                    pageNum = i + 1
+                                                } else if (pagination.currentPage >= pagination.totalPages - 2) {
+                                                    pageNum = pagination.totalPages - 4 + i
+                                                } else {
+                                                    pageNum = pagination.currentPage - 2 + i
+                                                }
+
+                                                return (
+                                                    <Button
+                                                        key={pageNum}
+                                                        variant={pagination.currentPage === pageNum ? "default" : "outline"}
+                                                        size="sm"
+                                                        onClick={() => handlePageChange(pageNum)}
+                                                    >
+                                                        {pageNum}
+                                                    </Button>
+                                                )
+                                            })}
+                                            {pagination.totalPages > 5 && pagination.currentPage < pagination.totalPages - 2 && (
+                                                <>
+                                                    <span className="px-2">...</span>
+                                                    <Button
+                                                        variant="outline"
+                                                        size="sm"
+                                                        onClick={() => handlePageChange(pagination.totalPages)}
+                                                    >
+                                                        {pagination.totalPages}
+                                                    </Button>
+                                                </>
+                                            )}
                                         </div>
-                                    )
-                                })}
-                            </div>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handlePageChange(pagination.currentPage + 1)}
+                                            disabled={pagination.currentPage === pagination.totalPages}
+                                        >
+                                            Next
+                                            <ChevronRightIcon className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                </div>
+                            </>
                         )}
                     </TabsContent>
                 </Tabs>
