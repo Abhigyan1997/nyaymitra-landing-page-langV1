@@ -730,11 +730,7 @@ export default function HomePage() {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => {
-                        const dashboardURL = profile?.role === 'lawyer'
-                          ? 'https://nyaymitra-dashboard.com/dashboard/lawyer'
-                          : 'https://nyaymitra-dashboard.com/dashboard/user';
-
-                        window.location.href = dashboardURL;
+                        window.location.href = 'https://dashbord-nyaymitra.vercel.app/';
                       }}
                     >
                       <div className="flex items-center gap-3 w-full justify-between">
@@ -745,6 +741,7 @@ export default function HomePage() {
                         <ChevronRight className="h-4 w-4" />
                       </div>
                     </DropdownMenuItem>
+
 
 
                     <DropdownMenuItem asChild>
@@ -853,28 +850,14 @@ export default function HomePage() {
                         return;
                       }
 
-                      const storedProfile = localStorage.getItem("userProfile");
-                      let role = profile?.role;
-
-                      if (!role && storedProfile) {
-                        try {
-                          const parsed = JSON.parse(storedProfile);
-                          role = parsed.role;
-                        } catch (e) {
-                          console.error("Failed to parse stored profile");
-                        }
-                      }
-
-                      const dashboardURL = role === 'lawyer'
-                        ? 'https://nyaymitra-dashboard.com/dashboard/lawyer'
-                        : 'https://nyaymitra-dashboard.com/dashboard/user';
-
-                      window.location.href = dashboardURL;
+                      // Redirect all authenticated users (lawyer or not) to the main dashboard
+                      window.location.href = 'https://dashbord-nyaymitra.vercel.app/';
                     }}
                     className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
                     My Dashboard
                   </button>
+
 
                   {profile?.role !== "lawyer" && (
                     <Link
