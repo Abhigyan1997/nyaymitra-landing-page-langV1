@@ -1,112 +1,174 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import {
-  Scale,
-  Heart,
-  Building,
-  ShoppingCart,
-  Shield,
-  Briefcase,
-  Users,
-  FileText,
-  Gavel,
-  ArrowRight,
-  Sparkles,
-  Zap,
-  Brain,
-  Star,
+  PenTool, GraduationCap, FileSignature, Package, Clock, ShoppingBag, FileCode,
+  Eye, Info, List, FileSearch, Play, Award, Users, ArrowRight, Brain, Zap,
+  Scale, Heart, Building, ShoppingCart, Shield, Briefcase, FileText, Gavel,
+  Sparkles, Star, Download, FileCheck, BookOpen, LayoutTemplate
 } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+
+// Predefined positions for the floating dots to avoid hydration mismatch
+const FLOATING_DOTS = Array.from({ length: 30 }, (_, i) => ({
+  id: i,
+  left: Math.floor(Math.random() * 100),
+  top: Math.floor(Math.random() * 100),
+  delay: Math.random() * 3,
+  duration: 2 + Math.random() * 3
+}));
 
 export default function ServicesPage() {
   const [hoveredService, setHoveredService] = useState<string | null>(null)
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const services = [
     {
-      id: "criminal-law",
-      title: "Criminal Defense AI",
-      description: "Advanced AI-powered criminal defense strategies with quantum case analysis",
-      icon: Gavel,
-      color: "from-red-500 to-pink-500",
-      popular: true,
-      areas: ["Murder Cases", "Cyber Crimes", "White Collar", "Drug Offenses", "Fraud Defense"],
-      aiFeatures: ["Case Outcome Prediction", "Evidence Analysis", "Precedent Matching"],
-    },
-    {
-      id: "family-law",
-      title: "Family Law Neural Network",
-      description: "Emotional AI for sensitive family matters with holographic mediation",
-      icon: Heart,
-      color: "from-pink-500 to-rose-500",
-      popular: true,
-      areas: ["Smart Divorce", "AI Custody", "Digital Alimony", "Virtual Mediation", "Blockchain Adoption"],
-      aiFeatures: ["Emotion Detection", "Fair Settlement AI", "Child Welfare Analysis"],
-    },
-    {
-      id: "property-law",
-      title: "Quantum Property Rights",
-      description: "Blockchain-verified property transactions with AR documentation",
-      icon: Building,
-      color: "from-blue-500 to-cyan-500",
-      popular: true,
-      areas: ["Smart Contracts", "AR Surveys", "Blockchain Registry", "Virtual Inspections", "AI Valuations"],
-      aiFeatures: ["Price Prediction", "Risk Assessment", "Document Verification"],
-    },
-    {
-      id: "consumer-law",
-      title: "Consumer Protection Matrix",
-      description: "Real-time consumer rights enforcement with AI complaint processing",
-      icon: ShoppingCart,
-      color: "from-green-500 to-emerald-500",
-      popular: false,
-      areas: ["Auto-Complaints", "AI Refunds", "Digital Rights", "E-commerce Protection", "Smart Warranties"],
-      aiFeatures: ["Instant Case Filing", "Compensation Calculator", "Merchant Analysis"],
-    },
-    {
-      id: "cyber-law",
-      title: "Cyber Security Legal AI",
-      description: "Next-gen cybercrime investigation with quantum encryption analysis",
-      icon: Shield,
-      color: "from-purple-500 to-violet-500",
-      popular: false,
-      areas: ["Data Breach Response", "AI Privacy", "Quantum Hacking", "Digital Forensics", "Crypto Crimes"],
-      aiFeatures: ["Threat Analysis", "Digital Evidence", "Privacy Audit"],
-    },
-    {
-      id: "corporate-law",
-      title: "Corporate Intelligence Suite",
-      description: "AI-driven corporate compliance with predictive regulatory analysis",
-      icon: Briefcase,
-      color: "from-indigo-500 to-blue-500",
-      popular: false,
-      areas: ["Smart Compliance", "AI Contracts", "Merger Analysis", "IPO Automation", "Regulatory Prediction"],
-      aiFeatures: ["Compliance Monitoring", "Risk Prediction", "Contract Generation"],
-    },
-    {
-      id: "labor-law",
-      title: "Workforce Rights AI",
-      description: "Automated labor dispute resolution with fair wage algorithms",
-      icon: Users,
-      color: "from-orange-500 to-amber-500",
-      popular: false,
-      areas: ["AI Arbitration", "Wage Analytics", "Workplace Monitoring", "Union Negotiations", "Gig Economy"],
-      aiFeatures: ["Fair Wage Calculator", "Dispute Prediction", "Performance Analysis"],
-    },
-    {
-      id: "documentation",
-      title: "Legal Document Genesis",
-      description: "AI-powered legal document creation with voice-to-contract technology",
+      id: "instant-download",
+      title: "Self-Attested Document Download",
+      description: "Download pre-filled Rent Agreements, Complaint Letters & Affidavits instantly.",
       icon: FileText,
-      color: "from-teal-500 to-cyan-500",
-      popular: false,
-      areas: ["Voice Contracts", "Auto-Wills", "Smart Agreements", "Digital Notary", "Blockchain Signatures"],
-      aiFeatures: ["Document Generation", "Legal Validation", "Smart Templates"],
+      color: "from-green-500 to-emerald-500",
+      popular: true,
+      areas: ["Rent Agreement", "Affidavit Draft", "Police Complaint", "Consumer Complaint"],
+      aiFeatures: ["Pre-fillable PDF Templates", "Instant Download", "Razorpay Checkout"],
+      pricing: "₹99/document"
     },
-  ]
+    {
+      id: "notary-service",
+      title: "Remote Notary via Licensed Lawyer",
+      description: "Get documents notarized remotely or via courier within 1–4 days.",
+      icon: PenTool,
+      color: "from-yellow-500 to-orange-500",
+      popular: true,
+      areas: ["Affidavit", "Authorization Letter", "Power of Attorney"],
+      aiFeatures: ["PDF Generation", "Manual Notarization", "Email/Courier Delivery"],
+      pricing: "₹399 (e-copy) / ₹799 (courier)"
+    },
+    // {
+    //   id: "student-pass",
+    //   title: "Student Access Pass",
+    //   description: "Unlock premium tools for law students: templates, AI tools, mock cases.",
+    //   icon: GraduationCap,
+    //   color: "from-blue-500 to-cyan-500",
+    //   popular: false,
+    //   areas: ["PDF Samples", "Mock Case Generator", "Premium Dashboard Access"],
+    //   aiFeatures: ["GPT Legal Assistant", "Smart Templates", "Monthly Access"],
+    //   pricing: "₹299/month"
+    // },
+    {
+      id: "ai-affidavit",
+      title: "AI Affidavit Assistant",
+      description: "Generate clean, ready-to-use affidavits with AI in minutes.",
+      icon: FileSignature,
+      color: "from-indigo-500 to-purple-500",
+      popular: false,
+      areas: ["Name Change", "Address Proof", "Lost Certificate", "Declaration"],
+      aiFeatures: ["Form-Based GPT Input", "Legal Formatting", "PDF Output"],
+      pricing: "₹149/document"
+    },
+    // {
+    //   id: "combo-bundles",
+    //   title: "Document Combo Packages",
+    //   description: "Get bundles like 'Rental Kit', 'Startup Kit', or 'Marriage Kit'.",
+    //   icon: Package,
+    //   color: "from-pink-500 to-rose-500",
+    //   popular: false,
+    //   areas: ["Rental Kit", "Marriage Kit", "Startup Kit"],
+    //   aiFeatures: ["Bundle ZIP Delivery", "Razorpay with Coupons", "Email/Download"],
+    //   pricing: "₹299–₹499/bundle"
+    // },
+    {
+      id: "priority-booking",
+      title: "Speed Booking (Priority)",
+      description: "Get same-day legal consultations with verified lawyers.",
+      icon: Clock,
+      color: "from-red-500 to-pink-500",
+      popular: false,
+      areas: ["Urgent Consultations", "Today Booking"],
+      aiFeatures: ["Priority Lawyer Matching", "Razorpay Add-on", "Same-Day Guarantee"],
+      pricing: "₹99 extra (optional)"
+    },
+    {
+      id: "legal-store",
+      title: "Legal Template Store",
+      description: "Purchase verified legal document templates — ready to fill & use.",
+      icon: ShoppingBag,
+      color: "from-gray-700 to-gray-900",
+      popular: false,
+      areas: ["Rent Agreement", "Complaint Letter", "Notice Draft", "Declaration"],
+      aiFeatures: ["Secure Storage (Firebase/S3)", "Dynamic Pricing", "Preview + Buy"],
+      pricing: "₹49–₹299/document"
+    },
+    {
+      id: "ai-pdf",
+      title: "AI PDF Generator",
+      description: "Use GPT to create any legal text and export it as a formatted PDF.",
+      icon: FileCode,
+      color: "from-lime-500 to-green-700",
+      popular: false,
+      areas: ["Police Complaints", "Custom Notices", "Draft Legal Letters"],
+      aiFeatures: ["Natural Language Input", "PDFKit Output", "Instant Download"],
+      pricing: "₹99/document"
+    },
+  ];
+
+  const getServiceButtons = (serviceId: string) => {
+    switch (serviceId) {
+      case "instant-download":
+        return {
+          primary: { text: "Download Now", icon: Download, href: "/services/downloads" },
+          secondary: { text: "View Samples", icon: FileCheck, href: "/services/downloads/samples" }
+        };
+      case "notary-service":
+        return {
+          primary: { text: "Notarize Now", icon: PenTool, href: "/notary/request" },
+          secondary: { text: "Process Info", icon: Info, href: "/notary/how-it-works" }
+        };
+      case "student-pass":
+        return {
+          primary: { text: "Subscribe", icon: GraduationCap, href: "/student-pass/subscribe" },
+          secondary: { text: "Features", icon: BookOpen, href: "/student-pass/features" }
+        };
+      case "ai-affidavit":
+        return {
+          primary: { text: "Generate Now", icon: FileSignature, href: "/ai-affidavit/create" },
+          secondary: { text: "See Examples", icon: FileSearch, href: "/ai-affidavit/examples" }
+        };
+      case "combo-bundles":
+        return {
+          primary: { text: "View Bundles", icon: Package, href: "/bundles" },
+          secondary: { text: "Compare", icon: Scale, href: "/bundles/compare" }
+        };
+      case "priority-booking":
+        return {
+          primary: { text: "Book Now", icon: Clock, href: "/booking/priority" },
+          secondary: { text: "Lawyers", icon: Users, href: "/lawyers/priority" }
+        };
+      case "legal-store":
+        return {
+          primary: { text: "Browse Store", icon: ShoppingBag, href: "/store" },
+          secondary: { text: "Top Items", icon: Award, href: "/store/top" }
+        };
+      case "ai-pdf":
+        return {
+          primary: { text: "Create PDF", icon: FileCode, href: "/ai-pdf/create" },
+          secondary: { text: "Try Demo", icon: Play, href: "/ai-pdf/demo" }
+        };
+      default:
+        return {
+          primary: { text: "Get Started", icon: ArrowRight, href: "/services" },
+          secondary: { text: "Learn More", icon: Info, href: "/services" }
+        };
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -115,21 +177,23 @@ export default function ServicesPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20" />
         <div className="absolute inset-0 cyber-grid opacity-30" />
 
-        {/* Floating Tech Elements */}
-        <div className="absolute inset-0">
-          {[...Array(30)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1 h-1 bg-blue-400/40 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 3}s`,
-              }}
-            />
-          ))}
-        </div>
+        {/* Floating Tech Elements - Client-side only */}
+        {isClient && (
+          <div className="absolute inset-0">
+            {FLOATING_DOTS.map((dot) => (
+              <div
+                key={dot.id}
+                className="absolute w-1 h-1 bg-blue-400/40 rounded-full animate-pulse"
+                style={{
+                  left: `${dot.left}%`,
+                  top: `${dot.top}%`,
+                  animationDelay: `${dot.delay}s`,
+                  animationDuration: `${dot.duration}s`,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Navigation */}
@@ -151,12 +215,12 @@ export default function ServicesPage() {
                   variant="outline"
                   className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm"
                 >
-                  Find AI Lawyers
+                  Find Lawyers
                 </Button>
               </Link>
               <Link href="/legal-gpt">
                 <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0">
-                  Neural Assistant
+                  AI Assistant
                 </Button>
               </Link>
             </div>
@@ -170,15 +234,14 @@ export default function ServicesPage() {
           <div className="text-center">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 backdrop-blur-sm mb-8 animate-pulse">
               <Sparkles className="h-4 w-4 text-blue-400 mr-2" />
-              <span className="text-sm text-blue-300">Next-Generation Legal Services</span>
+              <span className="text-sm text-blue-300">Instant Legal Solutions</span>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              AI-Powered Legal Services
+              Smart Legal Services
             </h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-              Experience the future of legal assistance with our revolutionary AI-driven services, quantum-verified
-              lawyers, and holographic consultations.
+              Get instant access to legal documents, notary services, and expert consultations with our AI-powered platform.
             </p>
           </div>
         </div>
@@ -191,6 +254,7 @@ export default function ServicesPage() {
             {services.map((service, index) => {
               const IconComponent = service.icon
               const isHovered = hoveredService === service.id
+              const buttons = getServiceButtons(service.id)
 
               return (
                 <Card
@@ -198,7 +262,6 @@ export default function ServicesPage() {
                   className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden"
                   onMouseEnter={() => setHoveredService(service.id)}
                   onMouseLeave={() => setHoveredService(null)}
-                  style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   {service.popular && (
                     <Badge className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 border-0 z-10">
@@ -207,16 +270,11 @@ export default function ServicesPage() {
                     </Badge>
                   )}
 
-                  {/* Animated Background Gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-                  />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
 
                   <CardHeader className="relative">
                     <div className="flex items-center space-x-4 mb-4">
-                      <div
-                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 relative`}
-                      >
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${service.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 relative`}>
                         <IconComponent className="h-8 w-8 text-white" />
                         {isHovered && <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse" />}
                       </div>
@@ -224,6 +282,7 @@ export default function ServicesPage() {
                         <CardTitle className="text-xl text-white group-hover:text-blue-300 transition-colors duration-300">
                           {service.title}
                         </CardTitle>
+                        <div className="text-sm text-white/60 mt-1">{service.pricing}</div>
                       </div>
                     </div>
                     <CardDescription className="text-white/70 group-hover:text-white/90 transition-colors duration-300">
@@ -232,7 +291,6 @@ export default function ServicesPage() {
                   </CardHeader>
 
                   <CardContent className="relative">
-                    {/* AI Features */}
                     <div className="mb-4">
                       <h4 className="font-semibold text-sm text-blue-300 mb-2 flex items-center">
                         <Brain className="h-4 w-4 mr-2" />
@@ -256,7 +314,6 @@ export default function ServicesPage() {
                       </div>
                     </div>
 
-                    {/* Service Areas */}
                     <div className="mb-6">
                       <h4 className="font-semibold text-sm text-white/70 mb-2">Specialized Areas:</h4>
                       <div className="flex flex-wrap gap-1">
@@ -274,22 +331,21 @@ export default function ServicesPage() {
                     </div>
 
                     <div className="flex space-x-2">
-                      <Link href={`/lawyers?service=${service.id}`} className="flex-1">
+                      <Link href={buttons.secondary.href} className="flex-1">
                         <Button
                           variant="outline"
                           className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 group/btn"
                         >
-                          <Users className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
-                          Find Experts
+                          <buttons.secondary.icon className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
+                          {buttons.secondary.text}
                         </Button>
                       </Link>
-                      <Link href={`/legal-gpt?topic=${service.id}`}>
+                      <Link href={buttons.primary.href}>
                         <Button
                           className={`bg-gradient-to-r ${service.color} hover:scale-105 transition-all duration-300 group/btn`}
                         >
-                          <Zap className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
-                          AI Chat
-                          <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                          <buttons.primary.icon className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
+                          {buttons.primary.text}
                         </Button>
                       </Link>
                     </div>
@@ -301,46 +357,39 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Updated CTA Section */}
       <section className="relative z-10 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-12 relative overflow-hidden">
-            {/* Animated Background Elements */}
             <div className="absolute inset-0">
               <div className="absolute top-4 left-4 w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-              <div
-                className="absolute top-8 right-8 w-1 h-1 bg-purple-400 rounded-full animate-pulse"
-                style={{ animationDelay: "0.5s" }}
-              />
-              <div
-                className="absolute bottom-6 left-12 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse"
-                style={{ animationDelay: "1s" }}
-              />
+              <div className="absolute top-8 right-8 w-1 h-1 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }} />
+              <div className="absolute bottom-6 left-12 w-1.5 h-1.5 bg-pink-400 rounded-full animate-pulse" style={{ animationDelay: "1s" }} />
             </div>
 
-            <h2 className="text-4xl font-bold text-white mb-4">Don't See Your Legal Challenge?</h2>
+            <h2 className="text-4xl font-bold text-white mb-4">Need Custom Legal Documents?</h2>
             <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-              Our quantum AI legal assistant can analyze any legal scenario with 99.2% accuracy, or connect you with
-              specialized neural-enhanced lawyers.
+              Our AI-powered document generator can create personalized legal documents in minutes, or connect you with expert lawyers for complex cases.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/legal-gpt">
+              <Link href="/ai-document-generator">
                 <Button
                   size="lg"
                   className="px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 transform hover:scale-105 transition-all duration-300 group"
                 >
-                  <Brain className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                  Ask Neural AI
+                  <LayoutTemplate className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                  Generate Document
                   <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
               </Link>
-              <Link href="/contact">
+              <Link href="/lawyers">
                 <Button
                   variant="outline"
                   size="lg"
                   className="px-8 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
                 >
-                  Contact Specialists
+                  <Users className="mr-3 h-5 w-5" />
+                  Consult a Lawyer
                 </Button>
               </Link>
             </div>
