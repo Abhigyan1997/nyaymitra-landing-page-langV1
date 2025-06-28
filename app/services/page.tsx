@@ -236,8 +236,7 @@ export default function ServicesPage() {
               <Sparkles className="h-4 w-4 text-blue-400 mr-2" />
               <span className="text-sm text-blue-300">Instant Legal Solutions</span>
             </div>
-
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent pb-2">
               Smart Legal Services
             </h1>
             <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">

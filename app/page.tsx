@@ -151,7 +151,7 @@ export default function HomePage() {
         title: "Justice for All",
         subtitle: "Anywhere, Anytime",
         description:
-          "Experience the future of legal assistance with our revolutionary AI-powered platform. Connect with verified lawyers, access legal documents, and resolve your legal issues from anywhere in India.",
+          "Create legal documents in minutes, talk to trusted lawyers, and get papers notarized — all from your phone, anywhere in India. Simple, fast, and affordable legal help for everyone.",
         ctaPrimary: "Talk to AI Now",
         ctaSecondary: "Get Free Legal Help",
         liveStatus: "AI System Online",
@@ -162,6 +162,7 @@ export default function HomePage() {
           response: "< 30 Sec Response",
         },
       },
+
       howItWorks: {
         title: "How It Works",
         subtitle: "Simple steps to get legal help",
@@ -345,7 +346,7 @@ export default function HomePage() {
         title: "सभी के लिए न्याय",
         subtitle: "कहीं भी, कभी भी",
         description:
-          "हमारे क्रांतिकारी AI-संचालित प्लेटफॉर्म के साथ कानूनी सहायता के भविष्य का अनुभव करें। सत्यापित वकीलों से जुड़ें, कानूनी दस्तावेजों तक पहुंचें, और भारत में कहीं से भी अपनी कानूनी समस्याओं का समाधान करें।",
+          "कानूनी दस्तावेज पाएं, भरोसेमंद वकीलों से बात करें, और नोटरी से दस्तावेज सत्यापित करवाएं — सब कुछ मोबाइल से, भारत में कहीं भी। आसान, तेज़ और सस्ती कानूनी मदद।",
         ctaPrimary: "अभी AI से बात करें",
         ctaSecondary: "मुफ्त कानूनी सहायता पाएं",
         liveStatus: "AI सिस्टम ऑनलाइन",
@@ -353,9 +354,10 @@ export default function HomePage() {
           cases: "10 लाख+ मामले हल",
           lawyers: "50 हज़ार+ विशेषज्ञ वकील",
           success: "99.9% सफलता दर",
-          response: "< 30 सेकंड जवाब",
+          response: "30 सेकंड से कम में जवाब",
         },
       },
+
       howItWorks: {
         title: "यह कैसे काम करता है",
         subtitle: "कानूनी सहायता पाने के सरल चरण",
