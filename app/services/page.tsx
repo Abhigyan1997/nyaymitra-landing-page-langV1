@@ -1,13 +1,14 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   PenTool, GraduationCap, FileSignature, Package, Clock, ShoppingBag, FileCode,
   Eye, Info, List, FileSearch, Play, Award, Users, ArrowRight, Brain, Zap,
   Scale, Heart, Building, ShoppingCart, Shield, Briefcase, FileText, Gavel,
-  Sparkles, Star, Download, FileCheck, BookOpen, LayoutTemplate
+  Sparkles, Star, Download, FileCheck, BookOpen, LayoutTemplate, Menu, X
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
@@ -24,6 +25,7 @@ const FLOATING_DOTS = Array.from({ length: 30 }, (_, i) => ({
 export default function ServicesPage() {
   const [hoveredService, setHoveredService] = useState<string | null>(null)
   const [isClient, setIsClient] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false) // Added mobile menu state
 
   useEffect(() => {
     setIsClient(true)
@@ -161,31 +163,82 @@ export default function ServicesPage() {
       <nav className="relative z-50 bg-black/20 backdrop-blur-xl border-b border-white/10 sticky top-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
-            <Link href="/" className="flex items-center space-x-3 group">
-              <div className="relative">
-                <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
-                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
-              </div>
-              <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Nyay Mitra
-              </span>
-            </Link>
-            <div className="flex items-center space-x-4">
+            {/* Logo and Back Button - Flex column on mobile */}
+            <div className="flex flex-col md:flex-row md:items-center space-y-1 md:space-y-0 md:space-x-4 lg:space-x-6">
+              <Link href="/" className="flex items-center space-x-3 group">
+                <div className="relative">
+                  <Scale className="h-8 w-8 md:h-10 md:w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
+                  <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
+                </div>
+                <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                  Nyay Mitra
+                </span>
+              </Link>
+              <Link href="/services" className="hidden md:block">
+                <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 text-sm md:text-base">
+                  <ArrowRight className="h-3 w-3 md:h-4 md:w-4 mr-1 transform rotate-180" />
+                  Back to Services
+                </Button>
+              </Link>
+            </div>
+
+            {/* Desktop Navigation - Hidden on mobile */}
+            <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
               <Link href="/lawyers">
                 <Button
                   variant="outline"
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm"
+                  className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm text-sm lg:text-base"
                 >
                   Find Lawyers
                 </Button>
               </Link>
               <Link href="/legal-gpt">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0">
+                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 text-sm lg:text-base">
                   AI Assistant
                 </Button>
               </Link>
             </div>
+
+            {/* Mobile menu button - Shows on small screens */}
+            <div className="md:hidden flex items-center">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/10"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
+
+          {/* Mobile Navigation - Shows when menu is open */}
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden pb-4 space-y-2"
+            >
+              <Link href="/services">
+                <Button variant="ghost" className="w-full justify-start text-white/80 hover:text-white hover:bg-white/10">
+                  <ArrowRight className="h-4 w-4 mr-2 transform rotate-180" />
+                  Back to Services
+                </Button>
+              </Link>
+              <Link href="/lawyers">
+                <Button variant="outline" className="w-full justify-start bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm">
+                  Find Lawyers
+                </Button>
+              </Link>
+              <Link href="/legal-gpt">
+                <Button className="w-full justify-start bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0">
+                  AI Assistant
+                </Button>
+              </Link>
+            </motion.div>
+          )}
         </div>
       </nav>
 
