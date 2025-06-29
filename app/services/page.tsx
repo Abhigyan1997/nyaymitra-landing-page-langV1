@@ -174,12 +174,6 @@ export default function ServicesPage() {
                   Nyay Mitra
                 </span>
               </Link>
-              <Link href="/services" className="hidden md:block">
-                <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10 text-sm md:text-base">
-                  <ArrowRight className="h-3 w-3 md:h-4 md:w-4 mr-1 transform rotate-180" />
-                  Back to Services
-                </Button>
-              </Link>
             </div>
 
             {/* Desktop Navigation - Hidden on mobile */}
@@ -397,6 +391,7 @@ export default function ServicesPage() {
             </div>
           </div>
         </div>
+
       </section>
     </div>
   )
