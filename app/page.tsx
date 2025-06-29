@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart2, ChevronRight } from 'lucide-react'; // or your icon library
+import { BarChart2, ChevronRight, Briefcase } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -950,15 +950,13 @@ export default function HomePage() {
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
               {/* Elegant Badge - Responsive */}
-              <div className="inline-flex items-center px-4 py-2 md:px-6 md:py-3 rounded-full bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 backdrop-blur-sm group hover:scale-105 transition-all duration-300">
-                <Award className="h-4 w-4 md:h-5 md:w-5 text-blue-400 mr-2 md:mr-3" />
-                <span className="text-blue-300 font-medium text-xs md:text-sm tracking-wide">India's #1 Legal AI Platform</span>
-                <div className="ml-2 md:ml-3 flex space-x-0.5 md:space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-2.5 w-2.5 md:h-3 md:w-3 text-yellow-400 fill-current" />
-                  ))}
-                </div>
+              <div className="inline-flex items-center px-5 py-2.5 md:px-7 md:py-3 rounded-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/30 backdrop-blur-md shadow-md hover:shadow-blue-500/20 group hover:scale-105 transition-all duration-300">
+                <Award className="h-5 w-5 text-blue-400 mr-2 animate-pulse" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 font-semibold text-sm md:text-base tracking-wide">
+                  India’s #1 One-Tap Legal Assistant – Draft, Notarize, & Book Lawyers Instantly
+                </span>
               </div>
+
 
               {/* Sophisticated Title - Responsive */}
               <div className="space-y-4 md:space-y-6">
@@ -1085,17 +1083,18 @@ export default function HomePage() {
                   </Button>
                 </Link>
 
-                <Link href="/lawyers">
-                  {/* <Button
+                <Link href="/services">
+                  <Button
                     variant="outline"
                     size="lg"
                     className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-white/5 border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-500 group relative overflow-hidden"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <Play className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
-                    <span className="relative z-10 font-semibold">Watch Demo</span>
-                  </Button> */}
+                    <Briefcase className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
+                    <span className="relative z-10 font-semibold">Get Legal Help</span>
+                  </Button>
                 </Link>
+
               </div>
 
               {/* Trust Indicators - Responsive */}

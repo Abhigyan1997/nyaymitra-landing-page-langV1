@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two-Party Agreement Template</title>
+    <style>
+        /* Main Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            background: #f1f1f1;
+            border-right: 1px solid #ddd;
+        }
+
+        .tab.active {
+            background: white;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Sample Agreement Styles */
+        .sample-agreement {
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .sample-agreement h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 22px;
+        }
+
+        .sample-party-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+
+        .sample-party {
+            width: 45%;
+            padding: 20px;
+            border: 1px solid #eee;
+            background-color: #f9f9f9;
+        }
+
+        .sample-clause {
+            margin: 25px 0;
+        }
+
+        .sample-clause h3 {
+            margin-bottom: 10px;
+            color: #2c3e50;
+            font-size: 16px;
+        }
+
+        .sample-signature-section {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 80px;
+        }
+
+        .sample-signature {
+            width: 45%;
+        }
+
+        .sample-signature-line {
+            border-top: 1px solid #333;
+            margin-top: 60px;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        /* Download Section Styles */
+        .download-section {
+            text-align: center;
+            padding: 30px;
+            background: #f9f9f9;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .feature {
+            width: 200px;
+            padding: 15px;
+            margin: 10px;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        /* Watermark for sample */
+        .watermark {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 100px;
+            transform: rotate(-30deg);
+            pointer-events: none;
+            z-index: 99;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Two-Party Agreement Template</h1>
+        <p>Professional legally-structured agreement template for any business arrangement</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="openTab('sample')">Sample Preview</div>
+            <div class="tab" onclick="openTab('details')">Template Details</div>
+        </div>
+
+        <div id="sample" class="tab-content active">
+            <div class="watermark">SAMPLE</div>
+            <div class="sample-agreement">
+                <h1>AGREEMENT</h1>
+
+                <p>This Agreement is made and entered into this 15th day of July, 2023 by and between:</p>
+
+                <div class="sample-party-info">
+                    <div class="sample-party">
+                        <h3>ABC Corporation</h3>
+                        <p>123 Business Avenue</p>
+                        <p>New York, NY 10001</p>
+                        <p>Hereinafter referred to as "Party A"</p>
+                    </div>
+
+                    <div class="sample-party">
+                        <h3>XYZ Services LLC</h3>
+                        <p>456 Commerce Street</p>
+                        <p>Boston, MA 02108</p>
+                        <p>Hereinafter referred to as "Party B"</p>
+                    </div>
+                </div>
+
+                <p>Whereas, the parties desire to enter into this Agreement to set forth the terms and conditions of
+                    their arrangement.</p>
+
+                <div class="sample-clause">
+                    <h3>1. Purpose</h3>
+                    <p>The purpose of this Agreement is to establish the terms under which Party B will provide
+                        marketing services to Party A.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>2. Terms</h3>
+                    <p>Party B agrees to provide the following services: Social media management, content creation, and
+                        monthly analytics reporting. Party A agrees to provide all necessary brand assets and timely
+                        feedback on deliverables.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>3. Duration</h3>
+                    <p>This Agreement shall commence on July 15, 2023 and shall continue for a period of twelve (12)
+                        months unless terminated earlier according to Section 5.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>4. Compensation</h3>
+                    <p>Party A shall pay Party B $2,500 per month, payable on the first business day of each month.
+                        Payment shall be made via bank transfer to the account specified by Party B.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>5. Termination</h3>
+                    <p>Either party may terminate this Agreement with thirty (30) days written notice to the other
+                        party. In the event of termination, Party B shall be compensated for all services rendered up to
+                        the termination date.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>6. Governing Law</h3>
+                    <p>This Agreement shall be governed by and construed in accordance with the laws of the State of New
+                        York.</p>
+                </div>
+
+                <div class="sample-clause">
+                    <h3>7. Entire Agreement</h3>
+                    <p>This Agreement constitutes the entire understanding between the parties and supersedes all prior
+                        agreements, understandings, and negotiations.</p>
+                </div>
+
+                <p>IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the date first written
+                    above.</p>
+
+                <div class="sample-signature-section">
+                    <div class="sample-signature">
+                        <p><strong>Party A</strong></p>
+                        <div class="sample-signature-line"></div>
+                        <p>Signature: _________________________</p>
+                        <p>Name: John Smith</p>
+                        <p>Title: Marketing Director</p>
+                        <p>Date: _________________________</p>
+                    </div>
+
+                    <div class="sample-signature">
+                        <p><strong>Party B</strong></p>
+                        <div class="sample-signature-line"></div>
+                        <p>Signature: _________________________</p>
+                        <p>Name: Sarah Johnson</p>
+                        <p>Title: CEO</p>
+                        <p>Date: _________________________</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="details" class="tab-content">
+            <h2>Template Features</h2>
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h3>Professional Format</h3>
+                    <p>Clean, legally-structured layout that looks professional</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h3>Easy to Customize</h3>
+                    <p>Simple fill-in-the-blank fields for quick personalization</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h3>Print-Ready</h3>
+                    <p>Optimized for printing with proper spacing and margins</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">✓</div>
+                    <h3>Comprehensive</h3>
+                    <p>Includes all standard agreement sections</p>
+                </div>
+            </div>
+
+            <h2>Template Includes</h2>
+            <ul>
+                <li>Editable HTML file with all formatting preserved</li>
+                <li>Printable PDF version</li>
+                <li>Microsoft Word version (.docx)</li>
+                <li>Step-by-step instructions for customization</li>
+                <li>Bonus: Three common agreement variations</li>
+            </ul>
+        </div>
+
+        <div class="download-section">
+            <h2>Ready to Download the Full Template?</h2>
+            <p>The complete editable template includes all formatting and is ready for immediate use.</p>
+            <a href="#" class="btn">Download Now (Rs.9.99)</a>
+            <p>Secure payment via Stripe or PayPal</p>
+            <p><small>30-day money back guarantee</small></p>
+        </div>
+    </div>
+
+    <script>
+        function openTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.getElementsByClassName('tab-content');
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove('active');
+            }
+
+            // Remove active class from all tabs
+            const tabs = document.getElementsByClassName('tab');
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            // Show the selected tab content and mark tab as active
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

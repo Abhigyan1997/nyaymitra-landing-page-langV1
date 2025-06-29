@@ -52,17 +52,6 @@ export default function ServicesPage() {
       aiFeatures: ["PDF Generation", "Manual Notarization", "Email/Courier Delivery"],
       pricing: "₹399 (e-copy) / ₹799 (courier)"
     },
-    // {
-    //   id: "student-pass",
-    //   title: "Student Access Pass",
-    //   description: "Unlock premium tools for law students: templates, AI tools, mock cases.",
-    //   icon: GraduationCap,
-    //   color: "from-blue-500 to-cyan-500",
-    //   popular: false,
-    //   areas: ["PDF Samples", "Mock Case Generator", "Premium Dashboard Access"],
-    //   aiFeatures: ["GPT Legal Assistant", "Smart Templates", "Monthly Access"],
-    //   pricing: "₹299/month"
-    // },
     {
       id: "ai-affidavit",
       title: "AI Affidavit Assistant",
@@ -74,17 +63,6 @@ export default function ServicesPage() {
       aiFeatures: ["Form-Based GPT Input", "Legal Formatting", "PDF Output"],
       pricing: "₹149/document"
     },
-    // {
-    //   id: "combo-bundles",
-    //   title: "Document Combo Packages",
-    //   description: "Get bundles like 'Rental Kit', 'Startup Kit', or 'Marriage Kit'.",
-    //   icon: Package,
-    //   color: "from-pink-500 to-rose-500",
-    //   popular: false,
-    //   areas: ["Rental Kit", "Marriage Kit", "Startup Kit"],
-    //   aiFeatures: ["Bundle ZIP Delivery", "Razorpay with Coupons", "Email/Download"],
-    //   pricing: "₹299–₹499/bundle"
-    // },
     {
       id: "priority-booking",
       title: "Speed Booking (Priority)",
@@ -124,48 +102,31 @@ export default function ServicesPage() {
     switch (serviceId) {
       case "instant-download":
         return {
-          primary: { text: "Download Now", icon: Download, href: "/services/downloads" },
-          secondary: { text: "View Samples", icon: FileCheck, href: "/services/downloads/samples" }
+          primary: { text: "Download Now", icon: Download, href: "/services/downloads" }
         };
       case "notary-service":
         return {
-          primary: { text: "Notarize Now", icon: PenTool, href: "/notary/request" },
-          secondary: { text: "Process Info", icon: Info, href: "/notary/how-it-works" }
-        };
-      case "student-pass":
-        return {
-          primary: { text: "Subscribe", icon: GraduationCap, href: "/student-pass/subscribe" },
-          secondary: { text: "Features", icon: BookOpen, href: "/student-pass/features" }
+          primary: { text: "Notarize Now", icon: PenTool, href: "/services/notary" }
         };
       case "ai-affidavit":
         return {
-          primary: { text: "Generate Now", icon: FileSignature, href: "/ai-affidavit/create" },
-          secondary: { text: "See Examples", icon: FileSearch, href: "/ai-affidavit/examples" }
-        };
-      case "combo-bundles":
-        return {
-          primary: { text: "View Bundles", icon: Package, href: "/bundles" },
-          secondary: { text: "Compare", icon: Scale, href: "/bundles/compare" }
+          primary: { text: "Generate Now", icon: FileSignature, href: "/services/ai-affidavit" }
         };
       case "priority-booking":
         return {
-          primary: { text: "Book Now", icon: Clock, href: "/booking/priority" },
-          secondary: { text: "Lawyers", icon: Users, href: "/lawyers/priority" }
+          primary: { text: "Book Now", icon: Clock, href: "/services/booking" }
         };
       case "legal-store":
         return {
-          primary: { text: "Browse Store", icon: ShoppingBag, href: "/store" },
-          secondary: { text: "Top Items", icon: Award, href: "/store/top" }
+          primary: { text: "Browse Store", icon: ShoppingBag, href: "/services/store" }
         };
       case "ai-pdf":
         return {
-          primary: { text: "Create PDF", icon: FileCode, href: "/ai-pdf/create" },
-          secondary: { text: "Try Demo", icon: Play, href: "/ai-pdf/demo" }
+          primary: { text: "Create PDF", icon: FileCode, href: "/services/ai-pdf" }
         };
       default:
         return {
-          primary: { text: "Get Started", icon: ArrowRight, href: "/services" },
-          secondary: { text: "Learn More", icon: Info, href: "/services" }
+          primary: { text: "Get Started", icon: ArrowRight, href: "/services" }
         };
     }
   };
@@ -258,12 +219,12 @@ export default function ServicesPage() {
               return (
                 <Card
                   key={service.id}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden"
+                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2 relative overflow-hidden flex flex-col h-full"
                   onMouseEnter={() => setHoveredService(service.id)}
                   onMouseLeave={() => setHoveredService(null)}
                 >
                   {service.popular && (
-                    <Badge className="absolute -top-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 border-0 z-10">
+                    <Badge className="absolute top-3 right-3 bg-gradient-to-r from-orange-500 to-pink-500 border-0 z-10 shadow-lg">
                       <Star className="h-3 w-3 mr-1" />
                       Popular
                     </Badge>
@@ -289,7 +250,7 @@ export default function ServicesPage() {
                     </CardDescription>
                   </CardHeader>
 
-                  <CardContent className="relative">
+                  <CardContent className="relative mt-auto">
                     <div className="mb-4">
                       <h4 className="font-semibold text-sm text-blue-300 mb-2 flex items-center">
                         <Brain className="h-4 w-4 mr-2" />
@@ -329,25 +290,14 @@ export default function ServicesPage() {
                       </div>
                     </div>
 
-                    <div className="flex space-x-2">
-                      <Link href={buttons.secondary.href} className="flex-1">
-                        <Button
-                          variant="outline"
-                          className="w-full bg-white/5 border-white/20 text-white hover:bg-white/10 group/btn"
-                        >
-                          <buttons.secondary.icon className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
-                          {buttons.secondary.text}
-                        </Button>
-                      </Link>
-                      <Link href={buttons.primary.href}>
-                        <Button
-                          className={`bg-gradient-to-r ${service.color} hover:scale-105 transition-all duration-300 group/btn`}
-                        >
-                          <buttons.primary.icon className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
-                          {buttons.primary.text}
-                        </Button>
-                      </Link>
-                    </div>
+                    <Link href={buttons.primary.href} className="w-full">
+                      <Button
+                        className={`w-full bg-gradient-to-r ${service.color} hover:scale-105 transition-all duration-300 group/btn`}
+                      >
+                        <buttons.primary.icon className="h-4 w-4 mr-2 group-hover/btn:rotate-12 transition-transform duration-300" />
+                        {buttons.primary.text}
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               )
