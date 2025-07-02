@@ -9,12 +9,14 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
+import { loadRazorpayScript } from "@/utils/loadRazorpay";
 import axios, { AxiosError, AxiosResponse } from "axios"
+import { getUser } from "@/utils/getUser"; // adjust path as needed
 
 // Declare Razorpay on window interface
 declare global {
     interface Window {
-        Razorpay: new (options: any) => any
+        Razorpay: any;
     }
 }
 
@@ -26,7 +28,9 @@ interface Document {
     price: number
     sampleUrl: string
     downloadUrl: string
+    type: string // <-- ✅ Add this line
 }
+
 
 interface RazorpayResponse {
     razorpay_payment_id: string
@@ -47,8 +51,9 @@ export default function InstantDownloadPage() {
             description: "Legally binding contract between two parties",
             features: ["Customizable terms", "Payment clauses", "Termination conditions"],
             price: 149,
-            sampleUrl: "/sample/agreement.html", // Path to sample in public folder
-            downloadUrl: "/template/agreement.html" // Path to template in public folder
+            type: "agreement", // ✅ add type
+            sampleUrl: "/sample/agreement.html",
+            downloadUrl: "/template/agreement.html"
         },
         {
             id: "affidavit-draft",
@@ -56,6 +61,7 @@ export default function InstantDownloadPage() {
             description: "Legal declaration for various purposes",
             features: ["Name change", "Address proof", "Income declaration"],
             price: 99,
+            type: "affidavit", // ✅ add type
             sampleUrl: "/sample/affidavit.htm",
             downloadUrl: "/template/affidavit.html"
         },
@@ -65,6 +71,7 @@ export default function InstantDownloadPage() {
             description: "Formal complaint letter to police authorities",
             features: ["Theft report", "Harassment complaint", "Lost property"],
             price: 99,
+            type: "complaint", // ✅ add type
             sampleUrl: "/sample/police-complaint.html",
             downloadUrl: "/template/police-complaint.html"
         }
@@ -75,18 +82,26 @@ export default function InstantDownloadPage() {
         window.open(doc.sampleUrl, '_blank', 'noopener,noreferrer');
     };
 
+
     // Update your initiatePayment function
+
     const initiatePayment = async (docId: string) => {
         setIsLoading(true);
         try {
             const doc = documents.find(d => d.id === docId);
             if (!doc) throw new Error("Document not found");
 
-            // Create order using axios
-            const { data: orderData } = await axios.post('http://localhost:4000/api/payment/create-order', {
-                documentId: docId,
-                amount: doc.price * 100, // in paise
-                currency: 'INR'
+            const user = getUser();
+
+            const razorpayLoaded = await loadRazorpayScript();
+            if (!razorpayLoaded) throw new Error("Razorpay SDK failed to load");
+
+            const { data: orderData } = await axios.post('https://nyaymitra-backend-document.onrender.com/api/payment/create-order', {
+                userId: user.userId,
+                userEmail: user.email,
+                serviceName: doc.name,
+                documentType: doc.type,
+                price: doc.price
             });
 
             const options = {
@@ -97,12 +112,12 @@ export default function InstantDownloadPage() {
                 description: `Payment for ${doc.name}`,
                 order_id: orderData.id,
                 handler: async function (response: RazorpayResponse) {
-                    await verifyPayment(response, docId);
+                    await verifyPayment(response, orderData.orderRecordId, user.userId);
                 },
                 prefill: {
-                    name: "Customer Name",
-                    email: "customer@example.com",
-                    contact: "9000000000"
+                    name: user.name,
+                    email: user.email,
+                    contact: user.phone || "9000000000"
                 },
                 theme: {
                     color: "#4F46E5"
@@ -111,12 +126,11 @@ export default function InstantDownloadPage() {
 
             const rzp = new window.Razorpay(options);
             rzp.open();
-
         } catch (error: any) {
             console.error('Payment error:', error);
             toast({
                 title: "Payment Error",
-                description: error.response?.data?.message || error.message || "Failed to initiate payment",
+                description: error?.message || "Failed to initiate payment",
                 variant: "destructive"
             });
         } finally {
@@ -124,14 +138,17 @@ export default function InstantDownloadPage() {
         }
     };
 
-
-    const verifyPayment = async (paymentResponse: RazorpayResponse, docId: string) => {
+    const verifyPayment = async (
+        paymentResponse: RazorpayResponse,
+        serviceOrderId: string,
+        userId: string
+    ) => {
         try {
-            const { data: verificationData } = await axios.post('http://localhost:4000/api/payment/verify', {
+            const { data } = await axios.post('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,
                 razorpay_order_id: paymentResponse.razorpay_order_id,
                 razorpay_signature: paymentResponse.razorpay_signature,
-                documentId: docId
+                documentId: serviceOrderId
             });
 
             toast({
@@ -139,8 +156,7 @@ export default function InstantDownloadPage() {
                 description: "Your document is ready for download",
             });
 
-            await downloadDocument(docId);
-
+            await downloadDocument(serviceOrderId, userId);
         } catch (error: any) {
             console.error('Verification error:', error);
             toast({
@@ -151,10 +167,10 @@ export default function InstantDownloadPage() {
         }
     };
 
-    const downloadDocument = async (docId: string) => {
+    const downloadDocument = async (documentId: string, userId: string) => {
         try {
-            const response = await axios.get(`http://localhost:4000/api/documents/download`, {
-                params: { documentId: docId },
+            const response = await axios.get(`https://nyaymitra-backend-document.onrender.com/api/documents/download`, {
+                params: { documentId, userId },
                 responseType: 'blob',
                 withCredentials: true,
             });
@@ -164,9 +180,7 @@ export default function InstantDownloadPage() {
             const link = document.createElement('a');
             link.href = url;
 
-            const doc = documents.find(d => d.id === docId);
-            link.setAttribute('download', `${doc?.name.replace(/\s+/g, '-').toLowerCase()}-template.html`);
-
+            link.setAttribute('download', `legal-document-template.html`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
