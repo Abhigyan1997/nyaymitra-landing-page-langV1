@@ -8,9 +8,10 @@ import {
   PenTool, GraduationCap, FileSignature, Package, Clock, ShoppingBag, FileCode,
   Eye, Info, List, FileSearch, Play, Award, Users, ArrowRight, Brain, Zap,
   Scale, Heart, Building, ShoppingCart, Shield, Briefcase, FileText, Gavel,
-  Sparkles, Star, Download, FileCheck, BookOpen, LayoutTemplate, Menu, X
+  Sparkles, Star, Download, FileCheck, BookOpen, LayoutTemplate, Menu, X, Calculator
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
+import { PriorityBookingDialog } from "@/components/PriorityBookingDialog"
 import Link from "next/link"
 
 // Predefined positions for the floating dots to avoid hydration mismatch
@@ -74,30 +75,32 @@ export default function ServicesPage() {
       popular: false,
       areas: ["Urgent Consultations", "Today Booking"],
       aiFeatures: ["Priority Lawyer Matching", "Razorpay Add-on", "Same-Day Guarantee"],
-      pricing: "₹99 extra (optional)"
+      pricing: "₹99 extra (optional)",
+      button: <PriorityBookingDialog /> // Replace the button with this component
+    },
+
+    {
+      id: "legal-notice",
+      title: "Legal Notice Generator",
+      description: "Generate demand notices for rent, dues, cheating, and other legal issues.",
+      icon: FileSignature,
+      color: "from-pink-500 to-red-600",
+      popular: false,
+      areas: ["Payment Default", "Tenant Disputes", "Contract Breach", "Employment Issues"],
+      aiFeatures: ["Form-Based Input", "Auto-Section Suggestion", "PDF Output"],
+      pricing: "₹149/document"
     },
     {
-      id: "legal-store",
-      title: "Legal Template Store",
-      description: "Purchase verified legal document templates — ready to fill & use.",
-      icon: ShoppingBag,
-      color: "from-gray-700 to-gray-900",
+      id: "stamp-duty",
+      title: "Stamp Duty Calculator",
+      description: "Find out the exact stamp paper value required for your document and state.",
+      icon: Calculator,
+      color: "from-gray-600 to-gray-800",
       popular: false,
-      areas: ["Rent Agreement", "Complaint Letter", "Notice Draft", "Declaration"],
-      aiFeatures: ["Secure Storage (Firebase/S3)", "Dynamic Pricing", "Preview + Buy"],
-      pricing: "₹49–₹299/document"
-    },
-    {
-      id: "ai-pdf",
-      title: "AI PDF Generator",
-      description: "Use GPT to create any legal text and export it as a formatted PDF.",
-      icon: FileCode,
-      color: "from-lime-500 to-green-700",
-      popular: false,
-      areas: ["Police Complaints", "Custom Notices", "Draft Legal Letters"],
-      aiFeatures: ["Natural Language Input", "PDFKit Output", "Instant Download"],
-      pricing: "₹99/document"
-    },
+      areas: ["Affidavit", "Agreements", "Power of Attorney"],
+      aiFeatures: ["Auto-State Detection", "Value Suggestion", "Legal Tips"],
+      pricing: "Free Tool"
+    }
   ];
 
   const getServiceButtons = (serviceId: string) => {
@@ -118,13 +121,21 @@ export default function ServicesPage() {
         return {
           primary: { text: "Book Now", icon: Clock, href: "/services/booking" }
         };
-      case "legal-store":
+      case "stamp-duty":
         return {
-          primary: { text: "Browse Store", icon: ShoppingBag, href: "/services/store" }
+          primary: {
+            text: "Calculate Duty",
+            icon: Calculator,
+            href: "/services/stamp-calculator",
+          },
         };
-      case "ai-pdf":
+      case "legal-notice":
         return {
-          primary: { text: "Create PDF", icon: FileCode, href: "/services/ai-pdf" }
+          primary: {
+            text: "Create Notice",
+            icon: FileText,
+            href: "/services/legal-notice-genrator",
+          },
         };
       default:
         return {

@@ -30,7 +30,6 @@ export default function LoginPage() {
     setFormData((prev) => ({ ...prev, [field]: value }))
   }
 
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -51,17 +50,21 @@ export default function LoginPage() {
 
       localStorage.setItem("token", token)
       localStorage.setItem("user", JSON.stringify(user))
-      localStorage.setItem("userId", response.data.user.userId) // ✅ FIX THIS
+      localStorage.setItem("userId", response.data.user.userId)
       localStorage.setItem("userName", response.data.user.fullName)
       localStorage.setItem("userEmail", response.data.user.email)
-      localStorage.setItem("userProfile", JSON.stringify(user));
-      // ✅ Show success toast
+      localStorage.setItem("userProfile", JSON.stringify(user))
+
       toast.success(message || "Logged in successfully!")
 
-      // Redirect based on role
-      router.push("/")
+      // Get redirect URL from query parameters
+      const urlParams = new URLSearchParams(window.location.search)
+      const redirectTo = urlParams.get('redirect') || '/'
+
+      // Redirect to the original requested page or home
+      router.push(redirectTo)
+
     } catch (error: any) {
-      // ❌ Show error toast
       toast.error(error.response?.data?.message || "Login failed")
     } finally {
       setLoading(false)

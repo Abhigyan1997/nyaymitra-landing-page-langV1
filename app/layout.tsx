@@ -1,7 +1,7 @@
-import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { TooltipProvider } from "@/components/ui/tooltip" // Import the TooltipProvider
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -10,7 +10,6 @@ export const metadata: Metadata = {
   description:
     "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
   keywords: "legal advice, lawyers India, AI legal help, legal consultation, Indian law",
-
 }
 
 export default function RootLayout({
@@ -20,7 +19,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <TooltipProvider> {/* Wrap children with TooltipProvider */}
+          {children}
+        </TooltipProvider>
+      </body>
     </html>
   )
 }

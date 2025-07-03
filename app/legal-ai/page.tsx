@@ -9,16 +9,39 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export default function LegalGPTPage() {
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
 
   useEffect(() => {
-    const token = localStorage.getItem("token")
-    if (!token) {
-      router.push("/auth/login") // redirect if not logged in
-    } else {
-      setIsLoggedIn(true)
+    const checkAuth = () => {
+      try {
+        const token = localStorage.getItem("token")
+        if (!token) {
+          setAuthStatus("unauthenticated")
+          // Store current path before redirecting
+          router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+        } else {
+          setAuthStatus("authenticated")
+        }
+      } catch (error) {
+        console.error("Authentication check failed:", error)
+        setAuthStatus("unauthenticated")
+        router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+      }
     }
+    checkAuth()
   }, [router])
+
+  if (authStatus === "loading") {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    )
+  }
+
+  if (authStatus === "unauthenticated") {
+    return null // or your redirect message
+  }
 
   return (
     <div className="min-h-screen bg-black text-white relative overflow-hidden">
@@ -43,7 +66,7 @@ export default function LegalGPTPage() {
                   Find Lawyers
                 </Button>
               </Link>
-              {!isLoggedIn && (
+              {authStatus !== "authenticated" && (
                 <Link href="/auth/login">
                   <Button className="bg-gradient-to-r from-blue-500 to-purple-500">Login</Button>
                 </Link>

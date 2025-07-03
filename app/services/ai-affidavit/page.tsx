@@ -1,317 +1,384 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { useState } from "react"
-import { FileSignature, Wand2, Sparkles, ArrowRight, Info, FileText, Check, Scale, Mail, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { FileSignature, User, FileText, ArrowRight, Download, Info, BookOpen, Calendar, Scale, Home, Mail, BookText, X, Menu, Phone } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
+import { Textarea } from "@/components/ui/textarea"
 
 export default function AIAffidavitPage() {
-    const [step, setStep] = useState(1)
-    const [formData, setFormData] = useState({
-        purpose: "",
-        details: "",
-        name: "",
-        address: "",
-        date: ""
-    })
+    const [affidavitType, setAffidavitType] = useState<string>("Name Change")
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [fullName, setFullName] = useState<string>("")
+    const [fatherName, setFatherName] = useState<string>("")
+    const [address, setAddress] = useState<string>("")
+    const [purpose, setPurpose] = useState<string>("")
+    const [generatedAffidavit, setGeneratedAffidavit] = useState<string>("")
+    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
+    const router = useRouter()
+
+    // Authentication check
+    useEffect(() => {
+        const checkAuth = () => {
+            try {
+                const token = localStorage.getItem("token")
+                if (!token) {
+                    setAuthStatus("unauthenticated")
+                    router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                } else {
+                    setAuthStatus("authenticated")
+                }
+            } catch (error) {
+                console.error("Authentication check failed:", error)
+                setAuthStatus("unauthenticated")
+                router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+            }
+        }
+        checkAuth()
+    }, [router])
+
+    // Loading states
+    if (authStatus === "loading") {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-white">Loading...</div>
+            </div>
+        )
+    }
+
+    if (authStatus === "unauthenticated") {
+        return null
+    }
 
     const affidavitTypes = [
-        "Name Change",
-        "Address Proof",
-        "Income Declaration",
-        "Marriage Affidavit",
-        "Lost Document",
-        "Identity Verification",
-        "Other"
+        "Name Change", "Address Proof", "Income Proof", "Marriage Proof",
+        "Educational Certificate", "Identity Proof", "Loss of Document", "Self Declaration"
     ]
 
-    const handleNext = () => {
-        if (step < 3) setStep(step + 1)
+    const generateAffidavit = () => {
+        // In a real app, this would call an API or use more sophisticated templating
+        const affidavit = `AFFIDAVIT
+
+I, ${fullName || "[Your Full Name]"}, son/daughter of ${fatherName || "[Father's Name]"}, residing at ${address || "[Your Full Address]"}, do hereby solemnly affirm and declare as under:
+
+1. That I am the deponent herein and am fully competent to swear this affidavit.
+
+2. That the purpose of this affidavit is for ${affidavitType}.
+
+3. That ${getAffidavitDetails(affidavitType)}
+
+4. That the contents of this affidavit are true and correct to the best of my knowledge and belief.
+
+5. That nothing material has been concealed therein.
+
+DEPONENT
+
+Solemnly affirmed and signed before me on this ${new Date().getDate()} day of ${new Date().toLocaleString('default', { month: 'long' })} ${new Date().getFullYear()}, at [Location].
+
+__________________________
+[Your Signature]
+
+[Notary/Oath Commissioner Stamp]`
+
+        setGeneratedAffidavit(affidavit)
     }
 
-    const handleBack = () => {
-        if (step > 1) setStep(step - 1)
-    }
-
-    const handleSubmit = () => {
-        // Handle form submission
-        console.log("Generating affidavit with:", formData)
+    const getAffidavitDetails = (type: string) => {
+        switch (type) {
+            case "Name Change":
+                return `I wish to change my name from [Old Name] to [New Name] for all legal purposes.`
+            case "Address Proof":
+                return `I currently reside at the address mentioned above and this is my permanent address.`
+            case "Income Proof":
+                return `my monthly income is ₹[Amount] derived from my occupation as [Your Profession].`
+            case "Loss of Document":
+                return `I have lost my [Document Name] bearing number [Document Number] issued by [Issuing Authority].`
+            default:
+                return purpose || `[Describe your specific declaration in detail]`
+        }
     }
 
     return (
         <div className="min-h-screen bg-black text-white relative overflow-hidden">
-            {/* Responsive Header */}
+            {/* Animated Background */}
+            <div className="fixed inset-0 z-0">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20" />
+                <div className="absolute inset-0 cyber-grid opacity-30" />
+            </div>
             <header className="relative z-50 w-full border-b border-white/10">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <Link href="/" className="flex items-center space-x-3 group">
-                        <div className="relative">
-                            <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
-                            <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex items-center justify-between">
+                        {/* Logo on the left */}
+                        <div className="flex-shrink-0">
+                            <Link href="/" className="flex items-center space-x-3 group">
+                                <div className="relative">
+                                    <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
+                                    <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
+                                </div>
+                                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                    Nyay Mitra
+                                </span>
+                            </Link>
                         </div>
-                        <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                            Nyay Mitra
-                        </span>
-                    </Link>
 
-                    <nav className="hidden md:flex items-center space-x-6">
-                        <Link href="/services" className="text-white/80 hover:text-white transition-colors">
-                            Services
-                        </Link>
-                        <Link href="/pricing" className="text-white/80 hover:text-white transition-colors">
-                            Pricing
-                        </Link>
-                        <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
-                            Contact
-                        </Link>
-                    </nav>
+                        {/* Centered navigation links */}
+                        <nav className="hidden md:flex items-center justify-center flex-1 px-8">
+                            <div className="flex space-x-8">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Home className="h-4 w-4 mr-1" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <BookText className="h-4 w-4 mr-1" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Mail className="h-4 w-4 mr-1" /> Contact
+                                </Link>
+                            </div>
+                        </nav>
 
-                    <div className="flex items-center space-x-4">
-                        <Button className="bg-gradient-to-r from-indigo-500 to-purple-500">
-                            Get Started
-                        </Button>
+                        {/* Right side links */}
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/services"
+                                className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                            >
+                                Back to Services
+                            </Link>
+                            <Link
+                                href="/services"
+                                className="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                            >
+                                Get Started
+                            </Link>
+
+                            {/* Mobile menu button */}
+                            <button
+                                className="md:hidden text-white focus:outline-none"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                {mobileMenuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </button>
+                        </div>
                     </div>
+
+                    {/* Mobile menu */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden bg-gray-900/95 backdrop-blur-sm px-4 py-6 border-t border-white/10">
+                            <div className="flex flex-col space-y-4">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors">
+                                    <Home className="h-4 w-4 mr-2 inline" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors">
+                                    <BookText className="h-4 w-4 mr-2 inline" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
+                                    <Mail className="h-4 w-4 mr-2 inline" /> Contact
+                                </Link>
+                                <Link href="/lawyers" className="text-white/80 hover:text-white transition-colors">
+                                    Find Lawyer
+                                </Link>
+                                <Link href="/ai-legal-assistant" className="text-white/80 hover:text-white transition-colors">
+                                    Talk to AI
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                                >
+                                    Back to Services
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                                >
+                                    Get Started
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </header>
 
-            {/* Animated Background */}
-            <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/20 to-purple-900/20" />
-                <div className="absolute inset-0 cyber-grid opacity-30" />
-            </div>
-
-            {/* Content */}
-            <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-12 md:mb-16"
-                >
-                    <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 backdrop-blur-sm mb-4 md:mb-6">
-                        <Wand2 className="h-4 w-4 text-indigo-400 mr-2" />
-                        <span className="text-sm text-indigo-300">AI-Powered</span>
-                    </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent pb-2">
-                        Affidavit Generator
-                    </h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                        Create legally valid affidavits in minutes with our AI assistant. Just fill in the details and download.
-                    </p>
-                </motion.div>
-
-                {/* Progress Steps */}
-                <div className="flex justify-between mb-8 md:mb-12 relative">
-                    <div className="absolute top-1/2 left-0 right-0 h-1 bg-white/10 -z-10" />
-                    {[1, 2, 3].map((stepNumber) => (
-                        <div key={stepNumber} className="flex flex-col items-center">
-                            <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center mb-2 ${step >= stepNumber ? 'bg-gradient-to-r from-indigo-500 to-purple-500' : 'bg-white/10 border border-white/20'}`}>
-                                {step > stepNumber ? (
-                                    <Check className="h-5 w-5 text-white" />
-                                ) : (
-                                    <span className="text-white font-medium">{stepNumber}</span>
-                                )}
-                            </div>
-                            <span className={`text-xs md:text-sm ${step >= stepNumber ? 'text-indigo-300' : 'text-white/50'}`}>
-                                {stepNumber === 1 && 'Details'}
-                                {stepNumber === 2 && 'Review'}
-                                {stepNumber === 3 && 'Download'}
-                            </span>
+            {/* Header */}
+            <section className="relative z-10 py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 backdrop-blur-sm mb-8">
+                            <FileSignature className="h-4 w-4 text-blue-400 mr-2" />
+                            <span className="text-sm text-blue-300">AI-Powered Document Generator</span>
                         </div>
-                    ))}
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent pb-2">
+                            AI Affidavit Assistant
+                        </h1>
+                        <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                            Create legally valid affidavits in minutes with our intelligent document generator
+                        </p>
+                    </div>
                 </div>
+            </section>
 
-                {/* Form Steps */}
-                <Card className="bg-white/5 backdrop-blur-xl border border-white/10 mb-8 md:mb-12">
-                    <CardHeader>
-                        <CardTitle className="text-white">
-                            {step === 1 && 'Affidavit Information'}
-                            {step === 2 && 'Review Your Affidavit'}
-                            {step === 3 && 'Download Your Document'}
-                        </CardTitle>
-                        <CardDescription className="text-white/70">
-                            {step === 1 && 'Provide details for your affidavit'}
-                            {step === 2 && 'Verify all information is correct'}
-                            {step === 3 && 'Your document is ready'}
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        {step === 1 && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                                className="space-y-6"
-                            >
+            {/* Generator Section */}
+            <section className="relative z-10 py-8">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Card className="bg-white/5 backdrop-blur-xl border border-white/10">
+                        <CardHeader>
+                            <CardTitle className="text-2xl flex items-center">
+                                <FileText className="h-6 w-6 mr-2 text-blue-400" />
+                                Affidavit Generator
+                            </CardTitle>
+                            <CardDescription className="text-white/70">
+                                Fill in your details to generate a customized affidavit
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="grid md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Purpose of Affidavit</label>
-                                    <Select onValueChange={(value) => setFormData({ ...formData, purpose: value })}>
-                                        <SelectTrigger className="bg-white/5 border-white/10 text-white">
-                                            <SelectValue placeholder="Select purpose..." />
-                                        </SelectTrigger>
-                                        <SelectContent className="bg-gray-900 border-white/10 text-white">
-                                            {affidavitTypes.map((type) => (
-                                                <SelectItem key={type} value={type}>{type}</SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Type of Affidavit</label>
+                                    <select
+                                        value={affidavitType}
+                                        onChange={(e) => setAffidavitType(e.target.value)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        {affidavitTypes.map((type) => (
+                                            <option key={type} value={type}>{type}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Full Details</label>
-                                    <Textarea
-                                        className="bg-white/5 border-white/10 text-white min-h-[120px]"
-                                        placeholder="Describe all relevant details for your affidavit..."
-                                        value={formData.details}
-                                        onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Your Full Name</label>
+                                    <input
+                                        type="text"
+                                        value={fullName}
+                                        onChange={(e) => setFullName(e.target.value)}
+                                        placeholder="As per official documents"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
 
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Your Full Name</label>
-                                        <Input
-                                            className="bg-white/5 border-white/10 text-white"
-                                            placeholder="As it should appear on the affidavit"
-                                            value={formData.name}
-                                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                        />
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-white/80 mb-2">Date</label>
-                                        <Input
-                                            type="date"
-                                            className="bg-white/5 border-white/10 text-white"
-                                            value={formData.date}
-                                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                                        />
-                                    </div>
-                                </div>
-
                                 <div>
-                                    <label className="block text-sm font-medium text-white/80 mb-2">Your Address</label>
-                                    <Textarea
-                                        className="bg-white/5 border-white/10 text-white"
-                                        placeholder="Full address as it should appear on the affidavit"
-                                        rows={3}
-                                        value={formData.address}
-                                        onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Father's Name</label>
+                                    <input
+                                        type="text"
+                                        value={fatherName}
+                                        onChange={(e) => setFatherName(e.target.value)}
+                                        placeholder="Father/Husband's full name"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
-                            </motion.div>
-                        )}
 
-                        {step === 2 && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                                className="space-y-6"
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Full Address</label>
+                                    <Textarea
+                                        value={address}
+                                        onChange={(e) => setAddress(e.target.value)}
+                                        placeholder="Your complete address with PIN code"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px]"
+                                    />
+                                </div>
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Purpose/Details</label>
+                                    <Textarea
+                                        value={purpose}
+                                        onChange={(e) => setPurpose(e.target.value)}
+                                        placeholder="Describe the purpose of this affidavit..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px]"
+                                    />
+                                </div>
+                            </div>
+
+                            <Button
+                                onClick={generateAffidavit}
+                                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 mb-8 group"
                             >
-                                <div className="bg-white/5 rounded-lg p-4 md:p-6 border border-white/10">
-                                    <h3 className="font-medium text-lg text-white mb-4">Affidavit Preview</h3>
+                                <FileSignature className="h-5 w-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+                                Generate Affidavit
+                            </Button>
 
-                                    <div className="space-y-4 text-white/80">
-                                        <div>
-                                            <span className="text-sm text-white/50 block">Purpose:</span>
-                                            <p>{formData.purpose || "Not specified"}</p>
-                                        </div>
-                                        <div>
-                                            <span className="text-sm text-white/50 block">Details:</span>
-                                            <p>{formData.details || "Not provided"}</p>
-                                        </div>
-                                        <div>
-                                            <span className="text-sm text-white/50 block">Name:</span>
-                                            <p>{formData.name || "Not provided"}</p>
-                                        </div>
-                                        <div>
-                                            <span className="text-sm text-white/50 block">Address:</span>
-                                            <p>{formData.address || "Not provided"}</p>
-                                        </div>
-                                        <div>
-                                            <span className="text-sm text-white/50 block">Date:</span>
-                                            <p>{formData.date || "Not specified"}</p>
+                            {generatedAffidavit && (
+                                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-xl p-6 mb-8">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-white">Your Affidavit</h3>
+                                        <div className="flex space-x-2">
+                                            <Button variant="outline" size="sm" className="bg-white/10 border-white/20">
+                                                <Download className="h-4 w-4 mr-2" />
+                                                Download PDF
+                                            </Button>
+                                            <Link href="/services/notary">
+                                                <Button size="sm" className="bg-gradient-to-r from-green-500 to-emerald-500 border-0">
+                                                    <FileSignature className="h-4 w-4 mr-2" />
+                                                    Get Notarized
+                                                </Button>
+                                            </Link>
                                         </div>
                                     </div>
+                                    <div className="bg-black/30 p-4 rounded-lg border border-white/10 whitespace-pre-wrap font-mono text-sm">
+                                        {generatedAffidavit}
+                                    </div>
                                 </div>
-
-                                <div className="flex items-center text-sm text-yellow-300">
-                                    <Info className="h-4 w-4 mr-2" />
-                                    <span>Verify all information is correct before generating</span>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        {step === 3 && (
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.3 }}
-                                className="text-center py-6 md:py-8"
-                            >
-                                <div className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6">
-                                    <Sparkles className="h-6 w-6 md:h-8 md:w-8 text-white" />
-                                </div>
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Your Affidavit is Ready!</h3>
-                                <p className="text-white/70 mb-6 md:mb-8">Download your legally formatted affidavit document below.</p>
-
-                                <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center">
-                                    <Button className="bg-gradient-to-r from-indigo-500 to-purple-500">
-                                        <FileText className="h-4 w-4 mr-2" />
-                                        Download PDF (₹149)
-                                    </Button>
-                                    <Button variant="outline" className="bg-white/10 border-white/20" onClick={() => setStep(1)}>
-                                        Make Changes
-                                    </Button>
-                                </div>
-                            </motion.div>
-                        )}
-
-                        <div className="mt-6 md:mt-8 flex justify-between">
-                            {step > 1 && (
-                                <Button variant="outline" onClick={handleBack} className="bg-white/10 border-white/20">
-                                    Back
-                                </Button>
                             )}
-                            {step < 3 ? (
-                                <Button
-                                    onClick={handleNext}
-                                    className="bg-gradient-to-r from-indigo-500 to-purple-500 ml-auto"
-                                    disabled={!formData.purpose || !formData.details}
-                                >
-                                    Next Step
-                                    <ArrowRight className="h-4 w-4 ml-2" />
-                                </Button>
-                            ) : null}
-                        </div>
-                    </CardContent>
-                </Card>
 
-                {/* Examples CTA */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="text-center"
-                >
-                    <div className="inline-flex items-center mb-4 md:mb-6 text-sm text-white/60">
-                        <FileText className="h-4 w-4 mr-2" />
-                        Need inspiration? See our affidavit examples
+                            {/* Additional Info */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                <div className="flex items-start">
+                                    <Info className="h-5 w-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <h4 className="font-medium text-white mb-2">About Affidavits</h4>
+                                        <ul className="text-sm text-white/70 space-y-2">
+                                            <li>• Affidavits must be signed before a notary or oath commissioner</li>
+                                            <li>• Stamp paper value varies by state and affidavit purpose</li>
+                                            <li>• False statements in an affidavit are punishable under Indian law</li>
+                                            <li>• Keep multiple copies of notarized affidavits for future use</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+            </section>
+
+            {/* CTA Section */}
+            <section className="relative z-10 py-16">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Need professional legal verification?</h2>
+                        <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                            Our legal experts can review your affidavit and ensure it meets all requirements
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link href="/services/notary">
+                                <Button
+                                    size="lg"
+                                    className="px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 transform hover:scale-105 transition-all duration-300 group"
+                                >
+                                    <FileSignature className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                                    Get Notarized
+                                    <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                                </Button>
+                            </Link>
+                            <Link href="/lawyers">
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    className="px-8 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                                >
+                                    <BookOpen className="mr-3 h-5 w-5" />
+                                    Legal Consultation
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
-                    <Link href="/ai-affidavit/examples">
-                        <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
-                            View Examples
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                    </Link>
-                </motion.div>
-            </div>
-            {/* Footer */}
+                </div>
+            </section>
             <footer className="relative z-20 bg-black/50 backdrop-blur-lg border-t border-white/10 mt-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -363,11 +430,11 @@ export default function AIAffidavitPage() {
                             <ul className="space-y-2 text-sm text-white/70">
                                 <li className="flex items-center">
                                     <Mail className="h-4 w-4 mr-2 text-lime-400" />
-                                    legal@nyaymitra.in
+                                    nyaymitra.ai@gmail.com
                                 </li>
                                 <li className="flex items-center">
                                     <Phone className="h-4 w-4 mr-2 text-lime-400" />
-                                    +91 98765 43210
+                                    +91 79705 96183
                                 </li>
                             </ul>
                             <div className="mt-4 flex space-x-4">

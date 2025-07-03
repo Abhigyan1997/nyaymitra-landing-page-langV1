@@ -9,9 +9,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    serverActions: true,
-  },
+  // experimental: {
+  //   serverActions: true,
+  // },
 }
 
 

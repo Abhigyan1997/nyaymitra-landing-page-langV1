@@ -1,17 +1,17 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Download, FileCheck, ArrowRight, FileText, Check, Zap, FileSearch, Scale, Sparkles, Users, Menu, X, Mail, Phone } from "lucide-react"
+import { Download, FileCheck, ArrowRight, FileText, Check, Zap, FileSearch, Scale, Sparkles, Users, Menu, X, Mail, Phone, Home, BookText } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react" // Add useEffect
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { loadRazorpayScript } from "@/utils/loadRazorpay";
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { getUser } from "@/utils/getUser"; // adjust path as needed
+import { getUser } from "@/utils/getUser";
 
 // Declare Razorpay on window interface
 declare global {
@@ -41,8 +41,43 @@ interface RazorpayResponse {
 export default function InstantDownloadPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading") // Add auth state
     const router = useRouter()
     const { toast } = useToast()
+
+    // Add authentication check effect
+    useEffect(() => {
+        const checkAuth = () => {
+            try {
+                const token = localStorage.getItem("token")
+                if (!token) {
+                    setAuthStatus("unauthenticated")
+                    // Store current path before redirecting
+                    router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                } else {
+                    setAuthStatus("authenticated")
+                }
+            } catch (error) {
+                console.error("Authentication check failed:", error)
+                setAuthStatus("unauthenticated")
+                router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+            }
+        }
+        checkAuth()
+    }, [router])
+
+    // Add loading states
+    if (authStatus === "loading") {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-white">Loading...</div>
+            </div>
+        )
+    }
+
+    if (authStatus === "unauthenticated") {
+        return null // or your redirect message
+    }
 
     const documents: Document[] = [
         {
@@ -208,11 +243,11 @@ export default function InstantDownloadPage() {
                 <div className="absolute inset-0 cyber-grid opacity-30" />
             </div>
 
-            {/* Navigation */}
-            <nav className="relative z-50 bg-black/20 backdrop-blur-xl border-b border-white/10 sticky top-0">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
-                        <div className="flex items-center space-x-4 md:space-x-6">
+            <header className="relative z-50 w-full border-b border-white/10">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex items-center justify-between">
+                        {/* Logo on the left */}
+                        <div className="flex-shrink-0">
                             <Link href="/" className="flex items-center space-x-3 group">
                                 <div className="relative">
                                     <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
@@ -222,73 +257,88 @@ export default function InstantDownloadPage() {
                                     Nyay Mitra
                                 </span>
                             </Link>
-                            <Link href="/services" className="hidden md:block">
-                                <Button variant="ghost" className="text-white/80 hover:text-white hover:bg-white/10">
-                                    <ArrowRight className="h-4 w-4 mr-1 transform rotate-180" />
-                                    Back to Services
-                                </Button>
-                            </Link>
                         </div>
 
-                        {/* Desktop Navigation */}
-                        <div className="hidden md:flex items-center space-x-4">
-                            <Link href="/lawyers">
-                                <Button
-                                    variant="outline"
-                                    className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm"
-                                >
-                                    Find Lawyers
-                                </Button>
-                            </Link>
-                            <Link href="/legal-gpt">
-                                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0">
-                                    AI Assistant
-                                </Button>
-                            </Link>
-                        </div>
+                        {/* Centered navigation links */}
+                        <nav className="hidden md:flex items-center justify-center flex-1 px-8">
+                            <div className="flex space-x-8">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Home className="h-4 w-4 mr-1" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <BookText className="h-4 w-4 mr-1" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Mail className="h-4 w-4 mr-1" /> Contact
+                                </Link>
+                            </div>
+                        </nav>
 
-                        {/* Mobile menu button */}
-                        <div className="md:hidden flex items-center">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="text-white hover:bg-white/10"
+                        {/* Right side links */}
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/services"
+                                className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                            >
+                                Back to Services
+                            </Link>
+                            <Link
+                                href="/services"
+                                className="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                            >
+                                Get Started
+                            </Link>
+
+                            {/* Mobile menu button */}
+                            <button
+                                className="md:hidden text-white focus:outline-none"
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             >
-                                {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                            </Button>
+                                {mobileMenuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </button>
                         </div>
                     </div>
 
-                    {/* Mobile Navigation */}
+                    {/* Mobile menu */}
                     {mobileMenuOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="md:hidden pb-4 space-y-2"
-                        >
-                            <Link href="/services">
-                                <Button variant="ghost" className="w-full justify-start text-white/80 hover:text-white hover:bg-white/10">
-                                    <ArrowRight className="h-4 w-4 mr-2 transform rotate-180" />
+                        <div className="md:hidden bg-gray-900/95 backdrop-blur-sm px-4 py-6 border-t border-white/10">
+                            <div className="flex flex-col space-y-4">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors">
+                                    <Home className="h-4 w-4 mr-2 inline" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors">
+                                    <BookText className="h-4 w-4 mr-2 inline" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
+                                    <Mail className="h-4 w-4 mr-2 inline" /> Contact
+                                </Link>
+                                <Link href="/lawyers" className="text-white/80 hover:text-white transition-colors">
+                                    Find Lawyer
+                                </Link>
+                                <Link href="/ai-legal-assistant" className="text-white/80 hover:text-white transition-colors">
+                                    Talk to AI
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                                >
                                     Back to Services
-                                </Button>
-                            </Link>
-                            <Link href="/lawyers">
-                                <Button variant="outline" className="w-full justify-start bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm">
-                                    Find Lawyers
-                                </Button>
-                            </Link>
-                            <Link href="/legal-gpt">
-                                <Button className="w-full justify-start bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0">
-                                    AI Assistant
-                                </Button>
-                            </Link>
-                        </motion.div>
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                                >
+                                    Get Started
+                                </Link>
+                            </div>
+                        </div>
                     )}
                 </div>
-            </nav>
+            </header>
 
             {/* Main Content */}
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -460,11 +510,11 @@ export default function InstantDownloadPage() {
                             <ul className="space-y-2 text-sm text-white/70">
                                 <li className="flex items-center">
                                     <Mail className="h-4 w-4 mr-2 text-lime-400" />
-                                    legal@nyaymitra.in
+                                    nyaymitra.ai@gmail.com
                                 </li>
                                 <li className="flex items-center">
                                     <Phone className="h-4 w-4 mr-2 text-lime-400" />
-                                    +91 98765 43210
+                                    +91 79705 96183
                                 </li>
                             </ul>
                             <div className="mt-4 flex space-x-4">

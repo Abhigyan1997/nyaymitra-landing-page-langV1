@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Clock, User, Check, ArrowRight, Mail, MapPin, Phone, Scale, Home, X, Menu, BookText } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -14,6 +15,9 @@ import Image from "next/image"
 export default function PriorityBookingPage() {
     const [step, setStep] = useState(1)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
+    const router = useRouter()
+
     const [formData, setFormData] = useState({
         name: "",
         phone: "",
@@ -22,6 +26,40 @@ export default function PriorityBookingPage() {
         time: "",
         lawyerType: ""
     })
+
+    // Add authentication check effect
+    useEffect(() => {
+        const checkAuth = () => {
+            try {
+                const token = localStorage.getItem("token")
+                if (!token) {
+                    setAuthStatus("unauthenticated")
+                    // Store current path before redirecting
+                    router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+                } else {
+                    setAuthStatus("authenticated")
+                }
+            } catch (error) {
+                console.error("Authentication check failed:", error)
+                setAuthStatus("unauthenticated")
+                router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
+            }
+        }
+        checkAuth()
+    }, [router])
+
+    // Add loading states
+    if (authStatus === "loading") {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-white">Loading...</div>
+            </div>
+        )
+    }
+
+    if (authStatus === "unauthenticated") {
+        return null // or your redirect message
+    }
 
     const lawyerTypes = [
         "Family Law",
@@ -57,76 +95,103 @@ export default function PriorityBookingPage() {
                 <div className="absolute inset-0 cyber-grid opacity-30" />
             </div>
 
+
             {/* Responsive Header */}
             <header className="relative z-50 w-full border-b border-white/10">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <div className="flex items-center space-x-8">
-                        <Link href="/" className="flex items-center space-x-3 group">
-                            <div className="relative">
-                                <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
-                                <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                    <div className="flex items-center justify-between">
+                        {/* Logo on the left */}
+                        <div className="flex-shrink-0">
+                            <Link href="/" className="flex items-center space-x-3 group">
+                                <div className="relative">
+                                    <Scale className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-all duration-300 group-hover:rotate-12" />
+                                    <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
+                                </div>
+                                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                    Nyay Mitra
+                                </span>
+                            </Link>
+                        </div>
+
+                        {/* Centered navigation links */}
+                        <nav className="hidden md:flex items-center justify-center flex-1 px-8">
+                            <div className="flex space-x-8">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Home className="h-4 w-4 mr-1" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <BookText className="h-4 w-4 mr-1" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors flex items-center">
+                                    <Mail className="h-4 w-4 mr-1" /> Contact
+                                </Link>
                             </div>
-                            <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                                Nyay Mitra
-                            </span>
-                        </Link>
-                        <nav className="hidden md:flex items-center space-x-6">
-                            <Link href="/" className="text-white/80 hover:text-white transition-colors">
-                                <Home className="h-4 w-4 mr-1 inline" /> Home
-                            </Link>
-                            <Link href="/services" className="text-white/80 hover:text-white transition-colors">
-                                <BookText className="h-4 w-4 mr-1 inline" /> Services
-                            </Link>
-                            <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
-                                <Mail className="h-4 w-4 mr-1 inline" /> Contact
-                            </Link>
                         </nav>
-                    </div>
 
-                    <div className="flex items-center space-x-4">
-                        <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20 hidden sm:inline-flex">
-                            Back to Services
-                        </Button>
-                        <Button className="hidden md:inline-flex bg-gradient-to-r from-yellow-500 to-orange-500">
-                            Get Started
-                        </Button>
-
-                        {/* Mobile menu button */}
-                        <button
-                            className="md:hidden text-white focus:outline-none"
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        >
-                            {mobileMenuOpen ? (
-                                <X className="h-6 w-6" />
-                            ) : (
-                                <Menu className="h-6 w-6" />
-                            )}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Mobile menu */}
-                {mobileMenuOpen && (
-                    <div className="md:hidden bg-gray-900/95 backdrop-blur-sm px-4 py-6 border-t border-white/10">
-                        <div className="flex flex-col space-y-4">
-                            {/* <Link href="/services" className="text-white/80 hover:text-white transition-colors">
-                                Services
-                            </Link> */}
-                            <Link href="/lawyers" className="text-white/80 hover:text-white transition-colors">
-                                Find Lawyer
-                            </Link>
-                            <Link href="/ai-legal-assistant" className="text-white/80 hover:text-white transition-colors">
-                                Talk to AI
-                            </Link>
-                            <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
+                        {/* Right side links */}
+                        <div className="flex items-center space-x-4">
+                            <Link
+                                href="/services"
+                                className="hidden sm:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                            >
                                 Back to Services
-                            </Button>
-                            <Button className="bg-gradient-to-r from-yellow-500 to-orange-500">
+                            </Link>
+                            <Link
+                                href="/services"
+                                className="hidden md:inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                            >
                                 Get Started
-                            </Button>
+                            </Link>
+
+                            {/* Mobile menu button */}
+                            <button
+                                className="md:hidden text-white focus:outline-none"
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            >
+                                {mobileMenuOpen ? (
+                                    <X className="h-6 w-6" />
+                                ) : (
+                                    <Menu className="h-6 w-6" />
+                                )}
+                            </button>
                         </div>
                     </div>
-                )}
+
+                    {/* Mobile menu */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden bg-gray-900/95 backdrop-blur-sm px-4 py-6 border-t border-white/10">
+                            <div className="flex flex-col space-y-4">
+                                <Link href="/" className="text-white/80 hover:text-white transition-colors">
+                                    <Home className="h-4 w-4 mr-2 inline" /> Home
+                                </Link>
+                                <Link href="/services" className="text-white/80 hover:text-white transition-colors">
+                                    <BookText className="h-4 w-4 mr-2 inline" /> Services
+                                </Link>
+                                <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
+                                    <Mail className="h-4 w-4 mr-2 inline" /> Contact
+                                </Link>
+                                <Link href="/lawyers" className="text-white/80 hover:text-white transition-colors">
+                                    Find Lawyer
+                                </Link>
+                                <Link href="/ai-legal-assistant" className="text-white/80 hover:text-white transition-colors">
+                                    Talk to AI
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-white/10 border border-white/20 hover:bg-white/20 transition-colors"
+                                >
+                                    Back to Services
+                                </Link>
+                                <Link
+                                    href="/services"
+                                    className="inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 transition-colors"
+                                >
+                                    Get Started
+                                </Link>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </header>
 
             {/* Content */}
@@ -403,11 +468,11 @@ export default function PriorityBookingPage() {
                             <ul className="space-y-2 text-sm text-white/70">
                                 <li className="flex items-center">
                                     <Mail className="h-4 w-4 mr-2 text-lime-400" />
-                                    legal@nyaymitra.in
+                                    nyaymitra.ai@gmail.com
                                 </li>
                                 <li className="flex items-center">
                                     <Phone className="h-4 w-4 mr-2 text-lime-400" />
-                                    +91 98765 43210
+                                    +91 79705 96183
                                 </li>
                             </ul>
                             <div className="mt-4 flex space-x-4">

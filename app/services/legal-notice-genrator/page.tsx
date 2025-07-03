@@ -1,28 +1,33 @@
 "use client"
 
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { NotaryBookingDialog } from "@/components/notary-booking-dialog"
-import { PenTool, Clock, Mail, Package, Check, ArrowRight, Info, Menu, X, Scale, BookText, Home, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { FileSignature, Gavel, ArrowRight, Download, Info, User, Mail, Calendar, Scale, Phone, Home, Menu, X, BookText } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { useState, useEffect } from "react" // Add useEffect
-import { useRouter } from "next/navigation" // Add useRouter
+import { Textarea } from "@/components/ui/textarea"
 
-export default function NotaryServicePage() {
+export default function LegalNoticePage() {
+    const [noticeType, setNoticeType] = useState<string>("Rent Default")
+    const [senderName, setSenderName] = useState<string>("")
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading") // Add auth state
-    const router = useRouter() // Initialize router
+    const [recipientName, setRecipientName] = useState<string>("")
+    const [amountDue, setAmountDue] = useState<string>("")
+    const [details, setDetails] = useState<string>("")
+    const [generatedNotice, setGeneratedNotice] = useState<string>("")
+    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
+    const router = useRouter()
 
-    // Add authentication check effect
+    // Authentication check
     useEffect(() => {
         const checkAuth = () => {
             try {
                 const token = localStorage.getItem("token")
                 if (!token) {
                     setAuthStatus("unauthenticated")
-                    // Store current path before redirecting
                     router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
                 } else {
                     setAuthStatus("authenticated")
@@ -36,7 +41,7 @@ export default function NotaryServicePage() {
         checkAuth()
     }, [router])
 
-    // Add loading states
+    // Loading states
     if (authStatus === "loading") {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -46,32 +51,82 @@ export default function NotaryServicePage() {
     }
 
     if (authStatus === "unauthenticated") {
-        return null // or your redirect message
+        return null
     }
 
-    const steps = [
-        {
-            title: "Upload Document",
-            description: "Upload the document you need notarized",
-            icon: <PenTool className="h-6 w-6 text-blue-400" />
-        },
-        {
-            title: "Verify Details",
-            description: "Our team verifies your identity and document",
-            icon: <Check className="h-6 w-6 text-green-400" />
-        },
-        {
-            title: "Notarization",
-            description: "Licensed lawyer notarizes your document",
-            icon: <PenTool className="h-6 w-6 text-purple-400" />
-        },
-        {
-            title: "Delivery",
-            description: "Receive notarized copy via email or courier",
-            icon: <Package className="h-6 w-6 text-yellow-400" />
-        }
+    const noticeTypes = [
+        "Rent Default", "Payment Default", "Tenant Eviction", "Employment Dispute",
+        "Contract Breach", "Consumer Complaint", "Property Dispute", "Cheque Bounce"
     ]
 
+    const generateNotice = () => {
+        const notice = `LEGAL NOTICE
+
+Under Section 80 of Code of Civil Procedure, 1908
+
+From:
+${senderName || "[Your Name]"}
+[Your Address]
+[City, State, PIN]
+
+To:
+${recipientName || "[Recipient Name]"}
+[Recipient Address]
+[City, State, PIN]
+
+Date: ${new Date().toLocaleDateString()}
+
+Subject: Legal Notice for ${noticeType}
+
+Dear Sir/Madam,
+
+I, ${senderName || "[Your Name]"}, through this legal notice bring to your attention the following facts:
+
+1. ${getNoticeDetails(noticeType)}
+
+2. Despite repeated requests, you have failed to ${noticeType.includes("Default") ? "make the payment" : "rectify the situation"}.
+
+3. This is my final notice to you to ${getRemedy(noticeType)} within 15 days from receipt of this notice.
+
+If you fail to comply with this notice, I shall be constrained to initiate appropriate legal proceedings against you at your cost and risk.
+
+Please treat this as most urgent.
+
+Yours faithfully,
+${senderName || "[Your Name]"}`
+
+        setGeneratedNotice(notice)
+    }
+
+    const getNoticeDetails = (type: string) => {
+        switch (type) {
+            case "Rent Default":
+                return `You are my tenant at [property address] and have failed to pay rent amounting to ₹${amountDue || "XX,XXX"} for the period [month/year].`
+            case "Payment Default":
+                return `You have failed to pay the outstanding amount of ₹${amountDue || "XX,XXX"} for [goods/services] provided on [date].`
+            case "Tenant Eviction":
+                return `You have violated the terms of our rental agreement dated [date] by [specific violations].`
+            case "Employment Dispute":
+                return `You have failed to [specific obligation] as per our employment agreement dated [date].`
+            default:
+                return details || `[Describe your specific grievance in detail]`
+        }
+    }
+
+    const getRemedy = (type: string) => {
+        switch (type) {
+            case "Rent Default":
+                return "clear all outstanding rent payments"
+            case "Payment Default":
+                return "make the payment in full"
+            case "Tenant Eviction":
+                return "vacate the premises"
+            case "Employment Dispute":
+                return "fulfill your contractual obligations"
+            default:
+                return "rectify the situation"
+        }
+    }
     return (
         <div className="min-h-screen bg-black text-white relative overflow-hidden">
             {/* Responsive Header */}
@@ -174,147 +229,177 @@ export default function NotaryServicePage() {
 
             {/* Animated Background */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-yellow-900/20 to-orange-900/20" />
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-pink-900/20" />
                 <div className="absolute inset-0 cyber-grid opacity-30" />
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="text-center mb-12 md:mb-16"
-                >
-                    <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 backdrop-blur-sm mb-4 md:mb-6">
-                        <PenTool className="h-4 w-4 text-yellow-400 mr-2" />
-                        <span className="text-sm text-yellow-300">Remote Notarization</span>
+            {/* Header */}
+            <section className="relative z-10 py-16">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center">
+                        <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 backdrop-blur-sm mb-8">
+                            <Gavel className="h-4 w-4 text-blue-400 mr-2" />
+                            <span className="text-sm text-blue-300">Legal Document Generator</span>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent pb-2">
+                            Legal Notice Generator
+                        </h1>
+                        <p className="text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
+                            Create professional legal notices for various disputes with our step-by-step tool
+                        </p>
                     </div>
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent pb-2">
-                        Legal Notary Service
-                    </h1>
-                    <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto leading-relaxed">
-                        Get your documents notarized remotely by licensed lawyers with delivery in 1-4 days.
-                    </p>
-                </motion.div>
-
-                {/* Process Steps */}
-                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-12 md:mb-20">
-                    {steps.map((step, index) => (
-                        <motion.div
-                            key={step.title}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            whileHover={{ y: -5 }}
-                        >
-                            <Card className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-yellow-500/30 transition-all duration-300 h-full">
-                                <CardHeader>
-                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 flex items-center justify-center mb-3 md:mb-4">
-                                        {step.icon}
-                                    </div>
-                                    <CardTitle className="text-white text-base md:text-lg">{step.title}</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <CardDescription className="text-white/70 text-sm md:text-base">
-                                        {step.description}
-                                    </CardDescription>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    ))}
                 </div>
+            </section>
 
-                {/* Pricing Options */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.4 }}
-                    className="grid md:grid-cols-2 gap-6 md:gap-8 mb-12 md:mb-16"
-                >
-                    <Card className="bg-white/5 backdrop-blur-xl border border-blue-500/30 relative overflow-hidden">
-                        <div className="absolute -right-8 -top-8 w-24 h-24 md:-right-10 md:-top-10 md:w-32 md:h-32 bg-blue-500/10 rounded-full blur-xl" />
+            {/* Generator Section */}
+            <section className="relative z-10 py-8">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <Card className="bg-white/5 backdrop-blur-xl border border-white/10">
                         <CardHeader>
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <CardTitle className="text-white">Digital Notarization</CardTitle>
-                                    <div className="text-2xl md:text-3xl font-bold text-blue-400 mt-1 md:mt-2">₹399</div>
-                                </div>
-                                <Badge className="bg-blue-500/20 text-blue-300 text-xs md:text-sm">Instant Delivery</Badge>
-                            </div>
+                            <CardTitle className="text-2xl flex items-center">
+                                <FileSignature className="h-6 w-6 mr-2 text-blue-400" />
+                                Legal Notice Generator
+                            </CardTitle>
+                            <CardDescription className="text-white/70">
+                                Fill in the details to generate your legal notice
+                            </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">
-                                <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Electronically notarized PDF</span>
-                                </div>
-                                <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Delivered within 24 hours</span>
-                                </div>
-                                <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-blue-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Legal validity across India</span>
-                                </div>
-                            </div>
-                            <NotaryBookingDialog serviceType="digital" />
-                        </CardContent>
-                    </Card>
-
-                    <Card className="bg-white/5 backdrop-blur-xl border border-orange-500/30 relative overflow-hidden">
-                        <div className="absolute -right-8 -top-8 w-24 h-24 md:-right-10 md:-top-10 md:w-32 md:h-32 bg-orange-500/10 rounded-full blur-xl" />
-                        <CardHeader>
-                            <div className="flex justify-between items-start">
+                            <div className="grid md:grid-cols-2 gap-6 mb-8">
                                 <div>
-                                    <CardTitle className="text-white">Physical Notarization</CardTitle>
-                                    <div className="text-2xl md:text-3xl font-bold text-orange-400 mt-1 md:mt-2">₹799</div>
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Type of Notice</label>
+                                    <select
+                                        value={noticeType}
+                                        onChange={(e) => setNoticeType(e.target.value)}
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        {noticeTypes.map((type) => (
+                                            <option key={type} value={type}>{type}</option>
+                                        ))}
+                                    </select>
                                 </div>
-                                <Badge className="bg-orange-500/20 text-orange-300 text-xs md:text-sm">Courier Included</Badge>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Your Name</label>
+                                    <input
+                                        type="text"
+                                        value={senderName}
+                                        onChange={(e) => setSenderName(e.target.value)}
+                                        placeholder="Sender's full name"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Recipient Name</label>
+                                    <input
+                                        type="text"
+                                        value={recipientName}
+                                        onChange={(e) => setRecipientName(e.target.value)}
+                                        placeholder="Recipient's full name"
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    />
+                                </div>
+
+                                {(noticeType.includes("Default") || noticeType.includes("Payment")) && (
+                                    <div>
+                                        <label className="block text-sm font-medium text-white/80 mb-2">Amount Due (₹)</label>
+                                        <input
+                                            type="text"
+                                            value={amountDue}
+                                            onChange={(e) => setAmountDue(e.target.value)}
+                                            placeholder="Enter amount"
+                                            className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                    </div>
+                                )}
+
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-medium text-white/80 mb-2">Additional Details</label>
+                                    <Textarea
+                                        value={details}
+                                        onChange={(e) => setDetails(e.target.value)}
+                                        placeholder="Describe your specific grievance..."
+                                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[120px]"
+                                    />
+                                </div>
                             </div>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">
-                                <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-orange-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Physically notarized copy</span>
+
+                            <Button
+                                onClick={generateNotice}
+                                className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 mb-8"
+                            >
+                                Generate Legal Notice
+                            </Button>
+
+                            {generatedNotice && (
+                                <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-xl p-6 mb-8">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <h3 className="text-lg font-semibold text-white">Your Legal Notice</h3>
+                                        <Button variant="outline" size="sm" className="bg-white/10 border-white/20">
+                                            <Download className="h-4 w-4 mr-2" />
+                                            Download PDF
+                                        </Button>
+                                    </div>
+                                    <div className="bg-black/30 p-4 rounded-lg border border-white/10 whitespace-pre-wrap font-mono text-sm">
+                                        {generatedNotice}
+                                    </div>
                                 </div>
+                            )}
+
+                            {/* Additional Info */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-6">
                                 <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-orange-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Delivered in 2-4 days</span>
-                                </div>
-                                <div className="flex items-start">
-                                    <Check className="h-4 w-4 text-orange-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Tracking number provided</span>
+                                    <Info className="h-5 w-5 text-blue-400 mr-3 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <h4 className="font-medium text-white mb-2">About Legal Notices</h4>
+                                        <ul className="text-sm text-white/70 space-y-2">
+                                            <li>• Legal notices are required before filing certain lawsuits in India</li>
+                                            <li>• Sending via registered post with acknowledgment is recommended</li>
+                                            <li>• Keep a copy of the notice and postal receipt for your records</li>
+                                            <li>• The recipient typically has 15-30 days to respond</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <NotaryBookingDialog serviceType="physical" />
                         </CardContent>
                     </Card>
-                </motion.div>
+                </div>
+            </section>
 
-                {/* FAQ CTA */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="text-center"
-                >
-                    <div className="inline-flex items-center mb-4 md:mb-6 text-sm text-white/60">
-                        <Info className="h-4 w-4 mr-2" />
-                        Have questions about the notarization process?
+            {/* CTA Section */}
+            <section className="relative z-10 py-16">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                        <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">Need professional legal help?</h2>
+                        <p className="text-lg text-white/80 mb-8 max-w-2xl mx-auto">
+                            Connect with experienced lawyers who can help you escalate your case
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                            <Link href="/lawyers">
+                                <Button
+                                    size="lg"
+                                    className="px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 transform hover:scale-105 transition-all duration-300 group"
+                                >
+                                    <User className="mr-3 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                                    Find a Lawyer
+                                    <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                                </Button>
+                            </Link>
+                            <Link href="/services/notary">
+                                <Button
+                                    variant="outline"
+                                    size="lg"
+                                    className="px-8 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                                >
+                                    <FileSignature className="mr-3 h-5 w-5" />
+                                    Get Document Notarized
+                                </Button>
+                            </Link>
+                        </div>
                     </div>
-                    <Link href="/notary/how-it-works">
-                        <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
-                            Learn How It Works
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                        </Button>
-                    </Link>
-                </motion.div>
-            </div>
-
-            {/* Footer */}
+                </div>
+            </section>
             <footer className="relative z-20 bg-black/50 backdrop-blur-lg border-t border-white/10 mt-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
