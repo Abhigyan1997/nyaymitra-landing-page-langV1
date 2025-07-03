@@ -189,7 +189,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
             const profileRaw = localStorage.getItem("userProfile")
             const profile = profileRaw ? JSON.parse(profileRaw) : {}
 
-            const response = await fetch('http://localhost:4000/api/documents/create-notary-booking', {
+            const response = await fetch('https://nyaymitra-backend-document.onrender.com/api/documents/create-notary-booking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                     description: "Notary Service Booking",
                     order_id: data.orderId,
                     handler: async function (response: any) {
-                        const verifyRes = await fetch('http://localhost:4000/api/payment/verify', {
+                        const verifyRes = await fetch('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
