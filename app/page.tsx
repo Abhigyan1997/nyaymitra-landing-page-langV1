@@ -950,14 +950,12 @@ export default function HomePage() {
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
               {/* Elegant Badge - Responsive */}
-              <div className="inline-flex items-center px-5 py-2.5 md:px-7 md:py-3 rounded-full bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-400/30 backdrop-blur-md shadow-md hover:shadow-blue-500/20 group hover:scale-105 transition-all duration-300">
-                <Award className="h-5 w-5 text-blue-400 mr-2 animate-pulse" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 font-semibold text-sm md:text-base tracking-wide">
+              <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
+                <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
                   India’s #1 One-Tap Legal Assistant – Draft, Notarize, & Book Lawyers Instantly
                 </span>
               </div>
-
-
               {/* Sophisticated Title - Responsive */}
               <div className="space-y-4 md:space-y-6">
                 <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight md:leading-none">
