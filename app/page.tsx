@@ -631,7 +631,7 @@ export default function HomePage() {
 
                 <div className="flex flex-col">
                   <span className="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-white group-hover:via-blue-200 group-hover:to-purple-200 transition-all duration-500">
-                    Nyay Mitra
+                    NyayMitra
                   </span>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs text-white/60 font-medium tracking-wider uppercase">
