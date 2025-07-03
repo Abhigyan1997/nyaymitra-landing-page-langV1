@@ -352,7 +352,7 @@ export default function LawyersPage() {
       const orderResponse = await axios.post(
         "https://nyaymitra-backend.onrender.com/api/v1/payment/create-order",
         {
-          amount: selectedLawyer.consultationFee * 100, // Convert to paise
+          amount: selectedLawyer.consultationFee, // Convert to paise
           currency: "INR",
           receipt: `booking_${Date.now()}`,
           notes: {
