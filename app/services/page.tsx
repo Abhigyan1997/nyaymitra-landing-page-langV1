@@ -379,7 +379,7 @@ export default function ServicesPage() {
               Our AI-powered document generator can create personalized legal documents in minutes, or connect you with expert lawyers for complex cases.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/ai-document-generator">
+              {/* <Link href="/ai-document-generator">
                 <Button
                   size="lg"
                   className="px-8 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 transform hover:scale-105 transition-all duration-300 group"
@@ -388,17 +388,18 @@ export default function ServicesPage() {
                   Generate Document
                   <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
-              </Link>
+              </Link> */}
               <Link href="/lawyers">
                 <Button
                   variant="outline"
                   size="lg"
-                  className="px-8 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                  className="px-8 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-none backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
                 >
                   <Users className="mr-3 h-5 w-5" />
                   Consult a Lawyer
                 </Button>
               </Link>
+
             </div>
           </div>
         </div>
