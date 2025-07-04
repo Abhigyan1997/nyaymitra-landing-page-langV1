@@ -10,12 +10,37 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import Link from "next/link"
-import Image from "next/image"
+import { toast } from "sonner"
+import axios from "axios"
+
+declare global {
+    interface Window {
+        Razorpay: any
+    }
+}
+
+type PaymentData = {
+    amount: number
+    currency: string
+    razorpayOrderId: string
+    key: string
+}
+
+type BookingResponse = {
+    success: boolean
+    message: string
+    data: {
+        order: any
+        payment: PaymentData
+    }
+}
 
 export default function PriorityBookingPage() {
     const [step, setStep] = useState(1)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
+    const [isProcessingPayment, setIsProcessingPayment] = useState(false)
+    const [createdOrder, setCreatedOrder] = useState<any>(null)
     const router = useRouter()
 
     const [formData, setFormData] = useState({
@@ -27,14 +52,12 @@ export default function PriorityBookingPage() {
         lawyerType: ""
     })
 
-    // Add authentication check effect
     useEffect(() => {
         const checkAuth = () => {
             try {
                 const token = localStorage.getItem("token")
                 if (!token) {
                     setAuthStatus("unauthenticated")
-                    // Store current path before redirecting
                     router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
                 } else {
                     setAuthStatus("authenticated")
@@ -48,17 +71,20 @@ export default function PriorityBookingPage() {
         checkAuth()
     }, [router])
 
-    // Add loading states
-    if (authStatus === "loading") {
-        return (
-            <div className="min-h-screen bg-black flex items-center justify-center">
-                <div className="text-white">Loading...</div>
-            </div>
-        )
-    }
-
-    if (authStatus === "unauthenticated") {
-        return null // or your redirect message
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            if (window.Razorpay) {
+                return resolve(true)
+            }
+            const script = document.createElement('script')
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+            script.onload = () => resolve(true)
+            script.onerror = () => {
+                toast.error("Failed to load payment processor")
+                resolve(false)
+            }
+            document.body.appendChild(script)
+        })
     }
 
     const lawyerTypes = [
@@ -87,6 +113,162 @@ export default function PriorityBookingPage() {
         if (step > 1) setStep(step - 1)
     }
 
+    const handleCreateBooking = async () => {
+        try {
+            const ipAddress = ""; // or fetch from backend if needed
+            const userAgent = window.navigator.userAgent;
+
+            // Validate form data first
+            if (!formData.name || !formData.phone || !formData.issue || !formData.lawyerType || !formData.date || !formData.time) {
+                throw new Error("Please fill all required fields");
+            }
+
+            setIsProcessingPayment(true);
+
+            const userProfileString = localStorage.getItem("userProfile");
+            if (!userProfileString) {
+                throw new Error("User session expired. Please login again.");
+            }
+
+            const userProfile = JSON.parse(userProfileString);
+            const userId = userProfile.userId;
+            const userEmail = userProfile.email;
+
+            if (!userId || !userEmail) {
+                throw new Error("Invalid user session. Please login again.");
+            }
+
+            const response = await axios.post<BookingResponse>(
+                'http://localhost:4000/api/documents/priority-booking',
+                {
+                    name: formData.name,
+                    phone: formData.phone,
+                    issueType: formData.lawyerType,
+                    preferredDate: formData.date,
+                    preferredTime: formData.time,
+                    description: formData.issue,
+                    urgency: "high",
+                    userId,
+                    userEmail,
+                    ipAddress,
+                    userAgent,
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem("token")}`
+                    }
+                }
+            );
+
+            if (!response.data.success || !response.data.data?.payment) {
+                throw new Error(response.data.message || "Failed to create booking");
+            }
+
+            setCreatedOrder(response.data.data.order);
+            await handlePayment(response.data.data.payment);
+
+        } catch (error: any) {
+            console.error("Booking failed:", error);
+            toast.error(error.response?.data?.message || error.message || "Failed to create booking");
+            setIsProcessingPayment(false);
+        }
+    };
+
+    const handlePayment = async (paymentData: PaymentData) => {
+        try {
+            const razorpayLoaded = await loadRazorpay();
+            if (!razorpayLoaded) {
+                toast.error("Payment processor failed to load");
+                return;
+            }
+
+            const userProfileString = localStorage.getItem("userProfile");
+            const userProfile = userProfileString ? JSON.parse(userProfileString) : null;
+
+            // Validate we have required data
+            if (!paymentData.razorpayOrderId || !paymentData.key) {
+                throw new Error("Invalid payment data received");
+            }
+
+            const options = {
+                key: paymentData.key,
+                amount: paymentData.amount * 100, // Convert to paise
+                currency: paymentData.currency,
+                name: "Nyay Mitra",
+                description: "Priority Legal Consultation",
+                order_id: paymentData.razorpayOrderId,
+                handler: async (response: any) => {
+                    try {
+                        const verifyResponse = await axios.post(
+                            'http://localhost:4000/api/payment/verify',
+                            {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                                documentId: createdOrder._id,
+                                userId: userProfile?.userId,
+                                userEmail: userProfile?.email
+                            },
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                                }
+                            }
+                        );
+
+                        if (verifyResponse.data.success) {
+                            toast.success("Payment successful! Your booking is confirmed.");
+                            router.push(`/bookings/${createdOrder._id}`);
+                        } else {
+                            throw new Error(verifyResponse.data.message || "Payment verification failed");
+                        }
+                    } catch (error: any) {
+                        console.error("Payment verification failed:", error);
+                        toast.error(error.response?.data?.message || "Payment verification failed. Please contact support.");
+                    }
+                },
+                prefill: {
+                    name: formData.name,
+                    contact: formData.phone,
+                    email: userProfile?.email || ""
+                },
+                theme: {
+                    color: "#4f46e5"
+                },
+                modal: {
+                    ondismiss: () => {
+                        toast.info("Payment window closed. Your booking is still pending.");
+                    }
+                }
+            };
+
+            const rzp = new window.Razorpay(options);
+            rzp.open();
+
+            rzp.on('payment.failed', (response: any) => {
+                toast.error(`Payment failed: ${response.error.description}`);
+                console.error("Payment failed:", response.error);
+            });
+
+        } catch (error: any) {
+            console.error("Payment initialization failed:", error);
+            toast.error(error.message || "Failed to initialize payment. Please try again.");
+            setIsProcessingPayment(false);
+        }
+    };
+
+    if (authStatus === "loading") {
+        return (
+            <div className="min-h-screen bg-black flex items-center justify-center">
+                <div className="text-white">Loading...</div>
+            </div>
+        )
+    }
+
+    if (authStatus === "unauthenticated") {
+        return null
+    }
+
     return (
         <div className="min-h-screen bg-black text-white relative overflow-hidden">
             {/* Animated Background */}
@@ -95,12 +277,10 @@ export default function PriorityBookingPage() {
                 <div className="absolute inset-0 cyber-grid opacity-30" />
             </div>
 
-
             {/* Responsive Header */}
             <header className="relative z-50 w-full border-b border-white/10">
                 <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
                     <div className="flex items-center justify-between">
-                        {/* Logo on the left */}
                         <div className="flex-shrink-0">
                             <Link href="/" className="flex items-center space-x-3 group">
                                 <div className="relative">
@@ -113,7 +293,6 @@ export default function PriorityBookingPage() {
                             </Link>
                         </div>
 
-                        {/* Centered navigation links */}
                         <nav className="hidden md:flex items-center justify-center flex-1 px-8">
                             <div className="flex space-x-8">
                                 <Link href="/" className="text-white/80 hover:text-white transition-colors flex items-center">
@@ -128,7 +307,6 @@ export default function PriorityBookingPage() {
                             </div>
                         </nav>
 
-                        {/* Right side links */}
                         <div className="flex items-center space-x-4">
                             <Link
                                 href="/services"
@@ -143,7 +321,6 @@ export default function PriorityBookingPage() {
                                 Get Started
                             </Link>
 
-                            {/* Mobile menu button */}
                             <button
                                 className="md:hidden text-white focus:outline-none"
                                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -157,7 +334,6 @@ export default function PriorityBookingPage() {
                         </div>
                     </div>
 
-                    {/* Mobile menu */}
                     {mobileMenuOpen && (
                         <div className="md:hidden bg-gray-900/95 backdrop-blur-sm px-4 py-6 border-t border-white/10">
                             <div className="flex flex-col space-y-4">
@@ -169,12 +345,6 @@ export default function PriorityBookingPage() {
                                 </Link>
                                 <Link href="/contact" className="text-white/80 hover:text-white transition-colors">
                                     <Mail className="h-4 w-4 mr-2 inline" /> Contact
-                                </Link>
-                                <Link href="/lawyers" className="text-white/80 hover:text-white transition-colors">
-                                    Find Lawyer
-                                </Link>
-                                <Link href="/ai-legal-assistant" className="text-white/80 hover:text-white transition-colors">
-                                    Talk to AI
                                 </Link>
                                 <Link
                                     href="/services"
@@ -389,8 +559,10 @@ export default function PriorityBookingPage() {
                                 <Button
                                     className="bg-gradient-to-r from-red-500 to-pink-500 w-full"
                                     size="lg"
+                                    onClick={handleCreateBooking}
+                                    disabled={isProcessingPayment}
                                 >
-                                    Confirm & Pay ₹99
+                                    {isProcessingPayment ? "Processing..." : "Confirm & Pay ₹99"}
                                 </Button>
                             )}
                         </div>
@@ -416,6 +588,7 @@ export default function PriorityBookingPage() {
                     </Link>
                 </motion.div>
             </div>
+
             {/* Footer */}
             <footer className="relative z-20 bg-black/50 backdrop-blur-lg border-t border-white/10 mt-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

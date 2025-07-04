@@ -56,15 +56,15 @@ export default function ServicesPage() {
       pricing: "₹399 (e-copy) / ₹799 (courier)"
     },
     {
-      id: "ai-affidavit",
-      title: "AI Affidavit Assistant",
-      description: "Generate clean, ready-to-use affidavits with AI in minutes.",
-      icon: FileSignature,
+      id: "document-review",
+      title: "Lawyer Document Review",
+      description: "Get your legal documents reviewed by experienced lawyers within 24 hours.",
+      icon: FileCheck,
       color: "from-indigo-500 to-purple-500",
       popular: false,
-      areas: ["Name Change", "Address Proof", "Lost Certificate", "Declaration"],
-      aiFeatures: ["Form-Based GPT Input", "Legal Formatting", "PDF Output"],
-      pricing: "₹149/document"
+      areas: ["Contracts", "Agreements", "Legal Notices", "Affidavits"],
+      aiFeatures: ["Expert Review", "Detailed Feedback", "Suggested Edits"],
+      pricing: "₹499/document"
     },
     {
       id: "priority-booking",
@@ -113,9 +113,9 @@ export default function ServicesPage() {
         return {
           primary: { text: "Notarize Now", icon: PenTool, href: "/services/notary" }
         };
-      case "ai-affidavit":
+      case "document-review":
         return {
-          primary: { text: "Generate Now", icon: FileSignature, href: "/services/ai-affidavit" }
+          primary: { text: "Get Review", icon: FileCheck, href: "/services/document-review" }
         };
       case "priority-booking":
         return {
