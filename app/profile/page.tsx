@@ -65,8 +65,6 @@ interface BankDetails {
     accountHolder?: string
     accountNumber?: string
     ifsc?: string
-    bankName?: string
-    branch?: string
     upiId?: string
 }
 
@@ -75,13 +73,6 @@ interface ConsultationMode {
     call?: boolean
     chat?: boolean
     inPerson?: boolean
-}
-
-interface Document {
-    name: string
-    url: string
-    verified: boolean
-    uploadDate: string
 }
 
 interface UserProfile {
@@ -100,67 +91,33 @@ interface UserProfile {
 
     // Common fields
     language?: string
-    timezone?: string
     emergencyContact?: {
         name?: string
         phone?: string
         relation?: string
     }
-    preferredConsultationMode?: string
-    notificationPreferences?: {
-        email?: boolean
-        sms?: boolean
-        push?: boolean
-    }
-    kycStatus?: 'pending' | 'approved' | 'rejected'
-    accountStatus?: 'active' | 'suspended' | 'pending'
+    accountStatus?: 'active' | 'blocked' | 'deleted'
     profileCompletedPercentage?: number
-
-    // User-specific fields
-    occupation?: string
-    education?: string
-    maritalStatus?: string
-    incomeRange?: string
-    preferredLanguage?: string
 
     // Lawyer-specific fields
     barCouncilId?: string
-    barMembershipNumber?: string
     specialization?: string[]
-    practiceAreas?: string[]
-    courtType?: string[]
-    city?: string
-    state?: string
-    bio?: string
-    experience?: number
     yearsPracticing?: number
-    rating?: number
-    consultationCount?: number
-    clientCount?: number
+    experience?: string
     consultationFee?: number
     languagesSpoken?: string[]
     linkedinUrl?: string
     website?: string
-    portfolio?: string[]
-    badges?: string[]
     lawFirm?: string
     licenseIssuedDate?: string
     licenseExpiryDate?: string
     verifiedByPlatform?: boolean
     consultationModes?: ConsultationMode
-    maxBookingsPerDay?: number
-    advanceNoticeHours?: number
-    consultationDurationMinutes?: number
-    status?: 'online' | 'offline' | 'busy'
     averageRating?: number
-    totalReviews?: number
-    profileViews?: number
-    lastConsultationAt?: string
+    consultationCount?: number
     bankDetails?: BankDetails
     panNumber?: string
-    documents?: Document[]
-    kycVerifiedAt?: string
-    kycRejectedReason?: string
+    bio?: string
 }
 
 export default function ProfilePage() {
@@ -228,16 +185,10 @@ export default function ProfilePage() {
             return element?.checked;
         };
 
-        const getSelectValue = (id: string) => {
-            const element = document.getElementById(id) as HTMLSelectElement;
-            return element?.value;
-        };
-
         const updatedData: any = {
-            // Common fields
             fullName: getInputValue("name"),
             phone: getInputValue("phone"),
-            gender: getSelectValue("gender"),
+            gender: getInputValue("gender"),
             dob: getInputValue("dob"),
             address: {
                 street: getInputValue("street"),
@@ -246,8 +197,6 @@ export default function ProfilePage() {
                 country: getInputValue("country"),
                 pincode: getInputValue("pincode"),
             },
-            language: getSelectValue("language"),
-            timezone: getInputValue("timezone"),
             emergencyContact: {
                 name: getInputValue("emergencyContactName"),
                 phone: getInputValue("emergencyContactPhone"),
@@ -255,26 +204,11 @@ export default function ProfilePage() {
             },
         };
 
-        if (profile.role === 'user') {
-            updatedData.occupation = getInputValue("occupation");
-            updatedData.education = getSelectValue("education");
-            updatedData.maritalStatus = getSelectValue("maritalStatus");
-            updatedData.incomeRange = getSelectValue("incomeRange");
-            updatedData.preferredLanguage = getInputValue("preferredLanguage");
-        }
-
         if (profile.role === 'lawyer') {
-            // Professional details
             updatedData.barCouncilId = getInputValue("barCouncilId");
-            updatedData.barMembershipNumber = getInputValue("barMembershipNumber");
             updatedData.specialization = getInputValue("specialization")?.split(',').map((s: string) => s.trim());
-            updatedData.practiceAreas = getInputValue("practiceAreas")?.split(',').map((s: string) => s.trim());
-            updatedData.courtType = getInputValue("courtType")?.split(',').map((s: string) => s.trim());
-            updatedData.city = getInputValue("city");
-            updatedData.state = getInputValue("state");
-            updatedData.bio = getInputValue("bio");
-            updatedData.experience = getNumberValue("experience");
             updatedData.yearsPracticing = getNumberValue("yearsPracticing");
+            updatedData.experience = getInputValue("experience");
             updatedData.consultationFee = getNumberValue("consultationFee");
             updatedData.languagesSpoken = getInputValue("languagesSpoken")?.split(',').map((s: string) => s.trim());
             updatedData.linkedinUrl = getInputValue("linkedinUrl");
@@ -283,8 +217,8 @@ export default function ProfilePage() {
             updatedData.licenseIssuedDate = getInputValue("licenseIssuedDate");
             updatedData.licenseExpiryDate = getInputValue("licenseExpiryDate");
             updatedData.panNumber = getInputValue("panNumber");
+            updatedData.bio = getInputValue("bio");
 
-            // Consultation settings
             updatedData.consultationModes = {
                 video: getBooleanValue("consultationModeVideo"),
                 call: getBooleanValue("consultationModeCall"),
@@ -292,17 +226,10 @@ export default function ProfilePage() {
                 inPerson: getBooleanValue("consultationModeInPerson"),
             };
 
-            updatedData.maxBookingsPerDay = getNumberValue("maxBookingsPerDay");
-            updatedData.advanceNoticeHours = getNumberValue("advanceNoticeHours");
-            updatedData.consultationDurationMinutes = getNumberValue("consultationDurationMinutes");
-
-            // Financial details
             updatedData.bankDetails = {
                 accountHolder: getInputValue("bankAccountHolder"),
                 accountNumber: getInputValue("bankAccountNumber"),
                 ifsc: getInputValue("bankIFSC"),
-                bankName: getInputValue("bankName"),
-                branch: getInputValue("bankBranch"),
                 upiId: getInputValue("upiId"),
             };
         }
@@ -438,46 +365,6 @@ export default function ProfilePage() {
             </div>
             <Separator />
             <div className="flex items-center gap-4">
-                <Briefcase className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Occupation</p>
-                    <p className="font-medium">{profile.occupation || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
-                <BookOpen className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Education</p>
-                    <p className="font-medium">{profile.education || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
-                <Home className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Marital Status</p>
-                    <p className="font-medium">{profile.maritalStatus || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
-                <Banknote className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Income Range</p>
-                    <p className="font-medium">{profile.incomeRange || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
-                <Languages className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Preferred Language</p>
-                    <p className="font-medium">{profile.preferredLanguage || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
                 <MapPin className="h-5 w-5 text-gray-400" />
                 <div>
                     <p className="text-sm text-gray-500">Address</p>
@@ -522,14 +409,6 @@ export default function ProfilePage() {
             </div>
             <Separator />
             <div className="flex items-center gap-4">
-                <FileKey className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Bar Membership Number</p>
-                    <p className="font-medium">{profile.barMembershipNumber || 'Not specified'}</p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
                 <GraduationCap className="h-5 w-5 text-gray-400" />
                 <div>
                     <p className="text-sm text-gray-500">Specialization</p>
@@ -540,21 +419,11 @@ export default function ProfilePage() {
             </div>
             <Separator />
             <div className="flex items-center gap-4">
-                <Scale className="h-5 w-5 text-gray-400" />
-                <div>
-                    <p className="text-sm text-gray-500">Practice Areas</p>
-                    <p className="font-medium">
-                        {profile.practiceAreas?.join(', ') || 'Not specified'}
-                    </p>
-                </div>
-            </div>
-            <Separator />
-            <div className="flex items-center gap-4">
                 <Briefcase className="h-5 w-5 text-gray-400" />
                 <div>
                     <p className="text-sm text-gray-500">Experience</p>
                     <p className="font-medium">
-                        {profile.experience || 0} years ({profile.yearsPracticing || 0} years practicing)
+                        {profile.experience || 'Not specified'} ({profile.yearsPracticing || 0} years practicing)
                     </p>
                 </div>
             </div>
@@ -578,9 +447,9 @@ export default function ProfilePage() {
                     </p>
                 </div>
             </div>
-            <Separator />
             {profile.bio && (
                 <>
+                    <Separator />
                     <div className="flex items-start gap-4">
                         <FileText className="h-5 w-5 text-gray-400 mt-1" />
                         <div>
@@ -588,9 +457,9 @@ export default function ProfilePage() {
                             <p className="font-medium whitespace-pre-line">{profile.bio}</p>
                         </div>
                     </div>
-                    <Separator />
                 </>
             )}
+            <Separator />
             <div className="flex items-center gap-4">
                 <BriefcaseBusiness className="h-5 w-5 text-gray-400" />
                 <div>
@@ -622,9 +491,9 @@ export default function ProfilePage() {
                     <p className="font-medium">{getAddressString()}</p>
                 </div>
             </div>
-            <Separator />
             {(profile.linkedinUrl || profile.website) && (
                 <>
+                    <Separator />
                     <div className="flex items-center gap-4">
                         <Linkedin className="h-5 w-5 text-gray-400" />
                         <div>
@@ -652,9 +521,9 @@ export default function ProfilePage() {
                             </p>
                         </div>
                     </div>
-                    <Separator />
                 </>
             )}
+            <Separator />
             <div className="flex items-center gap-4">
                 <Calendar className="h-5 w-5 text-gray-400" />
                 <div>
@@ -696,67 +565,9 @@ export default function ProfilePage() {
                     </Select>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Label htmlFor="dob">Date of Birth</Label>
-                    <Input id="dob" type="date" defaultValue={profile.dob || ''} />
-                </div>
-                <div>
-                    <Label htmlFor="occupation">Occupation</Label>
-                    <Input id="occupation" defaultValue={profile.occupation || ''} />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Label htmlFor="education">Education</Label>
-                    <Select defaultValue={profile.education || ''}>
-                        <SelectTrigger id="education">
-                            <SelectValue placeholder="Select education level" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="high_school">High School</SelectItem>
-                            <SelectItem value="bachelor">Bachelor's Degree</SelectItem>
-                            <SelectItem value="master">Master's Degree</SelectItem>
-                            <SelectItem value="phd">PhD</SelectItem>
-                            <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div>
-                    <Label htmlFor="maritalStatus">Marital Status</Label>
-                    <Select defaultValue={profile.maritalStatus || ''}>
-                        <SelectTrigger id="maritalStatus">
-                            <SelectValue placeholder="Select marital status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="single">Single</SelectItem>
-                            <SelectItem value="married">Married</SelectItem>
-                            <SelectItem value="divorced">Divorced</SelectItem>
-                            <SelectItem value="widowed">Widowed</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Label htmlFor="incomeRange">Income Range</Label>
-                    <Select defaultValue={profile.incomeRange || ''}>
-                        <SelectTrigger id="incomeRange">
-                            <SelectValue placeholder="Select income range" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="0-5L">0-5 Lakhs</SelectItem>
-                            <SelectItem value="5-10L">5-10 Lakhs</SelectItem>
-                            <SelectItem value="10-20L">10-20 Lakhs</SelectItem>
-                            <SelectItem value="20-50L">20-50 Lakhs</SelectItem>
-                            <SelectItem value="50L+">50 Lakhs+</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-                <div>
-                    <Label htmlFor="preferredLanguage">Preferred Language</Label>
-                    <Input id="preferredLanguage" defaultValue={profile.preferredLanguage || ''} />
-                </div>
+            <div>
+                <Label htmlFor="dob">Date of Birth</Label>
+                <Input id="dob" type="date" defaultValue={profile.dob || ''} />
             </div>
             <div className="grid grid-cols-1 gap-4">
                 <div>
@@ -827,23 +638,8 @@ export default function ProfilePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <Label htmlFor="barMembershipNumber">Bar Membership Number</Label>
-                    <Input id="barMembershipNumber" defaultValue={profile.barMembershipNumber || ''} />
-                </div>
-                <div>
                     <Label htmlFor="panNumber">PAN Number</Label>
                     <Input id="panNumber" defaultValue={profile.panNumber || ''} />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <Label htmlFor="experience">Experience (years)</Label>
-                    <Input
-                        id="experience"
-                        type="number"
-                        defaultValue={profile.experience || 0}
-                        min="0"
-                    />
                 </div>
                 <div>
                     <Label htmlFor="yearsPracticing">Years Practicing</Label>
@@ -878,23 +674,7 @@ export default function ProfilePage() {
                 <Input
                     id="specialization"
                     defaultValue={profile.specialization?.join(', ') || ''}
-                    placeholder="e.g. Criminal Law, Corporate Law, Family Law"
-                />
-            </div>
-            <div>
-                <Label htmlFor="practiceAreas">Practice Areas (comma separated)</Label>
-                <Input
-                    id="practiceAreas"
-                    defaultValue={profile.practiceAreas?.join(', ') || ''}
-                    placeholder="e.g. Civil Litigation, Corporate Law, Intellectual Property"
-                />
-            </div>
-            <div>
-                <Label htmlFor="courtType">Court Types (comma separated)</Label>
-                <Input
-                    id="courtType"
-                    defaultValue={profile.courtType?.join(', ') || ''}
-                    placeholder="e.g. Supreme Court, High Court, District Court"
+                    placeholder="e.g. Criminal Law, Corporate Law"
                 />
             </div>
             <div>
@@ -902,7 +682,7 @@ export default function ProfilePage() {
                 <Input
                     id="languagesSpoken"
                     defaultValue={profile.languagesSpoken?.join(', ') || ''}
-                    placeholder="e.g. English, Hindi, Tamil"
+                    placeholder="e.g. English, Hindi"
                 />
             </div>
             <div>
@@ -911,7 +691,7 @@ export default function ProfilePage() {
                     id="bio"
                     defaultValue={profile.bio || ''}
                     rows={4}
-                    placeholder="Tell clients about your expertise and approach..."
+                    placeholder="Tell clients about your expertise..."
                 />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -983,59 +763,6 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <Label htmlFor="maxBookingsPerDay">Max Bookings Per Day</Label>
-                    <Input
-                        id="maxBookingsPerDay"
-                        type="number"
-                        defaultValue={profile.maxBookingsPerDay || 5}
-                        min="1"
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="advanceNoticeHours">Advance Notice (hours)</Label>
-                    <Input
-                        id="advanceNoticeHours"
-                        type="number"
-                        defaultValue={profile.advanceNoticeHours || 24}
-                        min="1"
-                    />
-                </div>
-                <div>
-                    <Label htmlFor="consultationDurationMinutes">Session Duration (minutes)</Label>
-                    <Input
-                        id="consultationDurationMinutes"
-                        type="number"
-                        defaultValue={profile.consultationDurationMinutes || 30}
-                        min="15"
-                    />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 gap-4">
-                <div>
-                    <Label htmlFor="street">Street Address</Label>
-                    <Input id="street" defaultValue={profile.address?.street || ''} />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div>
-                    <Label htmlFor="city">City</Label>
-                    <Input id="city" defaultValue={profile.address?.city || ''} />
-                </div>
-                <div>
-                    <Label htmlFor="state">State</Label>
-                    <Input id="state" defaultValue={profile.address?.state || ''} />
-                </div>
-                <div>
-                    <Label htmlFor="country">Country</Label>
-                    <Input id="country" defaultValue={profile.address?.country || ''} />
-                </div>
-                <div>
-                    <Label htmlFor="pincode">Pincode</Label>
-                    <Input id="pincode" defaultValue={profile.address?.pincode || ''} />
-                </div>
-            </div>
             <div className="space-y-2">
                 <Label className="block">Bank Details</Label>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1058,20 +785,6 @@ export default function ProfilePage() {
                         <Input
                             id="bankIFSC"
                             defaultValue={profile.bankDetails?.ifsc || ''}
-                        />
-                    </div>
-                    <div>
-                        <Label htmlFor="bankName">Bank Name</Label>
-                        <Input
-                            id="bankName"
-                            defaultValue={profile.bankDetails?.bankName || ''}
-                        />
-                    </div>
-                    <div>
-                        <Label htmlFor="bankBranch">Branch</Label>
-                        <Input
-                            id="bankBranch"
-                            defaultValue={profile.bankDetails?.branch || ''}
                         />
                     </div>
                     <div>
@@ -1154,15 +867,15 @@ export default function ProfilePage() {
                                     <>
                                         <div className="bg-blue-50 p-4 rounded-lg">
                                             <p className="text-sm text-blue-600">Clients</p>
-                                            <p className="text-2xl font-bold text-blue-900">{profile.clientCount || 0}</p>
+                                            <p className="text-2xl font-bold text-blue-900">{profile.consultationCount || 0}</p>
                                         </div>
                                         <div className="bg-purple-50 p-4 rounded-lg">
                                             <p className="text-sm text-purple-600">Experience</p>
-                                            <p className="text-2xl font-bold text-purple-900">{profile.experience || 0} years</p>
+                                            <p className="text-2xl font-bold text-purple-900">{profile.yearsPracticing || 0} years</p>
                                         </div>
                                         <div className="bg-green-50 p-4 rounded-lg">
                                             <p className="text-sm text-green-600">Rating</p>
-                                            <p className="text-2xl font-bold text-green-900">{profile.rating ? profile.rating.toFixed(1) : '0.0'}/5</p>
+                                            <p className="text-2xl font-bold text-green-900">{profile.averageRating ? profile.averageRating.toFixed(1) : '0.0'}/5</p>
                                         </div>
                                         <div className="bg-amber-50 p-4 rounded-lg">
                                             <p className="text-sm text-amber-600">Consultations</p>
@@ -1254,13 +967,6 @@ export default function ProfilePage() {
                                                 </div>
                                                 <ChevronRight className="h-4 w-4" />
                                             </Button>
-                                            <Button variant="ghost" className="w-full justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <Bookmark className="h-5 w-5 text-purple-500" />
-                                                    <span>Manage Availability</span>
-                                                </div>
-                                                <ChevronRight className="h-4 w-4" />
-                                            </Button>
                                         </>
                                     )}
                                     <Button variant="ghost" className="w-full justify-between">
@@ -1274,13 +980,6 @@ export default function ProfilePage() {
                                         <div className="flex items-center gap-3">
                                             <Lock className="h-5 w-5 text-purple-500" />
                                             <span>Privacy Settings</span>
-                                        </div>
-                                        <ChevronRight className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="ghost" className="w-full justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <Bell className="h-5 w-5 text-amber-500" />
-                                            <span>Notifications</span>
                                         </div>
                                         <ChevronRight className="h-4 w-4" />
                                     </Button>
@@ -1299,8 +998,6 @@ export default function ProfilePage() {
                             </Card>
                         </div>
                     </TabsContent>
-
-                    {/* Other tabs would be implemented similarly */}
                 </Tabs>
             </div>
         </div>
