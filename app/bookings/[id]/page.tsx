@@ -81,7 +81,7 @@ export default function BookingDetails() {
         const fetchBooking = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await axios.get(`http://localhost:5000/api/v1/booking/${bookingId}`, {
+                const response = await axios.get(`https://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
