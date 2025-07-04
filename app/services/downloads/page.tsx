@@ -41,6 +41,7 @@ interface RazorpayResponse {
 export default function InstantDownloadPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [loadingDocumentId, setLoadingDocumentId] = useState<string | null>(null);
     const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading") // Add auth state
     const router = useRouter()
     const { toast } = useToast()
@@ -121,7 +122,7 @@ export default function InstantDownloadPage() {
     // Update your initiatePayment function
 
     const initiatePayment = async (docId: string) => {
-        setIsLoading(true);
+        setLoadingDocumentId(docId);
         try {
             const doc = documents.find(d => d.id === docId);
             if (!doc) throw new Error("Document not found");
@@ -169,7 +170,7 @@ export default function InstantDownloadPage() {
                 variant: "destructive"
             });
         } finally {
-            setIsLoading(false);
+            setLoadingDocumentId(null);
         }
     };
 
@@ -199,6 +200,8 @@ export default function InstantDownloadPage() {
                 description: error.response?.data?.message || error.message || "Could not verify payment",
                 variant: "destructive"
             });
+        } finally {
+            setLoadingDocumentId(null);
         }
     };
 
@@ -407,9 +410,9 @@ export default function InstantDownloadPage() {
                                         <Button
                                             onClick={() => initiatePayment(doc.id)}
                                             className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 group"
-                                            disabled={isLoading}
+                                            disabled={loadingDocumentId !== null}
                                         >
-                                            {isLoading ? (
+                                            {loadingDocumentId === doc.id ? (
                                                 <span className="flex items-center">
                                                     <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -443,12 +446,12 @@ export default function InstantDownloadPage() {
                         Not sure which document you need?
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Link href="/services/downloads/samples">
+                        {/* <Link href="/sample">
                             <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
                                 View All Samples
                                 <ArrowRight className="h-4 w-4 ml-2" />
                             </Button>
-                        </Link>
+                        </Link> */}
                         <Link href="/lawyers">
                             <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
                                 <Users className="h-4 w-4 mr-2" />
