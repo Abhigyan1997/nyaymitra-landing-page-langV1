@@ -55,17 +55,46 @@ export default function LoginPage() {
       localStorage.setItem("userEmail", response.data.user.email)
       localStorage.setItem("userProfile", JSON.stringify(user))
 
-      toast.success(message || "Logged in successfully!")
+      toast.success(message || "Logged in successfully!", {
+        description: `Welcome back, ${response.data.user.fullName}!`,
+        action: {
+          label: "Go to Dashboard",
+          onClick: () => {
+            const urlParams = new URLSearchParams(window.location.search)
+            const redirectTo = urlParams.get('redirect') || 'https://dashbord-nyaymitra.vercel.app/'
+            router.push(redirectTo)
+          }
+        }
+      })
 
-      // Get redirect URL from query parameters
-      const urlParams = new URLSearchParams(window.location.search)
-      const redirectTo = urlParams.get('redirect') || '/'
-
-      // Redirect to the original requested page or home
-      router.push(redirectTo)
+      // Redirect after a short delay to allow toast to be seen
+      setTimeout(() => {
+        const urlParams = new URLSearchParams(window.location.search)
+        const redirectTo = urlParams.get('redirect') || '/'
+        router.push(redirectTo)
+      }, 1000)
 
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Login failed")
+      let errorMessage = "Login failed"
+      if (error.response) {
+        if (error.response.status === 401) {
+          errorMessage = "Invalid email or password"
+        } else if (error.response.status === 403) {
+          errorMessage = "Account not verified. Please check your email."
+        } else {
+          errorMessage = error.response?.data?.message || errorMessage
+        }
+      } else if (error.request) {
+        errorMessage = "Network error. Please check your connection."
+      }
+
+      toast.error("Login Failed", {
+        description: errorMessage,
+        action: {
+          label: "Retry",
+          onClick: () => handleSubmit(e)
+        }
+      })
     } finally {
       setLoading(false)
     }

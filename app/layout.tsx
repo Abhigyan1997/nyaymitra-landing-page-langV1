@@ -1,7 +1,9 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import { TooltipProvider } from "@/components/ui/tooltip" // Import the TooltipProvider
+import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner" // Import the Toaster from sonner
+import { ThemeProvider } from "@/components/theme-provider" // Optional: if you're using dark mode
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -10,6 +12,10 @@ export const metadata: Metadata = {
   description:
     "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
   keywords: "legal advice, lawyers India, AI legal help, legal consultation, Indian law",
+  viewport: "width=device-width, initial-scale=1", // Recommended viewport meta
+  icons: {
+    icon: "/favicon.ico", // Add your favicon
+  },
 }
 
 export default function RootLayout({
@@ -18,11 +24,25 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <TooltipProvider> {/* Wrap children with TooltipProvider */}
-          {children}
-        </TooltipProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <TooltipProvider delayDuration={300}>
+            {children}
+            <Toaster
+              position="top-center"
+              richColors
+              closeButton
+              expand={false}
+              duration={4000}
+            />
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
