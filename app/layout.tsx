@@ -1,21 +1,26 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next" // Add Viewport to the import
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { Toaster } from "@/components/ui/sonner" // Import the Toaster from sonner
-import { ThemeProvider } from "@/components/theme-provider" // Optional: if you're using dark mode
+import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
+// Update your metadata export
 export const metadata: Metadata = {
   title: "Nyay Mitra - AI-Powered Legal Platform",
-  description:
-    "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
+  description: "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
   keywords: "legal advice, lawyers India, AI legal help, legal consultation, Indian law",
-  viewport: "width=device-width, initial-scale=1", // Recommended viewport meta
   icons: {
-    icon: "/favicon.ico", // Add your favicon
+    icon: "/favicon.ico",
   },
+}
+
+// Add this new viewport export
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 }
 
 export default function RootLayout({
