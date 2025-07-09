@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Link from "next/link"
 import { toast } from "sonner"
 import axios from "axios"
+import PaymentSuccessDialog from '../../../components/payment/PaymentSuccessDialog'
 
 declare global {
     interface Window {
@@ -37,6 +38,12 @@ type BookingResponse = {
 
 export default function PriorityBookingPage() {
     const [step, setStep] = useState(1)
+    const [paymentSuccessData, setPaymentSuccessData] = useState<{
+        show: boolean;
+        bookingDetails: any;
+        paymentDetails: any;
+    } | null>(null);
+
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
     const [isProcessingPayment, setIsProcessingPayment] = useState(false)
@@ -139,7 +146,7 @@ export default function PriorityBookingPage() {
             }
 
             const response = await axios.post<BookingResponse>(
-                'http://localhost:4000/api/documents/priority-booking',
+                'https://nyaymitra-backend-document.onrender.com/api/documents/priority-booking',
                 {
                     name: formData.name,
                     phone: formData.phone,
@@ -165,8 +172,11 @@ export default function PriorityBookingPage() {
             }
 
             setCreatedOrder(response.data.data.order);
-            await handlePayment(response.data.data.payment);
 
+            const paymentData = response.data?.data?.payment;
+            const createdOrder = response.data?.data?.order;
+
+            await handlePayment(paymentData, createdOrder);
         } catch (error: any) {
             console.error("Booking failed:", error);
             toast.error(error.response?.data?.message || error.message || "Failed to create booking");
@@ -174,41 +184,56 @@ export default function PriorityBookingPage() {
         }
     };
 
-    const handlePayment = async (paymentData: PaymentData) => {
+    const handlePayment = async (paymentData: PaymentData, createdOrder: any) => {
+        setIsProcessingPayment(true);
         try {
+            console.log("🚀 Starting payment process with data:", paymentData);
+
             const razorpayLoaded = await loadRazorpay();
             if (!razorpayLoaded) {
                 toast.error("Payment processor failed to load");
+                console.error("❌ Razorpay script failed to load");
                 return;
             }
 
             const userProfileString = localStorage.getItem("userProfile");
             const userProfile = userProfileString ? JSON.parse(userProfileString) : null;
+            console.log("👤 User profile:", userProfile);
 
-            // Validate we have required data
             if (!paymentData.razorpayOrderId || !paymentData.key) {
+                console.error("❌ Invalid payment data:", paymentData);
                 throw new Error("Invalid payment data received");
             }
 
             const options = {
                 key: paymentData.key,
-                amount: paymentData.amount * 100, // Convert to paise
+                amount: paymentData.amount * 100,
                 currency: paymentData.currency,
                 name: "Nyay Mitra",
                 description: "Priority Legal Consultation",
                 order_id: paymentData.razorpayOrderId,
                 handler: async (response: any) => {
+                    console.log("✅ Razorpay payment response:", response);
+
                     try {
+                        if (!createdOrder?._id) {
+                            console.error("❌ createdOrder is undefined or missing _id");
+                            toast.error("Booking reference not found. Please contact support.");
+                            return;
+                        }
+
+                        const verifyPayload = {
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            documentId: createdOrder._id,
+                            userId: userProfile?.userId,
+                            userEmail: userProfile?.email
+                        };
+
                         const verifyResponse = await axios.post(
-                            'http://localhost:4000/api/payment/verify',
-                            {
-                                razorpay_order_id: response.razorpay_order_id,
-                                razorpay_payment_id: response.razorpay_payment_id,
-                                razorpay_signature: response.razorpay_signature,
-                                documentId: createdOrder._id,
-                                userId: userProfile?.userId,
-                                userEmail: userProfile?.email
-                            },
+                            'https://nyaymitra-backend-document.onrender.com/api/payment/verify',
+                            verifyPayload,
                             {
                                 headers: {
                                     'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -217,19 +242,34 @@ export default function PriorityBookingPage() {
                         );
 
                         if (verifyResponse.data.success) {
-                            toast.success("Payment successful! Your booking is confirmed.");
-                            router.push(`/bookings/${createdOrder._id}`);
+                            setPaymentSuccessData({
+                                show: true,
+                                bookingDetails: {
+                                    id: createdOrder._id,
+                                    ...createdOrder.metadata
+                                },
+                                paymentDetails: {
+                                    id: response.razorpay_payment_id,
+                                    amount: paymentData.amount,
+                                    currency: paymentData.currency,
+                                    date: new Date().toISOString(),
+                                    method: "Razorpay",
+                                    orderId: response.razorpay_order_id
+                                }
+                            });
                         } else {
                             throw new Error(verifyResponse.data.message || "Payment verification failed");
                         }
                     } catch (error: any) {
-                        console.error("Payment verification failed:", error);
+                        console.error("❌ Payment verification failed:", error);
                         toast.error(error.response?.data?.message || "Payment verification failed. Please contact support.");
+                    } finally {
+                        setIsProcessingPayment(false);
                     }
                 },
                 prefill: {
-                    name: formData.name,
-                    contact: formData.phone,
+                    name: createdOrder?.metadata?.clientName || "",
+                    contact: createdOrder?.metadata?.clientPhone || "",
                     email: userProfile?.email || ""
                 },
                 theme: {
@@ -237,7 +277,9 @@ export default function PriorityBookingPage() {
                 },
                 modal: {
                     ondismiss: () => {
+                        console.warn("ℹ️ Payment modal dismissed");
                         toast.info("Payment window closed. Your booking is still pending.");
+                        setIsProcessingPayment(false);
                     }
                 }
             };
@@ -246,12 +288,13 @@ export default function PriorityBookingPage() {
             rzp.open();
 
             rzp.on('payment.failed', (response: any) => {
+                console.error("❌ Payment failed:", response.error);
                 toast.error(`Payment failed: ${response.error.description}`);
-                console.error("Payment failed:", response.error);
+                setIsProcessingPayment(false);
             });
 
         } catch (error: any) {
-            console.error("Payment initialization failed:", error);
+            console.error("💥 Payment initialization failed:", error);
             toast.error(error.message || "Failed to initialize payment. Please try again.");
             setIsProcessingPayment(false);
         }
@@ -673,6 +716,16 @@ export default function PriorityBookingPage() {
                     </div>
                 </div>
             </footer>
+            {paymentSuccessData && (
+                <PaymentSuccessDialog
+                    isOpen={paymentSuccessData.show}
+                    onClose={() => setPaymentSuccessData(null)}
+                    paymentData={{
+                        bookingDetails: paymentSuccessData.bookingDetails,
+                        paymentDetails: paymentSuccessData.paymentDetails
+                    }}
+                />
+            )}
         </div>
     )
 }
