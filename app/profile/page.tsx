@@ -423,7 +423,7 @@ export default function ProfilePage() {
                 <div>
                     <p className="text-sm text-gray-500">Experience</p>
                     <p className="font-medium">
-                        {profile.experience || 'Not specified'} ({profile.yearsPracticing || 0} years practicing)
+                        {profile.experience || 'Not specified'}
                     </p>
                 </div>
             </div>
@@ -871,7 +871,7 @@ export default function ProfilePage() {
                                         </div>
                                         <div className="bg-purple-50 p-4 rounded-lg">
                                             <p className="text-sm text-purple-600">Experience</p>
-                                            <p className="text-2xl font-bold text-purple-900">{profile.yearsPracticing || 0} years</p>
+                                            <p className="text-2xl font-bold text-purple-900">{profile.experience || 0} years</p>
                                         </div>
                                         <div className="bg-green-50 p-4 rounded-lg">
                                             <p className="text-sm text-green-600">Rating</p>

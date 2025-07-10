@@ -12,6 +12,13 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { Scale, Eye, EyeOff, Mail, Lock, User, Shield, Phone, MapPin, Award } from "lucide-react"
 import Link from "next/link"
 
@@ -93,6 +100,7 @@ const INDIAN_STATES = [
 // --- Main Signup Page Component ---
 export default function SignupPage() {
   const router = useRouter() // Initialize the router for navigation
+  const [showPostSignupDialog, setShowPostSignupDialog] = useState(false)
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -200,12 +208,13 @@ export default function SignupPage() {
               agreeToTerms: false,
               subscribeNewsletter: false,
             })
+            setShowPostSignupDialog(true)
           }
 
           // ✅ Delayed redirect with toast
-          setTimeout(() => {
-            router.push("/auth/login")
-          }, 1500)
+          // setTimeout(() => {
+          //   router.push("/auth/login")
+          // }, 1500)
         } else {
           const unexpectedError = "Unexpected response from server."
           setError(unexpectedError)
@@ -314,7 +323,25 @@ export default function SignupPage() {
           </p>
         </div>
       </div>
+      <Dialog open={showPostSignupDialog} onOpenChange={setShowPostSignupDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Almost there!</DialogTitle>
+            <DialogDescription>
+              You’ve successfully signed up as a lawyer.
+              <br />
+              <strong>Please log in and complete your profile</strong> to start receiving clients.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button variant="outline" onClick={() => setShowPostSignupDialog(false)}>Close</Button>
+            <Button onClick={() => router.push("/auth/login")}>Login Now</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </div>
+
   )
 }
 
@@ -593,12 +620,10 @@ function LawyerSignupForm({
               <SelectValue placeholder="Select experience" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="0-2">0-2 years</SelectItem>
-              <SelectItem value="3-5">3-5 years</SelectItem>
-              <SelectItem value="6-10">6-10 years</SelectItem>
-              <SelectItem value="11-15">11-15 years</SelectItem>
-              <SelectItem value="16-20">16-20 years</SelectItem>
-              <SelectItem value="20+">20+ years</SelectItem>
+              {Array.from({ length: 41 }, (_, i) => (
+                <SelectItem key={i} value={`${i}`}>{i} {i === 1 ? "year" : "years"}</SelectItem>
+              ))}
+
             </SelectContent>
           </Select>
         </div>
