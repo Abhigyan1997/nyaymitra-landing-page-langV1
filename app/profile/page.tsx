@@ -960,16 +960,21 @@ export default function ProfilePage() {
                                 <CardContent className="space-y-4">
                                     {profile.role === 'lawyer' && (
                                         <>
-                                            <Button variant="ghost" className="w-full justify-between">
+                                            <Button
+                                                variant="ghost"
+                                                className="w-full justify-between"
+                                                onClick={() => window.location.href = "https://dashbord-nyaymitra.vercel.app/"}
+                                            >
                                                 <div className="flex items-center gap-3">
                                                     <FileSignature className="h-5 w-5 text-blue-500" />
-                                                    <span>Create Consultation</span>
+                                                    <span>Dashboard</span>
                                                 </div>
                                                 <ChevronRight className="h-4 w-4" />
                                             </Button>
+
                                         </>
                                     )}
-                                    <Button variant="ghost" className="w-full justify-between">
+                                    {/* <Button variant="ghost" className="w-full justify-between">
                                         <div className="flex items-center gap-3">
                                             <CreditCard className="h-5 w-5 text-blue-500" />
                                             <span>Payment Methods</span>
@@ -982,7 +987,7 @@ export default function ProfilePage() {
                                             <span>Privacy Settings</span>
                                         </div>
                                         <ChevronRight className="h-4 w-4" />
-                                    </Button>
+                                    </Button> */}
                                     <Button
                                         variant="ghost"
                                         className="w-full justify-between text-red-500 hover:text-red-600"

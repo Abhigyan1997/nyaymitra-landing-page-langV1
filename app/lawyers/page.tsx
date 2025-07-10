@@ -140,7 +140,7 @@ export default function LawyersPage() {
           state: lawyer.userInfo?.address?.state || lawyer.lawyerDetails?.state || '',
           languages: lawyer.lawyerDetails?.languagesSpoken || [],
           consultationFee: lawyer.lawyerDetails?.consultationFee || 0,
-          availability: lawyer.lawyerDetails?.status === 'online' ? 'Available Now' : 'Available Soon',
+          // availability: lawyer.lawyerDetails.kycStatus === "verified" ? "Available Now" : "Available Soon",
           verified: lawyer.lawyerDetails?.verifiedByPlatform || false,
           bio: lawyer.lawyerDetails?.bio || 'Professional lawyer',
           consultationModes: lawyer.lawyerDetails?.consultationModes || {
