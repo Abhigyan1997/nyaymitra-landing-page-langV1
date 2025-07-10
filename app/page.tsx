@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart2, ChevronRight, Briefcase } from 'lucide-react'; // or your icon library
+import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -165,31 +165,31 @@ export default function HomePage() {
 
       howItWorks: {
         title: "How It Works",
-        subtitle: "Simple steps to get legal help",
+        subtitle: "From legal doubt to resolution – in a few simple steps",
         steps: [
           {
-            title: "AI Legal Help",
-            description: "Start with our intelligent AI that understands your legal questions in simple language",
-            icon: Brain,
-            color: "from-blue-500 to-cyan-500",
+            title: "Choose a Service",
+            description: "Start by selecting what you need – self-attested docs, notary, legal notice, or consult a lawyer.",
+            icon: FileCheck, // you can replace with your preferred icon
+            color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "Chat/Call/Video",
-            description: "Choose your preferred communication method - text, voice call, or video consultation",
-            icon: Video,
+            title: "Book & Pay Securely",
+            description: "Pick your time, preferred mode (chat/call/video), and pay securely through our platform.",
+            icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "Document Access",
-            description: "Upload, review, and get help with legal documents instantly",
-            icon: FileText,
+            title: "Get Notified & Connect",
+            description: "Receive instant booking confirmation, reminders, and connect directly at your scheduled time.",
+            icon: Bell,
             color: "from-green-500 to-emerald-500",
           },
           {
-            title: "Lawyer Matching",
-            description: "Get matched with verified lawyers specialized in your legal area",
-            icon: Users,
-            color: "from-orange-500 to-red-500",
+            title: "Receive Legal Help",
+            description: "Your lawyer helps you live. Post-session, access receipts and documents, and give feedback.",
+            icon: ThumbsUp,
+            color: "from-yellow-500 to-orange-500",
           },
         ],
       },
@@ -360,31 +360,31 @@ export default function HomePage() {
 
       howItWorks: {
         title: "यह कैसे काम करता है",
-        subtitle: "कानूनी सहायता पाने के सरल चरण",
+        subtitle: "कानूनी सहायता पाने के आसान और भरोसेमंद चरण",
         steps: [
           {
-            title: "AI कानूनी सहायता",
-            description: "हमारे बुद्धिमान AI से शुरुआत करें जो आपके कानूनी सवालों को सरल भाषा में समझता है",
-            icon: Brain,
-            color: "from-blue-500 to-cyan-500",
+            title: "सेवा चुनें",
+            description: "सेल्फ-अटेस्टेड दस्तावेज़, रिमोट नोटरी, वकील सलाह, या नोटिस जैसी सेवाओं में से चुनें।",
+            icon: FileText,
+            color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "चैट/कॉल/वीडियो",
-            description: "अपना पसंदीदा संचार माध्यम चुनें - टेक्स्ट, वॉयस कॉल, या वीडियो परामर्श",
-            icon: Video,
+            title: "समय तय करें और भुगतान करें",
+            description: "अपना पसंदीदा समय और संचार तरीका (कॉल/वीडियो/चैट) चुनें और भुगतान सुरक्षित रूप से करें।",
+            icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "दस्तावेज़ पहुंच",
-            description: "कानूनी दस्तावेज़ों को अपलोड करें, समीक्षा करें और तुरंत सहायता प्राप्त करें",
-            icon: FileText,
+            title: "सूचना प्राप्त करें और जुड़ें",
+            description: "बुकिंग की पुष्टि और रिमाइंडर प्राप्त करें, और अपने निर्धारित समय पर वकील से जुड़ें।",
+            icon: Bell,
             color: "from-green-500 to-emerald-500",
           },
           {
-            title: "वकील मैचिंग",
-            description: "अपने कानूनी क्षेत्र में विशेषज्ञ सत्यापित वकीलों से जुड़ें",
-            icon: Users,
-            color: "from-orange-500 to-red-500",
+            title: "सहायता प्राप्त करें और प्रतिक्रिया दें",
+            description: "वकील से कानूनी सलाह लें, रसीद और दस्तावेज़ डाउनलोड करें, और अनुभव साझा करें।",
+            icon: ThumbsUp,
+            color: "from-yellow-500 to-orange-500",
           },
         ],
       },
@@ -944,7 +944,7 @@ export default function HomePage() {
 
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left Column - Content */}
+
             {/* Left Column - Content */}
             <div
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
@@ -958,7 +958,10 @@ export default function HomePage() {
               </div>
               {/* Sophisticated Title - Responsive */}
               <div className="space-y-4 md:space-y-6">
-                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-tight md:leading-none">
+                <h1
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight leading-[1.15] sm:leading-[1.2] md:leading-[1.25] text-balance break-words overflow-visible"
+                  style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem" }}
+                >
                   <span className="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2 md:mb-4">
                     {t.hero.title.split(" ")[0]}
                   </span>
@@ -966,6 +969,7 @@ export default function HomePage() {
                     {t.hero.title.split(" ").slice(1).join(" ")}
                   </span>
                 </h1>
+
 
                 <div className="relative">
                   <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 tracking-wide">
@@ -976,11 +980,12 @@ export default function HomePage() {
               </div>
 
               {/* Elegant Description - Responsive */}
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed font-light max-w-2xl">
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed font-light max-w-2xl break-words text-pretty">
                 <span className="bg-gradient-to-r from-white/95 via-blue-100/85 to-purple-100/75 bg-clip-text text-transparent">
                   {t.hero.description}
                 </span>
               </p>
+
 
               {/* Premium Free Consultation Banner - Responsive */}
               <div className="relative">
@@ -1298,7 +1303,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Rest of the sections remain the same... */}
       {/* How It Works Section */}
       <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
