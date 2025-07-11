@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck } from 'lucide-react'; // or your icon library
+import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck, PenTool, IndianRupee } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -195,60 +195,62 @@ export default function HomePage() {
       },
       whyChoose: {
         title: "Why Choose NyayMitra",
-        subtitle: "Your trusted legal companion",
+        subtitle: "India’s Fastest Legal Assistant – Affordable. Instant. Reliable.",
         features: [
           {
-            title: "Verified Lawyers",
-            description: "All lawyers are verified by Bar Council and have proven track records",
-            icon: Shield,
+            title: "Instant Legal Documents",
+            description: "Download affidavits, agreements, and notices in minutes using AI-powered templates.",
+            icon: FileText, // or FileCheck if available
           },
           {
-            title: "Free Consultation",
-            description: "Get your first consultation absolutely free with no hidden charges",
-            icon: Heart,
+            title: "Remote Notarization",
+            description: "Get documents notarized online or via courier with licensed lawyers across India.",
+            icon: PenTool,
           },
           {
-            title: "Multi-Language Support",
-            description: "Available in Hindi, English, and 10+ regional languages",
-            icon: Languages,
+            title: "Affordable Lawyer Access",
+            description: "Verified lawyers. Transparent pricing. No surprise fees – starting at ₹99.",
+            icon: IndianRupee, // or BadgeCheck
           },
           {
-            title: "Rural Access",
-            description: "Bringing legal help to remote areas through SMS, IVR, and WhatsApp",
-            icon: MapIcon,
+            title: "AI + Human Legal Help",
+            description: "Blend of AI tools and expert lawyers for faster, smarter legal solutions.",
+            icon: Bot, // or Sparkles if available
           },
         ],
       },
       features: {
         title: "Powerful Features",
-        subtitle: "Everything you need for legal assistance",
+        subtitle: "Smart, affordable and fast legal support at your fingertips",
         items: [
           {
-            title: "AI Chatbot",
-            description: "24/7 intelligent legal assistant that understands your queries in natural language",
-            icon: Bot,
-            color: "from-blue-500 to-purple-500",
+            title: "Instant Lawyer Booking",
+            description: "Book consultations with verified lawyers in minutes — with real-time availability and priority booking.",
+            icon: CalendarCheck,
+            color: "from-indigo-600 to-purple-600",
           },
           {
-            title: "Legal Document Support",
-            description: "Upload, analyze, and get help with contracts, agreements, and legal papers",
-            icon: FileCheck,
-            color: "from-green-500 to-blue-500",
+            title: "Legal Document Generator",
+            description: "Create affidavits, rent agreements, complaints and more in minutes using AI-powered forms.",
+            icon: FileText,
+            color: "from-blue-600 to-indigo-600",
           },
           {
-            title: "Notary Access",
-            description: "Connect with certified notaries for document verification and attestation",
+            title: "Remote Notarization",
+            description: "Get documents notarized online or via courier by licensed lawyers anywhere in India.",
             icon: Stamp,
-            color: "from-purple-500 to-pink-500",
+            color: "from-purple-600 to-pink-500",
           },
           {
-            title: "Multi-Channel Integration",
-            description: "Access via WhatsApp, SMS, IVR calls, and mobile app for maximum convenience",
-            icon: Smartphone,
-            color: "from-orange-500 to-red-500",
+            title: "Indian Law Trained Legal GPT",
+            description: "Get instant legal guidance powered by AI trained on Indian laws, procedures, and real case patterns.",
+            icon: Bot,
+            color: "from-blue-600 to-indigo-600",
           },
-        ],
-      },
+        ]
+      }
+      ,
+
       getStarted: {
         title: "Ready to Get Started?",
         subtitle: "Join thousands of Indians who trust NyayMitra for their legal needs",
@@ -261,52 +263,52 @@ export default function HomePage() {
         subtitle: "Real experiences from real people",
         items: [
           {
-            name: "Priya Sharma",
-            location: "Mumbai, Maharashtra",
-            text: "NyayMitra's AI helped me understand my property rights in minutes. The lawyer consultation was excellent and affordable.",
+            name: "Ritika Mehra",
+            location: "Lucknow, Uttar Pradesh",
+            text: "I booked a lawyer in just 5 minutes through NyayMitra. The consultation was smooth and solved my property issue quickly.",
             rating: 5,
-            role: "Small Business Owner",
+            role: "Teacher",
+            avatar: "RM",
+          },
+          {
+            name: "Sunil Verma",
+            location: "Indore, Madhya Pradesh",
+            text: "I used the legal notice generator for a tenant dispute. The draft looked professional and was ready instantly.",
+            rating: 5,
+            role: "Landlord",
+            avatar: "SV",
+          },
+          {
+            name: "Neha D'Souza",
+            location: "Bangalore, Karnataka",
+            text: "Their remote notary service saved me a trip to the court. Got my affidavit notarized and delivered at home within 2 days!",
+            rating: 5,
+            role: "Working Professional",
+            avatar: "ND",
+          },
+          {
+            name: "Dr. Anil Chauhan",
+            location: "Chandigarh",
+            text: "The AI-based legal assistant understood my licensing concerns perfectly and gave accurate suggestions. Very impressive!",
+            rating: 5,
+            role: "Doctor",
+            avatar: "AC",
+          },
+          {
+            name: "Pooja Sharma",
+            location: "Varanasi, Uttar Pradesh",
+            text: "I uploaded my rent agreement draft and received a detailed lawyer review within hours. Great value for ₹499!",
+            rating: 5,
+            role: "Freelancer",
             avatar: "PS",
           },
           {
-            name: "Rajesh Kumar",
-            location: "Patna, Bihar",
-            text: "Being in a small town, I never had access to good lawyers. NyayMitra connected me with an expert who solved my case remotely.",
-            rating: 5,
-            role: "Farmer",
-            avatar: "RK",
-          },
-          {
-            name: "Anita Patel",
-            location: "Ahmedabad, Gujarat",
-            text: "The WhatsApp integration is amazing! I got legal help while managing my shop. Very convenient and professional.",
-            rating: 5,
-            role: "Shopkeeper",
-            avatar: "AP",
-          },
-          {
-            name: "Dr. Suresh Reddy",
-            location: "Hyderabad, Telangana",
-            text: "As a doctor, I needed quick legal advice for my clinic. The AI understood my medical-legal queries perfectly.",
-            rating: 5,
-            role: "Doctor",
-            avatar: "SR",
-          },
-          {
-            name: "Meera Singh",
-            location: "Jaipur, Rajasthan",
-            text: "The Hindi support made it so easy for me to explain my family dispute. Got excellent advice and resolution.",
-            rating: 5,
-            role: "Homemaker",
-            avatar: "MS",
-          },
-          {
-            name: "Advocate Vikram Joshi",
-            location: "Delhi",
-            text: "As a lawyer on the platform, I'm impressed by the quality of cases and the AI's initial screening. Great for both lawyers and clients.",
+            name: "Adv. Raghav Deshmukh",
+            location: "Pune, Maharashtra",
+            text: "The platform connects me with genuine clients, and AI-based case summaries save me time. A game-changer for lawyers.",
             rating: 5,
             role: "Lawyer",
-            avatar: "VJ",
+            avatar: "RD",
           },
         ],
       },
@@ -316,15 +318,15 @@ export default function HomePage() {
         quickLinks: "Quick Links",
         legal: "Legal",
         contact: "Contact Us",
-        address: "Ramsar, Bhagalpur, Bihar - 812002",
+        address: "Bhagalpur, Bihar - 812002",
         email: "nyaymitra.ai@gmail.com",
-        phone: "+91 11 4567 8900",
-        whatsapp: "+91 79705 96183",
+        phone: "+91 79705 96183",
+        // whatsapp: "+91 79705 96183",
         privacy: "Privacy Policy",
         terms: "Terms of Service",
         disclaimer: "Legal Disclaimer",
         about: "About NyayMitra",
-        careers: "Careers",
+        // careers: "Careers",
         press: "Press",
         blog: "Blog",
         signup: "Sign Up",
@@ -390,57 +392,57 @@ export default function HomePage() {
       },
       whyChoose: {
         title: "न्यायमित्र क्यों चुनें",
-        subtitle: "आपका विश्वसनीय कानूनी साथी",
+        subtitle: "भारत का सबसे तेज़ और भरोसेमंद कानूनी सहायक",
         features: [
           {
-            title: "सत्यापित वकील",
-            description: "सभी वकील बार काउंसिल द्वारा सत्यापित हैं और उनका सिद्ध ट्रैक रिकॉर्ड है",
-            icon: Shield,
+            title: "तुरंत कानूनी दस्तावेज़",
+            description: "AI की मदद से हलफ़नामे, अनुबंध और नोटिस कुछ ही मिनटों में डाउनलोड करें।",
+            icon: FileText,
           },
           {
-            title: "मुफ्त परामर्श",
-            description: "बिना किसी छुपी हुई फीस के अपना पहला परामर्श बिल्कुल मुफ्त प्राप्त करें",
-            icon: Heart,
+            title: "ऑनलाइन नोटरी सेवा",
+            description: "लाइसेंस प्राप्त वकीलों से दस्तावेज़ ऑनलाइन या कूरियर द्वारा नोटराइज़ करवाएं।",
+            icon: PenTool,
           },
           {
-            title: "बहुभाषी सहायता",
-            description: "हिंदी, अंग्रेजी और 10+ क्षेत्रीय भाषाओं में उपलब्ध",
-            icon: Languages,
+            title: "सुलभ वकील सेवाएं",
+            description: "प्रामाणिक वकील, पारदर्शी शुल्क – सेवाएं ₹99 से शुरू।",
+            icon: IndianRupee,
           },
           {
-            title: "ग्रामीण पहुंच",
-            description: "SMS, IVR और WhatsApp के माध्यम से दूरदराज के क्षेत्रों में कानूनी सहायता",
-            icon: MapIcon,
+            title: "AI + मानव विशेषज्ञता",
+            description: "AI टूल्स और अनुभवी वकीलों का मेल – तेज़ और सटीक समाधान के लिए।",
+            icon: Bot,
           },
         ],
       },
       features: {
         title: "शक्तिशाली सुविधाएं",
-        subtitle: "कानूनी सहायता के लिए आपको जो कुछ भी चाहिए",
+        subtitle: "स्मार्ट, किफायती और तेज़ कानूनी सहायता, बस एक क्लिक दूर",
         items: [
           {
-            title: "AI चैटबॉट",
-            description: "24/7 बुद्धिमान कानूनी सहायक जो आपके प्रश्नों को प्राकृतिक भाषा में समझता है",
-            icon: Bot,
-            color: "from-blue-500 to-purple-500",
+            title: "त्वरित वकील बुकिंग",
+            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइम उपलब्धता और प्राथमिकता बुकिंग के साथ।",
+            icon: CalendarCheck,
+            color: "from-indigo-600 to-purple-600",
           },
           {
-            title: "कानूनी दस्तावेज़ सहायता",
-            description: "अनुबंध, समझौते और कानूनी कागजात अपलोड करें, विश्लेषण करें और सहायता प्राप्त करें",
-            icon: FileCheck,
-            color: "from-green-500 to-blue-500",
+            title: "कानूनी दस्तावेज़ जनरेटर",
+            description: "AI फॉर्म की मदद से एफिडेविट, किराया समझौते, शिकायतें और अन्य दस्तावेज मिनटों में बनाएं।",
+            icon: FileText,
+            color: "from-blue-600 to-indigo-600",
           },
           {
-            title: "नोटरी पहुंच",
-            description: "दस्तावेज़ सत्यापन और प्रमाणीकरण के लिए प्रमाणित नोटरी से जुड़ें",
+            title: "दूरस्थ नोटरी सेवा",
+            description: "अपने दस्तावेज़ों को भारत भर में लाइसेंस प्राप्त वकीलों से ऑनलाइन या कूरियर के माध्यम से नोटरी करवाएं।",
             icon: Stamp,
-            color: "from-purple-500 to-pink-500",
+            color: "from-purple-600 to-pink-500",
           },
           {
-            title: "मल्टी-चैनल एकीकरण",
-            description: "अधिकतम सुविधा के लिए WhatsApp, SMS, IVR कॉल और मोबाइल ऐप के माध्यम से पहुंच",
-            icon: Smartphone,
-            color: "from-orange-500 to-red-500",
+            title: "भारतीय कानून प्रशिक्षित लीगल GPT",
+            description: "भारतीय कानून, प्रक्रियाओं और केस पैटर्न पर प्रशिक्षित AI से तुरंत कानूनी मार्गदर्शन प्राप्त करें।",
+            icon: Bot,
+            color: "from-blue-600 to-indigo-600",
           },
         ],
       },
@@ -456,52 +458,52 @@ export default function HomePage() {
         subtitle: "वास्तविक लोगों के वास्तविक अनुभव",
         items: [
           {
-            name: "प्रिया शर्मा",
-            location: "मुंबई, महाराष्ट्र",
-            text: "न्यायमित्र के AI ने मुझे मिनटों में मेरे संपत्ति अधिकारों को समझने में मदद की। वकील परामर्श उत्कृष्ट और किफायती था।",
+            name: "ऋतिका मेहरा",
+            location: "लखनऊ, उत्तर प्रदेश",
+            text: "मैंने सिर्फ 5 मिनट में वकील बुक किया और उसी दिन परामर्श मिला। संपत्ति विवाद में तुरंत समाधान मिला।",
             rating: 5,
-            role: "छोटे व्यापारी",
+            role: "शिक्षिका",
+            avatar: "RM",
+          },
+          {
+            name: "सुनील वर्मा",
+            location: "इंदौर, मध्यप्रदेश",
+            text: "किरायेदार विवाद के लिए मैंने कानूनी नोटिस जनरेटर का उपयोग किया। टेम्पलेट बढ़िया था और तुरंत मिल गया।",
+            rating: 5,
+            role: "मकान मालिक",
+            avatar: "SV",
+          },
+          {
+            name: "नेहा डी’सूज़ा",
+            location: "बेंगलुरु, कर्नाटक",
+            text: "नोटरी सेवा ने मुझे कोर्ट जाने से बचा लिया। दो दिन में दस्तावेज़ घर पहुँच गया। बहुत ही आसान और प्रभावी।",
+            rating: 5,
+            role: "कामकाजी महिला",
+            avatar: "ND",
+          },
+          {
+            name: "डॉ. अनिल चौहान",
+            location: "चंडीगढ़",
+            text: "AI ने मेरे मेडिकल-कानूनी प्रश्नों को सही से समझा और स्पष्ट सुझाव दिए। यह तकनीक वाकई प्रभावशाली है।",
+            rating: 5,
+            role: "चिकित्सक",
+            avatar: "AC",
+          },
+          {
+            name: "पूजा शर्मा",
+            location: "वाराणसी, उत्तर प्रदेश",
+            text: "मैंने अपना रेंट एग्रीमेंट अपलोड किया और कुछ ही घंटों में वकील का विस्तृत रिव्यू मिला। सिर्फ ₹499 में बहुत काम आया।",
+            rating: 5,
+            role: "फ्रीलांसर",
             avatar: "PS",
           },
           {
-            name: "राजेश कुमार",
-            location: "पटना, बिहार",
-            text: "छोटे शहर में होने के कारण, मेरे पास अच्छे वकीलों तक पहुंच नहीं थी। न्यायमित्र ने मुझे एक विशेषज्ञ से जोड़ा जिसने दूर से ही मेरा मामला हल कर दिया।",
-            rating: 5,
-            role: "किसान",
-            avatar: "RK",
-          },
-          {
-            name: "अनीता पटेल",
-            location: "अहमदाबाद, गुजरात",
-            text: "WhatsApp एकीकरण अद्भुत है! मुझे अपनी दुकान संभालते समय कानूनी सहायता मिली। बहुत सुविधाजनक और पेशेवर।",
-            rating: 5,
-            role: "दुकानदार",
-            avatar: "AP",
-          },
-          {
-            name: "डॉ. सुरेश रेड्डी",
-            location: "हैदराबाद, तेलंगाना",
-            text: "एक डॉक्टर के रूप में, मुझे अपने क्लिनिक के लिए त्वरित कानूनी सलाह की जरूरत थी। AI ने मेरे चिकित्सा-कानूनी प्रश्नों को पूरी तरह से समझा।",
-            rating: 5,
-            role: "डॉक्टर",
-            avatar: "SR",
-          },
-          {
-            name: "मीरा सिंह",
-            location: "जयपुर, राजस्थान",
-            text: "हिंदी सहायता ने मेरे लिए अपने पारिवारिक विवाद को समझाना बहुत आसान बना दिया। उत्कृष्ट सलाह और समाधान मिला।",
-            rating: 5,
-            role: "गृहिणी",
-            avatar: "MS",
-          },
-          {
-            name: "अधिवक्ता विक्रम जोशी",
-            location: "दिल्ली",
-            text: "प्लेटफॉर्म पर एक वकील के रूप में, मैं मामलों की गुणवत्ता और AI की प्रारंभिक जांच से प्रभावित हूं। वकीलों और ग्राहकों दोनों के लिए बेहतरीन।",
+            name: "अधिवक्ता राघव देशमुख",
+            location: "पुणे, महाराष्ट्र",
+            text: "मुझे यहां गुणवत्तापूर्ण क्लाइंट्स मिलते हैं और AI केस की शुरुआती स्कैनिंग कर देता है, जिससे समय बचता है।",
             rating: 5,
             role: "वकील",
-            avatar: "VJ",
+            avatar: "RD",
           },
         ],
       },
@@ -513,13 +515,13 @@ export default function HomePage() {
         contact: "संपर्क करें",
         address: "रामसर, भागलपुर, बिहार - 812002",
         email: "nyaymitra.ai@gmail.com",
-        phone: "+91 11 4567 8900",
-        whatsapp: "+91 79705 96183",
+        phone: "+91 79705 96183",
+        // whatsapp: "+91 79705 96183",
         privacy: "गोपनीयता नीति",
         terms: "सेवा की शर्तें",
         disclaimer: "कानूनी अस्वीकरण",
         about: "न्यायमित्र के बारे में",
-        careers: "करियर",
+        // careers: "करियर",
         press: "प्रेस",
         blog: "ब्लॉग",
         signup: "साइन अप",
@@ -1535,10 +1537,10 @@ export default function HomePage() {
                   <PhoneCall className="h-5 w-5 text-blue-400" />
                   <span className="text-white/80">{t.footer.phone}</span>
                 </div>
-                <div className="flex items-center space-x-3">
+                {/* <div className="flex items-center space-x-3">
                   <MessageSquare className="h-5 w-5 text-green-400" />
                   <span className="text-white/80">WhatsApp: {t.footer.whatsapp}</span>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -1577,9 +1579,9 @@ export default function HomePage() {
               <h3 className="text-lg font-semibold text-white mb-6">{t.footer.legal}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
+                  {/* <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
                     {t.footer.careers}
-                  </Link>
+                  </Link> */}
                 </li>
                 <li>
                   <Link href="/terms" className="text-white/60 hover:text-white transition-colors duration-300">
