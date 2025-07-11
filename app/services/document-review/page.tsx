@@ -17,19 +17,33 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { toast } from "sonner"
 
-// Mock API function
-const submitDocumentReview = async (formData: any, file: File) => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500))
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
 
-    // Simulate successful response
-    return {
-        success: true,
-        data: {
-            reviewId: "REV-" + Math.random().toString(36).substring(2, 10).toUpperCase(),
-            estimatedCompletion: new Date(Date.now() + parseInt(formData.urgency) * 60 * 60 * 1000).toLocaleString()
-        }
+const submitDocumentReview = async (formData: any, file: File, token: string) => {
+    const data = new FormData()
+
+    // Append all form fields
+    Object.keys(formData).forEach(key => {
+        data.append(key, formData[key])
+    })
+
+    // Append the file
+    data.append('document', file)
+
+    const response = await fetch(`${API_URL}/api/documents/review`, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: data
+    })
+
+    if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Submission failed')
     }
+
+    return await response.json()
 }
 
 export default function DocumentReviewPage() {
@@ -49,15 +63,22 @@ export default function DocumentReviewPage() {
     const [errors, setErrors] = useState<Record<string, string>>({})
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+    // Match these with your backend enum values
     const documentTypes = [
-        "Rent Agreement",
-        "Employment Contract",
-        "Business Agreement",
-        "Affidavit",
-        "Legal Notice",
-        "Power of Attorney",
-        "Will/Testament",
-        "Other"
+        { value: "rent_agreement", label: "Rent Agreement" },
+        { value: "bussiness_agreement", label: "Business Agreement" },
+        { value: "affidavit", label: "Affidavit" },
+        { value: "legal_notice", label: "Legal Notice" },
+        { value: "power_of_attorney", label: "Power of Attorney" },
+        { value: "will_testament", label: "Will/Testament" },
+        { value: "agreement", label: "Generic Agreement" },
+        { value: "complaint", label: "Complaint" },
+        { value: "contract", label: "Contract" },
+        { value: "education_gap_affidavit", label: "Education Gap Affidavit" },
+        { value: "indemnity_bond", label: "Indemnity Bond" },
+        { value: "legal_heir_certificate", label: "Legal Heir Certificate" },
+        { value: "court_evidence_affidavit", label: "Court Evidence Affidavit" },
+        { value: "other", label: "Other" }
     ]
 
     const urgencyOptions = [
@@ -114,20 +135,26 @@ export default function DocumentReviewPage() {
         setIsSubmitting(true)
 
         try {
-            // Mock API call
-            const response = await submitDocumentReview(formData, file as File)
+            // Get token from wherever you store it (localStorage, cookies, etc.)
+            const token = localStorage.getItem('token') || ''
+
+            const response = await submitDocumentReview({
+                ...formData,
+                userName: formData.name,
+                userPhone: formData.phone
+            }, file as File, token)
 
             if (response.success) {
                 setSubmitSuccess(true)
                 toast.success("Document submitted for review!", {
-                    description: `Review ID: ${response.data.reviewId}`,
+                    description: `Review ID: ${response.orderId}`,
                 })
             } else {
-                throw new Error("Submission failed")
+                throw new Error(response.error || "Submission failed")
             }
         } catch (error) {
             toast.error("Submission failed", {
-                description: "Please try again later",
+                description: error instanceof Error ? error.message : "Please try again later",
             })
             console.error("Submission error:", error)
         } finally {
@@ -312,11 +339,11 @@ export default function DocumentReviewPage() {
                                                     <SelectContent className="bg-gray-900 border-gray-700 text-white">
                                                         {documentTypes.map((type) => (
                                                             <SelectItem
-                                                                key={type}
-                                                                value={type}
+                                                                key={type.value}
+                                                                value={type.value}
                                                                 className="hover:bg-gray-800 focus:bg-gray-800"
                                                             >
-                                                                {type}
+                                                                {type.label}
                                                             </SelectItem>
                                                         ))}
                                                     </SelectContent>
