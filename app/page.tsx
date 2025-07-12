@@ -327,6 +327,7 @@ export default function HomePage() {
         disclaimer: "Legal Disclaimer",
         about: "About NyayMitra",
         // careers: "Careers",
+        deliveryPolicy: "Shipping & Delivery Policy",
         press: "Press",
         blog: "Blog",
         signup: "Sign Up",
@@ -522,6 +523,7 @@ export default function HomePage() {
         disclaimer: "कानूनी अस्वीकरण",
         about: "न्यायमित्र के बारे में",
         // careers: "करियर",
+        deliveryPolicy: "शिपिंग और डिलीवरी नीति",
         press: "प्रेस",
         blog: "ब्लॉग",
         signup: "साइन अप",
@@ -1589,9 +1591,9 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  {/* <Link href="/disclaimer" className="text-white/60 hover:text-white transition-colors duration-300">
-                    {t.footer.disclaimer}
-                  </Link> */}
+                  <Link href="/Shipping&DeliveryPolicy" className="text-white/60 hover:text-white transition-colors duration-300">
+                    {t.footer.deliveryPolicy}
+                  </Link>
                 </li>
                 <li>
                   <Link href="/contact" className="text-white/60 hover:text-white transition-colors duration-300">
