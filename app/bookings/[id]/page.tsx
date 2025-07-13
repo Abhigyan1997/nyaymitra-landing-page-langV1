@@ -78,7 +78,7 @@ interface Booking {
     };
 }
 
-const ContactCard = ({ booking, isLawyer }: { booking: Booking, isLawyer: boolean }) => {
+const ContactCard = ({ booking, isLawyer }: { booking: Booking; isLawyer: boolean }) => {
     if (isLawyer || !booking.lawyerPhone) return null;
 
     return (
@@ -86,47 +86,54 @@ const ContactCard = ({ booking, isLawyer }: { booking: Booking, isLawyer: boolea
             <CardHeader>
                 <CardTitle className="text-blue-800 flex items-center gap-2">
                     <Phone className="w-5 h-5" />
-                    Contact Information
+                    <span className="text-lg sm:text-xl">Contact Information</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                        <Badge variant="secondary" className="gap-2 px-3 py-2">
+                    {/* Phone Section */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                        <Badge variant="secondary" className="gap-2 px-3 py-2 w-fit">
                             <Phone className="w-4 h-4" />
                             Direct Call
                         </Badge>
-                        <p className="text-lg font-bold">{booking.lawyerPhone}</p>
+                        <p className="text-base sm:text-lg font-bold break-all">{booking.lawyerPhone}</p>
                         <Button
                             size="sm"
                             onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                            className="mt-2 sm:mt-0 w-full sm:w-auto"
                         >
                             Call Now
                         </Button>
                     </div>
 
+                    {/* Email Section */}
                     {booking.lawyerEmail && (
-                        <div className="flex items-center gap-4">
-                            <Badge variant="secondary" className="gap-2 px-3 py-2">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                            <Badge variant="secondary" className="gap-2 px-3 py-2 w-fit">
                                 <Mail className="w-4 h-4" />
                                 Email
                             </Badge>
-                            <p className="text-lg font-medium">{booking.lawyerEmail}</p>
+                            <p className="text-base sm:text-lg font-medium break-all">{booking.lawyerEmail}</p>
                             <Button
                                 size="sm"
                                 variant="outline"
                                 onClick={() => window.open(`mailto:${booking.lawyerEmail}`)}
+                                className="mt-2 sm:mt-0 w-full sm:w-auto"
                             >
                                 Send Email
                             </Button>
                         </div>
                     )}
 
+                    {/* Alert Section */}
                     <Alert className="mt-4 border-yellow-200 bg-yellow-50">
-                        <AlertCircle className="h-4 w-4 text-yellow-600" />
-                        <AlertDescription className="text-yellow-800">
-                            Please contact only during your scheduled slot: {format(new Date(booking.date), 'PPP')} at {booking.slot}
-                        </AlertDescription>
+                        <div className="flex items-start gap-2">
+                            <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                            <AlertDescription className="text-yellow-800 text-sm sm:text-base">
+                                Please contact only during your scheduled slot: {format(new Date(booking.date), 'PPP')} at {booking.slot}
+                            </AlertDescription>
+                        </div>
                     </Alert>
                 </div>
             </CardContent>
@@ -225,13 +232,13 @@ Contact: ${booking.lawyerPhone || 'N/A'}
 Specialization: Criminal Lawyer
 ----------------------------------------
 Payment Information:
-Amount: ₹${booking.amount || '0'}
+Amount: Rs.${booking.amount || '0'}
 Payment Method: ${booking.paymentMode ? booking.paymentMode.toUpperCase() : 'N/A'}
 Transaction ID: ${booking.paymentId || 'N/A'}
 Payment Status: ${booking.paymentStatus ? booking.paymentStatus.toUpperCase() : 'N/A'}
 ----------------------------------------
 Thank you for using LegalConnect!
-For any queries, please contact support@legalconnect.in
+For any queries, please contact nyaymitra.ai@gmail.com
     `.trim();
 
         const blob = new Blob([receiptContent], { type: 'text/plain' })
