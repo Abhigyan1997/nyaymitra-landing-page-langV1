@@ -27,7 +27,8 @@ import {
     CheckCircle2,
     XCircle,
     Clock,
-    AlertCircle
+    AlertCircle,
+    Mail
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -53,6 +54,9 @@ interface Booking {
     lawyerId: string
     userName: string
     lawyerName: string
+    lawyerPhone?: string
+    lawyerEmail?: string
+    lawyerCity?: string
     date: string
     slot: string
     status: 'pending' | 'confirmed' | 'completed' | 'cancelled'
@@ -63,7 +67,72 @@ interface Booking {
     paymentId?: string
     createdAt?: string
     updatedAt?: string
+    lawyerDetails?: {
+        specialization?: string[];
+        experience?: number;
+        bio?: string;
+        languages?: string[];
+        consultationFee?: number;
+        averageRating?: number;
+        totalReviews?: number;
+    };
 }
+
+const ContactCard = ({ booking, isLawyer }: { booking: Booking, isLawyer: boolean }) => {
+    if (isLawyer || !booking.lawyerPhone) return null;
+
+    return (
+        <Card className="mt-6 border-blue-200 bg-blue-50">
+            <CardHeader>
+                <CardTitle className="text-blue-800 flex items-center gap-2">
+                    <Phone className="w-5 h-5" />
+                    Contact Information
+                </CardTitle>
+            </CardHeader>
+            <CardContent>
+                <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                        <Badge variant="secondary" className="gap-2 px-3 py-2">
+                            <Phone className="w-4 h-4" />
+                            Direct Call
+                        </Badge>
+                        <p className="text-lg font-bold">{booking.lawyerPhone}</p>
+                        <Button
+                            size="sm"
+                            onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                        >
+                            Call Now
+                        </Button>
+                    </div>
+
+                    {booking.lawyerEmail && (
+                        <div className="flex items-center gap-4">
+                            <Badge variant="secondary" className="gap-2 px-3 py-2">
+                                <Mail className="w-4 h-4" />
+                                Email
+                            </Badge>
+                            <p className="text-lg font-medium">{booking.lawyerEmail}</p>
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => window.open(`mailto:${booking.lawyerEmail}`)}
+                            >
+                                Send Email
+                            </Button>
+                        </div>
+                    )}
+
+                    <Alert className="mt-4 border-yellow-200 bg-yellow-50">
+                        <AlertCircle className="h-4 w-4 text-yellow-600" />
+                        <AlertDescription className="text-yellow-800">
+                            Please contact only during your scheduled slot: {format(new Date(booking.date), 'PPP')} at {booking.slot}
+                        </AlertDescription>
+                    </Alert>
+                </div>
+            </CardContent>
+        </Card>
+    );
+};
 
 export default function BookingDetails() {
     const [booking, setBooking] = useState<Booking | null>(null)
@@ -81,7 +150,7 @@ export default function BookingDetails() {
         const fetchBooking = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await axios.get(`https://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}`, {
+                const response = await axios.get(`ttps://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -152,6 +221,7 @@ Name: ${booking.userName || 'N/A'}
 ----------------------------------------
 Lawyer Details:
 Name: ${booking.lawyerName || 'N/A'}
+Contact: ${booking.lawyerPhone || 'N/A'}
 Specialization: Criminal Lawyer
 ----------------------------------------
 Payment Information:
@@ -250,8 +320,6 @@ For any queries, please contact support@legalconnect.in
                 <Button onClick={() => router.push("/all-bookings")}>
                     View All Bookings
                 </Button>
-
-
             </div>
         )
     }
@@ -283,7 +351,6 @@ For any queries, please contact support@legalconnect.in
                 <Button onClick={() => router.push("/all-bookings")}>
                     View All Bookings
                 </Button>
-
             </div>
 
             {/* Booking Header */}
@@ -539,29 +606,36 @@ For any queries, please contact support@legalconnect.in
                                 </div>
                                 <div className="flex-1">
                                     <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-
                                         {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
                                     </h3>
 
                                     <p className="text-muted-foreground">
-                                        {isLawyer ? "Client" : "Criminal Lawyer | Supreme Court of India"}
+                                        {isLawyer ? "Client" : "Legal Expert "}
                                     </p>
                                     <div className="flex flex-wrap items-center gap-2 mt-3">
                                         {!isLawyer && (
                                             <>
-                                                <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 rounded-lg">
-                                                    <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                                                    <span>4.8 (128 reviews)</span>
-                                                </Badge>
-                                                <Badge variant="outline" className="px-3 py-1 rounded-lg">
-                                                    12+ years experience
-                                                </Badge>
+                                                {booking.lawyerDetails?.averageRating !== undefined && (
+                                                    <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 rounded-lg">
+                                                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                                                        <span>{booking.lawyerDetails.averageRating} ({booking.lawyerDetails.totalReviews} reviews)</span>
+                                                    </Badge>
+                                                )}
+
+                                                {booking.lawyerDetails?.experience !== undefined && (
+                                                    <Badge variant="outline" className="px-3 py-1 rounded-lg">
+                                                        {booking.lawyerDetails.experience}+ years experience
+                                                    </Badge>
+                                                )}
+
                                             </>
                                         )}
-                                        <Badge variant="outline" className="px-3 py-1 rounded-lg">
-                                            <MapPin className="w-3 h-3 mr-1" />
-                                            New Delhi
-                                        </Badge>
+                                        {booking.lawyerCity && (
+                                            <Badge variant="outline" className="px-3 py-1 rounded-lg">
+                                                <MapPin className="w-3 h-3 mr-1" />
+                                                {booking.lawyerCity}
+                                            </Badge>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -576,7 +650,7 @@ For any queries, please contact support@legalconnect.in
                                             Specializations
                                         </h4>
                                         <div className="flex flex-wrap gap-2">
-                                            {['Criminal Defense', 'Bail Applications', 'Cyber Crime', 'Property Disputes'].map(spec => (
+                                            {booking.lawyerDetails?.specialization?.map((spec, index) => (
                                                 <TooltipProvider key={spec}>
                                                     <Tooltip>
                                                         <TooltipTrigger>
@@ -600,7 +674,7 @@ For any queries, please contact support@legalconnect.in
                                         Languages
                                     </h4>
                                     <div className="flex flex-wrap gap-2">
-                                        {['English', 'Hindi', 'Punjabi'].map(lang => (
+                                        {booking.lawyerDetails?.languages?.map((lang, index) => (
                                             <Badge key={lang} variant="outline" className="rounded-lg px-3 py-1">
                                                 {lang}
                                             </Badge>
@@ -615,12 +689,13 @@ For any queries, please contact support@legalconnect.in
                                     {isLawyer ? (
                                         `Client ${booking.userName} has booked a consultation for legal advice.`
                                     ) : (
-                                        "Specialized in criminal defense with extensive experience in high-profile cases across India. Recognized for strategic litigation and client-focused approach. Admitted to practice in the Supreme Court of India and various High Courts."
+                                        booking.lawyerDetails?.bio || 'No bio available.'
                                     )}
                                 </p>
                             </div>
 
-                            {!isLawyer && (
+
+                            {/* {!isLawyer && (
                                 <div className="space-y-4">
                                     <h4 className="font-semibold text-lg">Education</h4>
                                     <div className="space-y-3">
@@ -640,7 +715,10 @@ For any queries, please contact support@legalconnect.in
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            )} */}
+
+                            {/* Add Contact Card here */}
+                            <ContactCard booking={booking} isLawyer={isLawyer} />
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -791,6 +869,8 @@ For any queries, please contact support@legalconnect.in
                                         <p className="text-xs text-center text-muted-foreground">
                                             Link will be active 10 minutes before your scheduled time at {booking.slot}
                                         </p>
+                                        {/* Add Contact Card for video consultations */}
+                                        <ContactCard booking={booking} isLawyer={isLawyer} />
                                     </div>
                                 ) : booking.mode === 'phone' ? (
                                     <div className="space-y-4">
@@ -804,24 +884,45 @@ For any queries, please contact support@legalconnect.in
                                                     <p className="text-sm text-muted-foreground mt-1">
                                                         {isLawyer
                                                             ? "You will call the client at their registered phone number."
-                                                            : "The lawyer will call you at your registered phone number."
+                                                            : "You can call the lawyer directly at their contact number."
                                                         }
-                                                        Please ensure your phone is available at the scheduled time.
                                                     </p>
                                                 </div>
                                             </div>
                                         </Card>
-                                        <div className="flex items-center justify-between bg-muted/30 p-4 rounded-xl">
-                                            <div>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {isLawyer ? "Client's contact number" : "Your contact number"}
-                                                </p>
-                                                <p className="font-medium">+91 ••••• •••89</p>
+                                        {/* Enhanced contact display for phone consultations */}
+                                        {!isLawyer && booking.lawyerPhone && (
+                                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Lawyer's Direct Number
+                                                        </p>
+                                                        <p className="text-xl font-bold text-blue-800">
+                                                            {booking.lawyerPhone}
+                                                        </p>
+                                                    </div>
+                                                    <Button
+                                                        onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                                                    >
+                                                        <Phone className="w-4 h-4 mr-2" /> Call Now
+                                                    </Button>
+                                                </div>
+                                                <div className="mt-3 flex items-center justify-between">
+                                                    <div>
+                                                        <p className="text-sm text-muted-foreground">
+                                                            Scheduled Call Time
+                                                        </p>
+                                                        <p className="font-medium">
+                                                            {format(new Date(booking.date), 'PPP')} at {booking.slot}
+                                                        </p>
+                                                    </div>
+                                                    <Button variant="outline">
+                                                        <CalendarDays className="w-4 h-4 mr-2" /> Add to Calendar
+                                                    </Button>
+                                                </div>
                                             </div>
-                                            <Button variant="outline" size="sm">
-                                                Edit
-                                            </Button>
-                                        </div>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="space-y-4">
@@ -845,6 +946,8 @@ For any queries, please contact support@legalconnect.in
                                         >
                                             Open Chat
                                         </Button>
+                                        {/* Add Contact Card for chat consultations */}
+                                        <ContactCard booking={booking} isLawyer={isLawyer} />
                                     </div>
                                 )}
                             </div>
@@ -855,6 +958,7 @@ For any queries, please contact support@legalconnect.in
         </div>
     )
 }
+
 function InfoRow({
     icon,
     label,
