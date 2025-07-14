@@ -333,7 +333,9 @@ export default function LawyersPage() {
 
     try {
       setBookingLoading(true)
-      if (typeof window === 'undefined') return
+
+      // Close the booking dialog first
+      setBookingOpen(false)
 
       const token = localStorage.getItem("token")
       const userId = localStorage.getItem("userId")
@@ -348,11 +350,11 @@ export default function LawyersPage() {
         return
       }
 
-      // Step 1: Create Razorpay order
+      // Create Razorpay order
       const orderResponse = await axios.post(
         "https://nyaymitra-backend.onrender.com/api/v1/payment/create-order",
         {
-          amount: selectedLawyer.consultationFee, // Convert to paise
+          amount: selectedLawyer.consultationFee,
           currency: "INR",
           receipt: `booking_${Date.now()}`,
           notes: {
@@ -372,10 +374,12 @@ export default function LawyersPage() {
 
       const order = orderResponse.data.order
 
-      // Step 2: Load Razorpay script
+      // Load Razorpay script
       await loadRazorpay()
 
-      // Step 3: Open Razorpay payment modal
+      // Add a small delay to ensure the booking dialog is fully closed
+      await new Promise(resolve => setTimeout(resolve, 300))
+
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: order.amount,
@@ -426,7 +430,6 @@ export default function LawyersPage() {
                 title: "Booking Confirmed",
                 description: `Your consultation with ${selectedLawyer.fullName} is confirmed`,
               })
-              setBookingOpen(false)
               router.push(`/bookings/${bookingResponse.data.booking._id}`)
             }
           } catch (err) {
@@ -436,6 +439,8 @@ export default function LawyersPage() {
               description: "Payment verification failed",
               variant: "destructive",
             })
+            // Reopen booking dialog if payment fails
+            setBookingOpen(true)
           }
         },
         prefill: {
@@ -449,10 +454,17 @@ export default function LawyersPage() {
         theme: {
           color: "#2563EB",
         },
+        modal: {
+          ondismiss: () => {
+            // Reopen booking dialog if user closes Razorpay
+            setBookingOpen(true)
+          }
+        }
       }
 
       const rzp = new (window as any).Razorpay(options)
       rzp.open()
+
     } catch (err) {
       console.error("Booking failed:", err)
       toast({
@@ -460,6 +472,8 @@ export default function LawyersPage() {
         description: "Failed to process booking",
         variant: "destructive",
       })
+      // Reopen booking dialog if something fails
+      setBookingOpen(true)
     } finally {
       setBookingLoading(false)
     }
