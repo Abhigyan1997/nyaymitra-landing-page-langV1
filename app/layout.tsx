@@ -9,11 +9,13 @@ const inter = Inter({ subsets: ["latin"] })
 
 // Update your metadata export
 export const metadata: Metadata = {
-  title: "Nyay Mitra - AI-Powered Legal Platform",
+  title: "Nyay Mitra – Legal Help Made Simple with AI + Lawyers",
   description: "Get instant legal advice, connect with verified lawyers, and understand your rights with AI-powered assistance across India.",
-  keywords: "legal advice, lawyers India, AI legal help, legal consultation, Indian law",
+  keywords: "legal advice India, free legal help, AI lawyer, book lawyer online, Nyay Mitra, Indian legal tech",
   icons: {
     icon: "/favicon.ico",
+    shortcut: "/favicon-32x32.png",
+    apple: "/apple-touch-icon.png",
   },
 }
 
