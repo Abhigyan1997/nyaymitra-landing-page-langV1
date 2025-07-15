@@ -963,7 +963,7 @@ export default function ProfilePage() {
                                             <Button
                                                 variant="ghost"
                                                 className="w-full justify-between"
-                                                onClick={() => window.location.href = "https://dashbord-nyaymitra.vercel.app/"}
+                                                onClick={() => window.location.href = "https://nyay-dashboard.netlify.app/"}
                                             >
                                                 <div className="flex items-center gap-3">
                                                     <FileSignature className="h-5 w-5 text-blue-500" />

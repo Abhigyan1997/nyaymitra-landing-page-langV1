@@ -61,7 +61,7 @@ export default function LoginPage() {
           label: "Go to Dashboard",
           onClick: () => {
             const urlParams = new URLSearchParams(window.location.search)
-            const redirectTo = urlParams.get('redirect') || 'https://dashbord-nyaymitra.vercel.app/'
+            const redirectTo = urlParams.get('redirect') || 'https://nyay-dashboard.netlify.app/'
             router.push(redirectTo)
           }
         }

@@ -736,7 +736,7 @@ export default function HomePage() {
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       onClick={() => {
-                        window.location.href = 'https://dashbord-nyaymitra.vercel.app/';
+                        window.location.href = 'https://nyay-dashboard.netlify.app/';
                       }}
                     >
                       <div className="flex items-center gap-3 w-full justify-between">
@@ -857,7 +857,7 @@ export default function HomePage() {
                       }
 
                       // Redirect all authenticated users (lawyer or not) to the main dashboard
-                      window.location.href = 'https://dashbord-nyaymitra.vercel.app/';
+                      window.location.href = 'https://nyay-dashboard.netlify.app/';
                     }}
                     className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
