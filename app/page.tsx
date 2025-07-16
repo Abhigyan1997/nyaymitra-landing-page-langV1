@@ -954,7 +954,7 @@ export default function HomePage() {
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
               <div className="text-sm md:text-base text-yellow-300 font-semibold tracking-wide">
-                ⚡ Digital Notary Delivered in 12 Hours — Physical Courier in 5–7 Days
+                ⚡ Digital Notary Delivered in 12 Hours
               </div>
 
 
@@ -1629,11 +1629,10 @@ export default function HomePage() {
               <a href="/cancellation" className="hover:text-white underline">Cancellation & Refund</a>
             </div>
 
-            <p className="text-white/40 text-xs max-w-2xl mx-auto px-4">
-              <strong>Disclaimer:</strong> NyayMitra is an AI-powered legal assistant intended for informational purposes only.
-              It does not constitute formal legal advice or establish a lawyer-client relationship.
-              For personalized legal counsel, always consult with a licensed advocate. NyayMitra is not responsible
-              for any decisions made based on AI-generated responses.
+            <p className="text-sm text-gray-400 mt-4">
+              <strong className="text-red-400">Disclaimer:</strong> <span className="text-gray-300">
+                NyayMitra is an AI-powered legal assistant designed for general informational purposes only. It does not provide formal legal advice, nor does it create a lawyer–client relationship. For any personalized or case-specific guidance, users are advised to consult a qualified legal professional. NyayMitra is not liable for decisions made based on automated suggestions or AI-generated content.
+              </span>
             </p>
           </div>
 
