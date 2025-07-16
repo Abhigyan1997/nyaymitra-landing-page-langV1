@@ -62,8 +62,8 @@ export default function ContactPage() {
       title: "Office Address",
       details: [
         "Nyay Mitra Legal Services Pvt. Ltd.",
-        "123 Legal Plaza, 5th Floor",
-        "Connaught Place, New Delhi - 110001",
+        "Ram Das Gupta Path",
+        "Bhagalpur, Bihar - 812002",
         "India",
       ],
     },
@@ -84,7 +84,6 @@ export default function ContactPage() {
         "General: info@nyaymitra.com",
         "Support: support@nyaymitra.com",
         "Legal: legal@nyaymitra.com",
-        "Careers: careers@nyaymitra.com",
       ],
     },
     {
