@@ -14,20 +14,67 @@ export default function PrivacyPage() {
 
                 <section className="space-y-6 text-gray-200 leading-relaxed">
                     <p>
-                        At <span className="text-purple-300 font-semibold">NyayMitra</span>, we value your privacy and are committed to protecting your personal data.
+                        At <span className="text-purple-300 font-semibold">NyayMitra</span>, your privacy is a top priority. This policy explains how we collect, use, and safeguard your personal data when you use our platform.
                     </p>
-                    <ul className="list-disc list-inside space-y-3">
-                        <li>We collect essential data like your name, contact details, and Aadhaar for identity verification.</li>
-                        <li>Your payment details are handled securely through Razorpay and never stored on our servers.</li>
-                        <li>Chat and consultation data may be used to improve service quality, never for third-party use.</li>
-                        <li>You may request data deletion by contacting <span className="underline">privacy@nyaymitra.in</span>.</li>
-                        <li>We follow industry-standard security protocols to keep your data safe.</li>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">1. What We Collect</h2>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li>Your name, phone number, and email address</li>
+                        <li>Government ID details (e.g., Aadhaar) for identity verification (when required)</li>
+                        <li>Uploaded documents for legal processing or notary services</li>
+                        <li>Lawyer booking and consultation history</li>
+                        <li>Chat history (used to improve service, not for marketing)</li>
+                        <li>Technical data such as IP address and device/browser info</li>
                     </ul>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">2. How We Use Your Data</h2>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li>To process bookings and connect you with verified lawyers</li>
+                        <li>To provide notary, affidavit, or document-related services</li>
+                        <li>To send status updates, invoices, or confirmation emails</li>
+                        <li>To improve service quality through usage feedback</li>
+                    </ul>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">3. Payment Security</h2>
                     <p>
-                        By using our services, you consent to this privacy policy.
+                        All payments are handled securely through <span className="font-medium">Razorpay</span>. We do not store card details or sensitive financial data on our servers.
                     </p>
-                    <p className="text-gray-400">
-                        For questions, feel free to email us at <span className="underline">privacy@nyaymitra.in</span>.
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">4. Data Sharing</h2>
+                    <p>
+                        We do <span className="italic">not</span> sell or rent your personal data to third parties. Your information is only shared:
+                    </p>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li>With the lawyer you’ve booked, for consultation purposes</li>
+                        <li>With government agencies (only if required by law)</li>
+                    </ul>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">5. Your Rights</h2>
+                    <ul className="list-disc list-inside space-y-2">
+                        <li>You can access, update, or correct your information at any time</li>
+                        <li>You may request data deletion by contacting us</li>
+                        <li>You can opt out of non-essential communications</li>
+                    </ul>
+
+                    <p className="text-sm text-gray-400">
+                        For all requests, please email us at:{" "}
+                        <a href="mailto:support@nyaymitra.tech" className="underline text-blue-400">
+                            support@nyaymitra.tech
+                        </a>
+                    </p>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">6. Data Security</h2>
+                    <p>
+                        We follow industry-standard practices including HTTPS, JWT-based authentication, and secure storage practices to protect your data.
+                    </p>
+
+                    <h2 className="text-xl font-semibold text-purple-300 mt-6">7. Updates to this Policy</h2>
+                    <p>
+                        We may occasionally update this Privacy Policy. We recommend reviewing this page periodically to stay informed.
+                    </p>
+
+                    <p className="mt-6">
+                        By using <span className="text-purple-300 font-semibold">NyayMitra</span>, you consent to the terms of this Privacy Policy.
                     </p>
                 </section>
             </div>
