@@ -608,15 +608,15 @@ export default function HomePage() {
             <div className="flex items-center">
               <Link href="/" className="flex items-center space-x-4 group">
                 <div className="relative">
-                  {/* Outer Glow Ring */}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-30 group-hover:opacity-60 transition-all duration-500 animate-pulse" />
+                  {/* Outer Glow */}
+                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-25 group-hover:opacity-50 transition duration-300" />
 
-                  {/* Main Logo Container */}
-                  <div className="relative bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 p-4 rounded-2xl shadow-2xl transform group-hover:scale-110 transition-all duration-500">
-                    <Scale className="h-8 w-8 text-white group-hover:rotate-12 transition-transform duration-500" />
+                  {/* Logo Icon */}
+                  <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-4 rounded-2xl shadow-lg group-hover:scale-105 transition duration-300">
+                    <Scale className="h-8 w-8 text-white group-hover:rotate-6 transition-transform duration-300" />
 
-                    {/* Inner Sparkles */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                    {/* Sparkles */}
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
                       {sparklePositions.map((pos, i) => (
                         <div
                           key={i}
@@ -624,7 +624,7 @@ export default function HomePage() {
                           style={{
                             left: pos.left,
                             top: pos.top,
-                            animationDelay: `${i * 0.3}s`,
+                            animationDelay: `${i * 0.25}s`,
                             animationDuration: "2s"
                           }}
                         />
@@ -633,29 +633,25 @@ export default function HomePage() {
                   </div>
                 </div>
 
+                {/* Text Block */}
                 <div className="flex flex-col">
-                  <span className="text-3xl font-black bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:from-white group-hover:via-blue-200 group-hover:to-purple-200 transition-all duration-500">
+                  <span className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:text-white transition duration-300">
                     NyayMitra
                   </span>
                   <div className="flex items-center space-x-2">
                     <span className="text-xs text-white/60 font-medium tracking-wider uppercase">
-                      Legal AI Platform
+                      India’s Legal Helpdesk
                     </span>
                     <div className="flex space-x-1">
                       <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" />
-                      <div
-                        className="w-1 h-1 bg-purple-400 rounded-full animate-pulse"
-                        style={{ animationDelay: "0.5s" }}
-                      />
-                      <div
-                        className="w-1 h-1 bg-pink-400 rounded-full animate-pulse"
-                        style={{ animationDelay: "1s" }}
-                      />
+                      <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse delay-150" />
+                      <div className="w-1 h-1 bg-pink-400 rounded-full animate-pulse delay-300" />
                     </div>
                   </div>
                 </div>
               </Link>
             </div>
+
 
             {/* Enhanced Desktop Navigation */}
             <div className="hidden md:block">
