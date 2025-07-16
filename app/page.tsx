@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck, PenTool, IndianRupee } from 'lucide-react'; // or your icon library
+import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck, PenTool, IndianRupee, ShieldCheck } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -153,7 +153,7 @@ export default function HomePage() {
         description:
           "Create legal documents in minutes, talk to trusted lawyers, and get papers notarized — all from your phone, anywhere in India. Simple, fast, and affordable legal help for everyone.",
         ctaPrimary: "Talk to AI Now",
-        ctaSecondary: "Get Free Legal Help",
+        ctaSecondary: "Start Digital Notary",
         liveStatus: "AI System Online",
         stats: {
           cases: "1M+ Cases Resolved",
@@ -351,7 +351,7 @@ export default function HomePage() {
         description:
           "कानूनी दस्तावेज पाएं, भरोसेमंद वकीलों से बात करें, और नोटरी से दस्तावेज सत्यापित करवाएं — सब कुछ मोबाइल से, भारत में कहीं भी। आसान, तेज़ और सस्ती कानूनी मदद।",
         ctaPrimary: "अभी AI से बात करें",
-        ctaSecondary: "मुफ्त कानूनी सहायता पाएं",
+        ctaSecondary: "तुरंत नोटरी सेवा शुरू करें",
         liveStatus: "AI सिस्टम ऑनलाइन",
         stats: {
           cases: "10 लाख+ मामले हल",
@@ -953,6 +953,11 @@ export default function HomePage() {
             <div
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
+              <div className="text-sm md:text-base text-yellow-300 font-semibold tracking-wide">
+                ⚡ Digital Notary Delivered in 12 Hours — Physical Courier in 5–7 Days
+              </div>
+
+
               {/* Elegant Badge - Responsive */}
               <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
                 <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
@@ -960,6 +965,7 @@ export default function HomePage() {
                   India’s #1 One-Tap Legal Assistant – Draft, Notarize, & Book Lawyers Instantly
                 </span>
               </div>
+
               {/* Sophisticated Title - Responsive */}
               <div className="space-y-4 md:space-y-6">
                 <h1
@@ -1090,33 +1096,39 @@ export default function HomePage() {
                   </Button>
                 </Link>
 
-                <Link href="/services">
+                <Link href="/services/notary">
                   <Button
-                    variant="outline"
                     size="lg"
-                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-white/5 border-2 border-white/20 text-white hover:bg-white/10 backdrop-blur-sm transition-all duration-500 group relative overflow-hidden"
+                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-black hover:from-yellow-500 hover:to-orange-500 shadow-lg transition-all duration-500 group relative overflow-hidden"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    <Briefcase className="mr-2 md:mr-3 h-4 w-4 md:h-5 md:w-5 text-emerald-400 group-hover:scale-125 transition-transform duration-500" />
-                    <span className="relative z-10 font-semibold">Get Legal Help</span>
+                    <FileText className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6" />
+                    <span className="relative z-10 font-semibold">{t.hero.ctaSecondary}</span>
+                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
                   </Button>
                 </Link>
+
 
               </div>
 
               {/* Trust Indicators - Responsive */}
               <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-6 md:space-x-0 pt-2 md:pt-4">
-                <div className="flex items-center space-x-2 md:space-x-3">
-                  <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-green-400" />
-                  <span className="text-white/70 text-xs md:text-sm">Trusted by 1K+ users</span>
-                </div>
+                <CheckCircle className="h-4 w-4 md:h-5 md:w-5 text-green-400" />
+                <span className="text-white/70 text-xs md:text-sm">
+                  Built with <span className="font-medium text-green-300">Real User Insights</span>
+                </span>
+
                 <div className="flex items-center space-x-2 md:space-x-3">
                   <Shield className="h-4 w-4 md:h-5 md:w-5 text-blue-400" />
-                  <span className="text-white/70 text-xs md:text-sm">Bank-grade security</span>
+                  <span className="text-white/70 text-xs md:text-sm">
+                    <span className="font-medium text-blue-300">Secure</span> Payments
+                  </span>
+
                 </div>
-                <div className="flex items-center space-x-2 md:space-x-3">
-                  <Award className="h-4 w-4 md:h-5 md:w-5 text-purple-400" />
-                  <span className="text-white/70 text-xs md:text-sm">Award winning</span>
+                <div className="flex items-center space-x-2 md:space-x-3 animate-fade-in" style={{ animationDelay: "0.6s" }}>
+                  <ShieldCheck className="h-4 w-4 md:h-5 md:w-5 text-teal-400" />
+                  <span className="text-white/70 text-xs md:text-sm">
+                    <span className="font-medium text-teal-300">Verified</span> Lawyers
+                  </span>
                 </div>
               </div>
             </div>
