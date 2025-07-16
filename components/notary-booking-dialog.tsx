@@ -40,6 +40,7 @@ interface BookingReceipt {
     documentType: string
     stampValue: number
     serviceFee: number
+    deliveryFee: number
     totalAmount: number
     serviceType: 'digital' | 'physical'
     deliveryMethod: string
@@ -109,6 +110,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
     const [showReceipt, setShowReceipt] = useState<boolean>(false)
     const { toast } = useToast()
     const receiptRef = useRef<HTMLDivElement>(null)
+    const [razorpayLoaded, setRazorpayLoaded] = useState<boolean>(false)
 
     const [formData, setFormData] = useState<FormData>({
         name: '',
@@ -129,6 +131,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
         const script = document.createElement("script")
         script.src = "https://checkout.razorpay.com/v1/checkout.js"
         script.async = true
+        script.onload = () => setRazorpayLoaded(true)
         document.body.appendChild(script)
         return () => {
             document.body.removeChild(script)
@@ -177,17 +180,23 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
     }
 
     const handleSubmit = async (e: React.FormEvent): Promise<void> => {
-        e.preventDefault()
-        if (!validate()) return
+        e.preventDefault();
+        if (!validate()) return;
 
-        setIsSubmitting(true)
+        setIsSubmitting(true);
 
         try {
-            const selectedDoc = DOCUMENT_TYPES.find(doc => doc.id === formData.documentType) || DOCUMENT_TYPES[0]
-            const serviceFee = serviceType === 'digital' ? 399 : 799
+            const selectedDoc = DOCUMENT_TYPES.find(doc => doc.id === formData.documentType) || DOCUMENT_TYPES[0];
+            const serviceFee = serviceType === 'digital' ? 399 : 799;
 
-            const profileRaw = localStorage.getItem("userProfile")
-            const profile = profileRaw ? JSON.parse(profileRaw) : {}
+            const profileRaw = localStorage.getItem("userProfile");
+            const profile = profileRaw ? JSON.parse(profileRaw) : {};
+
+            // Close the dialog before opening Razorpay
+            setOpen(false);
+
+            // Small delay to ensure dialog is fully closed
+            await new Promise(resolve => setTimeout(resolve, 50));
 
             const response = await fetch('https://nyaymitra-backend-document.onrender.com/api/documents/create-notary-booking', {
                 method: 'POST',
@@ -200,19 +209,23 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                     userId: profile.userId,
                     userEmail: profile.email
                 })
-            })
+            });
 
-            if (response.ok) {
-                const data = await response.json()
+            if (!response.ok) {
+                throw new Error('Booking failed');
+            }
 
-                const options = {
-                    key: data.key,
-                    amount: data.amount,
-                    currency: data.currency,
-                    name: "NyayMitra",
-                    description: "Notary Service Booking",
-                    order_id: data.orderId,
-                    handler: async function (response: any) {
+            const data = await response.json();
+
+            const options = {
+                key: data.key,
+                amount: data.amount,
+                currency: data.currency,
+                name: "NyayMitra",
+                description: "Notary Service Booking",
+                order_id: data.orderId,
+                handler: async function (response: any) {
+                    try {
                         const verifyRes = await fetch('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
                             method: 'POST',
                             headers: {
@@ -224,82 +237,115 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                 razorpay_signature: response.razorpay_signature,
                                 documentId: data.serviceOrderId
                             })
-                        })
+                        });
 
-                        if (verifyRes.ok) {
-                            const receiptData: BookingReceipt = {
-                                orderId: data.orderId,
-                                paymentId: response.razorpay_payment_id,
-                                serviceOrderId: data.serviceOrderId,
-                                documentType: selectedDoc.name,
-                                stampValue: formData.stampValue,
-                                serviceFee: serviceFee,
-                                totalAmount: serviceFee + formData.stampValue,
-                                serviceType,
-                                deliveryMethod: serviceType === 'digital' ? 'Email' : 'Courier',
-                                customerName: formData.name,
-                                email: formData.email,
-                                phone: formData.phone,
-                                date: new Date().toLocaleString(),
-                                status: 'Completed'
-                            }
-
-                            setBookingReceipt(receiptData)
-                            setShowReceipt(true)
-                            setOpen(false)
-
-                            toast({
-                                title: "Payment Successful",
-                                description: "Your notary booking has been confirmed.",
-                                variant: "default",
-                            })
-
-                            setFormData({
-                                name: '',
-                                email: '',
-                                phone: '',
-                                documentType: 'general_affidavit',
-                                stampValue: 10,
-                                documentDescription: '',
-                                deliveryAddress: serviceType === 'physical' ? '' : undefined,
-                                specialInstructions: '',
-                                requiresRegistration: false
-                            })
-                        } else {
-                            throw new Error('Payment verification failed')
+                        if (!verifyRes.ok) {
+                            throw new Error('Payment verification failed');
                         }
-                    },
-                    prefill: {
-                        name: formData.name,
-                        email: formData.email,
-                        contact: formData.phone
-                    },
-                    theme: {
-                        color: "#0ea5e9"
+
+                        const receiptData: BookingReceipt = {
+                            orderId: data.orderId,
+                            paymentId: response.razorpay_payment_id,
+                            serviceOrderId: data.serviceOrderId,
+                            documentType: selectedDoc.name,
+                            stampValue: formData.stampValue,
+                            serviceFee: serviceFee,
+                            totalAmount: serviceFee + formData.stampValue,
+                            serviceType,
+                            deliveryFee: serviceType === 'physical' ? 100 : 0,
+                            deliveryMethod: serviceType === 'digital' ? 'Email' : 'Courier',
+                            customerName: formData.name,
+                            email: formData.email,
+                            phone: formData.phone,
+                            date: new Date().toLocaleString(),
+                            status: 'Completed'
+                        };
+
+                        setBookingReceipt(receiptData);
+                        setShowReceipt(true);
+
+                        toast({
+                            title: "Payment Successful",
+                            description: "Your notary booking has been confirmed.",
+                            variant: "default",
+                        });
+
+                        // Reset form
+                        setFormData({
+                            name: '',
+                            email: '',
+                            phone: '',
+                            documentType: 'general_affidavit',
+                            stampValue: 10,
+                            documentDescription: '',
+                            deliveryAddress: serviceType === 'physical' ? '' : undefined,
+                            specialInstructions: '',
+                            requiresRegistration: false
+                        });
+                    } catch (error) {
+                        console.error('Verification error:', error);
+                        toast({
+                            title: "Verification Failed",
+                            description: "Payment was successful but verification failed. Please contact support.",
+                            variant: "destructive",
+                        });
+                        setOpen(true); // Reopen the form if verification fails
+                    }
+                },
+                prefill: {
+                    name: formData.name,
+                    email: formData.email,
+                    contact: formData.phone
+                },
+                theme: {
+                    color: "#0ea5e9"
+                },
+                modal: {
+                    ondismiss: () => {
+                        // Reopen the dialog if payment is cancelled
+                        setOpen(true);
+                        toast({
+                            title: "Payment Cancelled",
+                            description: "You can try again if you want to proceed.",
+                            variant: "default",
+                        });
                     }
                 }
+            };
 
-                const razor = new (window as any).Razorpay(options)
-                razor.open()
-            } else {
-                throw new Error('Booking failed')
-            }
+            const razor = new (window as any).Razorpay(options);
+            razor.open();
+
+            razor.on('payment.failed', function (response: any) {
+                toast({
+                    title: "Payment Failed",
+                    description: response.error.description,
+                    variant: "destructive",
+                });
+                setOpen(true); // Reopen the form on failure
+            });
+
         } catch (error) {
-            console.error('Booking error:', error)
-            setErrors(prev => ({ ...prev, form: 'Failed to submit booking. Please try again.' }))
+            console.error('Booking error:', error);
             toast({
-                title: "Payment Failed",
-                description: "There was an error processing your payment.",
+                title: "Booking Failed",
+                description: "There was an error processing your request. Please try again.",
                 variant: "destructive",
-            })
+            });
+            setOpen(true); // Reopen the form on error
         } finally {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
         }
+    };
+    const calculateTotal = (): number => {
+        const serviceFee = serviceType === 'digital' ? 399 : 799
+        const deliveryFee = serviceType === 'physical' ? 100 : 0 // Fixed delivery charge
+        return serviceFee + formData.stampValue + deliveryFee
     }
 
     const handlePrintReceipt = (): void => {
         if (receiptRef.current) {
-            const printWindow = window.open('', '', 'width=800,height=600');
+            const printWindow = window.open('', '', 'width=800,height=600')
             if (printWindow) {
                 printWindow.document.write(`
                     <html>
@@ -318,6 +364,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                 .total { font-weight: bold; font-size: 1.125rem; color: #1e40af; }
                                 .footer { margin-top: 2rem; text-align: center; color: #64748b; font-size: 0.875rem; }
                                 .badge { display: inline-flex; align-items: center; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background-color: #d1fae5; color: #065f46; }
+                                .note { background-color: #f0f9ff; padding: 1rem; border-radius: 0.5rem; margin-top: 1rem; }
                             </style>
                         </head>
                         <body>
@@ -342,8 +389,8 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                             </script>
                         </body>
                     </html>
-                `);
-                printWindow.document.close();
+                `)
+                printWindow.document.close()
             }
         }
     }
@@ -666,14 +713,63 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                 >
                                     <h3 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-200">Payment Summary</h3>
                                     <div className="space-y-3">
+                                        {/* Service Fee - Dynamic based on service type */}
                                         <div className="flex justify-between items-center">
                                             <span className="text-gray-600 dark:text-gray-300">Service Fee:</span>
-                                            <span className="font-medium">₹{serviceType === 'digital' ? '399' : '799'}</span>
+                                            <span className="font-medium">
+                                                ₹{serviceType === 'digital' ? '399' : '799'}
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Info className="h-4 w-4 ml-1 inline-block text-gray-500" />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
+                                                        <p>
+                                                            {serviceType === 'digital'
+                                                                ? 'Digital notarization service fee (includes e-stamp and digital certificate)'
+                                                                : 'Physical notarization service fee (includes stamp paper and courier charges)'}
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </span>
                                         </div>
+
+                                        {/* Stamp Duty - Dynamic based on document type */}
                                         <div className="flex justify-between items-center">
                                             <span className="text-gray-600 dark:text-gray-300">Stamp Duty:</span>
-                                            <span className="font-medium">₹{formData.stampValue}</span>
+                                            <span className="font-medium">
+                                                ₹{formData.stampValue}
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Info className="h-4 w-4 ml-1 inline-block text-gray-500" />
+                                                    </TooltipTrigger>
+                                                    <TooltipContent className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
+                                                        <p>
+                                                            {selectedDoc.name} requires stamp duty between ₹{selectedDoc.stampRange[0]} and ₹{selectedDoc.stampRange[1]}
+                                                        </p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            </span>
                                         </div>
+
+                                        {/* Delivery Fee - Fixed for physical service */}
+                                        {serviceType === 'physical' && (
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-gray-600 dark:text-gray-300">Delivery Charges:</span>
+                                                <span className="font-medium">
+                                                    ₹100
+                                                    <Tooltip>
+                                                        <TooltipTrigger asChild>
+                                                            <Info className="h-4 w-4 ml-1 inline-block text-gray-500" />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>Fixed delivery charge for courier service across India</p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Dynamic Additional Fees */}
                                         {formData.requiresRegistration && (
                                             <div className="flex justify-between items-center text-yellow-700 dark:text-yellow-300">
                                                 <span className="flex items-center gap-1">
@@ -683,26 +779,47 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                                             <Info className="h-4 w-4" />
                                                         </TooltipTrigger>
                                                         <TooltipContent className="bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700">
-                                                            <p>Registration fees vary by state and document value</p>
+                                                            <p>Registration fees vary by state and document value:</p>
+                                                            <ul className="list-disc pl-4 mt-1">
+                                                                <li>1% of property value for agreements</li>
+                                                                <li>Fixed fees for other documents</li>
+                                                            </ul>
                                                         </TooltipContent>
                                                     </Tooltip>
                                                 </span>
                                                 <span>₹1,000 - ₹5,000*</span>
                                             </div>
                                         )}
+
                                         <div className="border-t border-gray-300 dark:border-gray-700 my-2"></div>
+
+                                        {/* Dynamic Total Calculation */}
                                         <div className="flex justify-between items-center">
                                             <span className="font-bold text-lg">Total Amount:</span>
                                             <span className="font-bold text-lg text-blue-600 dark:text-blue-400">
-                                                ₹{(serviceType === 'digital' ? 399 : 799) + formData.stampValue}
+                                                ₹{calculateTotal()}
                                                 {formData.requiresRegistration && '+'}
                                             </span>
                                         </div>
-                                        {formData.requiresRegistration && (
-                                            <p className="text-xs text-yellow-600 dark:text-yellow-400 mt-2">
-                                                * Exact registration fee will be confirmed after document review
-                                            </p>
-                                        )}
+
+                                        {/* Conditional Notes */}
+                                        <div className="text-xs space-y-1">
+                                            {formData.requiresRegistration && (
+                                                <p className="text-yellow-600 dark:text-yellow-400">
+                                                    * Exact registration fee will be confirmed after document review
+                                                </p>
+                                            )}
+                                            {serviceType === 'digital' && (
+                                                <p className="text-gray-500 dark:text-gray-400">
+                                                    * Digital documents will be emailed within 24 hours
+                                                </p>
+                                            )}
+                                            {serviceType === 'physical' && (
+                                                <p className="text-gray-500 dark:text-gray-400">
+                                                    * Physical documents will be delivered within 3-5 business days
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
                                 </motion.div>
 
@@ -715,7 +832,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                 >
                                     <Button
                                         type="submit"
-                                        disabled={isSubmitting}
+                                        disabled={isSubmitting || !razorpayLoaded}
                                         className="w-full py-6 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 shadow-lg transition-all duration-300 hover:shadow-xl"
                                         size="lg"
                                     >
@@ -723,6 +840,11 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                                             <>
                                                 <Loader2 className="h-5 w-5 mr-2 animate-spin" />
                                                 Processing Your Request...
+                                            </>
+                                        ) : !razorpayLoaded ? (
+                                            <>
+                                                <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                                                Loading Payment Gateway...
                                             </>
                                         ) : (
                                             <>
@@ -739,101 +861,155 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
             </Dialog>
 
             {/* Payment Receipt Dialog */}
-            {/* Payment Receipt Dialog - Compact Version */}
             <Dialog open={showReceipt} onOpenChange={setShowReceipt}>
-                <DialogContent className="sm:max-w-[500px] rounded-lg p-4" ref={receiptRef}>
-                    <DialogHeader className="flex-row items-center justify-between space-y-0 pb-3">
+                <DialogContent
+                    className="max-w-[95vw] sm:max-w-[500px] rounded-lg p-4 sm:p-6 max-h-[90vh] overflow-y-auto"
+                    ref={receiptRef}
+                >
+                    <DialogHeader className="flex-row items-center justify-between space-y-0 pb-3 sm:pb-4">
                         <div className="flex items-center space-x-2">
-                            <CheckCircle className="h-6 w-6 text-green-500" />
-                            <DialogTitle className="text-lg font-bold text-green-600">
+                            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500" />
+                            <DialogTitle className="text-base sm:text-lg font-bold text-green-600">
                                 Payment Successful
                             </DialogTitle>
                         </div>
-                        <DialogClose asChild>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                                <X className="h-4 w-4" />
+                        {/* <DialogClose asChild>
+                            <Button variant="ghost" size="sm" className="h-7 w-7 sm:h-8 sm:w-8 p-0">
+                                <X className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             </Button>
-                        </DialogClose>
+                        </DialogClose> */}
                     </DialogHeader>
 
                     {bookingReceipt && (
-                        <div className="space-y-4">
-                            {/* Compact Summary Section */}
-                            <div className="grid grid-cols-2 gap-2 text-sm">
-                                <div className="space-y-1">
-                                    <p className="text-muted-foreground">Order ID</p>
-                                    <p className="font-medium">{bookingReceipt.orderId}</p>
+                        <div className="space-y-4 sm:space-y-6">
+                            {/* Order Summary */}
+                            <div className="grid grid-cols-2 gap-2 sm:gap-3 sm:space-y-0">
+                                <div>
+                                    <span className="text-xs sm:text-sm text-gray-500">Order ID</span>
+                                    <p className="text-xs sm:text-sm font-medium mt-1 truncate">{bookingReceipt.orderId}</p>
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-muted-foreground">Date</p>
-                                    <p className="font-medium">{bookingReceipt.date}</p>
+                                <div>
+                                    <span className="text-xs sm:text-sm text-gray-500">Date</span>
+                                    <p className="text-xs sm:text-sm font-medium mt-1">{bookingReceipt.date}</p>
                                 </div>
-                                <div className="space-y-1">
-                                    <p className="text-muted-foreground">Document Type</p>
-                                    <p className="font-medium">{bookingReceipt.documentType}</p>
-                                </div>
-                                <div className="space-y-1">
-                                    <p className="text-muted-foreground">Service Type</p>
-                                    <p className="font-medium capitalize">{bookingReceipt.serviceType}</p>
+                                <div className="col-span-2">
+                                    <span className="text-xs sm:text-sm text-gray-500">Status</span>
+                                    <div className="mt-1">
+                                        <Badge variant="success" className="text-xs sm:text-sm px-2 py-0.5 sm:px-2 sm:py-1">
+                                            {bookingReceipt.status}
+                                        </Badge>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Payment Breakdown - Compact */}
-                            <div className="rounded-lg border p-3 text-sm">
-                                <div className="flex justify-between py-1">
-                                    <span className="text-muted-foreground">Service Fee</span>
-                                    <span>₹{bookingReceipt.serviceFee}</span>
-                                </div>
-                                <div className="flex justify-between py-1">
-                                    <span className="text-muted-foreground">Stamp Duty</span>
-                                    <span>₹{bookingReceipt.stampValue}</span>
-                                </div>
-                                <div className="flex justify-between border-t pt-2 font-medium">
-                                    <span>Total Paid</span>
-                                    <span className="text-blue-600">₹{bookingReceipt.totalAmount}</span>
+                            {/* Document Details */}
+                            <div className="space-y-2 sm:space-y-3">
+                                <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Document Details</h4>
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Type</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1">{bookingReceipt.documentType}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Service</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1 capitalize">{bookingReceipt.serviceType}</p>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <span className="text-xs sm:text-sm text-gray-500">Delivery</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1">{bookingReceipt.deliveryMethod}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            {/* Customer Info - Compact */}
-                            <div className="rounded-lg border p-3 text-sm">
-                                <h4 className="pb-2 font-medium">Customer Details</h4>
-                                <div className="space-y-2">
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Name</span>
-                                        <span>{bookingReceipt.customerName}</span>
+                            {/* Payment Breakdown */}
+                            <div className="rounded-lg border p-3 sm:p-4 space-y-2 sm:space-y-3">
+                                <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Payment Details</h4>
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Service Fee</span>
+                                        <p className="text-xs sm:text-sm mt-1">₹{bookingReceipt.serviceFee}</p>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Email</span>
-                                        <span>{bookingReceipt.email}</span>
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Stamp Duty</span>
+                                        <p className="text-xs sm:text-sm mt-1">₹{bookingReceipt.stampValue}</p>
                                     </div>
-                                    <div className="flex justify-between">
-                                        <span className="text-muted-foreground">Phone</span>
-                                        <span>{bookingReceipt.phone}</span>
+                                    {bookingReceipt.serviceType === 'physical' && (
+                                        <div>
+                                            <span className="text-xs sm:text-sm text-gray-500">Delivery</span>
+                                            <p className="text-xs sm:text-sm mt-1">₹{bookingReceipt.deliveryFee}</p>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="border-t border-gray-200 my-1 sm:my-2"></div>
+                                <div className="flex items-center justify-between">
+                                    <span className="text-xs sm:text-sm font-semibold">Total Amount</span>
+                                    <span className="text-xs sm:text-sm font-bold text-blue-600">₹{bookingReceipt.totalAmount}</span>
+                                </div>
+                                <div className="mt-2">
+                                    <span className="text-xs sm:text-sm text-gray-500">Payment ID</span>
+                                    <p className="text-xs sm:text-sm font-mono mt-1 break-all">{bookingReceipt.paymentId}</p>
+                                </div>
+                            </div>
+
+                            {/* Customer Info */}
+                            <div className="space-y-2 sm:space-y-3">
+                                <h4 className="text-xs sm:text-sm font-semibold text-gray-700">Customer Information</h4>
+                                <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Name</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1">{bookingReceipt.customerName}</p>
+                                    </div>
+                                    <div>
+                                        <span className="text-xs sm:text-sm text-gray-500">Email</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1 break-all">{bookingReceipt.email}</p>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <span className="text-xs sm:text-sm text-gray-500">Phone</span>
+                                        <p className="text-xs sm:text-sm font-medium mt-1">{bookingReceipt.phone}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Important Note */}
+                            <div className="bg-blue-50 p-3 sm:p-4 rounded-lg border border-blue-100">
+                                <div className="flex items-start gap-2">
+                                    <Info className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                                    <div>
+                                        <h4 className="text-xs sm:text-sm font-medium text-blue-700">Next Steps</h4>
+                                        <p className="text-xs text-blue-600 mt-1">
+                                            {bookingReceipt.serviceType === 'digital'
+                                                ? 'Our notary will contact you within 1 hour to verify details and complete the process. Your digitally notarized document will be emailed within 24 hours.'
+                                                : 'Our notary will contact you within 1 hour to verify details. Your physical document will be prepared and dispatched via courier within 24 hours.'}
+                                        </p>
+                                        <p className="text-xs font-medium text-blue-700 mt-2">
+                                            For any queries, please contact nyaymitra.ai@gmail.com or call +91 7970596183
+                                        </p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
 
-                    <DialogFooter className="flex-row justify-end gap-2 pt-4">
+                    <DialogFooter className="flex-row justify-end gap-2 pt-3 sm:pt-4">
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={handlePrintReceipt}
-                            className="gap-1.5"
+                            className="gap-1.5 text-xs sm:text-sm h-8 sm:h-9 px-3 sm:px-4"
                         >
                             <Printer className="h-3.5 w-3.5" />
-                            Print
+                            Print Receipt
                         </Button>
                         <Button
                             size="sm"
                             onClick={() => {
-                                setShowReceipt(false);
+                                setShowReceipt(false)
                                 toast({
                                     title: "Booking Confirmed",
                                     description: "Our team will contact you shortly.",
-                                });
+                                })
                             }}
+                            className="text-xs sm:text-sm h-8 sm:h-9 px-3 sm:px-4"
                         >
                             Done
                         </Button>
