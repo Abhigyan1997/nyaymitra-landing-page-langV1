@@ -455,7 +455,7 @@ export default function ServicesPage() {
               <ul className="space-y-2 text-sm text-white/70">
                 <li className="flex items-center">
                   <Mail className="h-4 w-4 mr-2 text-lime-400" />
-                  nyaymitra.ai@gmail.com
+                  contact@nyaymitra.tech
                 </li>
                 <li className="flex items-center">
                   <Phone className="h-4 w-4 mr-2 text-lime-400" />

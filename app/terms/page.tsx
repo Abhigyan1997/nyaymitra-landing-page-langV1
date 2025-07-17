@@ -33,7 +33,7 @@ export default function TermsPage() {
                     <p className="text-gray-400">
                         For any questions or support, contact us at{" "}
                         <a href="mailto:nyaymitra.ai@gmail.com" className="underline hover:text-teal-300">
-                            nyaymitra.ai@gmail.com
+                            contact@nyaymitra.tech
                         </a>.
                     </p>
                 </section>

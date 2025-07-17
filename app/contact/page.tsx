@@ -81,9 +81,9 @@ export default function ContactPage() {
       icon: Mail,
       title: "Email Addresses",
       details: [
-        "General: info@nyaymitra.com",
-        "Support: support@nyaymitra.com",
-        "Legal: legal@nyaymitra.com",
+        "General: contact@nyaymitra.tech",
+        "Support: support@nyaymitra.tech",
+        "Legal: legal@nyaymitra.tech"
       ],
     },
     {

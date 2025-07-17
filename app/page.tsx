@@ -319,7 +319,7 @@ export default function HomePage() {
         legal: "Legal",
         contact: "Contact Us",
         address: "Bihar - 812002",
-        email: "nyaymitra.ai@gmail.com",
+        email: "contact@nyaymitra.tech",
         phone: "+91 79705 96183",
         // whatsapp: "+91 79705 96183",
         privacy: "Privacy Policy",

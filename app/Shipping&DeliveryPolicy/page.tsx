@@ -92,7 +92,7 @@ export default function ShippingPolicyPage() {
                             href="mailto:support@nyaymitra.tech"
                             className="text-blue-600 hover:underline font-medium"
                         >
-                            nyaymitra.ai@gmail.com
+                            contact@nyaymitra.tech
                         </a>
                     </div>
                 </section>
