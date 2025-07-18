@@ -567,7 +567,7 @@ export default function LawyersPage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
               <Scale className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">Nyay Mitra</span>
+              <span className="text-xl font-bold text-gray-900">NyayMitra</span>
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/legal-gpt">
