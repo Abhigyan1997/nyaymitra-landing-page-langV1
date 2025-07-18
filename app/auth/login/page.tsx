@@ -106,7 +106,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-2">
             <Scale className="h-10 w-10 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">Nyay Mitra</span>
+            <span className="text-2xl font-bold text-gray-900">NyayMitra</span>
           </Link>
           <p className="text-gray-600 mt-2">Welcome back! Please sign in to your account.</p>
         </div>
@@ -263,30 +263,6 @@ function LoginForm({
       <Button type="submit" className="w-full" size="lg" disabled={loading}>
         {loading ? "Signing in..." : `Sign In as ${userType === "user" ? "User" : "Lawyer"}`}
       </Button>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <span className="w-full border-t" />
-        </div>
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-gray-500">Or continue with</span>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <Button variant="outline" type="button">
-          <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
-            {/* Google icon paths */}
-          </svg>
-          Google
-        </Button>
-        <Button variant="outline" type="button">
-          <svg className="h-4 w-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-            {/* Facebook icon paths */}
-          </svg>
-          Facebook
-        </Button>
-      </div>
     </form>
   )
 }
