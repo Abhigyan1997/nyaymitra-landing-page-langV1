@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import { NotaryBookingDialog } from "@/components/notary-booking-dialog"
-import { PenTool, Clock, Mail, Package, Check, ArrowRight, Info, Menu, X, Scale, BookText, Home, Phone } from "lucide-react"
+import { PenTool, Clock, Mail, Package, Check, ArrowRight, Info, Menu, X, Scale, BookText, Home, Phone, ClipboardList } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -51,9 +51,9 @@ export default function NotaryServicePage() {
 
     const steps = [
         {
-            title: "Upload Document",
-            description: "Upload the document you need notarized",
-            icon: <PenTool className="h-6 w-6 text-blue-400" />
+            title: "Submit Request",
+            description: "Provide details about the document you need notarized",
+            icon: <ClipboardList className="h-6 w-6 text-blue-400" />
         },
         {
             title: "Verify Details",
@@ -282,7 +282,7 @@ export default function NotaryServicePage() {
                                 </div>
                                 <div className="flex items-start">
                                     <Check className="h-4 w-4 text-orange-400 mt-0.5 mr-2 flex-shrink-0" />
-                                    <span className="text-sm text-white/80">Delivered in 2-4 days</span>
+                                    <span className="text-sm text-white/80">Delivered in 3-4 days</span>
                                 </div>
                                 <div className="flex items-start">
                                     <Check className="h-4 w-4 text-orange-400 mt-0.5 mr-2 flex-shrink-0" />
@@ -305,9 +305,9 @@ export default function NotaryServicePage() {
                         <Info className="h-4 w-4 mr-2" />
                         Have questions about the notarization process?
                     </div>
-                    <Link href="/notary/how-it-works">
+                    <Link href="/contact">
                         <Button variant="outline" className="bg-white/10 border-white/20 hover:bg-white/20">
-                            Learn How It Works
+                            Contact Us
                             <ArrowRight className="h-4 w-4 ml-2" />
                         </Button>
                     </Link>
