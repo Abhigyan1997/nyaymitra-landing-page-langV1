@@ -6,14 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
-import { useState, useEffect } from "react" // Add useEffect
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { loadRazorpayScript } from "@/utils/loadRazorpay";
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { getUser } from "@/utils/getUser";
 
-// Declare Razorpay on window interface
 declare global {
     interface Window {
         Razorpay: any;
@@ -28,9 +27,8 @@ interface Document {
     price: number
     sampleUrl: string
     downloadUrl: string
-    type: string // <-- ✅ Add this line
+    type: string
 }
-
 
 interface RazorpayResponse {
     razorpay_payment_id: string
@@ -42,18 +40,16 @@ export default function InstantDownloadPage() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [loadingDocumentId, setLoadingDocumentId] = useState<string | null>(null);
-    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading") // Add auth state
+    const [authStatus, setAuthStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading")
     const router = useRouter()
     const { toast } = useToast()
 
-    // Add authentication check effect
     useEffect(() => {
         const checkAuth = () => {
             try {
                 const token = localStorage.getItem("token")
                 if (!token) {
                     setAuthStatus("unauthenticated")
-                    // Store current path before redirecting
                     router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`)
                 } else {
                     setAuthStatus("authenticated")
@@ -67,7 +63,6 @@ export default function InstantDownloadPage() {
         checkAuth()
     }, [router])
 
-    // Add loading states
     if (authStatus === "loading") {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -77,7 +72,7 @@ export default function InstantDownloadPage() {
     }
 
     if (authStatus === "unauthenticated") {
-        return null // or your redirect message
+        return null
     }
 
     const documents: Document[] = [
@@ -86,8 +81,8 @@ export default function InstantDownloadPage() {
             name: "Two Party Agreement",
             description: "Legally binding contract between two parties",
             features: ["Customizable terms", "Payment clauses", "Termination conditions"],
-            price: 149,
-            type: "agreement", // ✅ add type
+            price: 49,
+            type: "agreement",
             sampleUrl: "/sample/agreement.html",
             downloadUrl: "/template/agreement.html"
         },
@@ -97,7 +92,7 @@ export default function InstantDownloadPage() {
             description: "Legal declaration for various purposes",
             features: ["Name change", "Address proof", "Income declaration"],
             price: 99,
-            type: "affidavit", // ✅ add type
+            type: "affidavit",
             sampleUrl: "/sample/affidavit.htm",
             downloadUrl: "/template/affidavit.html"
         },
@@ -107,19 +102,15 @@ export default function InstantDownloadPage() {
             description: "Formal complaint letter to police authorities",
             features: ["Theft report", "Harassment complaint", "Lost property"],
             price: 99,
-            type: "complaint", // ✅ add type
+            type: "complaint",
             sampleUrl: "/sample/police-complaint.html",
             downloadUrl: "/template/police-complaint.html"
         }
     ];
 
     const handleViewSample = (doc: Document) => {
-        // Open sample PDF from public/sample folder in new tab
         window.open(doc.sampleUrl, '_blank', 'noopener,noreferrer');
     };
-
-
-    // Update your initiatePayment function
 
     const initiatePayment = async (docId: string) => {
         setLoadingDocumentId(docId);
@@ -148,7 +139,7 @@ export default function InstantDownloadPage() {
                 description: `Payment for ${doc.name}`,
                 order_id: orderData.id,
                 handler: async function (response: RazorpayResponse) {
-                    await verifyPayment(response, orderData.orderRecordId, user.userId);
+                    await verifyPayment(response, orderData.orderRecordId, user.userId, doc.name);
                 },
                 prefill: {
                     name: user.name,
@@ -177,7 +168,8 @@ export default function InstantDownloadPage() {
     const verifyPayment = async (
         paymentResponse: RazorpayResponse,
         serviceOrderId: string,
-        userId: string
+        userId: string,
+        documentName: string
     ) => {
         try {
             const { data } = await axios.post('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
@@ -192,7 +184,7 @@ export default function InstantDownloadPage() {
                 description: "Your document is ready for download",
             });
 
-            await downloadDocument(serviceOrderId, userId);
+            await downloadDocument(serviceOrderId, userId, documentName);
         } catch (error: any) {
             console.error('Verification error:', error);
             toast({
@@ -205,23 +197,33 @@ export default function InstantDownloadPage() {
         }
     };
 
-    const downloadDocument = async (documentId: string, userId: string) => {
+    const downloadDocument = async (documentId: string, userId: string, documentName: string) => {
         try {
             const response = await axios.get(`https://nyaymitra-backend-document.onrender.com/api/documents/download`, {
                 params: { documentId, userId },
                 responseType: 'blob',
-                withCredentials: true,
             });
 
-            const blob = new Blob([response.data]);
+            // Create a blob from the response data
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+
+            // Create a temporary URL for the blob
             const url = window.URL.createObjectURL(blob);
+
+            // Create a temporary anchor element to trigger the download
             const link = document.createElement('a');
             link.href = url;
 
-            link.setAttribute('download', `legal-document-template.html`);
+            // Set the download filename based on the document type
+            const fileName = `${documentName.toLowerCase().replace(/\s+/g, '-')}-template.html`;
+            link.setAttribute('download', fileName);
+
+            // Append to the body, click and remove
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            // Revoke the object URL to free up memory
             window.URL.revokeObjectURL(url);
 
             toast({

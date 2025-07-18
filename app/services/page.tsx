@@ -42,7 +42,7 @@ export default function ServicesPage() {
       popular: true,
       areas: ["Rent Agreement", "Affidavit Draft", "Police Complaint", "Consumer Complaint"],
       aiFeatures: ["Pre-fillable PDF Templates", "Instant Download", "Razorpay Checkout"],
-      pricing: "₹99/document"
+      pricing: "₹49/document"
     },
     {
       id: "notary-service",
@@ -64,7 +64,7 @@ export default function ServicesPage() {
       popular: false,
       areas: ["Contracts", "Agreements", "Legal Notices", "Affidavits"],
       aiFeatures: ["Expert Review", "Detailed Feedback", "Suggested Edits"],
-      pricing: "₹499/document"
+      pricing: "₹199/document"
     },
     {
       id: "priority-booking",
