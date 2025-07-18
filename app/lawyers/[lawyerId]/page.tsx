@@ -280,7 +280,7 @@ export default function LawyerDetailsPage() {
                                         variant={lawyer.status === "online" ? "default" : "secondary"}
                                         className="px-3 py-1"
                                     >
-                                        {lawyer.status === "online" ? "Available Now" : "Available Soon"}
+                                        {lawyer.kycStatus === "verified" ? "Available Now" : "Available Soon"}
                                     </Badge>
                                 </div>
                             </div>
@@ -416,12 +416,12 @@ export default function LawyerDetailsPage() {
                                         </div>
                                     </div>
 
-                                    <Button
+                                    {/* <Button
                                         className="w-full mt-4"
                                         onClick={handleBookConsultation}
                                     >
                                         Book Consultation
-                                    </Button>
+                                    </Button> */}
                                 </CardContent>
                             </Card>
 
