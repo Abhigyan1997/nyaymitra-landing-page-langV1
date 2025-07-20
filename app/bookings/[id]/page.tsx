@@ -157,7 +157,7 @@ export default function BookingDetails() {
         const fetchBooking = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await axios.get(`/api/v1/booking/${bookingId}`, {
+                const response = await axios.get(`https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
