@@ -157,7 +157,7 @@ export default function BookingDetails() {
         const fetchBooking = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await axios.get(`https://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}`, {
+                const response = await axios.get(`/api/v1/booking/${bookingId}`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -178,7 +178,7 @@ export default function BookingDetails() {
         setCancelling(true)
         try {
             const token = localStorage.getItem("token")
-            await axios.patch(`https://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}/cancel`, {}, {
+            await axios.patch(`/api/v1/booking/${bookingId}/cancel`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -197,7 +197,7 @@ export default function BookingDetails() {
         setCompleting(true)
         try {
             const token = localStorage.getItem("token")
-            await axios.patch(`https://nyaymitra-backend.onrender.com/api/v1/booking/${bookingId}/complete`, {}, {
+            await axios.patch(`https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}/complete`, {}, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

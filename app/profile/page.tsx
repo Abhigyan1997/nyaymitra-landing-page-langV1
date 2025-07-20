@@ -138,7 +138,7 @@ export default function ProfilePage() {
                 }
 
                 const response = await axios.get(
-                    'https://nyaymitra-backend.onrender.com/api/v1/auth/profile',
+                    'https://nyaymitra-backend-production.up.railway.app/api/v1/auth/profile',
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -236,8 +236,8 @@ export default function ProfilePage() {
 
         try {
             const endpoint = profile.role === 'lawyer'
-                ? "https://nyaymitra-backend.onrender.com/api/v1/auth/edit_lawyer"
-                : "https://nyaymitra-backend.onrender.com/api/v1/auth/edit_user";
+                ? "https://nyaymitra-backend-production.up.railway.app/api/v1/auth/edit_lawyer"
+                : "https://nyaymitra-backend-production.up.railway.app/api/v1/auth/edit_user";
 
             const response = await axios.put(
                 endpoint,

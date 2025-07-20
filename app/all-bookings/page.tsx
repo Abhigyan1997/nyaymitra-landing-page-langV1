@@ -105,7 +105,7 @@ export default function AllBookingsPage() {
         try {
             setLoading(true)
             const response = await axios.get<ApiResponse>(
-                `https://nyaymitra-backend.onrender.com/api/v1/booking/allOrders/${userId}`,
+                `https://nyaymitra-backend-production.up.railway.app/api/v1/booking/allOrders/${userId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

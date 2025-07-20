@@ -121,7 +121,7 @@ export default function LawyersPage() {
         setLoading(true)
         setError(null)
 
-        const response = await axios.get("https://nyaymitra-backend.onrender.com/api/v1/lawyer/all", {
+        const response = await axios.get("https://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/all", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -175,7 +175,7 @@ export default function LawyersPage() {
         setFetchingSlots(true)
         const token = localStorage.getItem("token")
         const response = await axios.get(
-          `https://nyaymitra-backend.onrender.com/api/v1/lawyer/${selectedLawyer.userId}/check?date=${selectedDate.toISOString()}`,
+          `https://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/${selectedLawyer.userId}/check?date=${selectedDate.toISOString()}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -352,7 +352,7 @@ export default function LawyersPage() {
 
       // Create Razorpay order
       const orderResponse = await axios.post(
-        "https://nyaymitra-backend.onrender.com/api/v1/payment/create-order",
+        "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/create-order",
         {
           amount: selectedLawyer.consultationFee,
           currency: "INR",
@@ -392,7 +392,7 @@ export default function LawyersPage() {
           try {
             // Verify payment
             const verifyResponse = await axios.post(
-              "https://nyaymitra-backend.onrender.com/api/v1/payment/verify",
+              "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/verify",
               {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -408,7 +408,7 @@ export default function LawyersPage() {
             if (verifyResponse.data.success) {
               // Create booking
               const bookingResponse = await axios.post(
-                "https://nyaymitra-backend.onrender.com/api/v1/booking/book",
+                "https://nyaymitra-backend-production.up.railway.app/api/v1/booking/book",
                 {
                   userId,
                   lawyerId: selectedLawyer.userId,

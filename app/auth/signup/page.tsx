@@ -46,7 +46,7 @@ interface LawyerFormData extends BaseFormData {
 type UserType = "user" | "lawyer"
 
 // --- Constants ---
-const BASE_API_URL = "https://nyaymitra-backend.onrender.com/api/v1/auth"
+const BASE_API_URL = "https://nyaymitra-backend-production.up.railway.app/api/v1/auth"
 
 const SPECIALIZATIONS = [
   "Criminal Law",
