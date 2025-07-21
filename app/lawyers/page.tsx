@@ -809,7 +809,10 @@ export default function LawyersPage() {
                           </div>
                         </div>
 
-                        <p className="text-gray-600 mb-4">{lawyer.bio}</p>
+                        <p className="text-gray-600 mb-4">
+                          {lawyer.bio.length > 160 ? lawyer.bio.slice(0, 160) + "..." : lawyer.bio}
+                        </p>
+
 
                         <div className="flex flex-wrap items-center gap-4 mb-4">
                           <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
