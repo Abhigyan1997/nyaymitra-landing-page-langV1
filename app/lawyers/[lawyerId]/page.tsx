@@ -22,13 +22,26 @@ import {
     BookOpen,
     Briefcase,
     ShieldCheck,
-    Languages
+    Languages,
+    ChevronDown,
+    ChevronUp
 } from "lucide-react"
 import Link from "next/link"
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Separator } from "@/components/ui/separator"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+} from "@/components/ui/dialog"
+import { DatePicker } from "@/components/ui/date-picker"
+import { TimePicker } from "@/components/ui/time-picker"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
 
 interface Lawyer {
     _id: string
@@ -62,6 +75,13 @@ interface Lawyer {
     yearsPracticing: number
 }
 
+interface AvailableSlot {
+    startTime: string
+    endTime: string
+    slot: string
+    durationMinutes: number
+}
+
 export default function LawyerDetailsPage() {
     const params = useParams()
     const router = useRouter()
@@ -69,6 +89,15 @@ export default function LawyerDetailsPage() {
     const [lawyer, setLawyer] = useState<Lawyer | null>(null)
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+
+    // Booking state
+    const [bookingOpen, setBookingOpen] = useState(false)
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>()
+    const [selectedTime, setSelectedTime] = useState<string>("")
+    const [selectedMode, setSelectedMode] = useState<string>("video")
+    const [bookingLoading, setBookingLoading] = useState(false)
+    const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
+    const [fetchingSlots, setFetchingSlots] = useState(false)
 
     const lawyerId = params?.lawyerId as string
 
@@ -121,7 +150,40 @@ export default function LawyerDetailsPage() {
         }
     }, [lawyerId, router, toast])
 
-    const handleBookConsultation = () => {
+    // Fetch available slots when date changes
+    useEffect(() => {
+        const fetchAvailableSlots = async () => {
+            if (!selectedDate || !lawyer) return
+
+            try {
+                setFetchingSlots(true)
+                const token = localStorage.getItem("token")
+                const response = await axios.get(
+                    `https://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/${lawyer.userId}/check?date=${selectedDate.toISOString()}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
+
+                setAvailableSlots(response.data.data?.availableSlots || [])
+            } catch (err) {
+                console.error("Error fetching available slots:", err)
+                toast({
+                    title: "Error",
+                    description: "Failed to fetch available slots",
+                    variant: "destructive",
+                })
+            } finally {
+                setFetchingSlots(false)
+            }
+        }
+
+        fetchAvailableSlots()
+    }, [selectedDate, lawyer, toast])
+
+    const openBookingDialog = () => {
         const token = localStorage.getItem("token")
         if (!token) {
             toast({
@@ -132,7 +194,192 @@ export default function LawyerDetailsPage() {
             router.push(`/auth/login?redirect=/lawyers/${lawyerId}`)
             return
         }
-        router.push(`/lawyers/${lawyerId}/book`)
+
+        setBookingOpen(true)
+        setSelectedDate(undefined)
+        setSelectedTime("")
+        // Set default mode based on what lawyer supports
+        if (lawyer?.consultationModes.video) {
+            setSelectedMode("video")
+        } else if (lawyer?.consultationModes.call) {
+            setSelectedMode("call")
+        } else if (lawyer?.consultationModes.chat) {
+            setSelectedMode("chat")
+        } else if (lawyer?.consultationModes.inPerson) {
+            setSelectedMode("inPerson")
+        }
+    }
+
+    const handleBooking = async () => {
+        if (!lawyer || !selectedDate || !selectedTime || !selectedMode) {
+            toast({
+                title: "Error",
+                description: "Please select all required fields",
+                variant: "destructive",
+            })
+            return
+        }
+
+        try {
+            setBookingLoading(true)
+
+            // Close the booking dialog first
+            setBookingOpen(false)
+
+            const token = localStorage.getItem("token")
+            const userId = localStorage.getItem("userId")
+
+            if (!token || !userId) {
+                toast({
+                    title: "Login Required",
+                    description: "Please log in to proceed with payment",
+                    variant: "destructive",
+                })
+                router.push("/auth/login?redirect=/lawyers")
+                return
+            }
+
+            // Create Razorpay order
+            const orderResponse = await axios.post(
+                "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/create-order",
+                {
+                    amount: lawyer.consultationFee,
+                    currency: "INR",
+                    receipt: `booking_${Date.now()}`,
+                    notes: {
+                        userId,
+                        lawyerId: lawyer.userId,
+                        mode: selectedMode,
+                        slot: selectedTime,
+                        date: selectedDate.toISOString()
+                    }
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+
+            const order = orderResponse.data.order
+
+            // Load Razorpay script
+            const loadRazorpay = () => {
+                return new Promise((resolve) => {
+                    const script = document.createElement('script')
+                    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
+                    script.onload = () => {
+                        resolve(true)
+                    }
+                    script.onerror = () => {
+                        resolve(false)
+                    }
+                    document.body.appendChild(script)
+                })
+            }
+
+            await loadRazorpay()
+
+            // Add a small delay to ensure the booking dialog is fully closed
+            await new Promise(resolve => setTimeout(resolve, 300))
+
+            const options = {
+                key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+                amount: order.amount,
+                currency: order.currency,
+                name: "Nyay Mitra",
+                description: `Consultation with ${lawyer.fullName}`,
+                image: "/logo.png",
+                order_id: order.id,
+                handler: async function (response: any) {
+                    try {
+                        // Verify payment
+                        const verifyResponse = await axios.post(
+                            "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/verify",
+                            {
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature,
+                            },
+                            {
+                                headers: {
+                                    Authorization: `Bearer ${token}`,
+                                },
+                            }
+                        )
+
+                        if (verifyResponse.data.success) {
+                            // Create booking
+                            const bookingResponse = await axios.post(
+                                "https://nyaymitra-backend-production.up.railway.app/api/v1/booking/book",
+                                {
+                                    userId,
+                                    lawyerId: lawyer.userId,
+                                    date: selectedDate.toISOString(),
+                                    slot: selectedTime,
+                                    mode: selectedMode,
+                                    paymentId: response.razorpay_payment_id,
+                                    paymentMode: "razorpay",
+                                    amount: lawyer.consultationFee
+                                },
+                                {
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                }
+                            )
+
+                            toast({
+                                title: "Booking Confirmed",
+                                description: `Your consultation with ${lawyer.fullName} is confirmed`,
+                            })
+                            router.push(`/bookings/${bookingResponse.data.booking._id}`)
+                        }
+                    } catch (err) {
+                        console.error("Payment verification failed:", err)
+                        toast({
+                            title: "Error",
+                            description: "Payment verification failed",
+                            variant: "destructive",
+                        })
+                        // Reopen booking dialog if payment fails
+                        setBookingOpen(true)
+                    }
+                },
+                prefill: {
+                    name: localStorage.getItem("userName") || "",
+                    email: localStorage.getItem("userEmail") || "",
+                    contact: localStorage.getItem("userPhone") || "",
+                },
+                notes: {
+                    address: "Nyay Mitra Legal Services",
+                },
+                theme: {
+                    color: "#2563EB",
+                },
+                modal: {
+                    ondismiss: () => {
+                        // Reopen booking dialog if user closes Razorpay
+                        setBookingOpen(true)
+                    }
+                }
+            }
+
+            const rzp = new (window as any).Razorpay(options)
+            rzp.open()
+
+        } catch (err) {
+            console.error("Booking failed:", err)
+            toast({
+                title: "Error",
+                description: "Failed to process booking",
+                variant: "destructive",
+            })
+            // Reopen booking dialog if something fails
+            setBookingOpen(true)
+        } finally {
+            setBookingLoading(false)
+        }
     }
 
     if (loading) {
@@ -416,12 +663,13 @@ export default function LawyerDetailsPage() {
                                         </div>
                                     </div>
 
-                                    {/* <Button
+                                    <Button
                                         className="w-full mt-4"
-                                        onClick={handleBookConsultation}
+                                        onClick={openBookingDialog}
                                     >
+                                        <Calendar className="h-4 w-4 mr-2" />
                                         Book Consultation
-                                    </Button> */}
+                                    </Button>
                                 </CardContent>
                             </Card>
 
@@ -483,6 +731,137 @@ export default function LawyerDetailsPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Booking Dialog */}
+            <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Book Consultation</DialogTitle>
+                        <DialogDescription>
+                            Schedule a consultation with {lawyer.fullName}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="grid gap-4 py-4">
+                        <div className="space-y-2">
+                            <Label>Consultation Mode</Label>
+                            <RadioGroup
+                                value={selectedMode}
+                                onValueChange={setSelectedMode}
+                                className="grid grid-cols-2 gap-2"
+                            >
+                                {lawyer.consultationModes.video && (
+                                    <div>
+                                        <RadioGroupItem value="video" id="video" className="peer sr-only" />
+                                        <Label
+                                            htmlFor="video"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                        >
+                                            <Video className="mb-2 h-6 w-6" />
+                                            Video Call
+                                        </Label>
+                                    </div>
+                                )}
+                                {lawyer.consultationModes.call && (
+                                    <div>
+                                        <RadioGroupItem value="call" id="call" className="peer sr-only" />
+                                        <Label
+                                            htmlFor="call"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                        >
+                                            <Phone className="mb-2 h-6 w-6" />
+                                            Phone Call
+                                        </Label>
+                                    </div>
+                                )}
+                                {lawyer.consultationModes.chat && (
+                                    <div>
+                                        <RadioGroupItem value="chat" id="chat" className="peer sr-only" />
+                                        <Label
+                                            htmlFor="chat"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                        >
+                                            <MessageCircle className="mb-2 h-6 w-6" />
+                                            Chat
+                                        </Label>
+                                    </div>
+                                )}
+                                {lawyer.consultationModes.inPerson && (
+                                    <div>
+                                        <RadioGroupItem value="inPerson" id="inPerson" className="peer sr-only" />
+                                        <Label
+                                            htmlFor="inPerson"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                        >
+                                            <User className="mb-2 h-6 w-6" />
+                                            In-Person
+                                        </Label>
+                                    </div>
+                                )}
+                            </RadioGroup>
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Date</Label>
+                            <DatePicker
+                                date={selectedDate}
+                                setDate={setSelectedDate}
+                                disabled={(date) => {
+                                    // Disable dates in the past
+                                    return date < new Date(new Date().setHours(0, 0, 0, 0))
+                                }}
+                            />
+                        </div>
+
+                        {selectedDate && (
+                            <div className="space-y-2">
+                                <Label>Available Time Slots</Label>
+                                {fetchingSlots ? (
+                                    <div className="flex justify-center py-4">
+                                        <Loader className="h-5 w-5 animate-spin" />
+                                    </div>
+                                ) : availableSlots.length > 0 ? (
+                                    <div className="grid grid-cols-3 gap-2">
+                                        {availableSlots.map((slot) => (
+                                            <Button
+                                                key={slot.slot}
+                                                variant={selectedTime === slot.slot ? "default" : "outline"}
+                                                onClick={() => setSelectedTime(slot.slot)}
+                                            >
+                                                {slot.startTime}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-sm text-gray-500">No available slots for this date</p>
+                                )}
+                            </div>
+                        )}
+
+                        <div className="pt-4">
+                            <div className="flex justify-between items-center border-t pt-4">
+                                <span className="font-medium">Total Amount</span>
+                                <span className="text-lg font-bold">₹{lawyer.consultationFee}</span>
+                            </div>
+                        </div>
+
+                        <Button
+                            className="w-full mt-4"
+                            onClick={handleBooking}
+                            disabled={!selectedDate || !selectedTime || bookingLoading}
+                        >
+                            {bookingLoading ? (
+                                <>
+                                    <Loader className="h-4 w-4 mr-2 animate-spin" />
+                                    Processing...
+                                </>
+                            ) : (
+                                "Proceed to Payment"
+                            )}
+                        </Button>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
