@@ -614,115 +614,124 @@ export default function LawyerDetailsPage() {
 
             {/* Booking Confirmation Dialog */}
             <Dialog open={showConfirmationDialog} onOpenChange={setShowConfirmationDialog}>
-                <DialogContent className="sm:max-w-[600px] w-[95vw] max-w-[95vw] rounded-lg p-6">
-                    <div className="flex justify-between items-center">
-                        <DialogHeader>
-                            <DialogTitle className="text-2xl font-bold flex items-center">
-                                <CheckCircle className="h-6 w-6 text-green-500 mr-2" />
-                                Booking Confirmed!
+                <DialogContent
+                    className="
+      w-[95vw] max-w-[95vw] 
+      sm:w-[90vw] sm:max-w-[600px]
+      rounded-lg p-4 sm:p-6
+      mx-auto my-2 sm:my-5
+      max-h-[90dvh] 
+      overflow-y-auto
+      overscroll-contain
+      bg-background
+    "
+                    onInteractOutside={(e) => e.preventDefault()} // Prevent closing when scrolling on mobile
+                >
+                    {/* Header - Sticky */}
+                    <div className="flex justify-between items-start sticky top-0 bg-background z-20 pb-3 -mt-1 pt-1">
+                        <DialogHeader className="flex-1">
+                            <DialogTitle className="text-lg sm:text-2xl font-bold flex items-center gap-2">
+                                <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-green-500 flex-shrink-0" />
+                                <span>Booking Confirmed!</span>
                             </DialogTitle>
-                            <DialogDescription>
-                                Your free consultation with {lawyer.fullName} has been scheduled
+                            <DialogDescription className="text-sm sm:text-base text-left mt-1">
+                                Your free consultation with {lawyer.fullName}
                             </DialogDescription>
                         </DialogHeader>
                         <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => setShowConfirmationDialog(false)}
-                            className="h-8 w-8"
+                            className="h-8 w-8 ml-2 flex-shrink-0"
                         >
                             <X className="h-4 w-4" />
                         </Button>
                     </div>
 
-                    {bookingDetails && (
-                        <div className="space-y-6 py-4">
-                            {/* Booking Summary */}
-                            <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                                <div className="flex items-start space-x-3">
-                                    <div className="bg-green-100 dark:bg-green-800 p-2 rounded-full">
-                                        <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400" />
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-green-800 dark:text-green-200">
-                                            Your booking is confirmed
-                                        </h4>
-                                        <p className="text-sm text-green-700 dark:text-green-300 mt-1">
-                                            {lawyer.fullName} will connect with you at the scheduled time
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Booking Details */}
-                            <div className="space-y-4">
-                                <h4 className="font-medium text-lg">Booking Details</h4>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div className="space-y-1">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Date</p>
-                                        <p className="font-medium">
-                                            {format(new Date(bookingDetails.booking.date), "PPP")}
-                                        </p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Time Slot</p>
-                                        <p className="font-medium">{bookingDetails.booking.slot}</p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Consultation Mode</p>
-                                        <p className="font-medium capitalize">{bookingDetails.booking.mode}</p>
-                                    </div>
-                                    <div className="space-y-1">
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Duration</p>
-                                        <p className="font-medium">{lawyer.consultationDurationMinutes} minutes</p>
+                    {/* Scrollable Content */}
+                    <div className="space-y-4 sm:space-y-5 py-1 overflow-y-auto">
+                        {bookingDetails && (
+                            <>
+                                {/* Booking Summary */}
+                                <div className="bg-green-50/80 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 sm:p-4 backdrop-blur-sm">
+                                    <div className="flex items-start gap-3">
+                                        <div className="bg-green-100 dark:bg-green-800 p-2 rounded-full flex-shrink-0 mt-0.5">
+                                            <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 text-green-600 dark:text-green-400" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-semibold text-sm sm:text-base text-green-800 dark:text-green-200">
+                                                Your booking is confirmed
+                                            </h4>
+                                            <p className="text-xs sm:text-sm text-green-700 dark:text-green-300 mt-1">
+                                                {lawyer.fullName} will connect with you at the scheduled time
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            {/* Important Notes */}
-                            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                                <h4 className="font-medium text-blue-800 dark:text-blue-200 mb-2">
-                                    Important Information
-                                </h4>
-                                <ul className="space-y-2 text-sm text-blue-700 dark:text-blue-300">
-                                    <li className="flex items-start">
-                                        <span className="mr-2">•</span>
-                                        The lawyer will contact you at the scheduled time via {bookingDetails.booking.mode === "video" ? "video call" : "phone call"}
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="mr-2">•</span>
-                                        Please be available 5 minutes before your scheduled time
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="mr-2">•</span>
-                                        You'll receive a reminder 1 hour before your consultation
-                                    </li>
-                                    <li className="flex items-start">
-                                        <span className="mr-2">•</span>
-                                        For any queries, contact our support team
-                                    </li>
-                                </ul>
-                            </div>
+                                {/* Booking Details */}
+                                <div className="space-y-2 sm:space-y-3">
+                                    <h4 className="font-medium text-base sm:text-lg">Booking Details</h4>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+                                        {[
+                                            { label: "Date", value: format(new Date(bookingDetails.booking.date), "PPP") },
+                                            { label: "Time Slot", value: bookingDetails.booking.slot },
+                                            { label: "Consultation Mode", value: bookingDetails.booking.mode },
+                                            { label: "Duration", value: `${lawyer.consultationDurationMinutes} minutes` }
+                                        ].map((item, index) => (
+                                            <div key={index} className="space-y-0.5">
+                                                <p className="text-xs sm:text-sm text-muted-foreground">{item.label}</p>
+                                                <p className="font-medium text-sm sm:text-base capitalize">
+                                                    {item.value}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Important Notes */}
+                                <div className="bg-blue-50/80 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 backdrop-blur-sm">
+                                    <h4 className="font-medium text-sm sm:text-base text-blue-800 dark:text-blue-200 mb-2">
+                                        Important Information
+                                    </h4>
+                                    <ul className="space-y-2 text-xs sm:text-sm text-blue-700 dark:text-blue-300">
+                                        {[
+                                            `The lawyer will contact you via ${bookingDetails.booking.mode === "video" ? "video call" : "phone call"}`,
+                                            "Please be available 5 minutes before your scheduled time",
+                                            "You'll receive a reminder 1 hour before your consultation",
+                                            "For any queries, contact our support team"
+                                        ].map((item, index) => (
+                                            <li key={index} className="flex items-start gap-2">
+                                                <span>•</span>
+                                                <span>{item}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </>
+                        )}
+                    </div>
+
+                    {/* Footer - Sticky */}
+                    <div className="sticky bottom-0 bg-background pt-3 pb-1 -mb-2 z-10">
+                        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowConfirmationDialog(false)}
+                                className="w-full sm:w-auto px-4 py-2 text-sm sm:text-base"
+                            >
+                                Close
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setShowConfirmationDialog(false);
+                                    router.push("/all-bookings");
+                                }}
+                                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 px-4 py-2 text-sm sm:text-base"
+                            >
+                                View All Bookings
+                            </Button>
                         </div>
-                    )}
-
-                    <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-                        <Button
-                            variant="outline"
-                            onClick={() => setShowConfirmationDialog(false)}
-                            className="w-full sm:w-auto"
-                        >
-                            Close
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setShowConfirmationDialog(false);
-                                router.push("/all-bookings");
-                            }}
-                            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
-                        >
-                            View All Bookings
-                        </Button>
                     </div>
                 </DialogContent>
             </Dialog>
