@@ -190,14 +190,21 @@ export default function LawyerDetailsPage() {
                 setShowConfirmationDialog(true)
             }
         } catch (error) {
-            console.error("Booking error:", error)
-            const axiosError = error as AxiosError<{ message?: string }>
+            console.error("Booking error:", error);
+            const axiosError = error as AxiosError<{ message?: string; error?: string }>;
+
             if (axiosError.response) {
-                toast.error(axiosError.response.data.message || "Failed to book consultation")
+                const errorMsg =
+                    axiosError.response.data.message ||
+                    axiosError.response.data.error || // <-- Check for this too
+                    "Failed to book consultation";
+
+                toast.error(errorMsg);
             } else {
-                toast.error("Network error. Please try again.")
+                toast.error("Network error. Please try again.");
             }
-        } finally {
+        }
+        finally {
             setIsBooking(false)
         }
     }
@@ -709,8 +716,8 @@ export default function LawyerDetailsPage() {
                         </Button>
                         <Button
                             onClick={() => {
-                                setShowConfirmationDialog(false)
-                                // You can add navigation to user's dashboard if needed
+                                setShowConfirmationDialog(false);
+                                router.push("/all-bookings");
                             }}
                             className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
                         >
