@@ -810,7 +810,7 @@ export default function LawyersPage() {
                         </div>
 
                         <p className="text-gray-600 mb-4">
-                          {lawyer.bio.length > 160 ? lawyer.bio.slice(0, 160) + "..." : lawyer.bio}
+                          {lawyer.bio.length > 160 ? lawyer.bio.slice(0, 150) + "..." : lawyer.bio}
                         </p>
 
 

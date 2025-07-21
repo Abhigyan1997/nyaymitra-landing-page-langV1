@@ -1002,7 +1002,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <Link href="/lawyers">
+                <Link href="/free-consultation">
                   <div className="group cursor-pointer transform hover:scale-[1.02] md:hover:scale-105 transition-all duration-500">
                     <div className="relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-teal-500/15 border-2 border-emerald-400/40 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-lg md:shadow-2xl shadow-emerald-500/10">
                       {/* Animated Background Glow */}
