@@ -101,7 +101,7 @@ const lawyer: Lawyer = {
     experience: 27,
     languagesSpoken: ["English", "Hindi"],
     verifiedByPlatform: true,
-    consultationFee: 499,
+    consultationFee: 799,
     maxBookingsPerDay: 5,
     consultationDurationMinutes: 30,
     status: "offline",
