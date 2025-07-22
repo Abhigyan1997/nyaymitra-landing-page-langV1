@@ -62,8 +62,8 @@ export default function ContactPage() {
       title: "Office Address",
       details: [
         "Nyay Mitra Legal Services Pvt. Ltd.",
-        "Ram Das Gupta Path",
-        "Bhagalpur, Bihar - 812002",
+        "Koramangala, 5th Block",
+        "Bangalore, Karnataka - 560095",
         "India",
       ],
     },
@@ -71,10 +71,7 @@ export default function ContactPage() {
       icon: Phone,
       title: "Phone Numbers",
       details: [
-        "Main Office: +91 11 4567 8900",
-        "Support: +91 11 4567 8901",
-        "Emergency: +91 98765 43210",
-        "WhatsApp: +91 98765 43211",
+        "Emergency: +91 79705 96183",
       ],
     },
     {
@@ -82,8 +79,7 @@ export default function ContactPage() {
       title: "Email Addresses",
       details: [
         "General: contact@nyaymitra.tech",
-        "Support: support@nyaymitra.tech",
-        "Legal: legal@nyaymitra.tech"
+        "Support: support@nyaymitra.tech"
       ],
     },
     {
@@ -95,37 +91,6 @@ export default function ContactPage() {
         "Sunday: 10:00 AM - 4:00 PM",
         "AI Support: 24/7 Available",
       ],
-    },
-  ]
-
-  const supportOptions = [
-    {
-      icon: MessageCircle,
-      title: "Live Chat",
-      description: "Get instant help from our support team",
-      action: "Start Chat",
-      available: true,
-    },
-    {
-      icon: Phone,
-      title: "Phone Support",
-      description: "Speak directly with our legal experts",
-      action: "Call Now",
-      available: true,
-    },
-    {
-      icon: Mail,
-      title: "Email Support",
-      description: "Send us detailed queries via email",
-      action: "Send Email",
-      available: true,
-    },
-    {
-      icon: Users,
-      title: "Video Consultation",
-      description: "Schedule a video call with our team",
-      action: "Book Call",
-      available: false,
     },
   ]
 
@@ -347,53 +312,6 @@ export default function ContactPage() {
                 })}
               </CardContent>
             </Card>
-
-            {/* Support Options */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Support Options</CardTitle>
-                <CardDescription>Choose the best way to get help</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {supportOptions.map((option, index) => {
-                  const IconComponent = option.icon
-                  return (
-                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center space-x-3">
-                        <IconComponent className="h-5 w-5 text-blue-600" />
-                        <div>
-                          <div className="font-medium text-sm">{option.title}</div>
-                          <div className="text-xs text-gray-600">{option.description}</div>
-                        </div>
-                      </div>
-                      <Button size="sm" variant={option.available ? "default" : "outline"} disabled={!option.available}>
-                        {option.action}
-                      </Button>
-                    </div>
-                  )
-                })}
-              </CardContent>
-            </Card>
-
-            {/* Emergency Contact */}
-            <Card className="bg-red-50 border-red-200">
-              <CardHeader>
-                <CardTitle className="text-red-800">Emergency Legal Help</CardTitle>
-                <CardDescription className="text-red-600">
-                  For urgent legal matters requiring immediate attention
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center space-x-2">
-                    <Phone className="h-4 w-4 text-red-600" />
-                    <span className="font-medium">Emergency Hotline:</span>
-                  </div>
-                  <p className="text-red-800 font-semibold">+91 98765 43210</p>
-                  <p className="text-red-600 text-xs">Available 24/7 for urgent legal emergencies</p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
 
@@ -402,42 +320,51 @@ export default function ContactPage() {
           <Card>
             <CardHeader className="text-center">
               <CardTitle className="text-2xl">Frequently Asked Questions</CardTitle>
-              <CardDescription>Quick answers to common questions</CardDescription>
+              <CardDescription>Answers related to NyayMitra's platform and services</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <h3 className="font-semibold mb-2">How quickly do you respond to queries?</h3>
+                  <h3 className="font-semibold mb-2">How do I book a consultation with a lawyer?</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    We typically respond to all queries within 24 hours during business days. For urgent matters, please
-                    call our emergency hotline.
+                    You can browse verified lawyers on our platform and book a consultation by selecting a date, time, and mode of consultation.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Is the initial consultation free?</h3>
+                  <h3 className="font-semibold mb-2">Is the first consultation free?</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Yes, our AI-powered legal advice is completely free. For detailed consultation with lawyers, charges
-                    apply based on the complexity and duration.
+                    Yes, every user gets one free consultation with a verified lawyer after signing up.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">Do you provide services in regional languages?</h3>
+                  <h3 className="font-semibold mb-2">How do lawyers get verified?</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Yes, we support multiple Indian languages including Hindi, Tamil, Telugu, Bengali, Marathi,
-                    Gujarati, and more.
+                    We verify lawyers by checking their Bar Council ID and other professional details before approving their profiles.
                   </p>
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-2">How do I become a lawyer on your platform?</h3>
+                  <h3 className="font-semibold mb-2">Is my data safe on NyayMitra?</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Lawyers can apply through our registration process. We verify credentials, experience, and conduct
-                    background checks before approval.
+                    Absolutely. We follow strict data privacy standards and never share your information without consent.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">How does AI legal support work?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Our AI Legal Assistant provides 24/7 guidance based on Indian laws and previously answered queries. For complex issues, we connect you to a real lawyer.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-2">Can I reschedule or cancel a booking?</h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Yes, you can manage your bookings through your dashboard. Please inform the lawyer in advance for any changes.
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+
       </div>
     </div>
   )
