@@ -151,7 +151,7 @@ export default function HomePage() {
         title: "Justice for All",
         subtitle: "Anywhere, Anytime",
         description:
-          "Create legal documents in minutes, talk to trusted lawyers, and get papers notarized — all from your phone, anywhere in India. Simple, fast, and affordable legal help for everyone.",
+          "Talk to verified lawyers, generate custom legal documents, and book notary services — right from your phone.Justice, simplified for every Indian.",
         ctaPrimary: "Talk to AI Now",
         ctaSecondary: "Start Digital Notary",
         liveStatus: "AI System Online",
@@ -318,7 +318,7 @@ export default function HomePage() {
         quickLinks: "Quick Links",
         legal: "Legal",
         contact: "Contact Us",
-        address: "Bihar - 812002",
+        address: "Koramangala,Bengaluru-560034",
         email: "contact@nyaymitra.tech",
         phone: "+91 79705 96183",
         // whatsapp: "+91 79705 96183",
@@ -349,7 +349,7 @@ export default function HomePage() {
         title: "सभी के लिए न्याय",
         subtitle: "कहीं भी, कभी भी",
         description:
-          "कानूनी दस्तावेज पाएं, भरोसेमंद वकीलों से बात करें, और नोटरी से दस्तावेज सत्यापित करवाएं — सब कुछ मोबाइल से, भारत में कहीं भी। आसान, तेज़ और सस्ती कानूनी मदद।",
+          "सत्यापित वकीलों से बात करें, अपने कानूनी दस्तावेज़ बनाएं, और नोटरी सेवाएं बुक करें — अब सब कुछ मोबाइल से। हर भारतीय के लिए न्याय, अब सरल और सुलभ।",
         ctaPrimary: "अभी AI से बात करें",
         ctaSecondary: "तुरंत नोटरी सेवा शुरू करें",
         liveStatus: "AI सिस्टम ऑनलाइन",
@@ -514,7 +514,7 @@ export default function HomePage() {
         quickLinks: "त्वरित लिंक",
         legal: "कानूनी",
         contact: "संपर्क करें",
-        address: "बिहार - 812002",
+        address: "कोरामंगला, बेंगलुरु-560034",
         email: "nyaymitra.ai@gmail.com",
         phone: "+91 79705 96183",
         // whatsapp: "+91 79705 96183",
@@ -950,7 +950,7 @@ export default function HomePage() {
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
               <div className="text-sm md:text-base text-yellow-300 font-semibold tracking-wide">
-                ⚡ Digital Notary Delivered in 12 Hours
+                ⚡Trusted Notary Services, Backed by a Government License.
               </div>
 
 
@@ -958,7 +958,7 @@ export default function HomePage() {
               <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
                 <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
-                  India’s #1 One-Tap Legal Assistant – Draft, Notarize, & Book Lawyers Instantly
+                  One-Tap Legal Help – Book Lawyers, Draft Docs, Get Notary Support Instantly
                 </span>
               </div>
 
@@ -1626,8 +1626,9 @@ export default function HomePage() {
             </div>
 
             <p className="text-sm text-gray-400 mt-4">
-              <strong className="text-red-400">Disclaimer:</strong> <span className="text-gray-300">
-                NyayMitra is an AI-powered legal assistant designed for general informational purposes only. It does not provide formal legal advice, nor does it create a lawyer–client relationship. For any personalized or case-specific guidance, users are advised to consult a qualified legal professional. NyayMitra is not liable for decisions made based on automated suggestions or AI-generated content.
+              <strong className="text-red-400">Disclaimer:</strong>
+              <span className="text-gray-300">
+                NyayMitra is a technology platform that helps users connect with verified legal professionals, access general legal information, and generate basic legal documents. While we provide AI-powered assistance, we do not offer legal advice or act as a law firm. All consultations and notary services are delivered by licensed third-party professionals. NyayMitra is not liable for actions taken based on AI suggestions or external legal interactions through the platform.
               </span>
             </p>
           </div>
