@@ -153,7 +153,7 @@ export default function HomePage() {
         description:
           "Talk to verified lawyers, generate custom legal documents, and book notary services — right from your phone.Justice, simplified for every Indian.",
         ctaPrimary: "Talk to AI Now",
-        ctaSecondary: "Start Digital Notary",
+        ctaSecondary: "Consult Lawyers",
         liveStatus: "AI System Online",
         stats: {
           cases: "1M+ Cases Resolved",
@@ -168,54 +168,48 @@ export default function HomePage() {
         subtitle: "From legal doubt to resolution – in a few simple steps",
         steps: [
           {
-            title: "Choose a Service",
-            description: "Start by selecting what you need – self-attested docs, notary, legal notice, or consult a lawyer.",
-            icon: FileCheck, // you can replace with your preferred icon
+            title: "Select a Lawyer",
+            description: "Browse verified lawyers by category and choose one that fits your legal need.",
+            icon: FileCheck,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "Book & Pay Securely",
-            description: "Pick your time, preferred mode (chat/call/video), and pay securely through our platform.",
+            title: "Pick a Slot",
+            description: "Choose a suitable date, time, and preferred mode (chat, call, or video) for the consultation.",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "Get Notified & Connect",
-            description: "Receive instant booking confirmation, reminders, and connect directly at your scheduled time.",
-            icon: Bell,
-            color: "from-green-500 to-emerald-500",
-          },
-          {
-            title: "Receive Legal Help",
-            description: "Your lawyer helps you live. Post-session, access receipts and documents, and give feedback.",
+            title: "Join & Review",
+            description: "Connect at your scheduled time. After the session, access receipts and share feedback.",
             icon: ThumbsUp,
             color: "from-yellow-500 to-orange-500",
           },
-        ],
+        ]
       },
       whyChoose: {
-        title: "Why Choose NyayMitra",
-        subtitle: "India’s Fastest Legal Assistant – Affordable. Instant. Reliable.",
+        title: "Why Choose NyayMitra?",
+        subtitle: "Smart Legal Help, Just a Click Away – Talk to a Lawyer or Ask Legal GPT Anytime",
         features: [
           {
-            title: "Instant Legal Documents",
-            description: "Download affidavits, agreements, and notices in minutes using AI-powered templates.",
-            icon: FileText, // or FileCheck if available
+            title: "Book a Verified Lawyer Instantly",
+            description: "Choose from trusted lawyers across India. Book consultations at your convenience – starting at just ₹99.",
+            icon: IndianRupee,
           },
           {
-            title: "Remote Notarization",
-            description: "Get documents notarized online or via courier with licensed lawyers across India.",
+            title: "Get Instant Answers with Legal GPT",
+            description: "Ask any legal question and get AI-powered answers 24/7 – fast, private, and easy to understand.",
+            icon: Bot,
+          },
+          {
+            title: "No More Legal Confusion",
+            description: "We simplify the law – whether it’s agreements, notices, or finding the right lawyer. We’re here for you.",
+            icon: FileText,
+          },
+          {
+            title: "Online & Hassle-Free",
+            description: "No need to visit courts or offices. Consult lawyers, notarize documents, or ask GPT – all from your phone.",
             icon: PenTool,
-          },
-          {
-            title: "Affordable Lawyer Access",
-            description: "Verified lawyers. Transparent pricing. No surprise fees – starting at ₹99.",
-            icon: IndianRupee, // or BadgeCheck
-          },
-          {
-            title: "AI + Human Legal Help",
-            description: "Blend of AI tools and expert lawyers for faster, smarter legal solutions.",
-            icon: Bot, // or Sparkles if available
           },
         ],
       },
@@ -248,8 +242,7 @@ export default function HomePage() {
             color: "from-blue-600 to-indigo-600",
           },
         ]
-      }
-      ,
+      },
 
       getStarted: {
         title: "Ready to Get Started?",
@@ -285,31 +278,7 @@ export default function HomePage() {
             rating: 5,
             role: "Working Professional",
             avatar: "ND",
-          },
-          {
-            name: "Dr. Anil Chauhan",
-            location: "Chandigarh",
-            text: "The AI-based legal assistant understood my licensing concerns perfectly and gave accurate suggestions. Very impressive!",
-            rating: 5,
-            role: "Doctor",
-            avatar: "AC",
-          },
-          {
-            name: "Pooja Sharma",
-            location: "Varanasi, Uttar Pradesh",
-            text: "I uploaded my rent agreement draft and received a detailed lawyer review within hours. Great value for ₹499!",
-            rating: 5,
-            role: "Freelancer",
-            avatar: "PS",
-          },
-          {
-            name: "Adv. Raghav Deshmukh",
-            location: "Pune, Maharashtra",
-            text: "The platform connects me with genuine clients, and AI-based case summaries save me time. A game-changer for lawyers.",
-            rating: 5,
-            role: "Lawyer",
-            avatar: "RD",
-          },
+          }
         ],
       },
       footer: {
@@ -351,7 +320,7 @@ export default function HomePage() {
         description:
           "सत्यापित वकीलों से बात करें, अपने कानूनी दस्तावेज़ बनाएं, और नोटरी सेवाएं बुक करें — अब सब कुछ मोबाइल से। हर भारतीय के लिए न्याय, अब सरल और सुलभ।",
         ctaPrimary: "अभी AI से बात करें",
-        ctaSecondary: "तुरंत नोटरी सेवा शुरू करें",
+        ctaSecondary: "वकील से परामर्श लें",
         liveStatus: "AI सिस्टम ऑनलाइन",
         stats: {
           cases: "10 लाख+ मामले हल",
@@ -363,60 +332,55 @@ export default function HomePage() {
 
       howItWorks: {
         title: "यह कैसे काम करता है",
-        subtitle: "कानूनी सहायता पाने के आसान और भरोसेमंद चरण",
+        subtitle: "कानूनी सलाह लेने के आसान और भरोसेमंद चरण",
         steps: [
           {
-            title: "सेवा चुनें",
-            description: "सेल्फ-अटेस्टेड दस्तावेज़, रिमोट नोटरी, वकील सलाह, या नोटिस जैसी सेवाओं में से चुनें।",
+            title: "वकील चुनें",
+            description: "अपनी ज़रूरत के अनुसार किसी अनुभवी वकील को खोजें और चुनें।",
             icon: FileText,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "समय तय करें और भुगतान करें",
-            description: "अपना पसंदीदा समय और संचार तरीका (कॉल/वीडियो/चैट) चुनें और भुगतान सुरक्षित रूप से करें।",
+            title: "स्लॉट बुक करें",
+            description: "सुविधाजनक समय और मोड (कॉल/वीडियो/चैट) चुनकर भुगतान करें।",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "सूचना प्राप्त करें और जुड़ें",
-            description: "बुकिंग की पुष्टि और रिमाइंडर प्राप्त करें, और अपने निर्धारित समय पर वकील से जुड़ें।",
-            icon: Bell,
-            color: "from-green-500 to-emerald-500",
-          },
-          {
-            title: "सहायता प्राप्त करें और प्रतिक्रिया दें",
-            description: "वकील से कानूनी सलाह लें, रसीद और दस्तावेज़ डाउनलोड करें, और अनुभव साझा करें।",
+            title: "जुड़ें और प्रतिक्रिया दें",
+            description: "निर्धारित समय पर वकील से जुड़ें और सेवा के बाद प्रतिक्रिया दें।",
             icon: ThumbsUp,
-            color: "from-yellow-500 to-orange-500",
+            color: "from-green-500 to-emerald-500",
           },
         ],
       },
       whyChoose: {
         title: "न्यायमित्र क्यों चुनें",
-        subtitle: "भारत का सबसे तेज़ और भरोसेमंद कानूनी सहायक",
+        subtitle: "अब वकील से सलाह लेना और कानूनी सवाल पूछना पहले से कहीं आसान",
         features: [
           {
-            title: "तुरंत कानूनी दस्तावेज़",
-            description: "AI की मदद से हलफ़नामे, अनुबंध और नोटिस कुछ ही मिनटों में डाउनलोड करें।",
-            icon: FileText,
-          },
-          {
-            title: "ऑनलाइन नोटरी सेवा",
-            description: "लाइसेंस प्राप्त वकीलों से दस्तावेज़ ऑनलाइन या कूरियर द्वारा नोटराइज़ करवाएं।",
-            icon: PenTool,
-          },
-          {
-            title: "सुलभ वकील सेवाएं",
-            description: "प्रामाणिक वकील, पारदर्शी शुल्क – सेवाएं ₹99 से शुरू।",
+            title: "प्रामाणिक वकील से तुरंत परामर्श",
+            description: "भारत के अनुभवी वकीलों में से चुनें – ₹99 से शुरू, अपने स्लॉट बुक करें और तुरंत जुड़ें।",
             icon: IndianRupee,
           },
           {
-            title: "AI + मानव विशेषज्ञता",
-            description: "AI टूल्स और अनुभवी वकीलों का मेल – तेज़ और सटीक समाधान के लिए।",
+            title: "AI से पूछें कानूनी सवाल",
+            description: "किसी भी समय अपने सवाल Legal GPT से पूछें – सरल, तेज़ और भरोसेमंद उत्तर पाएं।",
             icon: Bot,
+          },
+          {
+            title: "कोई भ्रम नहीं, बस समाधान",
+            description: "हम आपके लिए क़ानून को आसान बनाते हैं – सलाह हो या दस्तावेज़, सब कुछ एक जगह।",
+            icon: FileText,
+          },
+          {
+            title: "100% ऑनलाइन सुविधा",
+            description: "घर बैठे वकील से मिलें, दस्तावेज़ बनवाएं या AI से मदद लें – सब कुछ आपके फोन पर।",
+            icon: PenTool,
           },
         ],
       },
+
       features: {
         title: "शक्तिशाली सुविधाएं",
         subtitle: "स्मार्ट, किफायती और तेज़ कानूनी सहायता, बस एक क्लिक दूर",
@@ -481,31 +445,7 @@ export default function HomePage() {
             rating: 5,
             role: "कामकाजी महिला",
             avatar: "ND",
-          },
-          {
-            name: "डॉ. अनिल चौहान",
-            location: "चंडीगढ़",
-            text: "AI ने मेरे मेडिकल-कानूनी प्रश्नों को सही से समझा और स्पष्ट सुझाव दिए। यह तकनीक वाकई प्रभावशाली है।",
-            rating: 5,
-            role: "चिकित्सक",
-            avatar: "AC",
-          },
-          {
-            name: "पूजा शर्मा",
-            location: "वाराणसी, उत्तर प्रदेश",
-            text: "मैंने अपना रेंट एग्रीमेंट अपलोड किया और कुछ ही घंटों में वकील का विस्तृत रिव्यू मिला। सिर्फ ₹499 में बहुत काम आया।",
-            rating: 5,
-            role: "फ्रीलांसर",
-            avatar: "PS",
-          },
-          {
-            name: "अधिवक्ता राघव देशमुख",
-            location: "पुणे, महाराष्ट्र",
-            text: "मुझे यहां गुणवत्तापूर्ण क्लाइंट्स मिलते हैं और AI केस की शुरुआती स्कैनिंग कर देता है, जिससे समय बचता है।",
-            rating: 5,
-            role: "वकील",
-            avatar: "RD",
-          },
+          }
         ],
       },
       footer: {
@@ -1092,7 +1032,7 @@ export default function HomePage() {
                   </Button>
                 </Link>
 
-                <Link href="/services/notary">
+                <Link href="/lawyers">
                   <Button
                     size="lg"
                     className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-black hover:from-yellow-500 hover:to-orange-500 shadow-lg transition-all duration-500 group relative overflow-hidden"
@@ -1102,6 +1042,7 @@ export default function HomePage() {
                     <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
                   </Button>
                 </Link>
+
 
 
               </div>
@@ -1325,7 +1266,7 @@ export default function HomePage() {
             <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.howItWorks.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {t.howItWorks.steps.map((step, index) => {
               const IconComponent = step.icon
               return (
@@ -1357,6 +1298,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
 
       {/* Why Choose NyayMitra Section */}
       <section className="relative z-10 py-20">
