@@ -99,38 +99,58 @@ export default function AllBookingsPage() {
     const router = useRouter()
 
     const fetchBookings = async (page = 1) => {
-        const userId = localStorage.getItem("userId")
-        const token = localStorage.getItem("token")
+        const userId = localStorage.getItem("userId");
+        const token = localStorage.getItem("token");
 
         try {
-            setLoading(true)
+            setLoading(true);
+
             const response = await axios.get<ApiResponse>(
-                `https://nyaymitra-backend-production.up.railway.app/api/v1/booking/allOrders/${userId}`,
+                `http://localhost:5000/api/v1/booking/allOrders/${userId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                     params: {
                         page,
-                        limit: pagination.limit
-                    }
+                        limit: pagination.limit,
+                    },
                 }
-            )
+            );
 
-            setBookings(response.data.bookings || [])
+            if (response.data.bookings?.length === 0) {
+                toast.info("No bookings found");
+                setBookings([]);
+            } else {
+                setBookings(response.data.bookings || []);
+            }
+
             setPagination({
                 currentPage: response.data.currentPage,
                 totalPages: response.data.totalPages,
                 totalBookings: response.data.totalBookings,
-                limit: pagination.limit
-            })
-        } catch (error) {
-            console.error("Error fetching bookings:", error)
-            toast.error("Failed to load bookings")
+                limit: pagination.limit,
+            });
+
+        } catch (error: any) {
+            if (axios.isAxiosError(error)) {
+                if (error.response?.status === 404) {
+                    // No bookings found case
+                    setBookings([]);
+                    toast.info("No bookings found");
+                } else {
+                    console.error("Error fetching bookings:", error);
+                    toast.error("Something went wrong while loading bookings");
+                }
+            } else {
+                console.error("Unexpected error:", error);
+                toast.error("Unexpected error occurred");
+            }
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
+
 
     useEffect(() => {
         fetchBookings()

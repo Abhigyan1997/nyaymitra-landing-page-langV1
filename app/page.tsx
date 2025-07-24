@@ -147,6 +147,13 @@ export default function HomePage() {
         login: "Login",
         signup: "Sign Up",
       },
+      profileMenu: {
+        profile: "My Profile",
+        dashboard: "My Dashboard",
+        bookings: "My Bookings",
+        logout: "Logout"
+      },
+
       hero: {
         title: "Justice for All",
         subtitle: "Anywhere, Anytime",
@@ -314,6 +321,13 @@ export default function HomePage() {
         login: "लॉगिन",
         signup: "साइन अप",
       },
+      profileMenu: {
+        profile: "मेरी प्रोफ़ाइल",
+        dashboard: "मेरा डैशबोर्ड",
+        bookings: "मेरी बुकिंग्स",
+        logout: "लॉगआउट"
+      },
+
       hero: {
         title: "सभी के लिए न्याय",
         subtitle: "कहीं भी, कभी भी",
@@ -667,7 +681,7 @@ export default function HomePage() {
                   >
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="block px-3 py-2 hover:bg-white/10 rounded">
-                        My Profile
+                        {t.profileMenu.profile}
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem
@@ -678,7 +692,7 @@ export default function HomePage() {
                       <div className="flex items-center gap-3 w-full justify-between">
                         <div className="flex items-center gap-3">
                           <BarChart2 className="h-5 w-5 text-green-500" />
-                          <span>My Dashboard</span>
+                          <span>{t.profileMenu.dashboard}</span>
                         </div>
                         <ChevronRight className="h-4 w-4" />
                       </div>
@@ -694,13 +708,13 @@ export default function HomePage() {
                         }}
                         className="block w-full text-left px-3 py-2 hover:bg-white/10 rounded"
                       >
-                        Logout
+                        {t.profileMenu.logout}
                       </button>
                     </DropdownMenuItem>
                     {profile?.role !== "lawyer" && (
                       <DropdownMenuItem asChild>
                         <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
-                          My Bookings
+                          {t.profileMenu.bookings}
                         </Link>
                       </DropdownMenuItem>
                     )}
@@ -782,7 +796,7 @@ export default function HomePage() {
                     href="/profile"
                     className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
-                    My Profile
+                    {t.profileMenu.profile}
                   </Link>
                   <button
                     onClick={() => {
@@ -797,7 +811,7 @@ export default function HomePage() {
                     }}
                     className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
-                    My Dashboard
+                    <span>{t.profileMenu.dashboard}</span>
                   </button>
 
 
@@ -806,7 +820,7 @@ export default function HomePage() {
                       href="/all-bookings"
                       className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                     >
-                      My Bookings
+                      {t.profileMenu.bookings}
                     </Link>
                   )}
 
@@ -817,7 +831,7 @@ export default function HomePage() {
                     }}
                     className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
                   >
-                    Logout
+                    {t.profileMenu.logout}
                   </button>
                 </>
               )}
