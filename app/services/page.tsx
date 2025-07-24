@@ -34,17 +34,6 @@ export default function ServicesPage() {
 
   const services = [
     {
-      id: "instant-download",
-      title: "Self-Attested Document Download",
-      description: "Download pre-filled Rent Agreements, Complaint Letters & Affidavits instantly.",
-      icon: FileText,
-      color: "from-green-500 to-emerald-500",
-      popular: true,
-      areas: ["Rent Agreement", "Affidavit Draft", "Police Complaint", "Consumer Complaint"],
-      aiFeatures: ["Pre-fillable PDF Templates", "Instant Download", "Razorpay Checkout"],
-      pricing: "₹49/document"
-    },
-    {
       id: "notary-service",
       title: "Remote Notary via Licensed Lawyer",
       description: "Get documents notarized remotely or via courier within 1–4 days.",
@@ -56,40 +45,51 @@ export default function ServicesPage() {
       pricing: "₹399 (e-copy) / ₹799 (courier)"
     },
     {
-      id: "document-review",
-      title: "Lawyer Document Review",
-      description: "Get your legal documents reviewed by experienced lawyers within 24 hours.",
-      icon: FileCheck,
-      color: "from-indigo-500 to-purple-500",
-      popular: false,
-      areas: ["Contracts", "Agreements", "Legal Notices", "Affidavits"],
-      aiFeatures: ["Expert Review", "Detailed Feedback", "Suggested Edits"],
-      pricing: "₹199/document"
+      id: "instant-download",
+      title: "Self-Attested Document Download",
+      description: "Download pre-filled Rent Agreements, Complaint Letters & Affidavits instantly.",
+      icon: FileText,
+      color: "from-green-500 to-emerald-500",
+      popular: true,
+      areas: ["Rent Agreement", "Affidavit Draft", "Police Complaint", "Consumer Complaint"],
+      aiFeatures: ["Pre-fillable PDF Templates", "Instant Download", "Razorpay Checkout"],
+      pricing: "₹49/document"
     },
-    {
-      id: "priority-booking",
-      title: "Speed Booking (Priority)",
-      description: "Get same-day legal consultations with verified lawyers.",
-      icon: Clock,
-      color: "from-red-500 to-pink-500",
-      popular: false,
-      areas: ["Urgent Consultations", "Today Booking"],
-      aiFeatures: ["Priority Lawyer Matching", "Razorpay Add-on", "Same-Day Guarantee"],
-      pricing: "₹99 extra (optional)",
-      button: <PriorityBookingDialog /> // Replace the button with this component
-    },
+    // {
+    //   id: "document-review",
+    //   title: "Lawyer Document Review",
+    //   description: "Get your legal documents reviewed by experienced lawyers within 24 hours.",
+    //   icon: FileCheck,
+    //   color: "from-indigo-500 to-purple-500",
+    //   popular: false,
+    //   areas: ["Contracts", "Agreements", "Legal Notices", "Affidavits"],
+    //   aiFeatures: ["Expert Review", "Detailed Feedback", "Suggested Edits"],
+    //   pricing: "₹199/document"
+    // },
+    // {
+    //   id: "priority-booking",
+    //   title: "Speed Booking (Priority)",
+    //   description: "Get same-day legal consultations with verified lawyers.",
+    //   icon: Clock,
+    //   color: "from-red-500 to-pink-500",
+    //   popular: false,
+    //   areas: ["Urgent Consultations", "Today Booking"],
+    //   aiFeatures: ["Priority Lawyer Matching", "Razorpay Add-on", "Same-Day Guarantee"],
+    //   pricing: "₹99 extra (optional)",
+    //   button: <PriorityBookingDialog /> // Replace the button with this component
+    // },
 
-    {
-      id: "legal-notice",
-      title: "Legal Notice Generator",
-      description: "Generate demand notices for rent, dues, cheating, and other legal issues.",
-      icon: FileSignature,
-      color: "from-pink-500 to-red-600",
-      popular: false,
-      areas: ["Payment Default", "Tenant Disputes", "Contract Breach", "Employment Issues"],
-      aiFeatures: ["Form-Based Input", "Auto-Section Suggestion", "PDF Output"],
-      pricing: "₹149/document"
-    },
+    // {
+    //   id: "legal-notice",
+    //   title: "Legal Notice Generator",
+    //   description: "Generate demand notices for rent, dues, cheating, and other legal issues.",
+    //   icon: FileSignature,
+    //   color: "from-pink-500 to-red-600",
+    //   popular: false,
+    //   areas: ["Payment Default", "Tenant Disputes", "Contract Breach", "Employment Issues"],
+    //   aiFeatures: ["Form-Based Input", "Auto-Section Suggestion", "PDF Output"],
+    //   pricing: "₹149/document"
+    // },
     {
       id: "stamp-duty",
       title: "Stamp Duty Calculator",

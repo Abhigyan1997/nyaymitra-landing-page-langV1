@@ -74,7 +74,7 @@ export default function StampCalculatorPage() {
             "Sale Agreement": (value) => value * 0.05,
             "Gift Deed": (value) => value * 0.03,
             "Affidavit": 100,
-            "Power of Attorney": 500,
+            "Power of Attorney": (value) => value * 0.05,
             "Partnership Deed": 2000,
             "Will": 200,
             "Lease Agreement": (value) => value * 0.025,

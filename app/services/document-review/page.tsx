@@ -17,7 +17,7 @@ import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { toast } from "sonner"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://nyaymitra-backend-document.onrender.com"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000"
 
 const submitDocumentReview = async (formData: any, file: File, token: string) => {
     const data = new FormData()
