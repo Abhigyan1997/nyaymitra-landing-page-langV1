@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -15,7 +15,7 @@ type ResetPasswordRequest = {
     password: string
 }
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const token = searchParams?.get("token") || ""
@@ -234,5 +234,13 @@ export default function ResetPasswordPage() {
                 </Card>
             </div>
         </div>
+    )
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <ResetPasswordForm />
+        </Suspense>
     )
 }
