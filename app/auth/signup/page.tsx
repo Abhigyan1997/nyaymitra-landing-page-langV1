@@ -452,10 +452,13 @@ function UserSignupForm({
         label="Phone Number"
         placeholder="+91 98765 43210"
         value={formData.phone}
-        onChange={(value) => onInputChange("phone", value)}
+        onChange={(value) => {
+          if (/^\d{0,10}$/.test(value)) onInputChange("phone", value)
+        }}
         icon={Phone}
         required
       />
+
 
       <FormInputField
         id="password"
@@ -581,7 +584,9 @@ function LawyerSignupForm({
           label="Phone Number"
           placeholder="+91 98765 43210"
           value={formData.phone}
-          onChange={(value) => onInputChange("phone", value)}
+          onChange={(value) => {
+            if (/^\d{0,10}$/.test(value)) onInputChange("phone", value)
+          }}
           icon={Phone}
           required
         />
