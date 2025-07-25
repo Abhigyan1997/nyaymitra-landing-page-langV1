@@ -1,23 +1,69 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Scale, Mail, ArrowLeft, CheckCircle } from "lucide-react"
+import { Scale, Mail, ArrowLeft, CheckCircle, Loader2 } from "lucide-react"
 import Link from "next/link"
+import { toast } from "@/components/ui/use-toast"
+
+type ApiError = {
+  message: string
+}
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("")
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // In real app, this would send password reset email
-    setIsSubmitted(true)
+    setIsLoading(true)
+    setError("")
+
+    try {
+      const response = await fetch('https://nyaymitra.tech/api/v1/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send reset link')
+      }
+
+      setIsSubmitted(true)
+      toast({
+        title: "Success",
+        description: "Password reset link sent to your email",
+        variant: "default",
+      })
+    } catch (err: unknown) {
+      let errorMessage = 'Something went wrong. Please try again.'
+
+      if (err instanceof Error) {
+        errorMessage = err.message
+      } else if (typeof err === 'string') {
+        errorMessage = err
+      }
+
+      setError(errorMessage)
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   if (isSubmitted) {
@@ -70,6 +116,11 @@ export default function ForgotPasswordPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="text-red-500 text-sm text-center p-2 bg-red-50 rounded-md">
+                  {error}
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
                 <div className="relative">
@@ -86,8 +137,15 @@ export default function ForgotPasswordPage() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full" size="lg">
-                Send Reset Link
+              <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Reset Link"
+                )}
               </Button>
             </form>
 
@@ -107,7 +165,7 @@ export default function ForgotPasswordPage() {
             <div className="text-sm text-blue-800 space-y-1">
               <p>• Make sure you enter the email address associated with your account</p>
               <p>• Check your spam/junk folder for the reset email</p>
-              <p>• The reset link will expire in 24 hours for security</p>
+              <p>• The reset link will expire in 15 minutes for security</p>
               <p>• Contact support if you continue having issues</p>
             </div>
             <div className="mt-3">

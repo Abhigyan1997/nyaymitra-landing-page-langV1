@@ -1313,7 +1313,6 @@ export default function HomePage() {
         </div>
       </section>
 
-
       {/* Why Choose NyayMitra Section */}
       <section className="relative z-10 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1472,7 +1471,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
 
       {/* Footer */}
       <footer className="relative z-10 bg-black/40 backdrop-blur-xl border-t border-white/10 py-16">
