@@ -450,7 +450,7 @@ function UserSignupForm({
       <FormInputField
         id="phone"
         label="Phone Number"
-        placeholder="+91 98765 43210"
+        placeholder="9876543210"
         value={formData.phone}
         onChange={(value) => {
           if (/^\d{0,10}$/.test(value)) onInputChange("phone", value)
@@ -582,7 +582,7 @@ function LawyerSignupForm({
         <FormInputField
           id="phoneLawyer"
           label="Phone Number"
-          placeholder="+91 98765 43210"
+          placeholder="9876543210"
           value={formData.phone}
           onChange={(value) => {
             if (/^\d{0,10}$/.test(value)) onInputChange("phone", value)
