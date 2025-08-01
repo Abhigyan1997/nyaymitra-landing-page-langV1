@@ -57,7 +57,7 @@ export default function LegalGPTPage() {
             <Link href="/" className="flex items-center space-x-3">
               <Scale className="h-10 w-10 text-blue-400" />
               <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Nyay Mitra
+                NyayMitra
               </span>
             </Link>
             <div className="flex items-center space-x-4">

@@ -182,7 +182,7 @@ export default function ServicesPage() {
                   <div className="absolute inset-0 bg-blue-400/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300" />
                 </div>
                 <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                  Nyay Mitra
+                  NyayMitra
                 </span>
               </Link>
             </div>
