@@ -716,7 +716,7 @@ function Footer() {
                         <ul className="space-y-1.5 text-xs md:text-sm text-gray-400">
                             <li className="flex items-center">
                                 <Mail className="h-3 w-3 md:h-4 md:w-4 mr-1.5 text-lime-400" />
-                                nyaymitra.ai@gmail.com
+                                contact@nyaymitra.tech
                             </li>
                             <li className="flex items-center">
                                 <Phone className="h-3 w-3 md:h-4 md:w-4 mr-1.5 text-lime-400" />
