@@ -28,6 +28,22 @@ export default function TermsPage() {
                         <li>NyayMitra may update these terms at any time. Continued use of the platform indicates your acceptance of the revised terms.</li>
                     </ul>
 
+                    <hr className="my-10 border-gray-700" />
+
+                    <h2 className="text-2xl md:text-3xl font-semibold text-teal-400 mb-4">
+                        Additional Terms for Lawyers
+                    </h2>
+
+                    <ul className="list-disc list-inside space-y-3 text-gray-200">
+                        <li>Lawyers must provide accurate, updated, and verified information including qualifications, specialization, and license details.</li>
+                        <li>Lawyers agree to uphold professional standards during all consultations booked through NyayMitra.</li>
+                        <li>Lawyers are not employees or agents of NyayMitra. They operate as independent professionals and are solely responsible for legal advice provided.</li>
+                        <li>Any misuse of the platform, including but not limited to misinformation, abuse, or no-shows, may result in temporary or permanent suspension.</li>
+                        <li>Lawyers must ensure availability and timely communication with clients who book through the platform.</li>
+                        <li>NyayMitra reserves the right to remove or suspend profiles that receive consistent negative feedback or breach platform terms.</li>
+                    </ul>
+
+
                     <p>If you do not agree with any part of these terms, please discontinue using our services.</p>
 
                     <p className="text-gray-400">
