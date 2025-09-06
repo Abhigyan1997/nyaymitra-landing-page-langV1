@@ -146,7 +146,7 @@ export default function PriorityBookingPage() {
             }
 
             const response = await axios.post<BookingResponse>(
-                'https://nyaymitra-backend-document.onrender.com/api/documents/priority-booking',
+                'https://nyaymitra-backend-document-production.up.railway.app/api/documents/priority-booking',
                 {
                     name: formData.name,
                     phone: formData.phone,
@@ -232,7 +232,7 @@ export default function PriorityBookingPage() {
                         };
 
                         const verifyResponse = await axios.post(
-                            'https://nyaymitra-backend-document.onrender.com/api/payment/verify',
+                            'https://nyaymitra-backend-document-production.up.railway.app/api/payment/verify',
                             verifyPayload,
                             {
                                 headers: {

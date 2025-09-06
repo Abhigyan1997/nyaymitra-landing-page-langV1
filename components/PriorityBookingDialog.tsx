@@ -67,7 +67,7 @@ export function PriorityBookingDialog() {
         urgency: "high",
     })
     const router = useRouter()
-    const API_BASE_URL = "https://nyaymitra-backend-document.onrender.com/api"
+    const API_BASE_URL = "https://nyaymitra-backend-document-production.up.railway.app/api"
 
     const issueTypes = [
         "Property Dispute",

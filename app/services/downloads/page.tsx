@@ -123,7 +123,7 @@ export default function InstantDownloadPage() {
             const razorpayLoaded = await loadRazorpayScript();
             if (!razorpayLoaded) throw new Error("Razorpay SDK failed to load");
 
-            const { data: orderData } = await axios.post('https://nyaymitra-backend-document.onrender.com/api/payment/create-order', {
+            const { data: orderData } = await axios.post('https://nyaymitra-backend-document-production.up.railway.app/api/payment/create-order', {
                 userId: user.userId,
                 userEmail: user.email,
                 serviceName: doc.name,
@@ -172,7 +172,7 @@ export default function InstantDownloadPage() {
         documentName: string
     ) => {
         try {
-            const { data } = await axios.post('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
+            const { data } = await axios.post('https://nyaymitra-backend-document-production.up.railway.app/api/payment/verify', {
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,
                 razorpay_order_id: paymentResponse.razorpay_order_id,
                 razorpay_signature: paymentResponse.razorpay_signature,
@@ -199,7 +199,7 @@ export default function InstantDownloadPage() {
 
     const downloadDocument = async (documentId: string, userId: string, documentName: string) => {
         try {
-            const response = await axios.get(`https://nyaymitra-backend-document.onrender.com/api/documents/download`, {
+            const response = await axios.get(`https://nyaymitra-backend-document-production.up.railway.app/api/documents/download`, {
                 params: { documentId, userId },
                 responseType: 'blob',
             });

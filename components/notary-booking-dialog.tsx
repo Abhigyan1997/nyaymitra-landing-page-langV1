@@ -198,7 +198,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
             // Small delay to ensure dialog is fully closed
             await new Promise(resolve => setTimeout(resolve, 50));
 
-            const response = await fetch('https://nyaymitra-backend-document.onrender.com/api/documents/create-notary-booking', {
+            const response = await fetch('https://nyaymitra-backend-document-production.up.railway.app/api/documents/create-notary-booking', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -226,7 +226,7 @@ export function NotaryBookingDialog({ serviceType }: { serviceType: 'digital' | 
                 order_id: data.orderId,
                 handler: async function (response: any) {
                     try {
-                        const verifyRes = await fetch('https://nyaymitra-backend-document.onrender.com/api/payment/verify', {
+                        const verifyRes = await fetch('https://nyaymitra-backend-document-production.up.railway.app/api/payment/verify', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
