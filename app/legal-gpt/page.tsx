@@ -385,7 +385,7 @@ export default function LegalGPTPage() {
             </div>
           </div>
           <div className="mt-4 md:mt-6 text-center md:text-left text-xs md:text-sm text-white/50">
-            © {new Date().getFullYear()} NyayMitra. All rights reserved.
+            © {new Date().getFullYear()} NyayMitra | All rights reserved.
           </div>
         </div>
       </footer>
