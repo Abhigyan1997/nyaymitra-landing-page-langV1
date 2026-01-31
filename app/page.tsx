@@ -1608,7 +1608,7 @@ export default function HomePage() {
 
           <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm">
             <p className="text-white/60 mb-2">
-              © 2025 {t.footer.company}. All rights reserved. Powered by AI.
+              © 2026 {t.footer.company}. All rights reserved. Powered by AI.
             </p>
 
             <div className="flex justify-center gap-4 text-white/50 mb-2">
