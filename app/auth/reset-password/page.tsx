@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Lock, CheckCircle, Loader2, ArrowLeft, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { toast } from "@/components/ui/use-toast"
+import axios from "axios";
 
 type ResetPasswordRequest = {
     token: string
@@ -28,15 +29,15 @@ function ResetPasswordForm() {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!token) {
             toast({
                 title: "Error",
                 description: "Invalid or missing reset token",
                 variant: "destructive",
-            })
-            return
+            });
+            return;
         }
 
         if (password !== confirmPassword) {
@@ -44,8 +45,8 @@ function ResetPasswordForm() {
                 title: "Error",
                 description: "Passwords don't match",
                 variant: "destructive",
-            })
-            return
+            });
+            return;
         }
 
         if (password.length < 8) {
@@ -53,53 +54,51 @@ function ResetPasswordForm() {
                 title: "Error",
                 description: "Password must be at least 8 characters",
                 variant: "destructive",
-            })
-            return
+            });
+            return;
         }
 
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
             const resetData: ResetPasswordRequest = {
                 token,
-                password
-            }
+                password,
+            };
 
-            const response = await fetch('https://nyaymitra.tech/api/v1/auth/reset-password', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(resetData),
-            })
+            await axios.put(
+                "https://nyaymitra.tech/api/v1/auth/reset-password",
+                resetData,
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
 
-            if (!response.ok) {
-                const errorData = await response.json()
-                throw new Error(errorData.message || 'Failed to reset password')
-            }
+            setIsSuccess(true);
 
-            setIsSuccess(true)
             toast({
                 title: "Success",
                 description: "Your password has been reset successfully",
-                variant: "default",
-            })
-        } catch (err: unknown) {
-            let errorMessage = 'Failed to reset password. Please try again.'
+            });
 
-            if (err instanceof Error) {
-                errorMessage = err.message
-            }
+        } catch (err: any) {
+
+            const errorMessage =
+                err?.response?.data?.message ||
+                "Failed to reset password. Please try again.";
 
             toast({
                 title: "Error",
                 description: errorMessage,
                 variant: "destructive",
-            })
+            });
+
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     if (isSuccess) {
         return (
