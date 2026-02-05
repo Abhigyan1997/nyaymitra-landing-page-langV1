@@ -66,7 +66,7 @@ function ResetPasswordForm() {
             }
 
             const response = await fetch('https://nyaymitra.tech/api/v1/auth/reset-password', {
-                method: 'PATCH',
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
