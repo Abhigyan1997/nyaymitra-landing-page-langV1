@@ -56,7 +56,8 @@ interface Lawyer {
   languages: string[]
   consultationFee: number
   availability: string
-  profileImage?: string
+  profilePhoto?: string
+  avatar?: string
   verified: boolean
   bio: string
   consultationModes: {
@@ -132,6 +133,7 @@ export default function LawyersPage() {
           id: lawyer._id || lawyer.lawyerDetails?._id || '',
           userId: lawyer.userId || lawyer.lawyerDetails?.userId || '',
           fullName: lawyer.userInfo?.fullName || '',
+          profilePhoto: lawyer.userInfo?.profilePhoto || lawyer.userInfo?.avatar || '',
           specialization: lawyer.lawyerDetails?.specialization || [],
           experience: Number(lawyer.lawyerDetails?.experience) || 0,
           rating: lawyer.lawyerDetails?.averageRating || 0,
