@@ -84,7 +84,8 @@ interface UserProfile {
     phone?: string
     gender?: string
     dob?: string
-    profileImage?: string
+    profilePhoto?: string
+    avatar?: string
     address?: Address
     createdAt: string
     updatedAt: string
@@ -812,7 +813,9 @@ export default function ProfilePage() {
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                         <div className="relative group">
                             <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
-                                <AvatarImage src={profile.profileImage} />
+                                <AvatarImage
+                                    src={profile?.profilePhoto || profile?.avatar || undefined}
+                                />
                                 <AvatarFallback className="bg-gradient-to-r from-blue-500 to-purple-500 text-white text-2xl font-bold">
                                     {profile.fullName.split(" ").map(n => n[0]).join("")}
                                 </AvatarFallback>
