@@ -47,7 +47,8 @@ interface Lawyer {
     _id: string
     userId: string
     fullName: string
-    profileImage?: string
+    profilePhoto?: string
+    avatar?: string
     barCouncilId: string
     experience: string
     state: string
@@ -119,7 +120,7 @@ export default function LawyerDetailsPage() {
                 const lawyerData = {
                     ...response.data.lawyer,
                     fullName: response.data.lawyer.userInfo?.fullName || "Lawyer",
-                    profileImage: response.data.lawyer.userInfo?.profileImage
+                    profilePhoto: response.data.lawyer.userInfo?.profilePhoto || response.data.lawyer.userInfo?.avatar || '',
                 }
 
                 setLawyer(lawyerData)
@@ -478,9 +479,9 @@ export default function LawyerDetailsPage() {
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                         <div className="relative">
                             <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
-                                {lawyer.profileImage ? (
+                                {lawyer.profilePhoto ? (
                                     <img
-                                        src={lawyer.profileImage}
+                                        src={lawyer.profilePhoto}
                                         alt={lawyer.fullName}
                                         className="w-full h-full object-cover"
                                     />

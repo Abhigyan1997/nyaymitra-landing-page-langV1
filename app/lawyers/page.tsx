@@ -766,9 +766,18 @@ export default function LawyersPage() {
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center space-x-4">
                             <div className="relative">
-                              <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
-                                <User className="h-8 w-8 text-blue-600" />
+                              <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                                {lawyer.profilePhoto ? (
+                                  <img
+                                    src={lawyer.profilePhoto || lawyer.avatar || ''}
+                                    alt={lawyer.fullName}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <User className="h-8 w-8 text-blue-600" />
+                                )}
                               </div>
+
                               {lawyer.verified && (
                                 <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm">
                                   <div className="bg-blue-600 text-white p-1 rounded-full">
