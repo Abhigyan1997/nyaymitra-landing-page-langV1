@@ -67,7 +67,7 @@ function ResetPasswordForm() {
             };
 
             await axios.put(
-                "https://nyaymitra.tech/api/v1/auth/reset-password",
+                "https://nyaymitra-backend-production.up.railway.app/api/v1/auth/reset-password",
                 resetData,
                 {
                     headers: {
