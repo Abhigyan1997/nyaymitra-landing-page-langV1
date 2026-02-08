@@ -203,29 +203,72 @@ export default function LawyersPage() {
 
   const specializations = [
     "All Specializations",
-    "Criminal Law",
-    "Family Law",
-    "Property Law",
-    "Corporate Law",
-    "Consumer Rights",
-    "Cyber Law",
-    "Labor Law",
-    "Civil Law"
+    "Criminal Lawyer",
+    "Civil Lawyer",
+    "Family Lawyer",
+    "Divorce Lawyer",
+    "Child Custody Lawyer",
+    "Property Lawyer",
+    "Real Estate Lawyer",
+    "Corporate Lawyer",
+    "Startup Lawyer",
+    "Contract Lawyer",
+    "Intellectual Property Lawyer",
+    "Trademark Lawyer",
+    "Patent Lawyer",
+    "Cyber Crime Lawyer",
+    "Consumer Court Lawyer",
+    "Labour & Employment Lawyer",
+    "Tax Lawyer",
+    "GST Lawyer",
+    "Banking & Finance Lawyer",
+    "Debt Recovery Lawyer",
+    "Immigration Lawyer",
+    "Cheque Bounce Lawyer",
+    "Motor Accident Lawyer",
+    "Insurance Lawyer",
+    "Arbitration Lawyer",
+    "High Court Lawyer",
+    "Supreme Court Lawyer",
+    "Service Matter Lawyer",
+    "RERA Lawyer",
+    "Environmental Lawyer",
+    "Constitutional Lawyer"
   ]
+
 
   const states = [
     "All States",
-    "Maharashtra",
-    "Delhi",
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
     "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
     "Karnataka",
-    "Telangana",
-    "Tamil Nadu",
-    "West Bengal",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
     "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
     "Uttar Pradesh",
-    "Bihar"
+    "Uttarakhand",
+    "West Bengal"
   ]
+
 
   const experienceLevels = ["All Experience", "0-5 years", "5-10 years", "10-20 years", "20+ years"]
 
@@ -238,7 +281,15 @@ export default function LawyersPage() {
     "Telugu",
     "Tamil",
     "Kannada",
-    "Bengali"
+    "Bengali",
+    "Punjabi",
+    "Malayalam",
+    "Odia",
+    "Assamese",
+    "Maithili",
+    "Bhojpuri",
+    "Rajasthani",
+
   ]
 
   const sortOptions = [
