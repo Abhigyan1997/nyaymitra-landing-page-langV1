@@ -909,14 +909,12 @@ export default function HomePage() {
 
 
               {/* Elegant Badge - Responsive */}
-              <Link href="/services">
-                <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
-                  <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
-                    One-Tap Legal Help – Book Lawyers, Draft Docs, Get Notary Support Instantly
-                  </span>
-                </div>
-              </Link>
+              <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
+                <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
+                  One-Tap Legal Help – Book Lawyers, Draft Docs, Get Notary Support Instantly
+                </span>
+              </div>
 
               {/* Sophisticated Title - Responsive */}
               <div className="space-y-4 md:space-y-6">
