@@ -754,13 +754,14 @@ export default function HomePage() {
             <div className="md:hidden">
               <Button
                 variant="ghost"
-                size="sm"
+                size="default"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white hover:bg-white/10 transition-all duration-300"
+                className="text-white hover:bg-white/10 transition-all duration-300 w-11 h-11 p-0"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
             </div>
+
           </div>
         </div>
 
