@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Scale, Target, Eye, Heart, Users, Award, Linkedin, Twitter, Mail, ArrowRight } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image";
+
 
 export default function AboutPage() {
   // const team = [
@@ -280,9 +282,15 @@ export default function AboutPage() {
             {/* Team Member 1 */}
             <Card className="text-center overflow-hidden h-full">
               <CardContent className="p-6 flex flex-col h-full">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-gray-400" />
+                <div className="w-32 h-32 mx-auto mb-4 relative">
+                  <Image
+                    src="/images/alok.jpg"
+                    alt="Alok Abhigyan"
+                    fill
+                    className="rounded-full object-cover ring-4 ring-blue-500/20"
+                  />
                 </div>
+
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">Alok Abhigyan</h3>
                 <p className="text-blue-600 font-medium mb-2">Founder & CEO</p>
                 <div className="min-h-[40px] mb-4">
