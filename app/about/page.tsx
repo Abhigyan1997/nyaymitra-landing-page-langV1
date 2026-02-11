@@ -272,10 +272,11 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
-            <p className="text-xl text-gray-600">The experts behind Nyay Mitra</p>
+            <p className="text-xl text-gray-600">The team behind NyayMitra</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+
             {/* Team Member 1 */}
             <Card className="text-center overflow-hidden h-full">
               <CardContent className="p-6 flex flex-col h-full">
@@ -283,12 +284,12 @@ export default function AboutPage() {
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">Alok Abhigyan</h3>
-                <p className="text-blue-600 font-medium mb-2">Founder & Full Stack Developer</p>
+                <p className="text-blue-600 font-medium mb-2">Founder & CEO</p>
                 <div className="min-h-[40px] mb-4">
-                  <Badge variant="secondary" className="text-xs">MERN Stack Specialist</Badge>
+                  <Badge variant="secondary" className="text-xs">Full Stack Development</Badge>
                 </div>
                 <p className="text-gray-600 text-sm mb-4 flex-grow">
-                  Full stack developer with expertise in building scalable web applications and AI integrations.
+                  Leads product, technology, and strategic direction for NyayMitra, building a structured and trustworthy legal-tech platform.
                 </p>
               </CardContent>
             </Card>
@@ -305,7 +306,7 @@ export default function AboutPage() {
                   <Badge variant="secondary" className="text-xs">Civil & Criminal Law Specialist</Badge>
                 </div>
                 <p className="text-gray-600 text-sm mb-4 flex-grow">
-                  Senior practicing advocate with 25+ years of experience in civil, criminal, and consumer law. Brings deep domain expertise and ensures all legal frameworks on NyayMitra are sound, ethical, and user-centric.
+                  Senior practicing advocate with 25+ years of experience in civil, criminal, and consumer law. Ensures legal integrity and compliance across the platform.
                 </p>
               </CardContent>
             </Card>
@@ -316,33 +317,17 @@ export default function AboutPage() {
                 <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Pooja Rani</h3>
-                <p className="text-blue-600 font-medium mb-2">Head of Finance & Compliance</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Twinkle Gupta</h3>
+                <p className="text-blue-600 font-medium mb-2">Co-Founder</p>
                 <div className="min-h-[40px] mb-4">
-                  <Badge variant="secondary" className="text-xs">Finance & Compliance</Badge>
+                  <Badge variant="secondary" className="text-xs">Growth & Market Development</Badge>
                 </div>
                 <p className="text-gray-600 text-sm mb-4 flex-grow">
-                  Brings deep banking expertise to oversee financial operations, compliance, and regulatory alignment for NyayMitra.
+                  Focuses on brand positioning, organic marketing, and user acquisition strategy to strengthen NyayMitra’s trust-driven growth.
                 </p>
               </CardContent>
             </Card>
 
-            {/* Team Member 4 */}
-            <Card className="text-center overflow-hidden h-full">
-              <CardContent className="p-6 flex flex-col h-full">
-                <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Shweta Upadhya</h3>
-                <p className="text-blue-600 font-medium mb-2">Product Designer</p>
-                <div className="min-h-[40px] mb-4">
-                  <Badge variant="secondary" className="text-xs">User Experience</Badge>
-                </div>
-                <p className="text-gray-600 text-sm mb-4 flex-grow">
-                  Focused on creating intuitive and accessible interfaces for legal technology.
-                </p>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
