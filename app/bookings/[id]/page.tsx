@@ -587,7 +587,11 @@ For any queries, please contact nyaymitra.ai@gmail.com
                                     </Card>
                                 </div>
                             </div>
+                            <ContactCard booking={booking} isLawyer={isLawyer} />
+
                         </CardContent>
+                        {/* </CardContent> */}
+
                     </Card>
                 </TabsContent>
 
