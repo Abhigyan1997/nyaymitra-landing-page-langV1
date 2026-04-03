@@ -396,7 +396,7 @@ export default function HomePage() {
         items: [
           {
             title: "त्वरित वकील बुकिंग",
-            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइ�� उपलब्धता और प्राथमिकता बुकिंग के साथ।",
+            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइ�� उपलब्धता और प्राथमि��ता बुकिंग के साथ।",
             icon: CalendarCheck,
             color: "from-indigo-600 to-purple-600",
           },
@@ -485,9 +485,14 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-hidden relative">
-      {/* Simple Light Background */}
-      <div className="fixed inset-0 z-0 bg-gradient-to-br from-white to-blue-50" />
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 text-gray-900 overflow-hidden relative">
+      {/* Premium subtle gradient background */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50" />
+        {/* Subtle accent gradients */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/20 rounded-full filter blur-3xl opacity-30" />
+        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-blue-100/10 rounded-full filter blur-3xl opacity-20" />
+      </div>
 
       {/* Navigation remains the same... */}
       <nav className="relative z-50 bg-white border-b border-gray-200 sticky top-0">
@@ -779,76 +784,116 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 gap-16 items-center">
-            <div className="space-y-8 md:space-y-10">
+        <div className="max-w-5xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left: Content */}
+            <div className="space-y-8">
               {/* Trust Line */}
-              <div className="text-sm md:text-base text-gray-600 font-semibold tracking-wide">
-                ✔ Verified lawyers  ✔ Instant help  ✔ 100% confidential
+              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
+                <span className="text-xs font-semibold text-blue-700 tracking-wide">TRUSTED BY INDIANS</span>
               </div>
 
               {/* Title & Subtitle */}
-              <div className="space-y-4 md:space-y-6">
-                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight text-gray-900">
+              <div className="space-y-6">
+                <h1 className="text-5xl sm:text-6xl lg:text-6xl font-bold tracking-tight leading-tight text-gray-900">
                   {t.hero.title}
                 </h1>
 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700">
+                <h2 className="text-2xl sm:text-3xl font-semibold text-gray-700 leading-relaxed">
                   {t.hero.subtitle}
                 </h2>
               </div>
 
               {/* Description */}
-              <p className="text-lg sm:text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl">
                 {t.hero.description}
               </p>
 
-              {/* CTA Buttons with Card Background */}
-              <div className="bg-blue-50 rounded-lg p-6 md:p-8 border border-blue-100">
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link href="/legal-gpt">
+              {/* CTA Card */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 space-y-4">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link href="/legal-gpt" className="flex-1">
                     <Button
                       size="lg"
-                      className="text-base md:text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                      className="w-full text-base px-6 py-6 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-shadow"
                     >
                       <MessageCircle className="mr-2 h-5 w-5" />
                       {t.hero.ctaPrimary}
                     </Button>
                   </Link>
 
-                  <Link href="/lawyers">
+                  <Link href="/lawyers" className="flex-1">
                     <Button
                       size="lg"
-                      className="text-base md:text-lg px-8 py-6 bg-gray-600 hover:bg-gray-700 text-white font-semibold"
+                      className="w-full text-base px-6 py-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
                     >
                       <FileText className="mr-2 h-5 w-5" />
                       {t.hero.ctaSecondary}
                     </Button>
                   </Link>
-
-                  <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
-                    <Button
-                      size="lg"
-                      className="text-base md:text-lg px-8 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold"
-                    >
-                      <svg className="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-                      </svg>
-                      {t.hero.whatsapp}
-                    </Button>
-                  </a>
                 </div>
+
+                <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="block">
+                  <Button
+                    size="lg"
+                    className="w-full text-base px-6 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+                    </svg>
+                    {t.hero.whatsapp}
+                  </Button>
+                </a>
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap gap-6 pt-4">
-                <div className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5 text-blue-600" />
-                  <span className="text-gray-700 text-sm"><span className="font-semibold text-blue-600">Secure</span> Payments</span>
+              <div className="flex flex-wrap gap-8 pt-4">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
+                    <CheckCircle className="h-5 w-5" />
+                  </div>
+                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">Verified</span> Lawyers</span>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <ShieldCheck className="h-5 w-5 text-green-600" />
-                  <span className="text-gray-700 text-sm"><span className="font-semibold text-green-600">Verified</span> Lawyers</span>
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
+                    <CheckCircle className="h-5 w-5" />
+                  </div>
+                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">Instant</span> Guidance</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
+                    <CheckCircle className="h-5 w-5" />
+                  </div>
+                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">100%</span> Confidential</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Visual (Premium Card) */}
+            <div className="hidden lg:block">
+              <div className="relative h-96 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 shadow-lg p-8 space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="h-12 w-12 bg-blue-700 rounded-xl flex items-center justify-center text-white font-bold">1</div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900">Tell your problem</h3>
+                      <p className="text-xs text-gray-600">Apni legal issue batayein</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold">2</div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900">Get instant guidance</h3>
+                      <p className="text-xs text-gray-600">Turant samajho solution</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center text-white font-bold">3</div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-gray-900">Talk to lawyer</h3>
+                      <p className="text-xs text-gray-600">Connect with verified expert</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -857,10 +902,10 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-20 bg-blue-50">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-white via-blue-50/30 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.howItWorks.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
@@ -870,19 +915,28 @@ export default function HomePage() {
             {t.howItWorks.steps.map((step, index) => {
               const IconComponent = step.icon
               return (
-                <div key={index} className="text-center p-6 bg-white rounded-lg border border-blue-100 shadow-sm">
-                  <div className="mb-4 flex justify-center">
-                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                      <IconComponent className="h-8 w-8 text-blue-600" />
+                <div key={index} className="relative group">
+                  <div className="text-center p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                    <div className="mb-6 flex justify-center">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-8 w-8 text-blue-700" />
+                      </div>
                     </div>
+                    <div className="inline-block px-3 py-1 bg-blue-50 rounded-lg mb-4">
+                      <span className="text-sm font-bold text-blue-700">Step {index + 1}</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                      {step.title}
+                    </h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">
+                      {step.description}
+                    </p>
                   </div>
-                  <div className="text-3xl font-bold text-blue-600 mb-2">{index + 1}</div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {step.title}
-                  </h3>
-                  <p className="text-gray-600">
-                    {step.description}
-                  </p>
+                  {index < 2 && (
+                    <div className="hidden md:flex absolute top-1/2 -right-4 items-center justify-center w-8 h-8 text-gray-400">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  )}
                 </div>
               )
             })}
@@ -891,10 +945,10 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose NyayMitra Section */}
-      <section className="relative z-10 py-20 bg-white">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.whyChoose.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
@@ -904,14 +958,16 @@ export default function HomePage() {
             {t.whyChoose.features.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <div key={index} className="text-center p-6 bg-blue-50 rounded-lg border border-blue-100">
-                  <div className="mb-4 flex justify-center">
-                    <IconComponent className="h-12 w-12 text-blue-600" />
+                <div key={index} className="group text-center p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                  <div className="mb-6 flex justify-center">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-7 w-7 text-blue-700" />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -922,10 +978,10 @@ export default function HomePage() {
       </section>
 
       {/* Common Problems Section */}
-      <section className="relative z-10 py-20 bg-gray-50">
+      <section className="relative z-10 py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.commonProblems.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.commonProblems.subtitle}</p>
@@ -933,13 +989,20 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.commonProblems.items.map((item, index) => (
-              <div key={index} className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm">
-                  {item.description}
-                </p>
+              <div key={index} className="group p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <span className="text-sm font-bold text-blue-700">✓</span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -947,10 +1010,10 @@ export default function HomePage() {
       </section>
 
       {/* Features Section */}
-      <section className="relative z-10 py-20 bg-blue-50">
+      <section className="relative z-10 py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.features.title}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
@@ -962,19 +1025,23 @@ export default function HomePage() {
               return (
                 <div
                   key={index}
-                  className="p-6 bg-white rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-shadow"
+                  className="group p-8 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300"
                 >
-                  <div className="flex items-center space-x-4 mb-4">
-                    <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
-                      <IconComponent className="h-8 w-8 text-blue-600" />
+                  <div className="flex items-start space-x-6">
+                    <div className="flex-shrink-0">
+                      <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-7 w-7 text-blue-700" />
+                      </div>
                     </div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      {feature.title}
-                    </h3>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
                   </div>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    {feature.description}
-                  </p>
                 </div>
               )
             })}
@@ -983,10 +1050,10 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative z-10 py-20 bg-gray-50">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 text-gray-900">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-gray-900">
               {t.testimonials.title}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
@@ -997,32 +1064,32 @@ export default function HomePage() {
             {t.testimonials.items.map((testimonial, index) => (
               <div
                 key={index}
-                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-5 sm:p-6"
+                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 p-8"
               >
                 {/* Star rating */}
-                <div className="flex mb-4 sm:mb-6">
+                <div className="flex mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
 
                 {/* Quote */}
-                <blockquote className="text-sm sm:text-lg text-gray-700 mb-4 sm:mb-6 leading-relaxed">
+                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed italic">
                   "{testimonial.text}"
                 </blockquote>
 
                 {/* User info */}
-                <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-4 pt-6 border-t border-gray-100">
                   {/* Avatar fallback */}
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {testimonial.avatar}
                   </div>
-                  <div className="text-left">
-                    <div className="font-semibold text-gray-900 text-sm sm:text-base">
+                  <div className="text-left min-w-0">
+                    <div className="font-semibold text-gray-900 text-sm">
                       {testimonial.name}
                     </div>
-                    <div className="text-gray-600 text-xs sm:text-sm">{testimonial.role}</div>
-                    <div className="text-gray-500 text-xs sm:text-sm">{testimonial.location}</div>
+                    <div className="text-gray-600 text-xs">{testimonial.role}</div>
+                    <div className="text-gray-500 text-xs">{testimonial.location}</div>
                   </div>
                 </div>
               </div>
@@ -1180,17 +1247,19 @@ export default function HomePage() {
         href={`https://wa.me/${t.hero.whatsappNumber}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-6 right-6 z-50 group"
       >
-        <div className="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="h-7 w-7 text-white"
-          >
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-          </svg>
+        <div className="relative">
+          <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-8 w-8 text-white"
+            >
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+            </svg>
+          </div>
         </div>
       </a>
     </div>
