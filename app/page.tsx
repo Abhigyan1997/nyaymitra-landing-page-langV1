@@ -795,11 +795,11 @@ export default function HomePage() {
 
               {/* Title & Subtitle */}
               <div className="space-y-6">
-                <h1 className="text-5xl sm:text-6xl lg:text-6xl font-bold tracking-tight leading-tight text-gray-900">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold italic tracking-tight leading-tight text-transparent bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 bg-clip-text">
                   {t.hero.title}
                 </h1>
 
-                <h2 className="text-2xl sm:text-3xl font-semibold text-gray-700 leading-relaxed">
+                <h2 className="text-2xl sm:text-3xl font-playfair italic font-semibold text-blue-700 leading-relaxed">
                   {t.hero.subtitle}
                 </h2>
               </div>
@@ -1099,18 +1099,18 @@ export default function HomePage() {
       </section>
 
       {/* Get Started Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-12">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">{t.getStarted.title}</h2>
-            <p className="text-base sm:text-xl text-white/80 mb-3 sm:mb-4 max-w-2xl mx-auto">{t.getStarted.subtitle}</p>
-            <p className="text-sm sm:text-lg text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto">{t.getStarted.description}</p>
+      <section className="relative z-10 py-24 bg-gradient-to-r from-blue-50 via-white to-blue-50">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 sm:p-16 shadow-2xl">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold italic text-white mb-6 sm:mb-8">{t.getStarted.title}</h2>
+            <p className="text-base sm:text-xl text-blue-100 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed">{t.getStarted.subtitle}</p>
+            <p className="text-sm sm:text-lg text-blue-100 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">{t.getStarted.description}</p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/legal-gpt" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 shadow-2xl shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 group"
+                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-white text-blue-700 hover:bg-gray-100 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group rounded-xl"
                 >
                   <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
                   {t.getStarted.cta}
@@ -1119,9 +1119,8 @@ export default function HomePage() {
               </Link>
               <Link href="/lawyers" className="w-full sm:w-auto">
                 <Button
-                  variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
+                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-blue-700 text-white hover:bg-blue-900 border-2 border-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 rounded-xl"
                 >
                   {t.getStarted.secondary}
                 </Button>
