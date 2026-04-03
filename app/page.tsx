@@ -222,6 +222,28 @@ export default function HomePage() {
         ]
       },
 
+      commonProblems: {
+        title: "Common Legal Problems",
+        subtitle: "We help with these issues every day",
+        items: [
+          {
+            title: "FIR not being registered",
+            description: "Understand your rights and take action"
+          },
+          {
+            title: "Property dispute",
+            description: "Protect your ownership and boundaries"
+          },
+          {
+            title: "Divorce / Family issue",
+            description: "Get guidance on custody and settlements"
+          },
+          {
+            title: "Online fraud",
+            description: "Recover your money and file complaints"
+          },
+        ]
+      },
       getStarted: {
         title: "Ready to Get Started?",
         subtitle: "Join thousands of Indians who trust NyayMitra for their legal needs",
@@ -386,7 +408,7 @@ export default function HomePage() {
           },
           {
             title: "दूरस्थ नोटरी सेवा",
-            description: "अपने दस्तावेज़ों को भारत भर में लाइसेंस प्राप्त वकीलों से ऑनलाइन या कूरियर के माध्यम से नोटरी करवाएं।",
+            description: "अपने दस्तावेज़ों को भारत भर में लाइसेंस प्राप्त वकीलों से ऑनलाइन या कूरियर के माध्यम से नोटरी ��रवाएं।",
             icon: Stamp,
             color: "from-purple-600 to-pink-500",
           },
@@ -463,12 +485,12 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-hidden relative">
-      {/* Simple Background */}
-      <div className="fixed inset-0 z-0 bg-slate-950" />
+    <div className="min-h-screen bg-white text-gray-900 overflow-hidden relative">
+      {/* Simple Light Background */}
+      <div className="fixed inset-0 z-0 bg-gradient-to-br from-white to-blue-50" />
 
       {/* Navigation remains the same... */}
-      <nav className="relative z-50 bg-black/5 backdrop-blur-3xl border-b border-white/5 sticky top-0">
+      <nav className="relative z-50 bg-white border-b border-gray-200 sticky top-0">
         {/* Top Status Bar */}
         {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -502,33 +524,11 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-20">
             {/* Enhanced Logo */}
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-4 group">
-                <div className="relative">
-                  {/* Outer Glow */}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-25 group-hover:opacity-50 transition duration-300" />
-
-                  {/* Logo Icon */}
-                  <div className="relative bg-blue-600 p-4 rounded-2xl shadow-lg group-hover:scale-105 transition duration-300">
-                    <Scale className="h-8 w-8 text-white group-hover:rotate-6 transition-transform duration-300" />
-                  </div>
+              <Link href="/" className="flex items-center space-x-3">
+                <div className="bg-blue-600 p-3 rounded-lg hover:bg-blue-700 transition">
+                  <Scale className="h-6 w-6 text-white" />
                 </div>
-
-                {/* Text Block */}
-                <div className="flex flex-col">
-                  <span className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:text-white transition duration-300">
-                    NyayMitra
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-white/60 font-medium tracking-wider uppercase">
-                      India’s Legal Helpdesk
-                    </span>
-                    <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" />
-                      <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse delay-150" />
-                      <div className="w-1 h-1 bg-pink-400 rounded-full animate-pulse delay-300" />
-                    </div>
-                  </div>
-                </div>
+                <span className="text-2xl font-bold text-gray-900">NyayMitra</span>
               </Link>
             </div>
 
@@ -546,38 +546,25 @@ export default function HomePage() {
                           key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
                             `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
                       }
-                      className="relative text-white/70 hover:text-white px-4 py-3 text-sm font-medium transition-all duration-500 group"
+                      className="relative text-gray-700 hover:text-blue-600 px-4 py-3 text-sm font-medium transition-colors"
                     >
-                      <div className="relative z-10 flex items-center space-x-2">
-                        <span>{value}</span>
-                        {index === 0 && <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />}
-                      </div>
-
-                      {/* Hover Background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-95 group-hover:scale-100 blur-sm group-hover:blur-none" />
-
-                      {/* Bottom Indicator */}
-                      <div className="absolute bottom-0 left-1/2 w-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 group-hover:w-3/4 transition-all duration-500 transform -translate-x-1/2 rounded-full" />
-
-                      {/* Side Glow */}
-                      <div className="absolute inset-y-0 -left-2 w-1 bg-gradient-to-b from-transparent via-blue-400 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-full blur-sm" />
+                      <span>{value}</span>
                     </Link>
                   ))}
               </div>
             </div>
 
-            {/* Enhanced Action Buttons */}
+            {/* Action Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Language Toggle */}
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                className="border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <Globe className="h-4 w-4 mr-2 group-hover:rotate-180 transition-transform duration-700" />
-                <span className="relative z-10 font-medium">{language === "en" ? "हिं" : "EN"}</span>
+                <Globe className="h-4 w-4 mr-2" />
+                <span className="font-medium">{language === "en" ? "हिं" : "EN"}</span>
               </Button>
 
               {mounted && isLoggedIn ? (
@@ -585,12 +572,12 @@ export default function HomePage() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
-                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
                       disabled={isProfileLoading}
                     >
                       {isProfileLoading ? (
                         <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
                           Loading...
                         </div>
                       ) : (
@@ -602,11 +589,11 @@ export default function HomePage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                    className="mt-2 w-48 bg-black/90 border border-white/10 rounded-md shadow-lg p-2 text-white"
+                    className="mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg p-2"
                     sideOffset={5}
                   >
                     <DropdownMenuItem asChild>
-                      <Link href="/profile" className="block px-3 py-2 hover:bg-white/10 rounded">
+                      <Link href="/profile" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
                         {t.profileMenu.profile}
                       </Link>
                     </DropdownMenuItem>
@@ -615,16 +602,14 @@ export default function HomePage() {
                         window.location.href = 'https://nyay-dashboard.netlify.app/';
                       }}
                     >
-                      <div className="flex items-center gap-3 w-full justify-between">
+                      <div className="flex items-center gap-3 w-full justify-between text-gray-700">
                         <div className="flex items-center gap-3">
-                          <BarChart2 className="h-5 w-5 text-green-500" />
+                          <BarChart2 className="h-5 w-5 text-green-600" />
                           <span>{t.profileMenu.dashboard}</span>
                         </div>
                         <ChevronRight className="h-4 w-4" />
                       </div>
                     </DropdownMenuItem>
-
-
 
                     <DropdownMenuItem asChild>
                       <button
@@ -632,14 +617,14 @@ export default function HomePage() {
                           localStorage.removeItem("token");
                           window.location.reload();
                         }}
-                        className="block w-full text-left px-3 py-2 hover:bg-white/10 rounded"
+                        className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-gray-700"
                       >
                         {t.profileMenu.logout}
                       </button>
                     </DropdownMenuItem>
                     {profile?.role !== "lawyer" && (
                       <DropdownMenuItem asChild>
-                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
+                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
                           {t.profileMenu.bookings}
                         </Link>
                       </DropdownMenuItem>
@@ -655,7 +640,7 @@ export default function HomePage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
+                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
                     >
                       {t.nav.login}
                     </Button>
@@ -665,11 +650,9 @@ export default function HomePage() {
                   <Link href="/auth/signup">
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 border-0 shadow-xl shadow-blue-500/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 group relative overflow-hidden"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform duration-500" />
-                      <span className="relative z-10">{t.nav.signup}</span>
+                      {t.nav.signup}
                     </Button>
                   </Link>
                 </>
@@ -682,7 +665,7 @@ export default function HomePage() {
                 variant="ghost"
                 size="default"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white hover:bg-white/10 transition-all duration-300 w-11 h-11 p-0"
+                className="text-gray-700 hover:bg-gray-100 transition-all duration-300 w-11 h-11 p-0"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
@@ -694,7 +677,7 @@ export default function HomePage() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-3xl border-b border-white/10 animate-fade-in">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200">
             <div className="px-4 pt-4 pb-6 space-y-2">
               {/* Show regular nav links */}
               {Object.entries(t.nav)
@@ -794,130 +777,110 @@ export default function HomePage() {
         )}
       </nav>
 
-      {/* Elegant & Eye-Catching Hero Section */}
+      {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        {/* Clean Background - Minimal Decoration */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Optional: Subtle gradient overlay */}
-        </div>
-
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 gap-16 items-center">
-
-            {/* Left Column - Content */}
-            <div
-              className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
-            >
-              <div className="text-sm md:text-base text-white font-semibold tracking-wide">
-                ✓ Trusted by Indians, Verified Lawyers
+            <div className="space-y-8 md:space-y-10">
+              {/* Trust Line */}
+              <div className="text-sm md:text-base text-gray-600 font-semibold tracking-wide">
+                ✔ Verified lawyers  ✔ Instant help  ✔ 100% confidential
               </div>
 
-              {/* Simple Title */}
+              {/* Title & Subtitle */}
               <div className="space-y-4 md:space-y-6">
-                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight text-white">
+                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight text-gray-900">
                   {t.hero.title}
                 </h1>
 
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white/90">
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700">
                   {t.hero.subtitle}
                 </h2>
               </div>
 
-              {/* Simple Description */}
-              <p className="text-lg sm:text-xl md:text-2xl text-white/80 leading-relaxed max-w-2xl">
+              {/* Description */}
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-600 leading-relaxed max-w-2xl">
                 {t.hero.description}
               </p>
 
+              {/* CTA Buttons with Card Background */}
+              <div className="bg-blue-50 rounded-lg p-6 md:p-8 border border-blue-100">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Link href="/legal-gpt">
+                    <Button
+                      size="lg"
+                      className="text-base md:text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                    >
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      {t.hero.ctaPrimary}
+                    </Button>
+                  </Link>
 
+                  <Link href="/lawyers">
+                    <Button
+                      size="lg"
+                      className="text-base md:text-lg px-8 py-6 bg-gray-600 hover:bg-gray-700 text-white font-semibold"
+                    >
+                      <FileText className="mr-2 h-5 w-5" />
+                      {t.hero.ctaSecondary}
+                    </Button>
+                  </Link>
 
-
-              {/* Simple CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/legal-gpt">
-                  <Button
-                    size="lg"
-                    className="text-base md:text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
-                  >
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    {t.hero.ctaPrimary}
-                  </Button>
-                </Link>
-
-                <Link href="/lawyers">
-                  <Button
-                    size="lg"
-                    className="text-base md:text-lg px-8 py-6 bg-slate-700 hover:bg-slate-800 text-white font-semibold"
-                  >
-                    <FileText className="mr-2 h-5 w-5" />
-                    {t.hero.ctaSecondary}
-                  </Button>
-                </Link>
-
-                <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
-                  <Button
-                    size="lg"
-                    className="text-base md:text-lg px-8 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold"
-                  >
-                    <svg className="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-                    </svg>
-                    {t.hero.whatsapp}
-                  </Button>
-                </a>
+                  <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      size="lg"
+                      className="text-base md:text-lg px-8 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold"
+                    >
+                      <svg className="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+                      </svg>
+                      {t.hero.whatsapp}
+                    </Button>
+                  </a>
+                </div>
               </div>
 
-              {/* Trust Indicators - Simple */}
-              <div className="flex flex-wrap gap-4 pt-4">
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap gap-6 pt-4">
                 <div className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/70 text-sm"><span className="font-semibold text-blue-300">Secure</span> Payments</span>
+                  <Shield className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700 text-sm"><span className="font-semibold text-blue-600">Secure</span> Payments</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <ShieldCheck className="h-5 w-5 text-green-400" />
-                  <span className="text-white/70 text-sm"><span className="font-semibold text-green-300">Verified</span> Lawyers</span>
+                  <ShieldCheck className="h-5 w-5 text-green-600" />
+                  <span className="text-gray-700 text-sm"><span className="font-semibold text-green-600">Verified</span> Lawyers</span>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Elegant Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
-            <div className="flex flex-col items-center space-y-2">
-              <span className="text-white/60 text-sm font-medium">Discover More</span>
-              <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-                <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-20 bg-slate-900">
+      <section className="relative z-10 py-20 bg-blue-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
               {t.howItWorks.title}
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {t.howItWorks.steps.map((step, index) => {
               const IconComponent = step.icon
               return (
-                <div key={index} className="text-center p-6 bg-slate-800 rounded-lg">
+                <div key={index} className="text-center p-6 bg-white rounded-lg border border-blue-100 shadow-sm">
                   <div className="mb-4 flex justify-center">
-                    <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
-                      <IconComponent className="h-8 w-8 text-white" />
+                    <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                      <IconComponent className="h-8 w-8 text-blue-600" />
                     </div>
                   </div>
-                  <div className="text-3xl font-bold text-blue-400 mb-2">{index + 1}</div>
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <div className="text-3xl font-bold text-blue-600 mb-2">{index + 1}</div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {step.title}
                   </h3>
-                  <p className="text-white/70">
+                  <p className="text-gray-600">
                     {step.description}
                   </p>
                 </div>
@@ -928,27 +891,27 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose NyayMitra Section */}
-      <section className="relative z-10 py-20 bg-slate-950">
+      <section className="relative z-10 py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
               {t.whyChoose.title}
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.whyChoose.features.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <div key={index} className="text-center p-6 bg-slate-800 rounded-lg">
+                <div key={index} className="text-center p-6 bg-blue-50 rounded-lg border border-blue-100">
                   <div className="mb-4 flex justify-center">
-                    <IconComponent className="h-12 w-12 text-blue-400" />
+                    <IconComponent className="h-12 w-12 text-blue-600" />
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-white/70 text-sm">
+                  <p className="text-gray-600 text-sm">
                     {feature.description}
                   </p>
                 </div>
@@ -958,42 +921,61 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Common Problems Section */}
+      <section className="relative z-10 py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+              {t.commonProblems.title}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.commonProblems.subtitle}</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {t.commonProblems.items.map((item, index) => (
+              <div key={index} className="p-6 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-gray-600 text-sm">
+                  {item.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-purple-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <section className="relative z-10 py-20 bg-blue-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
               {t.features.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.features.subtitle}</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {t.features.items.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <Card
+                <div
                   key={index}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
+                  className="p-6 bg-white rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-shadow"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div
-                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500`}
-                      >
-                        <IconComponent className="h-8 w-8 text-white" />
-                      </div>
-                      <CardTitle className="text-2xl text-white group-hover:text-blue-300 transition-colors duration-300">
-                        {feature.title}
-                      </CardTitle>
+                  <div className="flex items-center space-x-4 mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
+                      <IconComponent className="h-8 w-8 text-blue-600" />
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-white/70 text-lg leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {feature.title}
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               )
             })}
           </div>
@@ -1001,51 +983,49 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative z-10 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14 sm:mb-20">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <section className="relative z-10 py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 text-gray-900">
               {t.testimonials.title}
             </h2>
-            <p className="text-base sm:text-xl text-white/80 max-w-3xl mx-auto">{t.testimonials.subtitle}</p>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
           </div>
 
           {/* Responsive container: scroll on mobile, grid on larger screens */}
           <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 scrollbar-hide">
             {t.testimonials.items.map((testimonial, index) => (
-              <Card
+              <div
                 key={index}
-                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
+                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow p-5 sm:p-6"
               >
-                <CardContent className="p-5 sm:p-6">
-                  {/* Star rating */}
-                  <div className="flex mb-4 sm:mb-6">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
+                {/* Star rating */}
+                <div className="flex mb-4 sm:mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
 
-                  {/* Quote */}
-                  <blockquote className="text-sm sm:text-lg text-white/80 mb-4 sm:mb-6 leading-relaxed group-hover:text-white transition-colors duration-300">
-                    "{testimonial.text}"
-                  </blockquote>
+                {/* Quote */}
+                <blockquote className="text-sm sm:text-lg text-gray-700 mb-4 sm:mb-6 leading-relaxed">
+                  "{testimonial.text}"
+                </blockquote>
 
-                  {/* User info */}
-                  <div className="flex items-center space-x-4">
-                    {/* Avatar fallback */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
-                      {testimonial.avatar}
-                    </div>
-                    <div className="text-left">
-                      <div className="font-semibold text-white group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-white/60 text-xs sm:text-sm">{testimonial.role}</div>
-                      <div className="text-white/40 text-xs sm:text-sm">{testimonial.location}</div>
-                    </div>
+                {/* User info */}
+                <div className="flex items-center space-x-4">
+                  {/* Avatar fallback */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
+                    {testimonial.avatar}
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="text-left">
+                    <div className="font-semibold text-gray-900 text-sm sm:text-base">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-gray-600 text-xs sm:text-sm">{testimonial.role}</div>
+                    <div className="text-gray-500 text-xs sm:text-sm">{testimonial.location}</div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -1085,33 +1065,29 @@ export default function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-black/40 backdrop-blur-xl border-t border-white/10 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="relative z-10 bg-gray-900 border-t border-gray-200 py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <Scale className="h-10 w-10 text-blue-400" />
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <Scale className="h-10 w-10 text-blue-600" />
+                <span className="text-2xl font-bold text-gray-900">
                   {t.footer.company}
                 </span>
               </div>
-              <p className="text-white/60 mb-6 max-w-md">{t.footer.tagline}</p>
+              <p className="text-gray-600 mb-6 max-w-md">{t.footer.tagline}</p>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <MapPin className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.address}</span>
+                  <MapPin className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.address}</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.email}</span>
+                  <Mail className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.email}</span>
                 </div>
-                {/* <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.email}</span>
-                </div> */}
                 <div className="flex items-center space-x-3">
-                  <PhoneCall className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.phone}</span>
+                  <PhoneCall className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.phone}</span>
                 </div>
                 {/* <div className="flex items-center space-x-3">
                   <MessageSquare className="h-5 w-5 text-green-400" />
@@ -1121,30 +1097,30 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">{t.footer.quickLinks}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.footer.quickLinks}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/about" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/about" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.about}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/services" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.nav.services}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/lawyers" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/lawyers" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.nav.lawyers}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auth/signup" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/auth/signup" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.signup}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auth/login" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/auth/login" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.signin}
                   </Link>
                 </li>
@@ -1152,7 +1128,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">{t.footer.legal}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.footer.legal}</h3>
               <ul className="space-y-3">
                 <li>
                   {/* <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
@@ -1170,30 +1146,28 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.contact}
                   </Link>
-                </li>
-                <li>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm">
-            <p className="text-white/60 mb-2">
+          <div className="border-t border-gray-200 mt-12 pt-8 text-center text-sm">
+            <p className="text-gray-600 mb-2">
               © 2026 {t.footer.company}. All rights reserved. Powered by AI.
             </p>
 
-            <div className="flex justify-center gap-4 text-white/50 mb-2">
-              <a href="/terms" className="hover:text-white underline">Terms & Conditions</a>
-              <a href="/privacy-policy" className="hover:text-white underline">Privacy Policy</a>
-              <a href="/cancellation" className="hover:text-white underline">Cancellation & Refund</a>
+            <div className="flex justify-center gap-4 text-gray-500 mb-2">
+              <a href="/terms" className="hover:text-blue-600 underline">Terms & Conditions</a>
+              <a href="/privacy-policy" className="hover:text-blue-600 underline">Privacy Policy</a>
+              <a href="/cancellation" className="hover:text-blue-600 underline">Cancellation & Refund</a>
             </div>
 
-            <p className="text-sm text-gray-400 mt-4">
-              <strong className="text-red-400">Disclaimer:</strong>
-              <span className="text-gray-300">
+            <p className="text-sm text-gray-600 mt-4">
+              <strong className="text-red-600">Disclaimer:</strong>
+              <span className="text-gray-600">
                 NyayMitra is a technology platform that helps users connect with verified legal professionals, access general legal information, and generate basic legal documents. While we provide AI-powered assistance, we do not offer legal advice or act as a law firm. All consultations and notary services are delivered by licensed third-party professionals. NyayMitra is not liable for actions taken based on AI suggestions or external legal interactions through the platform.
               </span>
             </p>
@@ -1201,46 +1175,22 @@ export default function HomePage() {
 
         </div>
       </footer>
-      {/* Simple Floating WhatsApp Button */}
+      {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/message/75WUE6HEW6ACL1"
+        href={`https://wa.me/${t.hero.whatsappNumber}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 group"
+        className="fixed bottom-6 right-6 z-50"
       >
-        <div className="relative">
-          {/* Main Button with Bounce Animation */}
-          <div className="animate-bounce group-hover:animate-none">
-            <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40 hover:shadow-green-500/60 transition-all duration-300 hover:scale-110 group-hover:rotate-12">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-7 w-7 text-white"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-              </svg>
-            </div>
-            {/* Live Indicator */}
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse" />
-          </div>
-
-          {/* Hover Tooltip - Appears on hover */}
-          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none translate-x-4 group-hover:translate-x-0">
-            <div className="bg-black/95 backdrop-blur-md text-white px-4 py-3 rounded-lg whitespace-nowrap text-sm font-medium border border-white/20 shadow-2xl">
-              <div className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4 text-green-400" />
-                <span className="font-semibold">Chat with Legal Experts</span>
-              </div>
-              <div className="text-xs text-green-300 mt-1">Instant Response • 24/7 Support</div>
-
-              {/* Tooltip Arrow */}
-              <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 rotate-45 w-3 h-3 bg-black/95 border-r border-b border-white/20" />
-            </div>
-          </div>
-
-          {/* Pulsing Glow Effect */}
-          <div className="absolute -inset-2 bg-green-500 rounded-full opacity-20 animate-ping group-hover:animate-none" style={{ animationDuration: '2s' }} />
+        <div className="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-7 w-7 text-white"
+          >
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+          </svg>
         </div>
       </a>
     </div>
