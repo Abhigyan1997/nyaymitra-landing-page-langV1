@@ -191,23 +191,6 @@ export default function HomePage() {
           },
         ],
       },
-          {
-            title: "Get Instant Answers with Legal GPT",
-            description: "Ask any legal question and get AI-powered answers 24/7 – fast, private, and easy to understand.",
-            icon: Bot,
-          },
-          {
-            title: "No More Legal Confusion",
-            description: "We simplify the law – whether it’s agreements, notices, or finding the right lawyer. We’re here for you.",
-            icon: FileText,
-          },
-          {
-            title: "Online & Hassle-Free",
-            description: "No need to visit courts or offices. Consult lawyers, notarize documents, or ask GPT – all from your phone.",
-            icon: PenTool,
-          },
-        ],
-      },
       features: {
         title: "Powerful Features",
         subtitle: "Smart, affordable and fast legal support at your fingertips",
@@ -391,7 +374,7 @@ export default function HomePage() {
         items: [
           {
             title: "त्वरित वकील बुकिंग",
-            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइम उपलब्धता और प्राथमिकता बुकिंग के साथ।",
+            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइ�� उपलब्धता और प्राथमिकता बुकिंग के साथ।",
             icon: CalendarCheck,
             color: "from-indigo-600 to-purple-600",
           },
@@ -429,7 +412,7 @@ export default function HomePage() {
           {
             name: "ऋतिका मेहरा",
             location: "लखनऊ, उत्तर प्रदेश",
-            text: "मैंने सिर्फ 5 मिनट में वकील बुक किया और उसी दिन परामर्श मिला। संपत्ति विवाद में तुरंत समाधान मिला।",
+            text: "मैंने सिर्फ 5 मिनट में वकील बुक किया ���र उसी दिन परामर्श मिला। संपत्ति विवाद में तुरंत समाधान मिला।",
             rating: 5,
             role: "शिक्षिका",
             avatar: "RM",
