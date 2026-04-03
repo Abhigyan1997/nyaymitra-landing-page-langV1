@@ -64,16 +64,8 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null)
   const [language, setLanguage] = useState<"en" | "hi">("en");
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentTime, setCurrentTime] = useState<string>("--:--:--"); // Changed to string type
-  const [sparklePositions, setSparklePositions] = useState<Array<{ left: string, top: string }>>([]);
-  const [floatElements, setFloatElements] = useState<Array<{
-    left: string
-    top: string
-    delay: string
-    duration: string
-  }>>([]);
+  const [currentTime, setCurrentTime] = useState<string>("--:--:--");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
@@ -103,35 +95,12 @@ export default function HomePage() {
     setIsLoaded(true);
     setCurrentTime(new Date().toLocaleTimeString());
 
-    // Initialize random positions
-    setSparklePositions(
-      Array(6).fill(0).map(() => ({
-        left: `${20 + Math.random() * 60}%`,
-        top: `${20 + Math.random() * 60}%`
-      }))
-    );
-
-    setFloatElements(
-      Array(12).fill(0).map((_, i) => ({
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 5}s`,
-        duration: `${6 + Math.random() * 4}s`
-      }))
-    );
-
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
       clearInterval(timer);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -155,12 +124,14 @@ export default function HomePage() {
       },
 
       hero: {
-        title: "Justice for All",
-        subtitle: "Anywhere, Anytime",
+        title: "Legal problem hai?",
+        subtitle: "Hum help karenge",
         description:
-          "Talk to verified lawyers, generate custom legal documents, and book notary services — right from your phone.Justice, simplified for every Indian.",
-        ctaPrimary: "Talk to AI Now",
-        ctaSecondary: "Consult Lawyers",
+          "FIR, property, family issues — samajhiye aur turant lawyer se baat kariye",
+        ctaPrimary: "Talk to Legal Buddy",
+        ctaSecondary: "Talk to Lawyer",
+        whatsapp: "Talk on WhatsApp",
+        whatsappNumber: "919970596183",
         liveStatus: "AI System Online",
         stats: {
           cases: "1M+ Cases Resolved",
@@ -172,23 +143,23 @@ export default function HomePage() {
 
       howItWorks: {
         title: "How It Works",
-        subtitle: "From legal doubt to resolution – in a few simple steps",
+        subtitle: "Teeno simple step mein solution",
         steps: [
           {
-            title: "Select a Lawyer",
-            description: "Browse verified lawyers by category and choose one that fits your legal need.",
+            title: "Tell your problem",
+            description: "Apni legal problem simple words me batayein",
             icon: FileCheck,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "Pick a Slot",
-            description: "Choose a suitable date, time, and preferred mode (chat, call, or video) for the consultation.",
+            title: "Get free guidance",
+            description: "Turant samjhein aapko kya karna chahiye",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "Join & Review",
-            description: "Connect at your scheduled time. After the session, access receipts and share feedback.",
+            title: "Talk to lawyer",
+            description: "Jarurat ho toh verified lawyer se baat karein",
             icon: ThumbsUp,
             color: "from-yellow-500 to-orange-500",
           },
@@ -196,13 +167,30 @@ export default function HomePage() {
       },
       whyChoose: {
         title: "Why Choose NyayMitra?",
-        subtitle: "Smart Legal Help, Just a Click Away – Talk to a Lawyer or Ask Legal GPT Anytime",
+        subtitle: "Saral, asaan, aur bharosa",
         features: [
           {
-            title: "Book a Verified Lawyer Instantly",
-            description: "Choose from trusted lawyers across India. Book consultations at your convenience – starting at just ₹99.",
+            title: "Simple legal help",
+            description: "Law ko easy language me samjhein",
             icon: IndianRupee,
           },
+          {
+            title: "Talk instantly",
+            description: "WhatsApp ya call pe turant help",
+            icon: Bot,
+          },
+          {
+            title: "Verified lawyers",
+            description: "Trusted lawyers se direct connect",
+            icon: FileText,
+          },
+          {
+            title: "No confusion",
+            description: "Step-by-step guidance milega",
+            icon: PenTool,
+          },
+        ],
+      },
           {
             title: "Get Instant Answers with Legal GPT",
             description: "Ask any legal question and get AI-powered answers 24/7 – fast, private, and easy to understand.",
@@ -329,12 +317,14 @@ export default function HomePage() {
       },
 
       hero: {
-        title: "सभी के लिए न्याय",
-        subtitle: "कहीं भी, कभी भी",
+        title: "Legal problem hai?",
+        subtitle: "Hum help karenge",
         description:
-          "सत्यापित वकीलों से बात करें, अपने कानूनी दस्तावेज़ बनाएं, और नोटरी सेवाएं बुक करें — अब सब कुछ मोबाइल से। हर भारतीय के लिए न्याय, अब सरल और सुलभ।",
-        ctaPrimary: "अभी AI से बात करें",
-        ctaSecondary: "वकील से परामर्श लें",
+          "FIR, property, family issues — samajhiye aur turant lawyer se baat kariye",
+        ctaPrimary: "Talk to Legal Buddy",
+        ctaSecondary: "Talk to Lawyer",
+        whatsapp: "Talk on WhatsApp",
+        whatsappNumber: "919970596183",
         liveStatus: "AI सिस्टम ऑनलाइन",
         stats: {
           cases: "10 लाख+ मामले हल",
@@ -345,51 +335,51 @@ export default function HomePage() {
       },
 
       howItWorks: {
-        title: "यह कैसे काम करता है",
-        subtitle: "कानूनी सलाह लेने के आसान और भरोसेमंद चरण",
+        title: "Yeh Kaise Kaam Karta Hai",
+        subtitle: "Teeno simple step mein solution",
         steps: [
           {
-            title: "वकील चुनें",
-            description: "अपनी ज़रूरत के अनुसार किसी अनुभवी वकील को खोजें और चुनें।",
+            title: "Tell your problem",
+            description: "Apni legal problem simple words me batayein",
             icon: FileText,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "स्लॉट बुक करें",
-            description: "सुविधाजनक समय और मोड (कॉल/वीडियो/चैट) चुनकर भुगतान करें।",
+            title: "Get free guidance",
+            description: "Turant samjhein aapko kya karna chahiye",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "जुड़ें और प्रतिक्रिया दें",
-            description: "निर्धारित समय पर वकील से जुड़ें और सेवा के बाद प्रतिक्रिया दें।",
+            title: "Talk to lawyer",
+            description: "Jarurat ho toh verified lawyer se baat karein",
             icon: ThumbsUp,
             color: "from-green-500 to-emerald-500",
           },
         ],
       },
       whyChoose: {
-        title: "न्यायमित्र क्यों चुनें",
-        subtitle: "अब वकील से सलाह लेना और कानूनी सवाल पूछना पहले से कहीं आसान",
+        title: "Kyun Choose Karein",
+        subtitle: "Saral, asaan, aur bharosa",
         features: [
           {
-            title: "प्रामाणिक वकील से तुरंत परामर्श",
-            description: "भारत के अनुभवी वकीलों में से चुनें – ₹99 से शुरू, अपने स्लॉट बुक करें और तुरंत जुड़ें।",
+            title: "Simple legal help",
+            description: "Law ko easy language me samjhein",
             icon: IndianRupee,
           },
           {
-            title: "AI से पूछें कानूनी सवाल",
-            description: "किसी भी समय अपने सवाल Legal GPT से पूछें – सरल, तेज़ और भरोसेमंद उत्तर पाएं।",
+            title: "Talk instantly",
+            description: "WhatsApp ya call pe turant help",
             icon: Bot,
           },
           {
-            title: "कोई भ्रम नहीं, बस समाधान",
-            description: "हम आपके लिए क़ानून को आसान बनाते हैं – सलाह हो या दस्तावेज़, सब कुछ एक जगह।",
+            title: "Verified lawyers",
+            description: "Trusted lawyers se direct connect",
             icon: FileText,
           },
           {
-            title: "100% ऑनलाइन सुविधा",
-            description: "घर बैठे वकील से मिलें, दस्तावेज़ बनवाएं या AI से मदद लें – सब कुछ आपके फोन पर।",
+            title: "No confusion",
+            description: "Step-by-step guidance milega",
             icon: PenTool,
           },
         ],
@@ -490,40 +480,9 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
-      {/* Enhanced Beautiful Background */}
-      <div className="fixed inset-0 z-0">
-        {/* Sophisticated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/30 via-purple-900/20 to-black" />
-
-        {/* Elegant Mesh Gradient */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-          <div
-            className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          />
-          <div
-            className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500/15 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
-            style={{ animationDelay: "4s" }}
-          />
-        </div>
-
-        {/* Sophisticated Grid Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.3)_1px,transparent_1px)] bg-[size:100px_100px]" />
-        </div>
-
-        {/* Dynamic Mouse-Following Glow */}
-        <div
-          className="absolute w-[600px] h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-3xl transition-all duration-1000 ease-out"
-          style={{
-            left: mousePosition.x / 8,
-            top: mousePosition.y / 8,
-            transform: "translate(-50%, -50%)",
-          }}
-        />
-      </div>
+    <div className="min-h-screen bg-slate-950 text-white overflow-hidden relative">
+      {/* Simple Background */}
+      <div className="fixed inset-0 z-0 bg-slate-950" />
 
       {/* Navigation remains the same... */}
       <nav className="relative z-50 bg-black/5 backdrop-blur-3xl border-b border-white/5 sticky top-0">
@@ -566,24 +525,8 @@ export default function HomePage() {
                   <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-25 group-hover:opacity-50 transition duration-300" />
 
                   {/* Logo Icon */}
-                  <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-4 rounded-2xl shadow-lg group-hover:scale-105 transition duration-300">
+                  <div className="relative bg-blue-600 p-4 rounded-2xl shadow-lg group-hover:scale-105 transition duration-300">
                     <Scale className="h-8 w-8 text-white group-hover:rotate-6 transition-transform duration-300" />
-
-                    {/* Sparkles */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-                      {sparklePositions.map((pos, i) => (
-                        <div
-                          key={i}
-                          className="absolute w-1 h-1 bg-white rounded-full animate-ping"
-                          style={{
-                            left: pos.left,
-                            top: pos.top,
-                            animationDelay: `${i * 0.25}s`,
-                            animationDuration: "2s"
-                          }}
-                        />
-                      ))}
-                    </div>
                   </div>
                 </div>
 
@@ -870,427 +813,85 @@ export default function HomePage() {
 
       {/* Elegant & Eye-Catching Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        {/* Sophisticated Background Elements */}
+        {/* Clean Background - Minimal Decoration */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Elegant Floating Orbs */}
-          {floatElements.map((element, i) => (
-            <div
-              key={i}
-              className="absolute animate-float"
-              style={{
-                left: element.left,
-                top: element.top,
-                animationDelay: element.delay,
-                animationDuration: element.duration
-              }}
-            >
-              <div className="w-2 h-2 bg-gradient-to-r from-blue-400/40 to-purple-400/40 rounded-full blur-sm" />
-            </div>
-          ))}
-
-          {/* Elegant Light Rays */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div
-              className="w-[800px] h-[800px] bg-gradient-conic from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-full animate-spin"
-              style={{ animationDuration: "20s" }}
-            />
-          </div>
+          {/* Optional: Subtle gradient overlay */}
         </div>
 
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 gap-16 items-center">
 
             {/* Left Column - Content */}
             <div
               className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
             >
-              <div className="text-sm md:text-base text-yellow-300 font-semibold tracking-wide">
-                ⚡Trusted Notary Services, Backed by a Government License.
+              <div className="text-sm md:text-base text-white font-semibold tracking-wide">
+                ✓ Trusted by Indians, Verified Lawyers
               </div>
 
-
-              {/* Elegant Badge - Responsive */}
-              <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
-                <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
-                  One-Tap Legal Help – Book Lawyers, Draft Docs, Get Notary Support Instantly
-                </span>
-              </div>
-
-              {/* Sophisticated Title - Responsive */}
+              {/* Simple Title */}
               <div className="space-y-4 md:space-y-6">
-                <h1
-                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight leading-[1.15] sm:leading-[1.2] md:leading-[1.25] text-balance break-words overflow-visible"
-                  style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem" }}
-                >
-                  <span className="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2 md:mb-4">
-                    {t.hero.title.split(" ")[0]}
-                  </span>
-                  <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {t.hero.title.split(" ").slice(1).join(" ")}
-                  </span>
+                <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-tight text-white">
+                  {t.hero.title}
                 </h1>
 
-
-                <div className="relative">
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 tracking-wide">
-                    {t.hero.subtitle}
-                  </h2>
-                  <div className="absolute -bottom-1 left-0 w-16 md:w-24 h-0.5 md:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
-                </div>
+                <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white/90">
+                  {t.hero.subtitle}
+                </h2>
               </div>
 
-              {/* Elegant Description - Responsive */}
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed font-light max-w-2xl break-words text-pretty">
-                <span className="bg-gradient-to-r from-white/95 via-blue-100/85 to-purple-100/75 bg-clip-text text-transparent">
-                  {t.hero.description}
-                </span>
+              {/* Simple Description */}
+              <p className="text-lg sm:text-xl md:text-2xl text-white/80 leading-relaxed max-w-2xl">
+                {t.hero.description}
               </p>
 
 
-              {/* Premium Free Consultation Banner - Responsive */}
-              <div className="relative">
-                {/* Floating Notification Badge */}
-                <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 z-10">
-                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
-                    <span className="text-white text-xs font-bold">🔥</span>
-                  </div>
-                </div>
 
-                <Link href="/free-consultation">
-                  <div className="group cursor-pointer transform hover:scale-[1.02] md:hover:scale-105 transition-all duration-500">
-                    <div className="relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-teal-500/15 border-2 border-emerald-400/40 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-lg md:shadow-2xl shadow-emerald-500/10">
-                      {/* Animated Background Glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                      {/* Sparkle Effects */}
-                      <div className="absolute inset-0 overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
-                        {Array(8).fill(0).map((_, i) => (
-                          <div
-                            key={i}
-                            className="absolute w-1 h-1 bg-emerald-300 rounded-full animate-ping"
-                            style={{
-                              left: `${10 + (i * 10)}%`,
-                              top: `${10 + (i * 10)}%`,
-                              animationDelay: `${i * 0.5}s`,
-                              animationDuration: "3s"
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
-                        <div className="flex items-center space-x-4 md:space-x-6">
-                          {/* Icon Container */}
-                          <div className="relative">
-                            <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl md:rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 shadow-lg md:shadow-xl">
-                              <Heart className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white group-hover:scale-110 transition-transform duration-300" />
-                            </div>
-                            {/* Floating Badge */}
-                            <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
-                              <span className="text-[8px] md:text-xs">✨</span>
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          <div className="space-y-1 md:space-y-2">
-                            <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 md:space-x-3">
-                              <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">
-                                🎉 First Consultation
-                              </span>
-                              <div className="px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full w-fit">
-                                <span className="text-black font-bold text-sm sm:text-base md:text-lg">FREE</span>
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-4 text-emerald-200/90">
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-green-400" />
-                                <span className="text-xs md:text-sm font-medium">No hidden charges</span>
-                              </div>
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <Clock className="h-3 w-3 md:h-4 md:w-4 text-blue-400" />
-                                <span className="text-xs md:text-sm font-medium">Instant access</span>
-                              </div>
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <Shield className="h-3 w-3 md:h-4 md:w-4 text-purple-400" />
-                                <span className="text-xs md:text-sm font-medium">100% Confidential</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Arrow with Glow - Hidden on small screens */}
-                        <div className="relative hidden sm:block">
-                          <div className="absolute inset-0 bg-emerald-400/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-                          <ArrowRight className="relative h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-emerald-400 group-hover:translate-x-3 group-hover:scale-110 transition-all duration-300" />
-                        </div>
-                      </div>
-
-                      {/* Bottom Highlight */}
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 md:h-1 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 rounded-b-xl md:rounded-b-2xl lg:rounded-b-3xl" />
-                    </div>
-                  </div>
-                </Link>
-              </div>
-
-              {/* Sophisticated CTA Buttons - Responsive */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6">
+              {/* Simple CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/legal-gpt">
                   <Button
                     size="lg"
-                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 border-0 shadow-lg md:shadow-xl lg:shadow-2xl shadow-blue-500/25 hover:shadow-purple-500/40 transition-all duration-500 group relative overflow-hidden"
+                    className="text-base md:text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    <MessageCircle className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6 group-hover:scale-110 transition-transform duration-300" />
-                    <span className="relative z-10 font-semibold">{t.hero.ctaPrimary}</span>
-                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    {t.hero.ctaPrimary}
                   </Button>
                 </Link>
 
                 <Link href="/lawyers">
                   <Button
                     size="lg"
-                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-black hover:from-yellow-500 hover:to-orange-500 shadow-lg transition-all duration-500 group relative overflow-hidden"
+                    className="text-base md:text-lg px-8 py-6 bg-slate-700 hover:bg-slate-800 text-white font-semibold"
                   >
-                    <FileText className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6" />
-                    <span className="relative z-10 font-semibold">{t.hero.ctaSecondary}</span>
-                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                    <FileText className="mr-2 h-5 w-5" />
+                    {t.hero.ctaSecondary}
                   </Button>
                 </Link>
 
-
-
+                <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    size="lg"
+                    className="text-base md:text-lg px-8 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold"
+                  >
+                    <svg className="mr-2 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+                    </svg>
+                    {t.hero.whatsapp}
+                  </Button>
+                </a>
               </div>
 
-              {/* Trust Indicators - Responsive */}
-              <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-6 md:space-x-0 pt-2 md:pt-4">
-                {/* WhatsApp Support with Icon */}
-                <div className="flex items-center space-x-2 group relative">
-                  {/* WhatsApp Icon Container */}
-                  <div className="relative">
-                    {/* Outer Glow */}
-                    <div className="absolute -inset-1 bg-green-500/20 rounded-full blur-sm group-hover:bg-green-500/30 transition-all duration-300" />
-
-                    {/* Main Icon */}
-                    <div className="relative w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-4 w-4 text-white"
-                      >
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-                      </svg>
-                    </div>
-
-                    {/* Live Indicator */}
-                    <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 rounded-full border border-white animate-pulse" />
-                  </div>
-
-                  {/* Text with Gradient */}
-                  <span className="text-white/80 text-xs md:text-sm font-medium">
-                    <span className="bg-gradient-to-r from-green-300 to-emerald-300 bg-clip-text text-transparent font-bold">
-                      24×7
-                    </span>{" "}
-                    <span className="text-white font-semibold">WhatsApp Support</span>
-                  </span>
-
-                  {/* Hover Arrow */}
-                  <ChevronRight className="h-3 w-3 text-green-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+              {/* Trust Indicators - Simple */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex items-center space-x-2">
+                  <Shield className="h-5 w-5 text-blue-400" />
+                  <span className="text-white/70 text-sm"><span className="font-semibold text-blue-300">Secure</span> Payments</span>
                 </div>
-
-                {/* Secure Payments */}
-                <div className="flex items-center space-x-2 md:space-x-3 group">
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-blue-500/20 rounded-full blur-sm group-hover:bg-blue-500/30 transition-all duration-300" />
-                    <Shield className="h-5 w-5 md:h-6 md:w-6 text-blue-400 relative group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <span className="text-white/70 text-xs md:text-sm">
-                    <span className="font-medium text-blue-300">Secure</span> Payments
-                  </span>
-                </div>
-
-                {/* Verified Lawyers */}
-                <div className="flex items-center space-x-2 md:space-x-3 group animate-fade-in" style={{ animationDelay: "0.6s" }}>
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-teal-500/20 rounded-full blur-sm group-hover:bg-teal-500/30 transition-all duration-300" />
-                    <ShieldCheck className="h-5 w-5 md:h-6 md:w-6 text-teal-400 relative group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <span className="text-white/70 text-xs md:text-sm">
-                    <span className="font-medium text-teal-300">Verified</span> Lawyers
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column - Animated Legal Illustration */}
-            <div
-              className={`relative transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
-              style={{ animationDelay: "0.3s" }}
-            >
-              {/* Main Illustration Container */}
-              <div className="relative w-full max-w-lg mx-auto">
-                {/* Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse" />
-
-                {/* Central Justice Scale */}
-                <div className="relative z-10 flex flex-col items-center">
-                  {/* Floating Crown/Badge */}
-                  <div className="mb-8 animate-float">
-                    <div className="relative">
-                      <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-yellow-500/25 transform rotate-12 hover:rotate-0 transition-transform duration-700">
-                        <Award className="h-10 w-10 text-white" />
-                      </div>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-ping">
-                        <CheckCircle className="h-4 w-4 text-white" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Main Scale of Justice */}
-                  <div className="relative mb-8">
-                    {/* Scale Base */}
-                    <div className="w-4 h-32 bg-gradient-to-b from-gray-300 to-gray-600 rounded-full mx-auto shadow-lg" />
-
-                    {/* Scale Beam */}
-                    <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-                      <div className="w-48 h-2 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full shadow-lg animate-pulse" />
-
-                      {/* Left Scale Pan */}
-                      <div className="absolute -left-8 top-2 transform -translate-x-1/2">
-                        <div
-                          className="flex flex-col items-center animate-bounce"
-                          style={{ animationDelay: "0s", animationDuration: "3s" }}
-                        >
-                          <div className="w-3 h-8 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full" />
-                          <div className="w-16 h-3 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full shadow-lg" />
-                          <div className="w-20 h-2 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full" />
-                          {/* AI Symbol */}
-                          <div className="mt-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                            <Brain className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right Scale Pan */}
-                      <div className="absolute -right-8 top-2 transform translate-x-1/2">
-                        <div
-                          className="flex flex-col items-center animate-bounce"
-                          style={{ animationDelay: "1.5s", animationDuration: "3s" }}
-                        >
-                          <div className="w-3 h-8 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full" />
-                          <div className="w-16 h-3 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full shadow-lg" />
-                          <div className="w-20 h-2 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full" />
-                          {/* Human Symbol */}
-                          <div className="mt-2 w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
-                            <Users className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Floating Legal Elements */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    {/* Floating Documents */}
-                    <div
-                      className="absolute top-16 -left-12 animate-float"
-                      style={{ animationDelay: "0s", animationDuration: "4s" }}
-                    >
-                      <div className="w-12 h-16 bg-gradient-to-b from-white/90 to-gray-100 rounded-lg shadow-lg border border-gray-200 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-                        <div className="p-2">
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-3/4 h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-1/2 h-1 bg-gray-300 rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      className="absolute top-32 -right-16 animate-float"
-                      style={{ animationDelay: "2s", animationDuration: "5s" }}
-                    >
-                      <div className="w-12 h-16 bg-gradient-to-b from-white/90 to-gray-100 rounded-lg shadow-lg border border-gray-200 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
-                        <div className="p-2">
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-2/3 h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-3/4 h-1 bg-gray-300 rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Floating Gavel */}
-                    <div
-                      className="absolute bottom-16 -left-8 animate-float"
-                      style={{ animationDelay: "1s", animationDuration: "6s" }}
-                    >
-                      <div className="transform rotate-45 hover:rotate-12 transition-transform duration-700">
-                        <div className="w-3 h-12 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full" />
-                        <div className="w-8 h-4 bg-gradient-to-r from-amber-700 to-amber-900 rounded-lg -mt-2 ml-1" />
-                      </div>
-                    </div>
-
-                    {/* Floating Shield */}
-                    <div
-                      className="absolute bottom-20 -right-12 animate-float"
-                      style={{ animationDelay: "3s", animationDuration: "4s" }}
-                    >
-                      <div className="w-12 h-14 bg-gradient-to-b from-blue-500 to-blue-700 rounded-t-full rounded-b-lg shadow-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-500">
-                        <Shield className="h-6 w-6 text-white" />
-                      </div>
-                    </div>
-
-                    {/* Orbiting Elements */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="relative w-80 h-80">
-                        {/* Orbiting Chat Bubble */}
-                        <div className="absolute animate-spin" style={{ animationDuration: "1s" }}>
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                              <div className="w-10 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <MessageCircle className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Orbiting Video Call */}
-                        <div
-                          className="absolute animate-spin"
-                          style={{ animationDuration: "2s", animationDirection: "reverse" }}
-                        >
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-                              <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <Video className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Orbiting Phone */}
-                        <div className="absolute animate-spin" style={{ animationDuration: "2s" }}>
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
-                              <div className="w-8 h-10 bg-gradient-to-b from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <PhoneCall className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Text */}
-                  <div className="text-center mt-8 space-y-2">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      AI-Powered Justice
-                    </div>
-                    <div className="text-white/60 text-sm">Balancing Technology & Human Expertise</div>
-                  </div>
+                <div className="flex items-center space-x-2">
+                  <ShieldCheck className="h-5 w-5 text-green-400" />
+                  <span className="text-white/70 text-sm"><span className="font-semibold text-green-300">Verified</span> Lawyers</span>
                 </div>
               </div>
             </div>
@@ -1310,42 +911,33 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <section className="relative z-10 py-20 bg-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
               {t.howItWorks.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.howItWorks.subtitle}</p>
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {t.howItWorks.steps.map((step, index) => {
               const IconComponent = step.icon
               return (
-                <Card
-                  key={index}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
-                >
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-4">
-                      <div
-                        className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500`}
-                      >
-                        <IconComponent className="h-10 w-10 text-white" />
-                      </div>
+                <div key={index} className="text-center p-6 bg-slate-800 rounded-lg">
+                  <div className="mb-4 flex justify-center">
+                    <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center">
+                      <IconComponent className="h-8 w-8 text-white" />
                     </div>
-                    <div className="text-2xl font-bold text-white mb-2">{index + 1}</div>
-                    <CardTitle className="text-xl text-white group-hover:text-blue-300 transition-colors duration-300">
-                      {step.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-white/70 text-center leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                      {step.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                  </div>
+                  <div className="text-3xl font-bold text-blue-400 mb-2">{index + 1}</div>
+                  <h3 className="text-xl font-semibold text-white mb-2">
+                    {step.title}
+                  </h3>
+                  <p className="text-white/70">
+                    {step.description}
+                  </p>
+                </div>
               )
             })}
           </div>
@@ -1353,29 +945,27 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose NyayMitra Section */}
-      <section className="relative z-10 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <section className="relative z-10 py-20 bg-slate-950">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 text-white">
               {t.whyChoose.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.whyChoose.subtitle}</p>
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.whyChoose.features.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <div key={index} className="text-center group transform hover:scale-105 transition-all duration-500">
-                  <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mx-auto backdrop-blur-sm border border-white/10 group-hover:border-white/30 transition-all duration-300">
-                      <IconComponent className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
-                    </div>
+                <div key={index} className="text-center p-6 bg-slate-800 rounded-lg">
+                  <div className="mb-4 flex justify-center">
+                    <IconComponent className="h-12 w-12 text-blue-400" />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-300 transition-colors duration-300">
+                  <h3 className="text-lg font-semibold text-white mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-white/70 group-hover:text-white/90 transition-colors duration-300">
+                  <p className="text-white/70 text-sm">
                     {feature.description}
                   </p>
                 </div>
