@@ -485,17 +485,22 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 text-gray-900 overflow-hidden relative">
-      {/* Premium subtle gradient background */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden relative">
+      {/* Premium dark gradient with animated particles */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50" />
-        {/* Subtle accent gradients */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/20 rounded-full filter blur-3xl opacity-30" />
-        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-blue-100/10 rounded-full filter blur-3xl opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950" />
+        
+        {/* Animated gradient blobs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob" />
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-2000" />
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-cyan-600/10 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
+        
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:50px_50px] opacity-50" />
       </div>
 
-      {/* Navigation remains the same... */}
-      <nav className="relative z-50 bg-white border-b border-gray-200 sticky top-0">
+      {/* Navigation */}
+      <nav className="relative z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 sticky top-0">
         {/* Top Status Bar */}
         {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -530,10 +535,10 @@ export default function HomePage() {
             {/* Enhanced Logo */}
             <div className="flex items-center">
               <Link href="/" className="flex items-center space-x-3">
-                <div className="bg-blue-600 p-3 rounded-lg hover:bg-blue-700 transition">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition">
                   <Scale className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl font-bold text-gray-900">NyayMitra</span>
+                <span className="text-2xl font-playfair font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">NyayMitra</span>
               </Link>
             </div>
 
@@ -551,7 +556,7 @@ export default function HomePage() {
                           key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
                             `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
                       }
-                      className="relative text-gray-700 hover:text-blue-600 px-4 py-3 text-sm font-medium transition-colors"
+                      className="relative text-slate-300 hover:text-blue-400 px-4 py-3 text-sm font-medium transition-colors"
                     >
                       <span>{value}</span>
                     </Link>
@@ -566,7 +571,7 @@ export default function HomePage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="border border-gray-300 text-gray-700 hover:bg-gray-100"
+                className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
               >
                 <Globe className="h-4 w-4 mr-2" />
                 <span className="font-medium">{language === "en" ? "हिं" : "EN"}</span>
@@ -577,7 +582,7 @@ export default function HomePage() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
-                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
+                      className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
                       disabled={isProfileLoading}
                     >
                       {isProfileLoading ? (
@@ -784,38 +789,39 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        <div className="max-w-5xl mx-auto w-full">
+        <div className="max-w-6xl mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Left: Content */}
-            <div className="space-y-8">
-              {/* Trust Line */}
-              <div className="inline-flex items-center space-x-3 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
-                <span className="text-xs font-semibold text-blue-700 tracking-wide">TRUSTED BY INDIANS</span>
+            <div className="space-y-10 animate-fade-in">
+              {/* Trust Badge */}
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-xs font-semibold text-blue-300 tracking-widest">TRUSTED BY 100K+ INDIANS</span>
               </div>
 
               {/* Title & Subtitle */}
               <div className="space-y-6">
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold italic tracking-tight leading-tight text-transparent bg-gradient-to-r from-blue-700 via-blue-600 to-blue-700 bg-clip-text">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold italic tracking-tight leading-tight text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text">
                   {t.hero.title}
                 </h1>
 
-                <h2 className="text-2xl sm:text-3xl font-playfair italic font-semibold text-blue-700 leading-relaxed">
+                <h2 className="text-2xl sm:text-3xl font-playfair italic font-semibold text-blue-300 leading-relaxed">
                   {t.hero.subtitle}
                 </h2>
               </div>
 
               {/* Description */}
-              <p className="text-base sm:text-lg text-gray-600 leading-relaxed max-w-xl">
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
                 {t.hero.description}
               </p>
 
-              {/* CTA Card */}
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 space-y-4">
+              {/* CTA Card - Glassmorphism */}
+              <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 space-y-4 hover:border-blue-500/50 transition-all duration-300">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Link href="/legal-gpt" className="flex-1">
                     <Button
                       size="lg"
-                      className="w-full text-base px-6 py-6 bg-blue-700 hover:bg-blue-800 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                      className="w-full text-base px-6 py-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/50 transition-all duration-300 btn-futuristic"
                     >
                       <MessageCircle className="mr-2 h-5 w-5" />
                       {t.hero.ctaPrimary}
@@ -825,7 +831,7 @@ export default function HomePage() {
                   <Link href="/lawyers" className="flex-1">
                     <Button
                       size="lg"
-                      className="w-full text-base px-6 py-6 bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+                      className="w-full text-base px-6 py-6 bg-slate-700/50 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600/50 hover:border-blue-500/50 shadow-lg transition-all duration-300"
                     >
                       <FileText className="mr-2 h-5 w-5" />
                       {t.hero.ctaSecondary}
@@ -836,7 +842,7 @@ export default function HomePage() {
                 <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="block">
                   <Button
                     size="lg"
-                    className="w-full text-base px-6 py-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-shadow"
+                    className="w-full text-base px-6 py-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-green-500/50 transition-all duration-300"
                   >
                     <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
@@ -846,53 +852,64 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* Trust Indicators */}
-              <div className="flex flex-wrap gap-8 pt-4">
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
-                    <CheckCircle className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">Verified</span> Lawyers</span>
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-4 pt-8">
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-blue-400 font-bold text-lg">1M+</div>
+                  <div className="text-slate-400 text-sm">Cases Resolved</div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
-                    <CheckCircle className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">Instant</span> Guidance</span>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-cyan-400 font-bold text-lg">50K+</div>
+                  <div className="text-slate-400 text-sm">Expert Lawyers</div>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 h-5 w-5 text-blue-700">
-                    <CheckCircle className="h-5 w-5" />
-                  </div>
-                  <span className="text-sm text-gray-700"><span className="font-semibold text-gray-900">100%</span> Confidential</span>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-green-400 font-bold text-lg">99.9%</div>
+                  <div className="text-slate-400 text-sm">Success Rate</div>
+                </div>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-purple-400 font-bold text-lg">&lt;30s</div>
+                  <div className="text-slate-400 text-sm">Response Time</div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Visual (Premium Card) */}
-            <div className="hidden lg:block">
-              <div className="relative h-96 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 shadow-lg p-8 space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="h-12 w-12 bg-blue-700 rounded-xl flex items-center justify-center text-white font-bold">1</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">Tell your problem</h3>
-                      <p className="text-xs text-gray-600">Apni legal issue batayein</p>
+            {/* Right: Visual - Premium Glassmorphism Card */}
+            <div className="hidden lg:flex items-center justify-center">
+              <div className="relative w-full max-w-md">
+                {/* Glow effect */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-2xl" />
+                
+                <div className="relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-2xl rounded-3xl border border-slate-700/50 p-8 space-y-6 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
+                  <h3 className="text-xl font-playfair italic font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">How It Works</h3>
+                  
+                  <div className="space-y-5">
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">1</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Tell your problem</h4>
+                        <p className="text-xs text-slate-400 mt-1">Describe your legal issue</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">2</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Get instant guidance</h4>
+                        <p className="text-xs text-slate-400 mt-1">AI-powered legal advice</p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-purple-600 to-cyan-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">3</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Connect with lawyer</h4>
+                        <p className="text-xs text-slate-400 mt-1">Book verified experts</p>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold">2</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">Get instant guidance</h3>
-                      <p className="text-xs text-gray-600">Turant samajho solution</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <div className="h-12 w-12 bg-blue-500 rounded-xl flex items-center justify-center text-white font-bold">3</div>
-                    <div>
-                      <h3 className="text-sm font-semibold text-gray-900">Talk to lawyer</h3>
-                      <p className="text-xs text-gray-600">Connect with verified expert</p>
-                    </div>
+
+                  <div className="pt-4 border-t border-slate-700/50">
+                    <p className="text-xs text-slate-400">Available 24/7 • Instant response • Zero hidden costs</p>
                   </div>
                 </div>
               </div>
@@ -902,13 +919,13 @@ export default function HomePage() {
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-b from-white via-blue-50/30 to-white">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 via-slate-900/50 to-slate-900">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
               {t.howItWorks.title}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -916,24 +933,24 @@ export default function HomePage() {
               const IconComponent = step.icon
               return (
                 <div key={index} className="relative group">
-                  <div className="text-center p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                  <div className="text-center p-8 bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-blue-500/50 transition-all duration-300 hover:bg-slate-800/60">
                     <div className="mb-6 flex justify-center">
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <IconComponent className="h-8 w-8 text-blue-700" />
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-700/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-blue-500/30">
+                        <IconComponent className="h-8 w-8 text-blue-400" />
                       </div>
                     </div>
-                    <div className="inline-block px-3 py-1 bg-blue-50 rounded-lg mb-4">
-                      <span className="text-sm font-bold text-blue-700">Step {index + 1}</span>
+                    <div className="inline-block px-3 py-1 bg-blue-500/20 rounded-lg mb-4 border border-blue-500/30">
+                      <span className="text-sm font-bold text-blue-300">Step {index + 1}</span>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                    <h3 className="text-lg font-semibold text-white mb-3">
                       {step.title}
                     </h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className="text-slate-400 text-sm leading-relaxed">
                       {step.description}
                     </p>
                   </div>
                   {index < 2 && (
-                    <div className="hidden md:flex absolute top-1/2 -right-4 items-center justify-center w-8 h-8 text-gray-400">
+                    <div className="hidden md:flex absolute top-1/2 -right-4 items-center justify-center w-8 h-8 text-blue-500/50">
                       <ArrowRight className="h-5 w-5" />
                     </div>
                   )}
@@ -1099,32 +1116,37 @@ export default function HomePage() {
       </section>
 
       {/* Get Started Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-r from-blue-50 via-white to-blue-50">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 to-slate-950">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl p-8 sm:p-16 shadow-2xl">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold italic text-white mb-6 sm:mb-8">{t.getStarted.title}</h2>
-            <p className="text-base sm:text-xl text-blue-100 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed">{t.getStarted.subtitle}</p>
-            <p className="text-sm sm:text-lg text-blue-100 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">{t.getStarted.description}</p>
+          <div className="relative">
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-xl" />
+            
+            <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl rounded-3xl p-8 sm:p-16 shadow-2xl border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold italic text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text mb-6 sm:mb-8">{t.getStarted.title}</h2>
+              <p className="text-base sm:text-xl text-slate-300 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed">{t.getStarted.subtitle}</p>
+              <p className="text-sm sm:text-lg text-slate-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">{t.getStarted.description}</p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/legal-gpt" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-white text-blue-700 hover:bg-gray-100 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group rounded-xl"
-                >
-                  <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                  {t.getStarted.cta}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
-              </Link>
-              <Link href="/lawyers" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-blue-700 text-white hover:bg-blue-900 border-2 border-white font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 rounded-xl"
-                >
-                  {t.getStarted.secondary}
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/legal-gpt" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 transition-all duration-300 group rounded-xl btn-futuristic"
+                  >
+                    <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                    {t.getStarted.cta}
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </Link>
+                <Link href="/lawyers" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-slate-700/50 text-white hover:bg-slate-700 border-2 border-slate-600 hover:border-blue-500 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 rounded-xl"
+                  >
+                    {t.getStarted.secondary}
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -1249,7 +1271,10 @@ export default function HomePage() {
         className="fixed bottom-6 right-6 z-50 group"
       >
         <div className="relative">
-          <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 rounded-full flex items-center justify-center shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110">
+          {/* Glow effect */}
+          <div className="absolute -inset-2 bg-green-500/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+          
+          <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-500/50 transition-all duration-300 hover:scale-125 group-hover:animate-pulse">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
