@@ -91,10 +91,28 @@ const config = {
         float: "float 6s ease-in-out infinite",
         blob: "blob 7s infinite",
         "gradient-x": "gradient-x 15s ease infinite",
+        "fade-in": "fadeIn 0.5s ease-in",
+      },
+      transitionDelay: {
+        "2000": "2000ms",
+        "4000": "4000ms",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities }: any) {
+      addUtilities({
+        ".animation-delay-2000": {
+          "animation-delay": "2000ms",
+        },
+        ".animation-delay-4000": {
+          "animation-delay": "4000ms",
+        },
+      });
+    },
+  ],
 } satisfies Config
 
 export default config
+
