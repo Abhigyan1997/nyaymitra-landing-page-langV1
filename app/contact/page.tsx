@@ -61,9 +61,18 @@ export default function ContactPage() {
       icon: MapPin,
       title: "Office Address",
       details: [
-        "Nyay Mitra Legal Services Pvt. Ltd.",
+        "NyayMitra Technologies Pvt. Ltd.",
         "Koramangala, 5th Block",
         "Bangalore, Karnataka - 560095",
+        "India",
+      ],
+    },
+    {
+      icon: MapPin,
+      title: "Registered Address",
+      details: [
+        "NyayMitra Technologies Pvt. Ltd.",
+        "Bhagalpur, Bihar",
         "India",
       ],
     },
@@ -78,7 +87,6 @@ export default function ContactPage() {
       icon: Mail,
       title: "Email Addresses",
       details: [
-        "General: contact@nyaymitra.tech",
         "Support: support@nyaymitra.tech"
       ],
     },
@@ -89,7 +97,7 @@ export default function ContactPage() {
         "Monday - Friday: 9:00 AM - 8:00 PM",
         "Saturday: 10:00 AM - 6:00 PM",
         "Sunday: 10:00 AM - 4:00 PM",
-        "AI Support: 24/7 Available",
+        // "AI Support: 24/7 Available",
       ],
     },
   ]

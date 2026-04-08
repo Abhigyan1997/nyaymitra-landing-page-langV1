@@ -64,16 +64,8 @@ export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null)
   const [language, setLanguage] = useState<"en" | "hi">("en");
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
-  const [currentTime, setCurrentTime] = useState<string>("--:--:--"); // Changed to string type
-  const [sparklePositions, setSparklePositions] = useState<Array<{ left: string, top: string }>>([]);
-  const [floatElements, setFloatElements] = useState<Array<{
-    left: string
-    top: string
-    delay: string
-    duration: string
-  }>>([]);
+  const [currentTime, setCurrentTime] = useState<string>("--:--:--");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
@@ -103,35 +95,12 @@ export default function HomePage() {
     setIsLoaded(true);
     setCurrentTime(new Date().toLocaleTimeString());
 
-    // Initialize random positions
-    setSparklePositions(
-      Array(6).fill(0).map(() => ({
-        left: `${20 + Math.random() * 60}%`,
-        top: `${20 + Math.random() * 60}%`
-      }))
-    );
-
-    setFloatElements(
-      Array(12).fill(0).map((_, i) => ({
-        left: `${Math.random() * 100}%`,
-        top: `${Math.random() * 100}%`,
-        delay: `${Math.random() * 5}s`,
-        duration: `${6 + Math.random() * 4}s`
-      }))
-    );
-
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
     return () => {
       clearInterval(timer);
-      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
@@ -155,40 +124,42 @@ export default function HomePage() {
       },
 
       hero: {
-        title: "Justice for All",
-        subtitle: "Anywhere, Anytime",
+        title: "Legal problem hai?",
+        subtitle: "Hum help karenge",
         description:
-          "Talk to verified lawyers, generate custom legal documents, and book notary services — right from your phone.Justice, simplified for every Indian.",
-        ctaPrimary: "Talk to AI Now",
-        ctaSecondary: "Consult Lawyers",
+          "FIR, property, family issues samajhiye aur turant lawyer se baat kariye",
+        ctaPrimary: "Talk to Legal Buddy",
+        ctaSecondary: "Talk to Lawyer",
+        whatsapp: "Talk on WhatsApp",
+        whatsappNumber: "919661644025",
         liveStatus: "AI System Online",
         stats: {
-          cases: "1M+ Cases Resolved",
-          lawyers: "50K+ Expert Lawyers",
+          cases: "100+ Cases Resolved",
+          lawyers: "60+ Expert Lawyers",
           success: "99.9% Success Rate",
-          response: "< 30 Sec Response",
+          response: "< 30 min Response",
         },
       },
 
       howItWorks: {
         title: "How It Works",
-        subtitle: "From legal doubt to resolution – in a few simple steps",
+        subtitle: "Teeno simple step mein solution",
         steps: [
           {
-            title: "Select a Lawyer",
-            description: "Browse verified lawyers by category and choose one that fits your legal need.",
+            title: "Tell your problem",
+            description: "Apni legal problem simple words me batayein",
             icon: FileCheck,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "Pick a Slot",
-            description: "Choose a suitable date, time, and preferred mode (chat, call, or video) for the consultation.",
+            title: "Get free guidance",
+            description: "Turant samjhein aapko kya karna chahiye",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "Join & Review",
-            description: "Connect at your scheduled time. After the session, access receipts and share feedback.",
+            title: "Talk to lawyer",
+            description: "Jarurat ho toh verified lawyer se baat karein",
             icon: ThumbsUp,
             color: "from-yellow-500 to-orange-500",
           },
@@ -196,26 +167,26 @@ export default function HomePage() {
       },
       whyChoose: {
         title: "Why Choose NyayMitra?",
-        subtitle: "Smart Legal Help, Just a Click Away – Talk to a Lawyer or Ask Legal GPT Anytime",
+        subtitle: "Saral, asaan, aur bharosa",
         features: [
           {
-            title: "Book a Verified Lawyer Instantly",
-            description: "Choose from trusted lawyers across India. Book consultations at your convenience – starting at just ₹99.",
+            title: "Simple legal help",
+            description: "Law ko easy language me samjhein",
             icon: IndianRupee,
           },
           {
-            title: "Get Instant Answers with Legal GPT",
-            description: "Ask any legal question and get AI-powered answers 24/7 – fast, private, and easy to understand.",
+            title: "Talk instantly",
+            description: "WhatsApp ya call pe turant help",
             icon: Bot,
           },
           {
-            title: "No More Legal Confusion",
-            description: "We simplify the law – whether it’s agreements, notices, or finding the right lawyer. We’re here for you.",
+            title: "Verified lawyers",
+            description: "Trusted lawyers se direct connect",
             icon: FileText,
           },
           {
-            title: "Online & Hassle-Free",
-            description: "No need to visit courts or offices. Consult lawyers, notarize documents, or ask GPT – all from your phone.",
+            title: "No confusion",
+            description: "Step-by-step guidance milega",
             icon: PenTool,
           },
         ],
@@ -226,7 +197,7 @@ export default function HomePage() {
         items: [
           {
             title: "Instant Lawyer Booking",
-            description: "Book consultations with verified lawyers in minutes — with real-time availability and priority booking.",
+            description: "Book consultations with verified lawyers in minutes with real time availability and priority booking.",
             icon: CalendarCheck,
             color: "from-indigo-600 to-purple-600",
           },
@@ -251,6 +222,28 @@ export default function HomePage() {
         ]
       },
 
+      commonProblems: {
+        title: "Common Legal Problems",
+        subtitle: "We help with these issues every day",
+        items: [
+          {
+            title: "FIR not being registered",
+            description: "Understand your rights and take action"
+          },
+          {
+            title: "Property dispute",
+            description: "Protect your ownership and boundaries"
+          },
+          {
+            title: "Divorce / Family issue",
+            description: "Get guidance on custody and settlements"
+          },
+          {
+            title: "Online fraud",
+            description: "Recover your money and file complaints"
+          },
+        ]
+      },
       getStarted: {
         title: "Ready to Get Started?",
         subtitle: "Join thousands of Indians who trust NyayMitra for their legal needs",
@@ -263,29 +256,29 @@ export default function HomePage() {
         subtitle: "Real experiences from real people",
         items: [
           {
-            name: "Ritika Mehra",
-            location: "Lucknow, Uttar Pradesh",
-            text: "I booked a lawyer in just 5 minutes through NyayMitra. The consultation was smooth and solved my property issue quickly.",
+            name: "Swapnil Anand",
+            location: "Bhagalpur, Bihar",
+            text: "Their remote notary service saved me a trip to the court. I needed an affidavit urgently, and NyayMitra handled everything smoothly. Got it notarized and delivered at home within 2 days without any hassle.",
             rating: 5,
-            role: "Teacher",
+            avatar: "SA",
+          },
+          {
+            name: "Anand Upadhyay",
+            location: "Bhopal, Madhya Pradesh",
+            text: "I was working as a corporate employee and was facing issues with delayed salary. Through NyayMitra, I quickly connected with a lawyer who guided me on the right steps and helped me resolve the situation.",
+            rating: 4,
+            // role: "Private Employee",
             avatar: "RM",
           },
           {
-            name: "Sunil Verma",
-            location: "Indore, Madhya Pradesh",
-            text: "I used the legal notice generator for a tenant dispute. The draft looked professional and was ready instantly.",
+            name: "Dinesh Chand",
+            location: "Gurgaon, Haryana",
+            text: "I received a challan in Delhi and was unsure about the process. Through NyayMitra, I got quick guidance and understood exactly what steps to take without any confusion.",
             rating: 5,
-            role: "Landlord",
-            avatar: "SV",
-          },
-          {
-            name: "Neha D'Souza",
-            location: "Bangalore, Karnataka",
-            text: "Their remote notary service saved me a trip to the court. Got my affidavit notarized and delivered at home within 2 days!",
-            rating: 5,
-            role: "Working Professional",
-            avatar: "ND",
+            // role: "Private Employee",
+            avatar: "DC",
           }
+
         ],
       },
       footer: {
@@ -295,7 +288,7 @@ export default function HomePage() {
         legal: "Legal",
         contact: "Contact Us",
         address: "Koramangala,Bengaluru-560034",
-        email: "contact@nyaymitra.tech",
+        email: "support@nyaymitra.tech",
         phone: "+91 79705 96183",
         // whatsapp: "+91 79705 96183",
         privacy: "Privacy Policy",
@@ -329,67 +322,69 @@ export default function HomePage() {
       },
 
       hero: {
-        title: "सभी के लिए न्याय",
-        subtitle: "कहीं भी, कभी भी",
+        title: "कोई कानूनी समस्या है?",
+        subtitle: "हम आपकी मदद करेंगे",
         description:
-          "सत्यापित वकीलों से बात करें, अपने कानूनी दस्तावेज़ बनाएं, और नोटरी सेवाएं बुक करें — अब सब कुछ मोबाइल से। हर भारतीय के लिए न्याय, अब सरल और सुलभ।",
-        ctaPrimary: "अभी AI से बात करें",
-        ctaSecondary: "वकील से परामर्श लें",
+          "FIR, प्रॉपर्टी और फैमिली से जुड़ी समस्याओं को समझें और तुरंत वकील से बात करें",
+        ctaPrimary: "लीगल बडी से बात करें",
+        ctaSecondary: "वकील से बात करें",
+        whatsapp: "व्हाट्सऐप पर बात करें",
+        whatsappNumber: "91961644025",
         liveStatus: "AI सिस्टम ऑनलाइन",
         stats: {
-          cases: "10 लाख+ मामले हल",
-          lawyers: "50 हज़ार+ विशेषज्ञ वकील",
+          cases: "1K+ मामले हल",
+          lawyers: "100+ विशेषज्ञ वकील",
           success: "99.9% सफलता दर",
-          response: "30 सेकंड से कम में जवाब",
+          response: "30 मिनट से कम में जवाब",
         },
       },
 
       howItWorks: {
         title: "यह कैसे काम करता है",
-        subtitle: "कानूनी सलाह लेने के आसान और भरोसेमंद चरण",
+        subtitle: "तीन आसान स्टेप में समाधान",
         steps: [
           {
-            title: "वकील चुनें",
-            description: "अपनी ज़रूरत के अनुसार किसी अनुभवी वकील को खोजें और चुनें।",
-            icon: FileText,
+            title: "अपनी समस्या बताएं",
+            description: "अपनी कानूनी समस्या को सरल शब्दों में बताएं",
+            icon: FileCheck,
             color: "from-blue-500 to-indigo-500",
           },
           {
-            title: "स्लॉट बुक करें",
-            description: "सुविधाजनक समय और मोड (कॉल/वीडियो/चैट) चुनकर भुगतान करें।",
+            title: "मुफ्त मार्गदर्शन पाएं",
+            description: "तुरंत समझें कि आपको क्या करना चाहिए",
             icon: CalendarCheck,
             color: "from-purple-500 to-pink-500",
           },
           {
-            title: "जुड़ें और प्रतिक्रिया दें",
-            description: "निर्धारित समय पर वकील से जुड़ें और सेवा के बाद प्रतिक्रिया दें।",
+            title: "वकील से बात करें",
+            description: "जरूरत हो तो सत्यापित वकील से सीधे बात करें",
             icon: ThumbsUp,
             color: "from-green-500 to-emerald-500",
           },
         ],
       },
       whyChoose: {
-        title: "न्यायमित्र क्यों चुनें",
-        subtitle: "अब वकील से सलाह लेना और कानूनी सवाल पूछना पहले से कहीं आसान",
+        title: "न्यायमित्र क्यों चुनें?",
+        subtitle: "सरल, आसान और भरोसेमंद",
         features: [
           {
-            title: "प्रामाणिक वकील से तुरंत परामर्श",
-            description: "भारत के अनुभवी वकीलों में से चुनें – ₹99 से शुरू, अपने स्लॉट बुक करें और तुरंत जुड़ें।",
+            title: "सरल कानूनी सहायता",
+            description: "कानून को आसान भाषा में समझें",
             icon: IndianRupee,
           },
           {
-            title: "AI से पूछें कानूनी सवाल",
-            description: "किसी भी समय अपने सवाल Legal GPT से पूछें – सरल, तेज़ और भरोसेमंद उत्तर पाएं।",
+            title: "तुरंत बात करें",
+            description: "व्हाट्सऐप या कॉल पर तुरंत सहायता पाएं",
             icon: Bot,
           },
           {
-            title: "कोई भ्रम नहीं, बस समाधान",
-            description: "हम आपके लिए क़ानून को आसान बनाते हैं – सलाह हो या दस्तावेज़, सब कुछ एक जगह।",
+            title: "सत्यापित वकील",
+            description: "विश्वसनीय वकीलों से सीधे जुड़ें",
             icon: FileText,
           },
           {
-            title: "100% ऑनलाइन सुविधा",
-            description: "घर बैठे वकील से मिलें, दस्तावेज़ बनवाएं या AI से मदद लें – सब कुछ आपके फोन पर।",
+            title: "कोई उलझन नहीं",
+            description: "स्टेप-बाय-स्टेप मार्गदर्शन प्राप्त करें",
             icon: PenTool,
           },
         ],
@@ -401,7 +396,7 @@ export default function HomePage() {
         items: [
           {
             title: "त्वरित वकील बुकिंग",
-            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें — रीयल-टाइम उपलब्धता और प्राथमिकता बुकिंग के साथ।",
+            description: "सत्यापित वकीलों से मिनटों में परामर्श बुक करें रीयल-टाइ�� उपलब्धता और प्राथमि��ता बुकिंग के साथ।",
             icon: CalendarCheck,
             color: "from-indigo-600 to-purple-600",
           },
@@ -413,7 +408,7 @@ export default function HomePage() {
           },
           {
             title: "दूरस्थ नोटरी सेवा",
-            description: "अपने दस्तावेज़ों को भारत भर में लाइसेंस प्राप्त वकीलों से ऑनलाइन या कूरियर के माध्यम से नोटरी करवाएं।",
+            description: "अपने दस्तावेज़ों को भारत भर में लाइसेंस प्राप्त वकीलों से ऑनलाइन या कूरियर के माध्यम से नोटरी ��रवाएं।",
             icon: Stamp,
             color: "from-purple-600 to-pink-500",
           },
@@ -422,6 +417,28 @@ export default function HomePage() {
             description: "भारतीय कानून, प्रक्रियाओं और केस पैटर्न पर प्रशिक्षित AI से तुरंत कानूनी मार्गदर्शन प्राप्त करें।",
             icon: Bot,
             color: "from-blue-600 to-indigo-600",
+          },
+        ],
+      },
+      commonProblems: {
+        title: "सामान्य कानूनी समस्याएं",
+        subtitle: "हम इन समस्याओं में रोज़ मदद करते हैं",
+        items: [
+          {
+            title: "FIR दर्ज नहीं हो रही",
+            description: "अपने अधिकार समझें और सही कदम उठाएं",
+          },
+          {
+            title: "प्रॉपर्टी विवाद",
+            description: "अपने मालिकाना हक और सीमाओं की सुरक्षा करें",
+          },
+          {
+            title: "तलाक / पारिवारिक समस्या",
+            description: "कस्टडी और सेटलमेंट पर सही मार्गदर्शन पाएं",
+          },
+          {
+            title: "ऑनलाइन धोखाधड़ी",
+            description: "अपने पैसे वापस पाने और शिकायत दर्ज करने में मदद लें",
           },
         ],
       },
@@ -439,7 +456,7 @@ export default function HomePage() {
           {
             name: "ऋतिका मेहरा",
             location: "लखनऊ, उत्तर प्रदेश",
-            text: "मैंने सिर्फ 5 मिनट में वकील बुक किया और उसी दिन परामर्श मिला। संपत्ति विवाद में तुरंत समाधान मिला।",
+            text: "मैंने सिर्फ 5 मिनट में वकील बुक किया ���र उसी दिन परामर्श मिला। संपत्ति विवाद में तुरंत समाधान मिला।",
             rating: 5,
             role: "शिक्षिका",
             avatar: "RM",
@@ -490,43 +507,22 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden relative">
-      {/* Enhanced Beautiful Background */}
-      <div className="fixed inset-0 z-0">
-        {/* Sophisticated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900/30 via-purple-900/20 to-black" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden relative">
+      {/* Premium dark gradient with animated particles */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950" />
 
-        {/* Elegant Mesh Gradient */}
-        <div className="absolute inset-0 opacity-30">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
-          <div
-            className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
-            style={{ animationDelay: "2s" }}
-          />
-          <div
-            className="absolute bottom-1/4 left-1/3 w-96 h-96 bg-pink-500/15 rounded-full mix-blend-multiply filter blur-3xl animate-pulse"
-            style={{ animationDelay: "4s" }}
-          />
-        </div>
+        {/* Animated gradient blobs */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob" />
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-2000" />
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-cyan-600/10 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
 
-        {/* Sophisticated Grid Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.3)_1px,transparent_1px)] bg-[size:100px_100px]" />
-        </div>
-
-        {/* Dynamic Mouse-Following Glow */}
-        <div
-          className="absolute w-[600px] h-[600px] bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-pink-500/10 rounded-full blur-3xl transition-all duration-1000 ease-out"
-          style={{
-            left: mousePosition.x / 8,
-            top: mousePosition.y / 8,
-            transform: "translate(-50%, -50%)",
-          }}
-        />
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:50px_50px] opacity-50" />
       </div>
 
-      {/* Navigation remains the same... */}
-      <nav className="relative z-50 bg-black/5 backdrop-blur-3xl border-b border-white/5 sticky top-0">
+      {/* Navigation */}
+      <nav className="relative z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 sticky top-0">
         {/* Top Status Bar */}
         {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -560,56 +556,18 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-20">
             {/* Enhanced Logo */}
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-4 group">
-                <div className="relative">
-                  {/* Outer Glow */}
-                  <div className="absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full blur-lg opacity-25 group-hover:opacity-50 transition duration-300" />
-
-                  {/* Logo Icon */}
-                  <div className="relative bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 p-4 rounded-2xl shadow-lg group-hover:scale-105 transition duration-300">
-                    <Scale className="h-8 w-8 text-white group-hover:rotate-6 transition-transform duration-300" />
-
-                    {/* Sparkles */}
-                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-                      {sparklePositions.map((pos, i) => (
-                        <div
-                          key={i}
-                          className="absolute w-1 h-1 bg-white rounded-full animate-ping"
-                          style={{
-                            left: pos.left,
-                            top: pos.top,
-                            animationDelay: `${i * 0.25}s`,
-                            animationDuration: "2s"
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
+              <Link href="/" className="flex items-center space-x-3">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition">
+                  <Scale className="h-6 w-6 text-white" />
                 </div>
-
-                {/* Text Block */}
-                <div className="flex flex-col">
-                  <span className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent group-hover:text-white transition duration-300">
-                    NyayMitra
-                  </span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-xs text-white/60 font-medium tracking-wider uppercase">
-                      India’s Legal Helpdesk
-                    </span>
-                    <div className="flex space-x-1">
-                      <div className="w-1 h-1 bg-blue-400 rounded-full animate-pulse" />
-                      <div className="w-1 h-1 bg-purple-400 rounded-full animate-pulse delay-150" />
-                      <div className="w-1 h-1 bg-pink-400 rounded-full animate-pulse delay-300" />
-                    </div>
-                  </div>
-                </div>
+                <span className="text-2xl font-playfair font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">NyayMitra</span>
               </Link>
             </div>
 
 
             {/* Enhanced Desktop Navigation */}
             <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-2">
+              <div className="ml-10 flex items-baseline space-x-8">
                 {Object.entries(t.nav)
                   .slice(0, -2)
                   .map(([key, value], index) => (
@@ -620,51 +578,38 @@ export default function HomePage() {
                           key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
                             `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
                       }
-                      className="relative text-white/70 hover:text-white px-4 py-3 text-sm font-medium transition-all duration-500 group"
+                      className="relative text-slate-300 hover:text-blue-400 px-4 py-3 text-sm font-medium transition-colors"
                     >
-                      <div className="relative z-10 flex items-center space-x-2">
-                        <span>{value}</span>
-                        {index === 0 && <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />}
-                      </div>
-
-                      {/* Hover Background */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 transform scale-95 group-hover:scale-100 blur-sm group-hover:blur-none" />
-
-                      {/* Bottom Indicator */}
-                      <div className="absolute bottom-0 left-1/2 w-0 h-1 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 group-hover:w-3/4 transition-all duration-500 transform -translate-x-1/2 rounded-full" />
-
-                      {/* Side Glow */}
-                      <div className="absolute inset-y-0 -left-2 w-1 bg-gradient-to-b from-transparent via-blue-400 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 rounded-full blur-sm" />
+                      <span>{value}</span>
                     </Link>
                   ))}
               </div>
             </div>
 
-            {/* Enhanced Action Buttons */}
+            {/* Action Buttons */}
             <div className="hidden md:flex items-center space-x-4">
               {/* Language Toggle */}
-              <Button
+              {/* <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <Globe className="h-4 w-4 mr-2 group-hover:rotate-180 transition-transform duration-700" />
-                <span className="relative z-10 font-medium">{language === "en" ? "हिं" : "EN"}</span>
-              </Button>
+                <Globe className="h-4 w-4 mr-2" />
+                <span className="font-medium">{language === "en" ? "हिं" : "EN"}</span>
+              </Button> */}
 
               {mounted && isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
-                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 group relative overflow-hidden"
+                      className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
                       disabled={isProfileLoading}
                     >
                       {isProfileLoading ? (
                         <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
                           Loading...
                         </div>
                       ) : (
@@ -676,11 +621,11 @@ export default function HomePage() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
-                    className="mt-2 w-48 bg-black/90 border border-white/10 rounded-md shadow-lg p-2 text-white"
+                    className="mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg p-2"
                     sideOffset={5}
                   >
                     <DropdownMenuItem asChild>
-                      <Link href="/profile" className="block px-3 py-2 hover:bg-white/10 rounded">
+                      <Link href="/profile" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
                         {t.profileMenu.profile}
                       </Link>
                     </DropdownMenuItem>
@@ -689,16 +634,14 @@ export default function HomePage() {
                         window.location.href = 'https://nyay-dashboard.netlify.app/';
                       }}
                     >
-                      <div className="flex items-center gap-3 w-full justify-between">
+                      <div className="flex items-center gap-3 w-full justify-between text-gray-700">
                         <div className="flex items-center gap-3">
-                          <BarChart2 className="h-5 w-5 text-green-500" />
+                          <BarChart2 className="h-5 w-5 text-green-600" />
                           <span>{t.profileMenu.dashboard}</span>
                         </div>
                         <ChevronRight className="h-4 w-4" />
                       </div>
                     </DropdownMenuItem>
-
-
 
                     <DropdownMenuItem asChild>
                       <button
@@ -706,14 +649,14 @@ export default function HomePage() {
                           localStorage.removeItem("token");
                           window.location.reload();
                         }}
-                        className="block w-full text-left px-3 py-2 hover:bg-white/10 rounded"
+                        className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-gray-700"
                       >
                         {t.profileMenu.logout}
                       </button>
                     </DropdownMenuItem>
                     {profile?.role !== "lawyer" && (
                       <DropdownMenuItem asChild>
-                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-white/10 rounded">
+                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
                           {t.profileMenu.bookings}
                         </Link>
                       </DropdownMenuItem>
@@ -729,7 +672,7 @@ export default function HomePage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="bg-white/5 border-white/10 text-white hover:bg-white/10 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25"
+                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
                     >
                       {t.nav.login}
                     </Button>
@@ -739,11 +682,9 @@ export default function HomePage() {
                   <Link href="/auth/signup">
                     <Button
                       size="sm"
-                      className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 border-0 shadow-xl shadow-blue-500/25 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/40 group relative overflow-hidden"
+                      className="bg-blue-600 hover:bg-blue-700 text-white"
                     >
-                      <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <Sparkles className="h-4 w-4 mr-2 group-hover:rotate-12 transition-transform duration-500" />
-                      <span className="relative z-10">{t.nav.signup}</span>
+                      {t.nav.signup}
                     </Button>
                   </Link>
                 </>
@@ -756,7 +697,7 @@ export default function HomePage() {
                 variant="ghost"
                 size="default"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-white hover:bg-white/10 transition-all duration-300 w-11 h-11 p-0"
+                className="text-gray-700 hover:bg-gray-100 transition-all duration-300 w-11 h-11 p-0"
               >
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
@@ -768,7 +709,7 @@ export default function HomePage() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-3xl border-b border-white/10 animate-fade-in">
+          <div className="md:hidden absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-800">
             <div className="px-4 pt-4 pb-6 space-y-2">
               {/* Show regular nav links */}
               {Object.entries(t.nav)
@@ -856,496 +797,186 @@ export default function HomePage() {
               )}
 
               {/* Language toggle for mobile */}
-              <button
+              {/* <button
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
                 className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10 flex items-center"
               >
                 <Globe className="h-5 w-5 mr-3" />
                 {language === "en" ? "हिंदी" : "English"}
-              </button>
+              </button> */}
             </div>
           </div>
         )}
       </nav>
 
-      {/* Elegant & Eye-Catching Hero Section */}
+      {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        {/* Sophisticated Background Elements */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {/* Elegant Floating Orbs */}
-          {floatElements.map((element, i) => (
-            <div
-              key={i}
-              className="absolute animate-float"
-              style={{
-                left: element.left,
-                top: element.top,
-                animationDelay: element.delay,
-                animationDuration: element.duration
-              }}
-            >
-              <div className="w-2 h-2 bg-gradient-to-r from-blue-400/40 to-purple-400/40 rounded-full blur-sm" />
-            </div>
-          ))}
-
-          {/* Elegant Light Rays */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div
-              className="w-[800px] h-[800px] bg-gradient-conic from-blue-500/5 via-purple-500/5 to-pink-500/5 rounded-full animate-spin"
-              style={{ animationDuration: "20s" }}
-            />
-          </div>
-        </div>
-
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-            {/* Left Column - Content */}
-            <div
-              className={`space-y-6 md:space-y-8 transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-10"}`}
-            >
-              <div className="text-sm md:text-base text-yellow-300 font-semibold tracking-wide">
-                ⚡Trusted Notary Services, Backed by a Government License.
+        <div className="max-w-6xl mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Left: Content */}
+            <div className="space-y-10 animate-fade-in">
+              {/* Trust Badge */}
+              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <span className="text-xs font-semibold text-blue-300 tracking-widest">TRUSTED BY 100K+ INDIANS</span>
               </div>
 
-
-              {/* Elegant Badge - Responsive */}
-              <div className="inline-flex items-center px-6 py-3 md:px-8 md:py-3 rounded-full bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-md border border-blue-300/20 shadow-xl transition-all duration-300 group hover:scale-105 hover:ring-2 hover:ring-purple-400/50 animate-float">
-                <Award className="h-6 w-6 text-purple-300 mr-3 drop-shadow-md animate-pulse" />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-300 via-purple-300 to-pink-400 font-bold text-base md:text-lg tracking-wide animate-shimmer">
-                  One-Tap Legal Help – Book Lawyers, Draft Docs, Get Notary Support Instantly
-                </span>
-              </div>
-
-              {/* Sophisticated Title - Responsive */}
-              <div className="space-y-4 md:space-y-6">
-                <h1
-                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold tracking-tight leading-[1.15] sm:leading-[1.2] md:leading-[1.25] text-balance break-words overflow-visible"
-                  style={{ paddingTop: "0.5rem", paddingBottom: "0.5rem" }}
-                >
-                  <span className="block bg-gradient-to-r from-white via-blue-100 to-purple-100 bg-clip-text text-transparent mb-2 md:mb-4">
-                    {t.hero.title.split(" ")[0]}
-                  </span>
-                  <span className="block bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    {t.hero.title.split(" ").slice(1).join(" ")}
-                  </span>
+              {/* Title & Subtitle */}
+              <div className="space-y-6">
+                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold italic tracking-tight leading-tight text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text">
+                  {t.hero.title}
                 </h1>
 
-
-                <div className="relative">
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 tracking-wide">
-                    {t.hero.subtitle}
-                  </h2>
-                  <div className="absolute -bottom-1 left-0 w-16 md:w-24 h-0.5 md:h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full" />
-                </div>
+                <h2 className="text-2xl sm:text-3xl font-playfair italic font-semibold text-blue-300 leading-relaxed">
+                  {t.hero.subtitle}
+                </h2>
               </div>
 
-              {/* Elegant Description - Responsive */}
-              <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed font-light max-w-2xl break-words text-pretty">
-                <span className="bg-gradient-to-r from-white/95 via-blue-100/85 to-purple-100/75 bg-clip-text text-transparent">
-                  {t.hero.description}
-                </span>
+              {/* Description */}
+              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
+                {t.hero.description}
               </p>
 
+              {/* CTA Card - Glassmorphism */}
+              <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 space-y-4 hover:border-blue-500/50 transition-all duration-300">
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Link href="/legal-gpt" className="flex-1">
+                    <Button
+                      size="lg"
+                      className="w-full text-base px-6 py-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/50 transition-all duration-300 btn-futuristic"
+                    >
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      {t.hero.ctaPrimary}
+                    </Button>
+                  </Link>
 
-              {/* Premium Free Consultation Banner - Responsive */}
-              <div className="relative">
-                {/* Floating Notification Badge */}
-                <div className="absolute -top-2 -right-2 md:-top-3 md:-right-3 z-10">
-                  <div className="w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse shadow-lg">
-                    <span className="text-white text-xs font-bold">🔥</span>
-                  </div>
+                  <Link href="/lawyers" className="flex-1">
+                    <Button
+                      size="lg"
+                      className="w-full text-base px-6 py-6 bg-slate-700/50 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600/50 hover:border-blue-500/50 shadow-lg transition-all duration-300"
+                    >
+                      <FileText className="mr-2 h-5 w-5" />
+                      {t.hero.ctaSecondary}
+                    </Button>
+                  </Link>
                 </div>
 
-                <Link href="/free-consultation">
-                  <div className="group cursor-pointer transform hover:scale-[1.02] md:hover:scale-105 transition-all duration-500">
-                    <div className="relative overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl bg-gradient-to-r from-emerald-500/15 via-green-500/15 to-teal-500/15 border-2 border-emerald-400/40 backdrop-blur-xl p-4 sm:p-6 md:p-8 shadow-lg md:shadow-2xl shadow-emerald-500/10">
-                      {/* Animated Background Glow */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-                      {/* Sparkle Effects */}
-                      <div className="absolute inset-0 overflow-hidden rounded-xl md:rounded-2xl lg:rounded-3xl">
-                        {Array(8).fill(0).map((_, i) => (
-                          <div
-                            key={i}
-                            className="absolute w-1 h-1 bg-emerald-300 rounded-full animate-ping"
-                            style={{
-                              left: `${10 + (i * 10)}%`,
-                              top: `${10 + (i * 10)}%`,
-                              animationDelay: `${i * 0.5}s`,
-                              animationDuration: "3s"
-                            }}
-                          />
-                        ))}
-                      </div>
-
-                      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between space-y-4 sm:space-y-0">
-                        <div className="flex items-center space-x-4 md:space-x-6">
-                          {/* Icon Container */}
-                          <div className="relative">
-                            <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-gradient-to-r from-emerald-500 to-green-500 rounded-xl md:rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-500 shadow-lg md:shadow-xl">
-                              <Heart className="h-5 w-5 md:h-6 md:w-6 lg:h-8 lg:w-8 text-white group-hover:scale-110 transition-transform duration-300" />
-                            </div>
-                            {/* Floating Badge */}
-                            <div className="absolute -top-1 -right-1 md:-top-2 md:-right-2 w-4 h-4 md:w-5 md:h-5 lg:w-6 lg:h-6 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
-                              <span className="text-[8px] md:text-xs">✨</span>
-                            </div>
-                          </div>
-
-                          {/* Content */}
-                          <div className="space-y-1 md:space-y-2">
-                            <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 md:space-x-3">
-                              <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black bg-gradient-to-r from-emerald-300 to-green-300 bg-clip-text text-transparent">
-                                🎉 First Consultation
-                              </span>
-                              <div className="px-2 py-0.5 sm:px-3 sm:py-1 md:px-4 md:py-1 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full w-fit">
-                                <span className="text-black font-bold text-sm sm:text-base md:text-lg">FREE</span>
-                              </div>
-                            </div>
-                            <div className="flex flex-wrap gap-x-2 gap-y-1 md:gap-x-4 text-emerald-200/90">
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <CheckCircle className="h-3 w-3 md:h-4 md:w-4 text-green-400" />
-                                <span className="text-xs md:text-sm font-medium">No hidden charges</span>
-                              </div>
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <Clock className="h-3 w-3 md:h-4 md:w-4 text-blue-400" />
-                                <span className="text-xs md:text-sm font-medium">Instant access</span>
-                              </div>
-                              <div className="flex items-center space-x-1 md:space-x-2">
-                                <Shield className="h-3 w-3 md:h-4 md:w-4 text-purple-400" />
-                                <span className="text-xs md:text-sm font-medium">100% Confidential</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Arrow with Glow - Hidden on small screens */}
-                        <div className="relative hidden sm:block">
-                          <div className="absolute inset-0 bg-emerald-400/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-500" />
-                          <ArrowRight className="relative h-6 w-6 md:h-7 md:w-7 lg:h-8 lg:w-8 text-emerald-400 group-hover:translate-x-3 group-hover:scale-110 transition-all duration-300" />
-                        </div>
-                      </div>
-
-                      {/* Bottom Highlight */}
-                      <div className="absolute bottom-0 left-0 right-0 h-0.5 md:h-1 bg-gradient-to-r from-emerald-400 via-green-400 to-teal-400 rounded-b-xl md:rounded-b-2xl lg:rounded-b-3xl" />
-                    </div>
-                  </div>
-                </Link>
-              </div>
-
-              {/* Sophisticated CTA Buttons - Responsive */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-6">
-                <Link href="/legal-gpt">
+                <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="block">
                   <Button
                     size="lg"
-                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 border-0 shadow-lg md:shadow-xl lg:shadow-2xl shadow-blue-500/25 hover:shadow-purple-500/40 transition-all duration-500 group relative overflow-hidden"
+                    className="w-full text-base px-6 py-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-green-500/50 transition-all duration-300"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/20 -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                    <MessageCircle className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6 group-hover:scale-110 transition-transform duration-300" />
-                    <span className="relative z-10 font-semibold">{t.hero.ctaPrimary}</span>
-                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
+                    <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+                    </svg>
+                    {t.hero.whatsapp}
                   </Button>
-                </Link>
-
-                <Link href="/lawyers">
-                  <Button
-                    size="lg"
-                    className="text-base md:text-lg px-6 py-4 md:px-8 md:py-5 lg:px-10 lg:py-6 bg-gradient-to-r from-yellow-400 to-orange-400 text-black hover:from-yellow-500 hover:to-orange-500 shadow-lg transition-all duration-500 group relative overflow-hidden"
-                  >
-                    <FileText className="mr-2 md:mr-3 h-5 w-5 md:h-6 md:w-6" />
-                    <span className="relative z-10 font-semibold">{t.hero.ctaSecondary}</span>
-                    <ArrowRight className="ml-2 md:ml-3 h-5 w-5 md:h-6 md:w-6 group-hover:translate-x-2 transition-transform duration-300" />
-                  </Button>
-                </Link>
-
-
-
+                </a>
               </div>
 
-              {/* Trust Indicators - Responsive */}
-              <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-6 md:space-x-0 pt-2 md:pt-4">
-                {/* WhatsApp Support with Icon */}
-                <div className="flex items-center space-x-2 group relative">
-                  {/* WhatsApp Icon Container */}
-                  <div className="relative">
-                    {/* Outer Glow */}
-                    <div className="absolute -inset-1 bg-green-500/20 rounded-full blur-sm group-hover:bg-green-500/30 transition-all duration-300" />
-
-                    {/* Main Icon */}
-                    <div className="relative w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="h-4 w-4 text-white"
-                      >
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-                      </svg>
-                    </div>
-
-                    {/* Live Indicator */}
-                    <div className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 rounded-full border border-white animate-pulse" />
-                  </div>
-
-                  {/* Text with Gradient */}
-                  <span className="text-white/80 text-xs md:text-sm font-medium">
-                    <span className="bg-gradient-to-r from-green-300 to-emerald-300 bg-clip-text text-transparent font-bold">
-                      24×7
-                    </span>{" "}
-                    <span className="text-white font-semibold">WhatsApp Support</span>
-                  </span>
-
-                  {/* Hover Arrow */}
-                  <ChevronRight className="h-3 w-3 text-green-400 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+              {/* Stats */}
+              <div className="grid grid-cols-2 gap-4 pt-8">
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-blue-400 font-bold text-lg">100+</div>
+                  <div className="text-slate-400 text-sm">Cases Resolved</div>
                 </div>
-
-                {/* Secure Payments */}
-                <div className="flex items-center space-x-2 md:space-x-3 group">
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-blue-500/20 rounded-full blur-sm group-hover:bg-blue-500/30 transition-all duration-300" />
-                    <Shield className="h-5 w-5 md:h-6 md:w-6 text-blue-400 relative group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <span className="text-white/70 text-xs md:text-sm">
-                    <span className="font-medium text-blue-300">Secure</span> Payments
-                  </span>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-cyan-400 font-bold text-lg">60+</div>
+                  <div className="text-slate-400 text-sm">Expert Lawyers</div>
                 </div>
-
-                {/* Verified Lawyers */}
-                <div className="flex items-center space-x-2 md:space-x-3 group animate-fade-in" style={{ animationDelay: "0.6s" }}>
-                  <div className="relative">
-                    <div className="absolute -inset-1 bg-teal-500/20 rounded-full blur-sm group-hover:bg-teal-500/30 transition-all duration-300" />
-                    <ShieldCheck className="h-5 w-5 md:h-6 md:w-6 text-teal-400 relative group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                  <span className="text-white/70 text-xs md:text-sm">
-                    <span className="font-medium text-teal-300">Verified</span> Lawyers
-                  </span>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-green-400 font-bold text-lg">99.9%</div>
+                  <div className="text-slate-400 text-sm">Success Rate</div>
+                </div>
+                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
+                  <div className="text-purple-400 font-bold text-lg">&lt;30min</div>
+                  <div className="text-slate-400 text-sm">Response Time</div>
                 </div>
               </div>
             </div>
 
-            {/* Right Column - Animated Legal Illustration */}
-            <div
-              className={`relative transition-all duration-1500 ${isLoaded ? "opacity-100 translate-x-0" : "opacity-0 translate-x-10"}`}
-              style={{ animationDelay: "0.3s" }}
-            >
-              {/* Main Illustration Container */}
-              <div className="relative w-full max-w-lg mx-auto">
-                {/* Background Glow */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-full blur-3xl animate-pulse" />
+            {/* Right: Visual - Premium Glassmorphism Card */}
+            <div className="hidden lg:flex items-center justify-center">
+              <div className="relative w-full max-w-md">
+                {/* Glow effect */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-2xl" />
 
-                {/* Central Justice Scale */}
-                <div className="relative z-10 flex flex-col items-center">
-                  {/* Floating Crown/Badge */}
-                  <div className="mb-8 animate-float">
-                    <div className="relative">
-                      <div className="w-20 h-20 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-2xl shadow-yellow-500/25 transform rotate-12 hover:rotate-0 transition-transform duration-700">
-                        <Award className="h-10 w-10 text-white" />
+                <div className="relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-2xl rounded-3xl border border-slate-700/50 p-8 space-y-6 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
+                  <h3 className="text-xl font-playfair italic font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">How It Works</h3>
+
+                  <div className="space-y-5">
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">1</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Tell your problem</h4>
+                        <p className="text-xs text-slate-400 mt-1">Describe your legal issue</p>
                       </div>
-                      <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center animate-ping">
-                        <CheckCircle className="h-4 w-4 text-white" />
+                    </div>
+
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">2</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Get instant guidance</h4>
+                        <p className="text-xs text-slate-400 mt-1">AI-powered legal advice</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-4">
+                      <div className="h-10 w-10 bg-gradient-to-br from-purple-600 to-cyan-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">3</div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white">Connect with lawyer</h4>
+                        <p className="text-xs text-slate-400 mt-1">Book verified experts</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Main Scale of Justice */}
-                  <div className="relative mb-8">
-                    {/* Scale Base */}
-                    <div className="w-4 h-32 bg-gradient-to-b from-gray-300 to-gray-600 rounded-full mx-auto shadow-lg" />
-
-                    {/* Scale Beam */}
-                    <div className="absolute top-8 left-1/2 transform -translate-x-1/2">
-                      <div className="w-48 h-2 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full shadow-lg animate-pulse" />
-
-                      {/* Left Scale Pan */}
-                      <div className="absolute -left-8 top-2 transform -translate-x-1/2">
-                        <div
-                          className="flex flex-col items-center animate-bounce"
-                          style={{ animationDelay: "0s", animationDuration: "3s" }}
-                        >
-                          <div className="w-3 h-8 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full" />
-                          <div className="w-16 h-3 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full shadow-lg" />
-                          <div className="w-20 h-2 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full" />
-                          {/* AI Symbol */}
-                          <div className="mt-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                            <Brain className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right Scale Pan */}
-                      <div className="absolute -right-8 top-2 transform translate-x-1/2">
-                        <div
-                          className="flex flex-col items-center animate-bounce"
-                          style={{ animationDelay: "1.5s", animationDuration: "3s" }}
-                        >
-                          <div className="w-3 h-8 bg-gradient-to-b from-gray-400 to-gray-600 rounded-full" />
-                          <div className="w-16 h-3 bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-full shadow-lg" />
-                          <div className="w-20 h-2 bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full" />
-                          {/* Human Symbol */}
-                          <div className="mt-2 w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-lg flex items-center justify-center">
-                            <Users className="h-4 w-4 text-white" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Floating Legal Elements */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    {/* Floating Documents */}
-                    <div
-                      className="absolute top-16 -left-12 animate-float"
-                      style={{ animationDelay: "0s", animationDuration: "4s" }}
-                    >
-                      <div className="w-12 h-16 bg-gradient-to-b from-white/90 to-gray-100 rounded-lg shadow-lg border border-gray-200 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-                        <div className="p-2">
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-3/4 h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-1/2 h-1 bg-gray-300 rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div
-                      className="absolute top-32 -right-16 animate-float"
-                      style={{ animationDelay: "2s", animationDuration: "5s" }}
-                    >
-                      <div className="w-12 h-16 bg-gradient-to-b from-white/90 to-gray-100 rounded-lg shadow-lg border border-gray-200 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
-                        <div className="p-2">
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-2/3 h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-full h-1 bg-gray-300 rounded mb-1" />
-                          <div className="w-3/4 h-1 bg-gray-300 rounded" />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Floating Gavel */}
-                    <div
-                      className="absolute bottom-16 -left-8 animate-float"
-                      style={{ animationDelay: "1s", animationDuration: "6s" }}
-                    >
-                      <div className="transform rotate-45 hover:rotate-12 transition-transform duration-700">
-                        <div className="w-3 h-12 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full" />
-                        <div className="w-8 h-4 bg-gradient-to-r from-amber-700 to-amber-900 rounded-lg -mt-2 ml-1" />
-                      </div>
-                    </div>
-
-                    {/* Floating Shield */}
-                    <div
-                      className="absolute bottom-20 -right-12 animate-float"
-                      style={{ animationDelay: "3s", animationDuration: "4s" }}
-                    >
-                      <div className="w-12 h-14 bg-gradient-to-b from-blue-500 to-blue-700 rounded-t-full rounded-b-lg shadow-lg flex items-center justify-center transform hover:scale-110 transition-transform duration-500">
-                        <Shield className="h-6 w-6 text-white" />
-                      </div>
-                    </div>
-
-                    {/* Orbiting Elements */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="relative w-80 h-80">
-                        {/* Orbiting Chat Bubble */}
-                        <div className="absolute animate-spin" style={{ animationDuration: "1s" }}>
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                              <div className="w-10 h-8 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <MessageCircle className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Orbiting Video Call */}
-                        <div
-                          className="absolute animate-spin"
-                          style={{ animationDuration: "2s", animationDirection: "reverse" }}
-                        >
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
-                              <div className="w-10 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <Video className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Orbiting Phone */}
-                        <div className="absolute animate-spin" style={{ animationDuration: "2s" }}>
-                          <div className="w-80 h-80 relative">
-                            <div className="absolute top-1/2 right-0 transform translate-x-1/2 -translate-y-1/2">
-                              <div className="w-8 h-10 bg-gradient-to-b from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300">
-                                <PhoneCall className="h-5 w-5 text-white" />
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Text */}
-                  <div className="text-center mt-8 space-y-2">
-                    <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                      AI-Powered Justice
-                    </div>
-                    <div className="text-white/60 text-sm">Balancing Technology & Human Expertise</div>
+                  <div className="pt-4 border-t border-slate-700/50">
+                    <p className="text-xs text-slate-400">Available 24/7 • Instant response • Zero hidden costs</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Elegant Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hidden md:block">
-            <div className="flex flex-col items-center space-y-2">
-              <span className="text-white/60 text-sm font-medium">Discover More</span>
-              <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-                <div className="w-1 h-3 bg-white/60 rounded-full mt-2 animate-pulse" />
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 via-slate-900/50 to-slate-900">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
               {t.howItWorks.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.howItWorks.subtitle}</p>
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {t.howItWorks.steps.map((step, index) => {
               const IconComponent = step.icon
               return (
-                <Card
-                  key={index}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
-                >
-                  <CardHeader className="text-center pb-4">
-                    <div className="mx-auto mb-4">
-                      <div
-                        className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500`}
-                      >
-                        <IconComponent className="h-10 w-10 text-white" />
+                <div key={index} className="relative group">
+                  <div className="text-center p-8 bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-blue-500/50 transition-all duration-300 hover:bg-slate-800/60">
+                    <div className="mb-6 flex justify-center">
+                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-700/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-blue-500/30">
+                        <IconComponent className="h-8 w-8 text-blue-400" />
                       </div>
                     </div>
-                    <div className="text-2xl font-bold text-white mb-2">{index + 1}</div>
-                    <CardTitle className="text-xl text-white group-hover:text-blue-300 transition-colors duration-300">
+                    <div className="inline-block px-3 py-1 bg-blue-500/20 rounded-lg mb-4 border border-blue-500/30">
+                      <span className="text-sm font-bold text-blue-300">Step {index + 1}</span>
+                    </div>
+                    <h3 className="text-lg font-semibold text-white mb-3">
                       {step.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-white/70 text-center leading-relaxed group-hover:text-white/90 transition-colors duration-300">
+                    </h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">
                       {step.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                    </p>
+                  </div>
+                  {index < 2 && (
+                    <div className="hidden md:flex absolute top-1/2 -right-4 items-center justify-center w-8 h-8 text-blue-500/50">
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  )}
+                </div>
               )
             })}
           </div>
@@ -1353,29 +984,29 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose NyayMitra Section */}
-      <section className="relative z-10 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.whyChoose.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.whyChoose.subtitle}</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {t.whyChoose.features.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <div key={index} className="text-center group transform hover:scale-105 transition-all duration-500">
-                  <div className="relative mb-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl flex items-center justify-center mx-auto backdrop-blur-sm border border-white/10 group-hover:border-white/30 transition-all duration-300">
-                      <IconComponent className="h-10 w-10 text-blue-400 group-hover:text-blue-300 transition-colors duration-300" />
+                <div key={index} className="group text-center p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300">
+                  <div className="mb-6 flex justify-center">
+                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <IconComponent className="h-7 w-7 text-blue-700" />
                     </div>
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-blue-300 transition-colors duration-300">
+                  <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-white/70 group-hover:text-white/90 transition-colors duration-300">
+                  <p className="text-gray-600 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
@@ -1385,42 +1016,72 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-purple-900/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Common Problems Section */}
+      <section className="relative z-10 py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              {t.commonProblems.title}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.commonProblems.subtitle}</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {t.commonProblems.items.map((item, index) => (
+              <div key={index} className="group p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <span className="text-sm font-bold text-blue-700">✓</span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">
+                      {item.title}
+                    </h3>
+                    <p className="text-xs text-gray-600 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="relative z-10 py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
               {t.features.title}
             </h2>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto">{t.features.subtitle}</p>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {t.features.items.map((feature, index) => {
               const IconComponent = feature.icon
               return (
-                <Card
+                <div
                   key={index}
-                  className="bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
+                  className="group p-8 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300"
                 >
-                  <CardHeader className="pb-4">
-                    <div className="flex items-center space-x-4 mb-4">
-                      <div
-                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:rotate-12 transition-transform duration-500`}
-                      >
-                        <IconComponent className="h-8 w-8 text-white" />
+                  <div className="flex items-start space-x-6">
+                    <div className="flex-shrink-0">
+                      <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <IconComponent className="h-7 w-7 text-blue-700" />
                       </div>
-                      <CardTitle className="text-2xl text-white group-hover:text-blue-300 transition-colors duration-300">
-                        {feature.title}
-                      </CardTitle>
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-white/70 text-lg leading-relaxed group-hover:text-white/90 transition-colors duration-300">
-                      {feature.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               )
             })}
           </div>
@@ -1428,117 +1089,115 @@ export default function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative z-10 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14 sm:mb-20">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-gray-900">
               {t.testimonials.title}
             </h2>
-            <p className="text-base sm:text-xl text-white/80 max-w-3xl mx-auto">{t.testimonials.subtitle}</p>
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
           </div>
 
           {/* Responsive container: scroll on mobile, grid on larger screens */}
           <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 scrollbar-hide">
             {t.testimonials.items.map((testimonial, index) => (
-              <Card
+              <div
                 key={index}
-                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white/5 backdrop-blur-xl border border-white/10 hover:border-white/20 transition-all duration-500 group transform hover:scale-105 hover:-translate-y-2"
+                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 p-8"
               >
-                <CardContent className="p-5 sm:p-6">
-                  {/* Star rating */}
-                  <div className="flex mb-4 sm:mb-6">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 sm:h-5 sm:w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
+                {/* Star rating */}
+                <div className="flex mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                  ))}
+                </div>
 
-                  {/* Quote */}
-                  <blockquote className="text-sm sm:text-lg text-white/80 mb-4 sm:mb-6 leading-relaxed group-hover:text-white transition-colors duration-300">
-                    "{testimonial.text}"
-                  </blockquote>
+                {/* Quote */}
+                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed italic">
+                  "{testimonial.text}"
+                </blockquote>
 
-                  {/* User info */}
-                  <div className="flex items-center space-x-4">
-                    {/* Avatar fallback */}
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base">
-                      {testimonial.avatar}
-                    </div>
-                    <div className="text-left">
-                      <div className="font-semibold text-white group-hover:text-blue-300 transition-colors duration-300 text-sm sm:text-base">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-white/60 text-xs sm:text-sm">{testimonial.role}</div>
-                      <div className="text-white/40 text-xs sm:text-sm">{testimonial.location}</div>
-                    </div>
+                {/* User info */}
+                <div className="flex items-center space-x-4 pt-6 border-t border-gray-100">
+                  {/* Avatar fallback */}
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                    {testimonial.avatar}
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="text-left min-w-0">
+                    <div className="font-semibold text-gray-900 text-sm">
+                      {testimonial.name}
+                    </div>
+                    {/* <div className="text-gray-600 text-xs">{testimonial.role}</div> */}
+                    <div className="text-gray-500 text-xs">{testimonial.location}</div>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* Get Started Section */}
-      <section className="relative z-10 py-20 bg-gradient-to-b from-transparent to-blue-900/20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-12">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6">{t.getStarted.title}</h2>
-            <p className="text-base sm:text-xl text-white/80 mb-3 sm:mb-4 max-w-2xl mx-auto">{t.getStarted.subtitle}</p>
-            <p className="text-sm sm:text-lg text-white/70 mb-6 sm:mb-8 max-w-2xl mx-auto">{t.getStarted.description}</p>
+      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 to-slate-950">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="relative">
+            {/* Glow effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-xl" />
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/legal-gpt" className="w-full sm:w-auto">
-                <Button
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 border-0 shadow-2xl shadow-blue-500/25 transform hover:scale-105 transition-all duration-300 group"
-                >
-                  <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                  {t.getStarted.cta}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </Button>
-              </Link>
-              <Link href="/lawyers" className="w-full sm:w-auto">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto text-base sm:text-lg px-6 sm:px-8 py-4 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-sm transform hover:scale-105 transition-all duration-300"
-                >
-                  {t.getStarted.secondary}
-                </Button>
-              </Link>
+            <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl rounded-3xl p-8 sm:p-16 shadow-2xl border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold italic text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text mb-6 sm:mb-8">{t.getStarted.title}</h2>
+              <p className="text-base sm:text-xl text-slate-300 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed">{t.getStarted.subtitle}</p>
+              <p className="text-sm sm:text-lg text-slate-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">{t.getStarted.description}</p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/legal-gpt" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 transition-all duration-300 group rounded-xl btn-futuristic"
+                  >
+                    <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
+                    {t.getStarted.cta}
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  </Button>
+                </Link>
+                <Link href="/lawyers" className="w-full sm:w-auto">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-slate-700/50 text-white hover:bg-slate-700 border-2 border-slate-600 hover:border-blue-500 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 rounded-xl"
+                  >
+                    {t.getStarted.secondary}
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-black/40 backdrop-blur-xl border-t border-white/10 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <footer className="relative z-10 bg-gray-900 border-t border-gray-200 py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <Scale className="h-10 w-10 text-blue-400" />
-                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                <Scale className="h-10 w-10 text-blue-600" />
+                <span className="text-2xl font-bold text-gray-900">
                   {t.footer.company}
                 </span>
               </div>
-              <p className="text-white/60 mb-6 max-w-md">{t.footer.tagline}</p>
+              <p className="text-gray-600 mb-6 max-w-md">{t.footer.tagline}</p>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <MapPin className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.address}</span>
+                  <MapPin className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.address}</span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.email}</span>
+                  <Mail className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.email}</span>
                 </div>
-                {/* <div className="flex items-center space-x-3">
-                  <Mail className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.email}</span>
-                </div> */}
                 <div className="flex items-center space-x-3">
-                  <PhoneCall className="h-5 w-5 text-blue-400" />
-                  <span className="text-white/80">{t.footer.phone}</span>
+                  <PhoneCall className="h-5 w-5 text-blue-600" />
+                  <span className="text-gray-700">{t.footer.phone}</span>
                 </div>
                 {/* <div className="flex items-center space-x-3">
                   <MessageSquare className="h-5 w-5 text-green-400" />
@@ -1548,30 +1207,30 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">{t.footer.quickLinks}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.footer.quickLinks}</h3>
               <ul className="space-y-3">
                 <li>
-                  <Link href="/about" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/about" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.about}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/services" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/services" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.nav.services}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/lawyers" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/lawyers" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.nav.lawyers}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auth/signup" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/auth/signup" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.signup}
                   </Link>
                 </li>
                 <li>
-                  <Link href="/auth/login" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/auth/login" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.signin}
                   </Link>
                 </li>
@@ -1579,7 +1238,7 @@ export default function HomePage() {
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-white mb-6">{t.footer.legal}</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-6">{t.footer.legal}</h3>
               <ul className="space-y-3">
                 <li>
                   {/* <Link href="/careers" className="text-white/60 hover:text-white transition-colors duration-300">
@@ -1597,30 +1256,28 @@ export default function HomePage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="text-white/60 hover:text-white transition-colors duration-300">
+                  <Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors duration-300">
                     {t.footer.contact}
                   </Link>
-                </li>
-                <li>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="border-t border-white/10 mt-12 pt-8 text-center text-sm">
-            <p className="text-white/60 mb-2">
+          <div className="border-t border-gray-200 mt-12 pt-8 text-center text-sm">
+            <p className="text-gray-600 mb-2">
               © 2026 {t.footer.company}. All rights reserved. Powered by AI.
             </p>
 
-            <div className="flex justify-center gap-4 text-white/50 mb-2">
-              <a href="/terms" className="hover:text-white underline">Terms & Conditions</a>
-              <a href="/privacy-policy" className="hover:text-white underline">Privacy Policy</a>
-              <a href="/cancellation" className="hover:text-white underline">Cancellation & Refund</a>
+            <div className="flex justify-center gap-4 text-gray-500 mb-2">
+              <a href="/terms" className="hover:text-blue-600 underline">Terms & Conditions</a>
+              <a href="/privacy-policy" className="hover:text-blue-600 underline">Privacy Policy</a>
+              <a href="/cancellation" className="hover:text-blue-600 underline">Cancellation & Refund</a>
             </div>
 
-            <p className="text-sm text-gray-400 mt-4">
-              <strong className="text-red-400">Disclaimer:</strong>
-              <span className="text-gray-300">
+            <p className="text-sm text-gray-600 mt-4">
+              <strong className="text-red-600">Disclaimer:</strong>
+              <span className="text-gray-600">
                 NyayMitra is a technology platform that helps users connect with verified legal professionals, access general legal information, and generate basic legal documents. While we provide AI-powered assistance, we do not offer legal advice or act as a law firm. All consultations and notary services are delivered by licensed third-party professionals. NyayMitra is not liable for actions taken based on AI suggestions or external legal interactions through the platform.
               </span>
             </p>
@@ -1628,46 +1285,27 @@ export default function HomePage() {
 
         </div>
       </footer>
-      {/* Simple Floating WhatsApp Button */}
+      {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/message/75WUE6HEW6ACL1"
+        href={`https://wa.me/${t.hero.whatsappNumber}`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed bottom-6 right-6 z-50 group"
       >
         <div className="relative">
-          {/* Main Button with Bounce Animation */}
-          <div className="animate-bounce group-hover:animate-none">
-            <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/40 hover:shadow-green-500/60 transition-all duration-300 hover:scale-110 group-hover:rotate-12">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="h-7 w-7 text-white"
-              >
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-              </svg>
-            </div>
-            {/* Live Indicator */}
-            <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse" />
+          {/* Glow effect */}
+          <div className="absolute -inset-2 bg-green-500/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
+
+          <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-500/50 transition-all duration-300 hover:scale-125 group-hover:animate-pulse">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-8 w-8 text-white"
+            >
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
+            </svg>
           </div>
-
-          {/* Hover Tooltip - Appears on hover */}
-          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none translate-x-4 group-hover:translate-x-0">
-            <div className="bg-black/95 backdrop-blur-md text-white px-4 py-3 rounded-lg whitespace-nowrap text-sm font-medium border border-white/20 shadow-2xl">
-              <div className="flex items-center space-x-2">
-                <MessageSquare className="h-4 w-4 text-green-400" />
-                <span className="font-semibold">Chat with Legal Experts</span>
-              </div>
-              <div className="text-xs text-green-300 mt-1">Instant Response • 24/7 Support</div>
-
-              {/* Tooltip Arrow */}
-              <div className="absolute top-1/2 -right-2 transform -translate-y-1/2 rotate-45 w-3 h-3 bg-black/95 border-r border-b border-white/20" />
-            </div>
-          </div>
-
-          {/* Pulsing Glow Effect */}
-          <div className="absolute -inset-2 bg-green-500 rounded-full opacity-20 animate-ping group-hover:animate-none" style={{ animationDuration: '2s' }} />
         </div>
       </a>
     </div>

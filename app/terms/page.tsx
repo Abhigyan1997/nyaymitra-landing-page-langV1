@@ -9,7 +9,7 @@ export default function TermsPage() {
                     Terms & Conditions
                 </h1>
                 <p className="mb-8 text-gray-400 text-lg text-center">
-                    Last updated: July 2025
+                    Last updated: March 2026
                 </p>
 
                 <section className="space-y-6 text-gray-200 leading-relaxed">
@@ -49,7 +49,7 @@ export default function TermsPage() {
                     <p className="text-gray-400">
                         For any questions or support, contact us at{" "}
                         <a href="mailto:nyaymitra.ai@gmail.com" className="underline hover:text-teal-300">
-                            contact@nyaymitra.tech
+                            support@nyaymitra.tech
                         </a>.
                     </p>
                 </section>
