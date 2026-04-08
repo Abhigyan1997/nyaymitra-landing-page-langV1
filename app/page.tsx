@@ -485,22 +485,14 @@ export default function HomePage() {
   if (!mounted) return null; // prevent hydration mismatch in Next.js
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white overflow-hidden relative">
-      {/* Premium dark gradient with animated particles */}
+    <div className="min-h-screen bg-white text-gray-900 overflow-hidden relative">
+      {/* Subtle background accent */}
       <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-blue-950/20 to-slate-950" />
-        
-        {/* Animated gradient blobs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl opacity-50 animate-blob" />
-        <div className="absolute bottom-0 left-1/3 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-40 animate-blob animation-delay-2000" />
-        <div className="absolute top-1/2 left-0 w-96 h-96 bg-cyan-600/10 rounded-full filter blur-3xl opacity-30 animate-blob animation-delay-4000" />
-        
-        {/* Grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.05)_1px,transparent_1px)] bg-[size:50px_50px] opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50 to-white" />
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 sticky top-0">
+      <nav className="relative z-50 bg-white border-b border-gray-100 sticky top-0">
         {/* Top Status Bar */}
         {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -535,10 +527,10 @@ export default function HomePage() {
             {/* Enhanced Logo */}
             <div className="flex items-center">
               <Link href="/" className="flex items-center space-x-3">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition">
+                <div className="bg-blue-600 p-2 rounded-lg hover:bg-blue-700 transition">
                   <Scale className="h-6 w-6 text-white" />
                 </div>
-                <span className="text-2xl font-playfair font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">NyayMitra</span>
+                <span className="text-2xl font-bold text-gray-900">NyayMitra</span>
               </Link>
             </div>
 
@@ -556,7 +548,7 @@ export default function HomePage() {
                           key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
                             `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
                       }
-                      className="relative text-slate-300 hover:text-blue-400 px-4 py-3 text-sm font-medium transition-colors"
+                      className="relative text-gray-600 hover:text-blue-600 px-4 py-3 text-sm font-medium transition-colors"
                     >
                       <span>{value}</span>
                     </Link>
@@ -571,7 +563,7 @@ export default function HomePage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
+                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
               >
                 <Globe className="h-4 w-4 mr-2" />
                 <span className="font-medium">{language === "en" ? "हिं" : "EN"}</span>
@@ -582,7 +574,7 @@ export default function HomePage() {
                   <DropdownMenuTrigger asChild>
                     <Button
                       size="sm"
-                      className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
+                className="border border-gray-300 text-gray-700 hover:bg-gray-100"
                       disabled={isProfileLoading}
                     >
                       {isProfileLoading ? (
@@ -788,325 +780,277 @@ export default function HomePage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
-        <div className="max-w-6xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            {/* Left: Content */}
-            <div className="space-y-10 animate-fade-in">
-              {/* Trust Badge */}
-              <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-xs font-semibold text-blue-300 tracking-widest">TRUSTED BY 100K+ INDIANS</span>
-              </div>
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-8">
+            {/* Headline */}
+            <h1 className="text-5xl sm:text-6xl font-bold leading-tight text-gray-900">
+              Confused about a legal issue? Get clarity in minutes.
+            </h1>
 
-              {/* Title & Subtitle */}
-              <div className="space-y-6">
-                <h1 className="text-5xl sm:text-6xl lg:text-7xl font-playfair font-bold italic tracking-tight leading-tight text-transparent bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-400 bg-clip-text">
-                  {t.hero.title}
-                </h1>
+            {/* Subtext */}
+            <p className="text-xl text-gray-600 max-w-2xl leading-relaxed">
+              Understand your situation first. Then connect with a verified lawyer — no confusion, no delay.
+            </p>
 
-                <h2 className="text-2xl sm:text-3xl font-playfair italic font-semibold text-blue-300 leading-relaxed">
-                  {t.hero.subtitle}
-                </h2>
-              </div>
-
-              {/* Description */}
-              <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-xl">
-                {t.hero.description}
-              </p>
-
-              {/* CTA Card - Glassmorphism */}
-              <div className="bg-slate-800/40 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 space-y-4 hover:border-blue-500/50 transition-all duration-300">
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Link href="/legal-gpt" className="flex-1">
-                    <Button
-                      size="lg"
-                      className="w-full text-base px-6 py-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-blue-500/50 transition-all duration-300 btn-futuristic"
-                    >
-                      <MessageCircle className="mr-2 h-5 w-5" />
-                      {t.hero.ctaPrimary}
-                    </Button>
-                  </Link>
-
-                  <Link href="/lawyers" className="flex-1">
-                    <Button
-                      size="lg"
-                      className="w-full text-base px-6 py-6 bg-slate-700/50 hover:bg-slate-700 text-white font-semibold rounded-xl border border-slate-600/50 hover:border-blue-500/50 shadow-lg transition-all duration-300"
-                    >
-                      <FileText className="mr-2 h-5 w-5" />
-                      {t.hero.ctaSecondary}
-                    </Button>
-                  </Link>
-                </div>
-
-                <a href={`https://wa.me/${t.hero.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="block">
-                  <Button
-                    size="lg"
-                    className="w-full text-base px-6 py-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-green-500/50 transition-all duration-300"
-                  >
-                    <svg className="mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
-                    </svg>
-                    {t.hero.whatsapp}
-                  </Button>
-                </a>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-4 pt-8">
-                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                  <div className="text-blue-400 font-bold text-lg">1M+</div>
-                  <div className="text-slate-400 text-sm">Cases Resolved</div>
-                </div>
-                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                  <div className="text-cyan-400 font-bold text-lg">50K+</div>
-                  <div className="text-slate-400 text-sm">Expert Lawyers</div>
-                </div>
-                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                  <div className="text-green-400 font-bold text-lg">99.9%</div>
-                  <div className="text-slate-400 text-sm">Success Rate</div>
-                </div>
-                <div className="bg-slate-800/40 backdrop-blur-sm rounded-lg p-4 border border-slate-700/50">
-                  <div className="text-purple-400 font-bold text-lg">&lt;30s</div>
-                  <div className="text-slate-400 text-sm">Response Time</div>
-                </div>
-              </div>
+            {/* Input Box */}
+            <div className="space-y-3">
+              <input
+                type="text"
+                placeholder="Describe your problem... (e.g. tenant not leaving house)"
+                className="w-full px-6 py-4 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
 
-            {/* Right: Visual - Premium Glassmorphism Card */}
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="relative w-full max-w-md">
-                {/* Glow effect */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-2xl" />
-                
-                <div className="relative bg-gradient-to-br from-slate-800/60 to-slate-900/60 backdrop-blur-2xl rounded-3xl border border-slate-700/50 p-8 space-y-6 shadow-2xl hover:border-blue-500/50 transition-all duration-300">
-                  <h3 className="text-xl font-playfair italic font-bold text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">How It Works</h3>
-                  
-                  <div className="space-y-5">
-                    <div className="flex items-start space-x-4">
-                      <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">1</div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-white">Tell your problem</h4>
-                        <p className="text-xs text-slate-400 mt-1">Describe your legal issue</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-4">
-                      <div className="h-10 w-10 bg-gradient-to-br from-cyan-600 to-blue-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">2</div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-white">Get instant guidance</h4>
-                        <p className="text-xs text-slate-400 mt-1">AI-powered legal advice</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start space-x-4">
-                      <div className="h-10 w-10 bg-gradient-to-br from-purple-600 to-cyan-600 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0 shadow-lg">3</div>
-                      <div>
-                        <h4 className="text-sm font-semibold text-white">Connect with lawyer</h4>
-                        <p className="text-xs text-slate-400 mt-1">Book verified experts</p>
-                      </div>
-                    </div>
-                  </div>
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 rounded-lg font-semibold text-lg">
+                Get Legal Help
+              </Button>
+              <Button variant="outline" className="border-gray-300 text-gray-900 px-8 py-6 rounded-lg font-semibold text-lg hover:bg-gray-50">
+                Ask Your Question
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-                  <div className="pt-4 border-t border-slate-700/50">
-                    <p className="text-xs text-slate-400">Available 24/7 • Instant response • Zero hidden costs</p>
-                  </div>
-                </div>
-              </div>
+      {/* Trust Bar */}
+      <section className="relative z-10 py-12 px-4 sm:px-6 lg:px-8 bg-gray-50 border-y border-gray-200">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">100+</div>
+              <div className="text-sm text-gray-600 mt-1">Users Helped</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">65+</div>
+              <div className="text-sm text-gray-600 mt-1">Verified Lawyers</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">Fast</div>
+              <div className="text-sm text-gray-600 mt-1">& Confidential</div>
+            </div>
+            <div className="text-center">
+              <div className="text-2xl font-bold text-gray-900">AI+</div>
+              <div className="text-sm text-gray-600 mt-1">Human Support</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 via-slate-900/50 to-slate-900">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">
-              {t.howItWorks.title}
-            </h2>
-            <p className="text-lg text-slate-400 max-w-2xl mx-auto">{t.howItWorks.subtitle}</p>
-          </div>
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+          <p className="text-lg text-gray-600 mb-16 max-w-2xl">Get legal clarity in three simple steps</p>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {t.howItWorks.steps.map((step, index) => {
-              const IconComponent = step.icon
-              return (
-                <div key={index} className="relative group">
-                  <div className="text-center p-8 bg-slate-800/40 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl hover:shadow-2xl hover:border-blue-500/50 transition-all duration-300 hover:bg-slate-800/60">
-                    <div className="mb-6 flex justify-center">
-                      <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-700/20 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 border border-blue-500/30">
-                        <IconComponent className="h-8 w-8 text-blue-400" />
-                      </div>
-                    </div>
-                    <div className="inline-block px-3 py-1 bg-blue-500/20 rounded-lg mb-4 border border-blue-500/30">
-                      <span className="text-sm font-bold text-blue-300">Step {index + 1}</span>
-                    </div>
-                    <h3 className="text-lg font-semibold text-white mb-3">
-                      {step.title}
-                    </h3>
-                    <p className="text-slate-400 text-sm leading-relaxed">
-                      {step.description}
-                    </p>
-                  </div>
-                  {index < 2 && (
-                    <div className="hidden md:flex absolute top-1/2 -right-4 items-center justify-center w-8 h-8 text-blue-500/50">
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  )}
-                </div>
-              )
-            })}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">1</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Tell us your problem</h3>
+              <p className="text-gray-600">Describe your legal issue in a few sentences</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">2</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Get instant clarity</h3>
+              <p className="text-gray-600">AI provides immediate guidance on your situation</p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-blue-600">3</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Talk to a verified lawyer</h3>
+              <p className="text-gray-600">Connect with expert lawyers when you need them</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Why Choose NyayMitra Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-              {t.whyChoose.title}
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.whyChoose.subtitle}</p>
-          </div>
+      {/* Positioning Section */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Not just a platform. Your Legal Buddy.</h2>
+          <p className="text-lg text-gray-600 mb-16 max-w-3xl">We're here to make legal help accessible, simple, and affordable for everyone</p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.whyChoose.features.map((feature, index) => {
-              const IconComponent = feature.icon
-              return (
-                <div key={index} className="group text-center p-8 bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300">
-                  <div className="mb-6 flex justify-center">
-                    <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="h-7 w-7 text-blue-700" />
-                    </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-100">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
                   </div>
-                  <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
                 </div>
-              )
-            })}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Simple explanations</h3>
+                  <p className="text-gray-600 mt-1">No complex jargon. Just clear, simple language</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-100">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Verified lawyers</h3>
+                  <p className="text-gray-600 mt-1">Only qualified, experienced lawyers in our network</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-100">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Fast response</h3>
+                  <p className="text-gray-600 mt-1">Get answers in minutes, not days</p>
+                </div>
+              </div>
+
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue-100">
+                    <CheckCircle className="h-6 w-6 text-blue-600" />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Affordable help</h3>
+                  <p className="text-gray-600 mt-1">Legal guidance without breaking the bank</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-8 flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-6xl mb-4">🤝</div>
+                <p className="text-xl font-semibold text-gray-900">We're Your Legal Buddy</p>
+                <p className="text-gray-600 mt-2">Always here when you need us</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Common Problems Section */}
-      <section className="relative z-10 py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-              {t.commonProblems.title}
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.commonProblems.subtitle}</p>
-          </div>
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">Common Legal Problems We Help With</h2>
+          <p className="text-lg text-gray-600 mb-16 max-w-2xl">Get expert help for the issues that matter most</p>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {t.commonProblems.items.map((item, index) => (
-              <div key={index} className="group p-6 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300">
-                <div className="flex items-start space-x-3">
-                  <div className="flex-shrink-0 h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <span className="text-sm font-bold text-blue-700">✓</span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-sm font-semibold text-gray-900 mb-1 group-hover:text-blue-700 transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 leading-relaxed">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6">
+            {[
+              { title: "Tenant Issues", icon: "🏠" },
+              { title: "Salary Not Paid", icon: "💰" },
+              { title: "FIR / Police Issues", icon: "⚖️" },
+              { title: "Divorce & Family", icon: "👨‍👩‍👧‍👦" },
+              { title: "Property Disputes", icon: "🏢" }
+            ].map((problem, index) => (
+              <div key={index} className="group bg-white rounded-lg p-6 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-300">
+                <div className="text-4xl mb-4">{problem.icon}</div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">{problem.title}</h3>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                  Get Help
+                </Button>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="relative z-10 py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-              {t.features.title}
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t.features.subtitle}</p>
-          </div>
+      {/* AI + Lawyer Section */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">AI for clarity. Lawyers for decisions.</h2>
+          <p className="text-lg text-gray-600 mb-12 max-w-3xl">Get the best of both worlds: instant AI-powered guidance plus expert lawyer advice</p>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {t.features.items.map((feature, index) => {
-              const IconComponent = feature.icon
-              return (
-                <div
-                  key={index}
-                  className="group p-8 bg-gradient-to-br from-gray-50 to-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300"
-                >
-                  <div className="flex items-start space-x-6">
-                    <div className="flex-shrink-0">
-                      <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                        <IconComponent className="h-7 w-7 text-blue-700" />
-                      </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">
-                        {feature.title}
-                      </h3>
-                      <p className="text-gray-600 leading-relaxed">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-white rounded-lg p-8 border border-gray-200">
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">AI Instant Clarity</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Get answers in seconds</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Available 24/7</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Understand your rights</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-white rounded-lg p-8 border border-gray-200">
+              <div className="text-4xl mb-4">⚖️</div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Lawyer Expertise</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Talk to real lawyers</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Get actionable steps</span>
+                </li>
+                <li className="flex items-start space-x-3">
+                  <span className="text-blue-600 font-bold">✓</span>
+                  <span className="text-gray-600">Legal peace of mind</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Testimonials Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-b from-blue-50/50 to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-5xl font-bold mb-6 text-gray-900">
-              {t.testimonials.title}
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">{t.testimonials.subtitle}</p>
-          </div>
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Users Say</h2>
+          <p className="text-lg text-gray-600 mb-16 max-w-2xl">Real people, real solutions, real results</p>
 
-          {/* Responsive container: scroll on mobile, grid on larger screens */}
           <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory scroll-px-4 scrollbar-hide">
             {t.testimonials.items.map((testimonial, index) => (
               <div
                 key={index}
-                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center group bg-white rounded-2xl border border-gray-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 p-8"
+                className="min-w-[90%] sm:min-w-[45%] md:min-w-0 snap-center bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 p-6"
               >
                 {/* Star rating */}
-                <div className="flex mb-6">
+                <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
 
-                {/* Quote */}
-                <blockquote className="text-sm text-gray-700 mb-6 leading-relaxed italic">
-                  "{testimonial.text}"
-                </blockquote>
+                {/* Problem and Solution */}
+                <div className="mb-4">
+                  <h4 className="font-semibold text-gray-900 mb-2">Problem</h4>
+                  <p className="text-sm text-gray-600 mb-3">Legal issue faced</p>
+                  
+                  <h4 className="font-semibold text-gray-900 mb-2 mt-4">Solution</h4>
+                  <p className="text-sm text-gray-700">{testimonial.text}</p>
+                </div>
 
                 {/* User info */}
-                <div className="flex items-center space-x-4 pt-6 border-t border-gray-100">
-                  {/* Avatar fallback */}
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                <div className="flex items-center space-x-3 pt-4 border-t border-gray-100">
+                  <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                     {testimonial.avatar}
                   </div>
-                  <div className="text-left min-w-0">
-                    <div className="font-semibold text-gray-900 text-sm">
-                      {testimonial.name}
-                    </div>
+                  <div className="min-w-0">
+                    <div className="font-semibold text-gray-900 text-sm">{testimonial.name}</div>
                     <div className="text-gray-600 text-xs">{testimonial.role}</div>
-                    <div className="text-gray-500 text-xs">{testimonial.location}</div>
                   </div>
                 </div>
               </div>
@@ -1115,40 +1059,15 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Get Started Section */}
-      <section className="relative z-10 py-24 bg-gradient-to-b from-slate-900 to-slate-950">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="relative">
-            {/* Glow effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-cyan-600/20 rounded-3xl blur-xl" />
-            
-            <div className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-xl rounded-3xl p-8 sm:p-16 shadow-2xl border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair font-bold italic text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text mb-6 sm:mb-8">{t.getStarted.title}</h2>
-              <p className="text-base sm:text-xl text-slate-300 mb-4 sm:mb-6 max-w-3xl mx-auto leading-relaxed">{t.getStarted.subtitle}</p>
-              <p className="text-sm sm:text-lg text-slate-400 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed">{t.getStarted.description}</p>
+      {/* Final CTA Section */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-blue-600">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Still unsure about your situation?</h2>
+          <p className="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">Don't wait till it gets worse. Get clarity today from an expert.</p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/legal-gpt" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-semibold shadow-lg hover:shadow-cyan-500/50 transform hover:scale-105 transition-all duration-300 group rounded-xl btn-futuristic"
-                  >
-                    <Sparkles className="mr-2 h-5 w-5 group-hover:rotate-12 transition-transform duration-300" />
-                    {t.getStarted.cta}
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
-                  </Button>
-                </Link>
-                <Link href="/lawyers" className="w-full sm:w-auto">
-                  <Button
-                    size="lg"
-                    className="w-full sm:w-auto text-base sm:text-lg px-8 sm:px-10 py-6 bg-slate-700/50 text-white hover:bg-slate-700 border-2 border-slate-600 hover:border-blue-500 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 rounded-xl"
-                  >
-                    {t.getStarted.secondary}
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
+          <Button className="bg-white hover:bg-gray-100 text-blue-600 px-8 py-6 rounded-lg font-semibold text-lg">
+            Get Legal Help Now
+          </Button>
         </div>
       </section>
 
@@ -1271,15 +1190,12 @@ export default function HomePage() {
         className="fixed bottom-6 right-6 z-50 group"
       >
         <div className="relative">
-          {/* Glow effect */}
-          <div className="absolute -inset-2 bg-green-500/30 rounded-full blur-lg group-hover:blur-xl transition-all duration-300 opacity-0 group-hover:opacity-100" />
-          
-          <div className="relative w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-green-500/50 transition-all duration-300 hover:scale-125 group-hover:animate-pulse">
+          <div className="w-14 h-14 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              className="h-8 w-8 text-white"
+              className="h-7 w-7 text-white"
             >
               <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
             </svg>
