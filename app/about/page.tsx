@@ -70,12 +70,12 @@ export default function AboutPage() {
 
   const achievements = [
     {
-      number: "50,000+",
+      number: "100+",
       label: "Legal Queries Resolved",
       icon: Scale,
     },
     {
-      number: "2,500+",
+      number: "100+",
       label: "Verified Lawyers",
       icon: Users,
     },
@@ -122,7 +122,7 @@ export default function AboutPage() {
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex items-center space-x-2">
               <Scale className="h-8 w-8 text-blue-600" />
-              <span className="text-xl font-bold text-gray-900">Nyay Mitra</span>
+              <span className="text-xl font-bold text-gray-900">NyayMitra</span>
             </Link>
             <div className="flex items-center space-x-4">
               <Link href="/lawyers">
@@ -196,19 +196,19 @@ export default function AboutPage() {
 
           <div className="prose prose-lg mx-auto text-gray-600">
             <p>
-              Nyay Mitra is a newly launched initiative, started in June 2025, born out of a deeply personal observation that even in 2025, millions of people in India still struggle to access basic legal help. Whether it’s a simple tenant issue, a consumer complaint, or family-related matters, legal assistance often feels complicated, expensive, and inaccessible.
+              NyayMitra is a legal-tech initiative launched in June 2025, built on a simple yet critical insight even today, millions of people in India struggle to access basic legal support. From tenant disputes and consumer complaints to family related matters, legal assistance is often perceived as complex, expensive, and difficult to navigate.
             </p>
 
             <p>
-              As a developer who frequently saw people around me getting misled or harassed due to a lack of legal awareness, I realized there had to be a better way. That’s when I decided to create an MVP — a platform that could act as a bridge between ordinary citizens and genuine legal guidance.
+              Observing this gap firsthand, especially how individuals are often misled or disadvantaged due to a lack of legal awareness, led to the creation of NyayMitra. The goal was to build a platform that could bridge the gap between everyday users and reliable legal guidance.
             </p>
 
             <p>
-              Nyay Mitra started as a solo project with a simple goal: to offer quick, reliable, and affordable legal help using both technology and a network of trusted legal experts. With features like AI-powered legal guidance, real-time lawyer booking, and an easy-to-use dashboard, the platform is designed for those who don’t have the time or resources to chase legal help the traditional way.
+              NyayMitra started as a focused MVP with a clear mission: to make legal help more accessible, understandable, and efficient. By combining technology with a network of verified legal professionals, the platform enables users to gain initial clarity through AI-powered guidance and seamlessly connect with lawyers when needed.
             </p>
 
             <p>
-              While we're just getting started, the vision is big — to make legal literacy and access a basic right, not a luxury. Every update we push, every lawyer we onboard, and every consultation booked is a step closer to that mission.
+              While still in its early stages, NyayMitra is steadily evolving into a trust first legal ecosystem. Each improvement, user interaction, and lawyer onboarding contributes to a larger vision making legal awareness and access a fundamental service, not a privilege.
             </p>
           </div>
 
@@ -325,7 +325,7 @@ export default function AboutPage() {
                 <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                   <Users className="h-16 w-16 text-gray-400" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">Twinkle Gupta</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Twinkle Chatterjee</h3>
                 <p className="text-blue-600 font-medium mb-2">Co-Founder</p>
                 <div className="min-h-[40px] mb-4">
                   <Badge variant="secondary" className="text-xs">Growth & Market Development</Badge>
