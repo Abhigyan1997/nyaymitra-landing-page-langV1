@@ -674,41 +674,49 @@ export default function LawyersPage() {
             "lg:col-span-1",
             mobileFiltersOpen ? "block" : "hidden lg:block"
           )}>
-            <Card className="sticky top-24 shadow-lg">
+            <Card className="sticky top-24 shadow-lg dark:bg-gray-800 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="flex items-center text-lg">
-                  <Filter className="h-5 w-5 mr-2 text-blue-600" />
+                <CardTitle className="flex items-center text-lg text-gray-900 dark:text-white">
+                  <Filter className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                   Refine Your Search
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Search */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Search</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Search
+                  </label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
                     <Input
                       placeholder="Search by name or expertise..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10"
+                      className="pl-10 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400"
                     />
                   </div>
                 </div>
 
                 {/* Specialization */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Area of Law</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Area of Law
+                  </label>
                   <Select
                     value={selectedSpecialization}
                     onValueChange={setSelectedSpecialization}
                   >
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Select specialization" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
                       {specializations.map((spec) => (
-                        <SelectItem key={spec} value={spec}>
+                        <SelectItem
+                          key={spec}
+                          value={spec}
+                          className="dark:text-white dark:focus:bg-gray-700 dark:focus:text-white"
+                        >
                           {spec}
                         </SelectItem>
                       ))}
@@ -718,14 +726,20 @@ export default function LawyersPage() {
 
                 {/* State */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Location</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Location
+                  </label>
                   <Select value={selectedState} onValueChange={setSelectedState}>
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Select state" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
                       {states.map((state) => (
-                        <SelectItem key={state} value={state}>
+                        <SelectItem
+                          key={state}
+                          value={state}
+                          className="dark:text-white dark:focus:bg-gray-700"
+                        >
                           {state}
                         </SelectItem>
                       ))}
@@ -735,14 +749,20 @@ export default function LawyersPage() {
 
                 {/* Experience */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Years of Experience</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Years of Experience
+                  </label>
                   <Select value={selectedExperience} onValueChange={setSelectedExperience}>
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Select experience" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
                       {experienceLevels.map((level) => (
-                        <SelectItem key={level} value={level}>
+                        <SelectItem
+                          key={level}
+                          value={level}
+                          className="dark:text-white dark:focus:bg-gray-700"
+                        >
                           {level}
                         </SelectItem>
                       ))}
@@ -752,14 +772,20 @@ export default function LawyersPage() {
 
                 {/* Language */}
                 <div>
-                  <label className="text-sm font-medium text-gray-700 mb-2 block">Language</label>
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 block">
+                    Language
+                  </label>
                   <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className="bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                       <SelectValue placeholder="Select language" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
                       {languages.map((lang) => (
-                        <SelectItem key={lang} value={lang}>
+                        <SelectItem
+                          key={lang}
+                          value={lang}
+                          className="dark:text-white dark:focus:bg-gray-700"
+                        >
                           {lang}
                         </SelectItem>
                       ))}
@@ -769,7 +795,7 @@ export default function LawyersPage() {
 
                 <Button
                   variant="outline"
-                  className="w-full border-blue-500 text-blue-600 hover:bg-blue-50"
+                  className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950"
                   onClick={resetFilters}
                 >
                   Clear All Filters
@@ -817,7 +843,7 @@ export default function LawyersPage() {
               {filteredLawyers.map((lawyer) => (
                 <Card
                   key={lawyer.id}
-                  className="hover:shadow-xl transition-all duration-300 border border-gray-200 rounded-xl overflow-hidden"
+                  className="hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden dark:bg-gray-800"
                 >
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row gap-6">
@@ -826,7 +852,7 @@ export default function LawyersPage() {
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center space-x-4">
                             <div className="relative">
-                              <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                              <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 flex items-center justify-center">
                                 {lawyer.profilePhoto ? (
                                   <img
                                     src={lawyer.profilePhoto || lawyer.avatar || ''}
@@ -834,19 +860,19 @@ export default function LawyersPage() {
                                     className="w-full h-full object-cover"
                                   />
                                 ) : (
-                                  <User className="h-8 w-8 text-blue-600" />
+                                  <User className="h-8 w-8 text-blue-600 dark:text-blue-400" />
                                 )}
                               </div>
 
                               {lawyer.verified && (
-                                <div className="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow-sm">
+                                <div className="absolute -bottom-1 -right-1 bg-white dark:bg-gray-800 rounded-full p-1 shadow-sm">
                                   <div className="bg-blue-600 text-white p-1 rounded-full">
                                     <Award className="h-3 w-3" />
                                   </div>
                                 </div>
                               )}
                               {lawyer.kycStatus === 'verified' && (
-                                <div className="absolute -bottom-1 -right-8 bg-white rounded-full p-1 shadow-sm">
+                                <div className="absolute -bottom-1 -right-8 bg-white dark:bg-gray-800 rounded-full p-1 shadow-sm">
                                   <div className="bg-green-600 text-white p-1 rounded-full text-xs px-2">
                                     KYC
                                   </div>
@@ -855,24 +881,24 @@ export default function LawyersPage() {
                             </div>
                             <div>
                               <div className="flex items-center space-x-2">
-                                <h3 className="text-xl font-semibold text-gray-900 hover:text-blue-600 transition-colors">
+                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                                   {lawyer.fullName}
                                 </h3>
                               </div>
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {lawyer.specialization.map((spec, i) => (
-                                  <Badge key={i} variant="outline" className="text-blue-600 border-blue-200">
+                                  <Badge key={i} variant="outline" className="text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800">
                                     {spec}
                                   </Badge>
                                 ))}
                               </div>
-                              <div className="flex items-center space-x-4 text-sm text-gray-600 mt-2">
+                              <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mt-2">
                                 <span className="flex items-center">
-                                  <Clock className="h-4 w-4 mr-1 text-gray-500" />
+                                  <Clock className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400" />
                                   {lawyer.experience} years exp.
                                 </span>
                                 <span className="flex items-center">
-                                  <MapPin className="h-4 w-4 mr-1 text-gray-500" />
+                                  <MapPin className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400" />
                                   {lawyer.city}, {lawyer.state}
                                 </span>
                               </div>
@@ -880,16 +906,15 @@ export default function LawyersPage() {
                           </div>
                         </div>
 
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-gray-600 dark:text-gray-300 mb-4">
                           {lawyer.bio.length > 160 ? lawyer.bio.slice(0, 150) + "..." : lawyer.bio}
                         </p>
 
-
                         <div className="flex flex-wrap items-center gap-4 mb-4">
-                          <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
+                          <div className="flex items-center bg-yellow-50 dark:bg-yellow-950/30 px-3 py-1 rounded-full">
                             <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                            <span className="ml-1 font-medium text-gray-900">{lawyer.rating.toFixed(1)}</span>
-                            <span className="text-gray-600 text-sm ml-1">({lawyer.reviews} reviews)</span>
+                            {/* <span className="ml-1 font-medium text-gray-900 dark:text-white">{lawyer.rating.toFixed(1)}</span> */}
+                            <span className="text-gray-600 dark:text-gray-400 text-sm ml-1">({lawyer.reviews} reviews)</span>
                           </div>
 
                           <Badge
@@ -901,26 +926,26 @@ export default function LawyersPage() {
 
                           <div className="flex items-center space-x-1">
                             {lawyer.consultationModes.video && (
-                              <Badge variant="outline" className="px-2">
-                                <Video className="h-4 w-4 mr-1 text-purple-600" />
+                              <Badge variant="outline" className="px-2 dark:border-purple-800 dark:text-purple-400">
+                                <Video className="h-4 w-4 mr-1 text-purple-600 dark:text-purple-400" />
                                 Video
                               </Badge>
                             )}
                             {lawyer.consultationModes.call && (
-                              <Badge variant="outline" className="px-2">
-                                <Phone className="h-4 w-4 mr-1 text-green-600" />
+                              <Badge variant="outline" className="px-2 dark:border-green-800 dark:text-green-400">
+                                <Phone className="h-4 w-4 mr-1 text-green-600 dark:text-green-400" />
                                 Call
                               </Badge>
                             )}
                             {lawyer.consultationModes.chat && (
-                              <Badge variant="outline" className="px-2">
-                                <MessageCircle className="h-4 w-4 mr-1 text-blue-600" />
+                              <Badge variant="outline" className="px-2 dark:border-blue-800 dark:text-blue-400">
+                                <MessageCircle className="h-4 w-4 mr-1 text-blue-600 dark:text-blue-400" />
                                 Chat
                               </Badge>
                             )}
                             {lawyer.consultationModes.inPerson && (
-                              <Badge variant="outline" className="px-2">
-                                <User className="h-4 w-4 mr-1 text-orange-600" />
+                              <Badge variant="outline" className="px-2 dark:border-orange-800 dark:text-orange-400">
+                                <User className="h-4 w-4 mr-1 text-orange-600 dark:text-orange-400" />
                                 In-person
                               </Badge>
                             )}
@@ -929,9 +954,9 @@ export default function LawyersPage() {
 
                         {lawyer.languages.length > 0 && (
                           <div className="flex flex-wrap gap-2">
-                            <span className="text-sm text-gray-600">Languages:</span>
+                            <span className="text-sm text-gray-600 dark:text-gray-400">Languages:</span>
                             {lawyer.languages.map((lang, index) => (
-                              <Badge key={index} variant="secondary" className="px-2">
+                              <Badge key={index} variant="secondary" className="px-2 dark:bg-gray-700 dark:text-gray-300">
                                 {lang}
                               </Badge>
                             ))}
@@ -942,20 +967,20 @@ export default function LawyersPage() {
                       {/* Booking Section */}
                       <div className="md:w-64 flex flex-col justify-between">
                         <div className="text-center mb-4">
-                          <div className="text-2xl font-bold text-gray-900">₹{lawyer.consultationFee}</div>
-                          <div className="text-sm text-gray-600">per consultation</div>
+                          <div className="text-2xl font-bold text-gray-900 dark:text-white">₹{lawyer.consultationFee}</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400">per consultation</div>
                         </div>
 
                         <div className="space-y-3">
                           <Button
-                            className="w-full bg-blue-600 hover:bg-blue-700"
+                            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700"
                             onClick={() => openBookingDialog(lawyer)}
                           >
                             <Calendar className="h-4 w-4 mr-2" />
                             Book Consultation
                           </Button>
                           <Link href={`/lawyers/${lawyer.id}`}>
-                            <Button variant="outline" className="w-full border-blue-500 text-blue-600 hover:bg-blue-50">
+                            <Button variant="outline" className="w-full border-blue-500 text-blue-600 hover:bg-blue-50 dark:border-blue-400 dark:text-blue-400 dark:hover:bg-blue-950">
                               View Full Profile
                             </Button>
                           </Link>
