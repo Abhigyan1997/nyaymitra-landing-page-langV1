@@ -130,11 +130,11 @@ export default function LawyersPage() {
         })
 
         const lawyersData = response.data?.lawyers?.map((lawyer: any) => ({
-          id: lawyer._id || lawyer.lawyerDetails?._id || '',
-          userId: lawyer.userId || lawyer.lawyerDetails?.userId || '',
+          id: lawyer.lawyerDetails?._id || lawyer._id || '',
+          userId: lawyer.lawyerDetails?.userId || lawyer.userId || '',
           fullName: lawyer.userInfo?.fullName || '',
           profilePhoto: lawyer.userInfo?.profilePhoto || lawyer.userInfo?.avatar || '',
-          specialization: lawyer.lawyerDetails?.specialization || [],
+          specialization: lawyer.lawyerDetails?.specialization || [], // ✅ This is correct
           experience: Number(lawyer.lawyerDetails?.experience) || 0,
           rating: lawyer.lawyerDetails?.averageRating || 0,
           reviews: lawyer.lawyerDetails?.totalReviews || 0,
@@ -142,7 +142,6 @@ export default function LawyersPage() {
           state: lawyer.userInfo?.address?.state || lawyer.lawyerDetails?.state || '',
           languages: lawyer.lawyerDetails?.languagesSpoken || [],
           consultationFee: lawyer.lawyerDetails?.consultationFee || 0,
-          // availability: lawyer.lawyerDetails.kycStatus === "verified" ? "Available Now" : "Available Soon",
           verified: lawyer.lawyerDetails?.verifiedByPlatform || false,
           bio: lawyer.lawyerDetails?.bio || 'Professional lawyer',
           consultationModes: lawyer.lawyerDetails?.consultationModes || {
@@ -153,7 +152,8 @@ export default function LawyersPage() {
           },
           barCouncilId: lawyer.lawyerDetails?.barCouncilId || '',
           yearsPracticing: lawyer.lawyerDetails?.yearsPracticing || 0,
-          kycStatus: lawyer.lawyerDetails?.kycStatus || 'pending'
+          kycStatus: lawyer.lawyerDetails?.kycStatus || 'pending',
+          availability: lawyer.lawyerDetails?.kycStatus === "verified" ? "Available Now" : "Available Soon"
         })) || []
 
         setLawyers(lawyersData)
@@ -203,37 +203,37 @@ export default function LawyersPage() {
 
   const specializations = [
     "All Specializations",
-    "Criminal Lawyer",
-    "Civil Lawyer",
-    "Family Lawyer",
-    "Divorce Lawyer",
-    "Child Custody Lawyer",
-    "Property Lawyer",
-    "Real Estate Lawyer",
-    "Corporate Lawyer",
-    "Startup Lawyer",
-    "Contract Lawyer",
-    "Intellectual Property Lawyer",
-    "Trademark Lawyer",
-    "Patent Lawyer",
-    "Cyber Crime Lawyer",
-    "Consumer Court Lawyer",
-    "Labour & Employment Lawyer",
-    "Tax Lawyer",
-    "GST Lawyer",
-    "Banking & Finance Lawyer",
-    "Debt Recovery Lawyer",
-    "Immigration Lawyer",
-    "Cheque Bounce Lawyer",
-    "Motor Accident Lawyer",
-    "Insurance Lawyer",
-    "Arbitration Lawyer",
-    "High Court Lawyer",
-    "Supreme Court Lawyer",
-    "Service Matter Lawyer",
-    "RERA Lawyer",
-    "Environmental Lawyer",
-    "Constitutional Lawyer"
+    "Criminal Law",
+    "Civil Law",
+    "Family Law",
+    "Divorce Law",
+    "Child Custody Law",
+    "Property Law",
+    "Real Estate Law",
+    "Corporate Law",
+    "Startup Law",
+    "Contract Law",
+    "Intellectual Property Law",
+    "Trademark Law",
+    "Patent Law",
+    "Cyber Crime Law",
+    "Consumer Court Law",
+    "Labour & Employment Law",
+    "Tax Law",
+    "GST Law",
+    "Banking & Finance Law",
+    "Debt Recovery Law",
+    "Immigration Law",
+    "Cheque Bounce Law",
+    "Motor Accident Law",
+    "Insurance Law",
+    "Arbitration Law",
+    "High Court Law",
+    "Supreme Court Law",
+    "Service Matter Law",
+    "RERA Law",
+    "Environmental Law",
+    "Constitutional Law"
   ]
 
 
@@ -311,7 +311,16 @@ export default function LawyersPage() {
       const matchesSpecialization =
         !selectedSpecialization ||
         selectedSpecialization === "All Specializations" ||
-        (lawyer.specialization?.includes(selectedSpecialization) || false)
+        (lawyer.specialization && lawyer.specialization.some(spec =>
+          spec.toLowerCase() === selectedSpecialization.toLowerCase() ||
+          spec.toLowerCase().includes(selectedSpecialization.toLowerCase())
+        ))
+      if (selectedSpecialization && selectedSpecialization !== "All Specializations") {
+        console.log('Lawyer:', lawyer.fullName)
+        console.log('Specializations:', lawyer.specialization)
+        console.log('Selected:', selectedSpecialization)
+        console.log('Matches:', matchesSpecialization)
+      }
 
       const matchesState =
         !selectedState ||
