@@ -385,10 +385,10 @@ export default function LawyerDetailsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
                 <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <div className="flex items-center mb-6">
-                        <Button variant="ghost" onClick={() => router.back()}>
+                        <Button variant="ghost" onClick={() => router.back()} className="dark:text-white dark:hover:bg-gray-800">
                             <ArrowLeft className="h-5 w-5 mr-2" />
                             Back
                         </Button>
@@ -396,26 +396,26 @@ export default function LawyerDetailsPage() {
 
                     <div className="space-y-8">
                         <div className="flex items-start space-x-6">
-                            <Skeleton className="h-32 w-32 rounded-full" />
+                            <Skeleton className="h-32 w-32 rounded-full dark:bg-gray-700" />
                             <div className="space-y-4">
-                                <Skeleton className="h-8 w-64" />
-                                <Skeleton className="h-4 w-48" />
+                                <Skeleton className="h-8 w-64 dark:bg-gray-700" />
+                                <Skeleton className="h-4 w-48 dark:bg-gray-700" />
                                 <div className="flex space-x-4">
-                                    <Skeleton className="h-6 w-24" />
-                                    <Skeleton className="h-6 w-24" />
+                                    <Skeleton className="h-6 w-24 dark:bg-gray-700" />
+                                    <Skeleton className="h-6 w-24 dark:bg-gray-700" />
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid md:grid-cols-2 gap-6">
                             {[...Array(6)].map((_, i) => (
-                                <Card key={i}>
+                                <Card key={i} className="dark:bg-gray-800 dark:border-gray-700">
                                     <CardHeader>
-                                        <Skeleton className="h-6 w-32" />
+                                        <Skeleton className="h-6 w-32 dark:bg-gray-700" />
                                     </CardHeader>
                                     <CardContent>
-                                        <Skeleton className="h-4 w-full" />
-                                        <Skeleton className="h-4 w-3/4 mt-2" />
+                                        <Skeleton className="h-4 w-full dark:bg-gray-700" />
+                                        <Skeleton className="h-4 w-3/4 mt-2 dark:bg-gray-700" />
                                     </CardContent>
                                 </Card>
                             ))}
@@ -428,13 +428,13 @@ export default function LawyerDetailsPage() {
 
     if (error) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
-                <div className="max-w-md text-center p-6 bg-white rounded-lg shadow-md border border-red-100">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-                        <AlertCircle className="h-6 w-6 text-red-600" />
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+                <div className="max-w-md text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-red-100 dark:border-red-900">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+                        <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-400" />
                     </div>
-                    <h3 className="mt-3 text-lg font-medium text-gray-900">Error loading lawyer details</h3>
-                    <p className="mt-2 text-gray-600">{error}</p>
+                    <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">Error loading lawyer details</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">{error}</p>
                     <div className="mt-6 space-x-3">
                         <Button onClick={() => window.location.reload()}>Try Again</Button>
                         <Button variant="outline" onClick={() => router.push("/lawyers")}>
@@ -448,13 +448,13 @@ export default function LawyerDetailsPage() {
 
     if (!lawyer) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
-                <div className="max-w-md text-center p-6 bg-white rounded-lg shadow-md border border-gray-200">
-                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
-                        <User className="h-6 w-6 text-gray-600" />
+            <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
+                <div className="max-w-md text-center p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-700">
+                        <User className="h-6 w-6 text-gray-600 dark:text-gray-400" />
                     </div>
-                    <h3 className="mt-3 text-lg font-medium text-gray-900">Lawyer not found</h3>
-                    <p className="mt-2 text-gray-600">The lawyer you're looking for doesn't exist or may have been removed.</p>
+                    <h3 className="mt-3 text-lg font-medium text-gray-900 dark:text-white">Lawyer not found</h3>
+                    <p className="mt-2 text-gray-600 dark:text-gray-400">The lawyer you're looking for doesn't exist or may have been removed.</p>
                     <div className="mt-6">
                         <Button variant="outline" onClick={() => router.push("/lawyers")}>
                             Browse Lawyers
@@ -466,19 +466,20 @@ export default function LawyerDetailsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="flex items-center mb-6">
-                    <Button variant="ghost" onClick={() => router.back()}>
+                    <Button variant="ghost" onClick={() => router.back()} className="dark:text-white dark:hover:bg-gray-800">
                         <ArrowLeft className="h-5 w-5 mr-2" />
                         Back to Lawyers
                     </Button>
                 </div>
 
                 <div className="space-y-8">
+                    {/* Profile Header */}
                     <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                         <div className="relative">
-                            <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center overflow-hidden">
+                            <div className="w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-full flex items-center justify-center overflow-hidden">
                                 {lawyer.profilePhoto ? (
                                     <img
                                         src={lawyer.profilePhoto}
@@ -486,11 +487,11 @@ export default function LawyerDetailsPage() {
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
-                                    <User className="h-16 w-16 text-blue-600" />
+                                    <User className="h-16 w-16 text-blue-600 dark:text-blue-400" />
                                 )}
                             </div>
                             {lawyer.verifiedByPlatform && (
-                                <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow-sm">
+                                <div className="absolute -bottom-2 -right-2 bg-white dark:bg-gray-800 rounded-full p-1 shadow-sm">
                                     <div className="bg-blue-600 text-white p-1 rounded-full">
                                         <Award className="h-4 w-4" />
                                     </div>
@@ -501,12 +502,12 @@ export default function LawyerDetailsPage() {
                         <div className="flex-1">
                             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                 <div>
-                                    <h1 className="text-3xl font-bold text-gray-900">
+                                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                                         {lawyer.fullName}
                                     </h1>
                                     <div className="flex flex-wrap items-center gap-2 mt-2">
                                         {lawyer.specialization.map((spec, i) => (
-                                            <Badge key={i} variant="outline" className="text-blue-600 border-blue-200">
+                                            <Badge key={i} variant="outline" className="text-blue-600 dark:text-blue-400 border-blue-200 dark:border-blue-800">
                                                 {spec}
                                             </Badge>
                                         ))}
@@ -514,12 +515,12 @@ export default function LawyerDetailsPage() {
                                 </div>
 
                                 <div className="flex items-center space-x-4">
-                                    <div className="flex items-center bg-yellow-50 px-3 py-1 rounded-full">
+                                    <div className="flex items-center bg-yellow-50 dark:bg-yellow-950/30 px-3 py-1 rounded-full">
                                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                                        <span className="ml-1 font-medium text-gray-900">
+                                        <span className="ml-1 font-medium text-gray-900 dark:text-white">
                                             {lawyer.averageRating.toFixed(1)}
                                         </span>
-                                        <span className="text-gray-600 text-sm ml-1">
+                                        <span className="text-gray-600 dark:text-gray-400 text-sm ml-1">
                                             ({lawyer.totalReviews} reviews)
                                         </span>
                                     </div>
@@ -533,66 +534,69 @@ export default function LawyerDetailsPage() {
                                 </div>
                             </div>
 
-                            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-600">
+                            <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-gray-600 dark:text-gray-400">
                                 <div className="flex items-center">
-                                    <MapPin className="h-4 w-4 mr-1 text-gray-500" />
+                                    <MapPin className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400" />
                                     {lawyer.city}, {lawyer.state}
                                 </div>
                                 <div className="flex items-center">
-                                    <Clock className="h-4 w-4 mr-1 text-gray-500" />
+                                    <Clock className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400" />
                                     {lawyer.experience} years experience
                                 </div>
                                 <div className="flex items-center">
-                                    <Scale className="h-4 w-4 mr-1 text-gray-500" />
+                                    <Scale className="h-4 w-4 mr-1 text-gray-500 dark:text-gray-400" />
                                     Bar Council ID: {lawyer.barCouncilId}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <Separator />
+                    <Separator className="dark:bg-gray-700" />
 
                     <div className="grid md:grid-cols-3 gap-6">
                         <div className="md:col-span-2 space-y-6">
-                            <Card>
+                            {/* About Section */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <BookOpen className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         About
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                    <p className="text-gray-700">{lawyer.bio}</p>
+                                    <p className="text-gray-700 dark:text-gray-300">{lawyer.bio}</p>
                                 </CardContent>
                             </Card>
 
-                            <Card>
+                            {/* Experience & Qualifications */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <Briefcase className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <Briefcase className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         Experience & Qualifications
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div>
-                                        <h4 className="font-medium text-gray-900">Years Practicing</h4>
-                                        <p className="text-gray-700">{lawyer.yearsPracticing} years</p>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Years Practicing</h4>
+                                        <p className="text-gray-700 dark:text-gray-300">{lawyer.yearsPracticing} years</p>
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-gray-900">Total Experience</h4>
-                                        <p className="text-gray-700">{lawyer.experience} years</p>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Total Experience</h4>
+                                        <p className="text-gray-700 dark:text-gray-300">{lawyer.experience} years</p>
                                     </div>
                                     <div>
-                                        <h4 className="font-medium text-gray-900">Bar Council ID</h4>
-                                        <p className="text-gray-700">{lawyer.barCouncilId}</p>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Bar Council ID</h4>
+                                        <p className="text-gray-700 dark:text-gray-300">{lawyer.barCouncilId}</p>
                                     </div>
                                 </CardContent>
                             </Card>
 
-                            <Card>
+                            {/* Availability */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <Calendar className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         Availability
                                     </CardTitle>
                                 </CardHeader>
@@ -601,10 +605,10 @@ export default function LawyerDetailsPage() {
                                         {lawyer.timeSlots.length > 0 ? (
                                             lawyer.timeSlots.map((daySlot) => (
                                                 <div key={daySlot._id}>
-                                                    <h4 className="font-medium text-gray-900">{daySlot.day}</h4>
+                                                    <h4 className="font-medium text-gray-900 dark:text-white">{daySlot.day}</h4>
                                                     <div className="flex flex-wrap gap-2 mt-2">
                                                         {daySlot.slots.map((slot, i) => (
-                                                            <Badge key={i} variant="outline" className="px-3">
+                                                            <Badge key={i} variant="outline" className="px-3 dark:border-gray-600 dark:text-gray-300">
                                                                 {slot}
                                                             </Badge>
                                                         ))}
@@ -612,7 +616,7 @@ export default function LawyerDetailsPage() {
                                                 </div>
                                             ))
                                         ) : (
-                                            <p className="text-gray-500">No availability information provided</p>
+                                            <p className="text-gray-500 dark:text-gray-400">No availability information provided</p>
                                         )}
                                     </div>
                                 </CardContent>
@@ -620,44 +624,45 @@ export default function LawyerDetailsPage() {
                         </div>
 
                         <div className="space-y-6">
-                            <Card>
+                            {/* Consultation Card */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <Phone className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <Phone className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         Consultation
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
                                     <div>
-                                        <h4 className="font-medium text-gray-900">Fee</h4>
-                                        <p className="text-2xl font-bold text-gray-900">₹{lawyer.consultationFee}</p>
-                                        <p className="text-sm text-gray-500">per consultation</p>
+                                        <h4 className="font-medium text-gray-900 dark:text-white">Fee</h4>
+                                        <p className="text-2xl font-bold text-gray-900 dark:text-white">₹{lawyer.consultationFee}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">per consultation</p>
                                     </div>
 
                                     <div>
-                                        <h4 className="font-medium text-gray-900 mb-2">Available Modes</h4>
+                                        <h4 className="font-medium text-gray-900 dark:text-white mb-2">Available Modes</h4>
                                         <div className="space-y-2">
                                             {lawyer.consultationModes.video && (
-                                                <div className="flex items-center">
-                                                    <Video className="h-4 w-4 mr-2 text-purple-600" />
+                                                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                                                    <Video className="h-4 w-4 mr-2 text-purple-600 dark:text-purple-400" />
                                                     <span>Video Call</span>
                                                 </div>
                                             )}
                                             {lawyer.consultationModes.call && (
-                                                <div className="flex items-center">
-                                                    <Phone className="h-4 w-4 mr-2 text-green-600" />
+                                                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                                                    <Phone className="h-4 w-4 mr-2 text-green-600 dark:text-green-400" />
                                                     <span>Phone Call</span>
                                                 </div>
                                             )}
                                             {lawyer.consultationModes.chat && (
-                                                <div className="flex items-center">
-                                                    <MessageCircle className="h-4 w-4 mr-2 text-blue-600" />
+                                                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                                                    <MessageCircle className="h-4 w-4 mr-2 text-blue-600 dark:text-blue-400" />
                                                     <span>Chat</span>
                                                 </div>
                                             )}
                                             {lawyer.consultationModes.inPerson && (
-                                                <div className="flex items-center">
-                                                    <User className="h-4 w-4 mr-2 text-orange-600" />
+                                                <div className="flex items-center text-gray-700 dark:text-gray-300">
+                                                    <User className="h-4 w-4 mr-2 text-orange-600 dark:text-orange-400" />
                                                     <span>In-Person</span>
                                                 </div>
                                             )}
@@ -674,10 +679,11 @@ export default function LawyerDetailsPage() {
                                 </CardContent>
                             </Card>
 
-                            <Card>
+                            {/* Languages Card */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <Languages className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <Languages className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         Languages
                                     </CardTitle>
                                 </CardHeader>
@@ -685,27 +691,28 @@ export default function LawyerDetailsPage() {
                                     {lawyer.languagesSpoken.length > 0 ? (
                                         <div className="flex flex-wrap gap-2">
                                             {lawyer.languagesSpoken.map((lang, i) => (
-                                                <Badge key={i} variant="secondary">
+                                                <Badge key={i} variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">
                                                     {lang}
                                                 </Badge>
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-gray-500">No languages specified</p>
+                                        <p className="text-gray-500 dark:text-gray-400">No languages specified</p>
                                     )}
                                 </CardContent>
                             </Card>
 
-                            <Card>
+                            {/* Verification Card */}
+                            <Card className="dark:bg-gray-800 dark:border-gray-700">
                                 <CardHeader>
-                                    <CardTitle className="flex items-center">
-                                        <ShieldCheck className="h-5 w-5 mr-2 text-blue-600" />
+                                    <CardTitle className="flex items-center text-gray-900 dark:text-white">
+                                        <ShieldCheck className="h-5 w-5 mr-2 text-blue-600 dark:text-blue-400" />
                                         Verification
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-2">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-700">Platform Verified</span>
+                                        <span className="text-gray-700 dark:text-gray-300">Platform Verified</span>
                                         {lawyer.verifiedByPlatform ? (
                                             <Badge variant="default">Verified</Badge>
                                         ) : (
@@ -713,7 +720,7 @@ export default function LawyerDetailsPage() {
                                         )}
                                     </div>
                                     <div className="flex items-center justify-between">
-                                        <span className="text-gray-700">KYC Status</span>
+                                        <span className="text-gray-700 dark:text-gray-300">KYC Status</span>
                                         <Badge
                                             variant={
                                                 lawyer.kycStatus === "verified"
@@ -733,19 +740,19 @@ export default function LawyerDetailsPage() {
                 </div>
             </div>
 
-            {/* Booking Dialog */}
+            {/* Booking Dialog - Add dark mode classes */}
             <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[425px] dark:bg-gray-800 dark:border-gray-700">
                     <DialogHeader>
-                        <DialogTitle>Book Consultation</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="dark:text-white">Book Consultation</DialogTitle>
+                        <DialogDescription className="dark:text-gray-400">
                             Schedule a consultation with {lawyer.fullName}
                         </DialogDescription>
                     </DialogHeader>
 
                     <div className="grid gap-4 py-4">
                         <div className="space-y-2">
-                            <Label>Consultation Mode</Label>
+                            <Label className="dark:text-gray-300">Consultation Mode</Label>
                             <RadioGroup
                                 value={selectedMode}
                                 onValueChange={setSelectedMode}
@@ -756,7 +763,7 @@ export default function LawyerDetailsPage() {
                                         <RadioGroupItem value="video" id="video" className="peer sr-only" />
                                         <Label
                                             htmlFor="video"
-                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         >
                                             <Video className="mb-2 h-6 w-6" />
                                             Video Call
@@ -768,7 +775,7 @@ export default function LawyerDetailsPage() {
                                         <RadioGroupItem value="call" id="call" className="peer sr-only" />
                                         <Label
                                             htmlFor="call"
-                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         >
                                             <Phone className="mb-2 h-6 w-6" />
                                             Phone Call
@@ -780,7 +787,7 @@ export default function LawyerDetailsPage() {
                                         <RadioGroupItem value="chat" id="chat" className="peer sr-only" />
                                         <Label
                                             htmlFor="chat"
-                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         >
                                             <MessageCircle className="mb-2 h-6 w-6" />
                                             Chat
@@ -792,7 +799,7 @@ export default function LawyerDetailsPage() {
                                         <RadioGroupItem value="inPerson" id="inPerson" className="peer sr-only" />
                                         <Label
                                             htmlFor="inPerson"
-                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
+                                            className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         >
                                             <User className="mb-2 h-6 w-6" />
                                             In-Person
@@ -803,12 +810,11 @@ export default function LawyerDetailsPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <Label>Date</Label>
+                            <Label className="dark:text-gray-300">Date</Label>
                             <DatePicker
                                 date={selectedDate}
                                 setDate={setSelectedDate}
                                 disabled={(date) => {
-                                    // Disable dates in the past
                                     return date < new Date(new Date().setHours(0, 0, 0, 0))
                                 }}
                             />
@@ -816,10 +822,10 @@ export default function LawyerDetailsPage() {
 
                         {selectedDate && (
                             <div className="space-y-2">
-                                <Label>Available Time Slots</Label>
+                                <Label className="dark:text-gray-300">Available Time Slots</Label>
                                 {fetchingSlots ? (
                                     <div className="flex justify-center py-4">
-                                        <Loader className="h-5 w-5 animate-spin" />
+                                        <Loader className="h-5 w-5 animate-spin dark:text-white" />
                                     </div>
                                 ) : availableSlots.length > 0 ? (
                                     <div className="grid grid-cols-3 gap-2">
@@ -828,21 +834,22 @@ export default function LawyerDetailsPage() {
                                                 key={slot.slot}
                                                 variant={selectedTime === slot.slot ? "default" : "outline"}
                                                 onClick={() => setSelectedTime(slot.slot)}
+                                                className={selectedTime !== slot.slot ? "dark:bg-gray-700 dark:text-white dark:border-gray-600" : ""}
                                             >
                                                 {slot.startTime}
                                             </Button>
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-sm text-gray-500">No available slots for this date</p>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400">No available slots for this date</p>
                                 )}
                             </div>
                         )}
 
                         <div className="pt-4">
-                            <div className="flex justify-between items-center border-t pt-4">
-                                <span className="font-medium">Total Amount</span>
-                                <span className="text-lg font-bold">₹{lawyer.consultationFee}</span>
+                            <div className="flex justify-between items-center border-t pt-4 dark:border-gray-700">
+                                <span className="font-medium dark:text-white">Total Amount</span>
+                                <span className="text-lg font-bold dark:text-white">₹{lawyer.consultationFee}</span>
                             </div>
                         </div>
 
