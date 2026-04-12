@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck, PenTool, IndianRupee, ShieldCheck } from 'lucide-react'; // or your icon library
+import { BarChart2, ChevronRight, Briefcase, Bell, ThumbsUp, CalendarCheck, PenTool, IndianRupee, LogOut } from 'lucide-react'; // or your icon library
 import { User } from "lucide-react"
 import {
   DropdownMenu,
@@ -522,293 +522,208 @@ export default function HomePage() {
       </div>
 
       {/* Navigation */}
-      <nav className="relative z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800/50 sticky top-0">
-        {/* Top Status Bar */}
-        {/* <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 backdrop-blur-xl border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-8 text-xs">
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                  <span className="text-green-300 font-medium">{t.hero.liveStatus}</span>
-                </div>
-                <div className="flex items-center space-x-2 text-blue-300">
-                  <Clock className="h-3 w-3" />
-                  {currentTime}
-                </div>
-              </div>
-              <div className="flex items-center space-x-4 text-white/60">
-                <div className="flex items-center space-x-1">
-                  <Wifi className="h-3 w-3" />
-                  <span>99.9% Uptime</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <TrendingUp className="h-3 w-3" />
-                  <span>1k+ Active Users</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
-
+      <nav className="relative z-50 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/50 sticky top-0">
         {/* Main Navigation */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            {/* Enhanced Logo */}
-            <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3">
-                <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-3 rounded-xl hover:shadow-lg hover:shadow-blue-500/50 transition">
-                  <Scale className="h-6 w-6 text-white" />
-                </div>
-                <span className="text-2xl font-playfair font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">NyayMitra</span>
-              </Link>
-            </div>
-
-
-            {/* Enhanced Desktop Navigation */}
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
-                {Object.entries(t.nav)
-                  .slice(0, -2)
-                  .map(([key, value], index) => (
-                    <Link
-                      key={key}
-                      href={
-                        key === "home" ? "/" :
-                          key === "legalGPT" ? "/legal-ai" : // Special case for Legal GPT
-                            `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
-                      }
-                      className="relative text-slate-300 hover:text-blue-400 px-4 py-3 text-sm font-medium transition-colors"
-                    >
-                      <span>{value}</span>
-                    </Link>
-                  ))}
+          <div className="flex justify-between items-center h-16 lg:h-20">
+            {/* Logo */}
+            <Link href="/" className="flex items-center space-x-3 group">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-2.5 lg:p-3 rounded-xl shadow-lg group-hover:shadow-blue-500/30 transition-all duration-300">
+                <Scale className="h-5 w-5 lg:h-6 lg:w-6 text-white" />
               </div>
-            </div>
+              <span className="text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                NyayMitra
+              </span>
+            </Link>
 
-            {/* Action Buttons */}
-            <div className="hidden md:flex items-center space-x-4">
-              {/* Language Toggle */}
-              {/* <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
-              >
-                <Globe className="h-4 w-4 mr-2" />
-                <span className="font-medium">{language === "en" ? "हिं" : "EN"}</span>
-              </Button> */}
-
-              {mounted && isLoggedIn ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      size="sm"
-                      className="border border-slate-700 text-slate-300 hover:bg-slate-800 bg-slate-900/50"
-                      disabled={isProfileLoading}
-                    >
-                      {isProfileLoading ? (
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-700 mr-2"></div>
-                          Loading...
-                        </div>
-                      ) : (
-                        <>
-                          <User className="h-4 w-4 mr-2" />
-                          Profile
-                        </>
-                      )}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg p-2"
-                    sideOffset={5}
-                  >
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
-                        {t.profileMenu.profile}
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onClick={() => {
-                        window.location.href = 'https://nyay-dashboard.netlify.app/';
-                      }}
-                    >
-                      <div className="flex items-center gap-3 w-full justify-between text-gray-700">
-                        <div className="flex items-center gap-3">
-                          <BarChart2 className="h-5 w-5 text-green-600" />
-                          <span>{t.profileMenu.dashboard}</span>
-                        </div>
-                        <ChevronRight className="h-4 w-4" />
-                      </div>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem asChild>
-                      <button
-                        onClick={() => {
-                          localStorage.removeItem("token");
-                          window.location.reload();
-                        }}
-                        className="block w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-gray-700"
-                      >
-                        {t.profileMenu.logout}
-                      </button>
-                    </DropdownMenuItem>
-                    {profile?.role !== "lawyer" && (
-                      <DropdownMenuItem asChild>
-                        <Link href="/all-bookings" className="block px-3 py-2 hover:bg-gray-100 rounded text-gray-700">
-                          {t.profileMenu.bookings}
-                        </Link>
-                      </DropdownMenuItem>
-                    )}
-
-
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : mounted && (
-                <>
-                  {/* Login Button */}
-                  <Link href="/auth/login">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="border border-gray-300 text-gray-700 hover:bg-gray-100"
-                    >
-                      {t.nav.login}
-                    </Button>
-                  </Link>
-
-                  {/* Signup Button */}
-                  <Link href="/auth/signup">
-                    <Button
-                      size="sm"
-                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                    >
-                      {t.nav.signup}
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
-
-
-            <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="default"
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-700 hover:bg-gray-100 transition-all duration-300 w-11 h-11 p-0"
-              >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
-            </div>
-
-          </div>
-        </div>
-
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-slate-950 border-b border-slate-800">
-            <div className="px-4 pt-4 pb-6 space-y-2">
-              {/* Show regular nav links */}
+            {/* Desktop Navigation Links */}
+            <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               {Object.entries(t.nav)
-                .filter(([key]) => !['login', 'signup'].includes(key)) // Filter out login/signup when logged in
+                .slice(0, -2)
                 .map(([key, value]) => (
                   <Link
                     key={key}
                     href={
-                      key === "home"
-                        ? "/"
-                        : key === "legalGPT"
-                          ? "/legal-ai"
-                          : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
+                      key === "home" ? "/" :
+                        key === "legalGPT" ? "/legal-ai" :
+                          `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
                     }
-                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    className="px-3 lg:px-4 py-2 text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 rounded-lg transition-all duration-200"
                   >
                     {value}
                   </Link>
+                ))}
+            </div>
 
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-3">
+              {mounted && isLoggedIn ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="flex items-center gap-2 focus:outline-none group">
+                      <div className="flex items-center gap-2 bg-slate-800/50 border border-slate-700/50 rounded-full pl-1.5 pr-3 py-1.5 hover:bg-slate-800 transition-all duration-200">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                          <User className="h-3.5 w-3.5 text-white" />
+                        </div>
+                        <span className="text-sm font-medium text-slate-200 hidden sm:inline-block">
+                          {profile?.name?.split(' ')[0] || 'Account'}
+                        </span>
+                      </div>
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    className="w-64 mt-2 p-1 bg-slate-900 border border-slate-700 rounded-xl shadow-xl"
+                    align="end"
+                    sideOffset={8}
+                  >
+                    <DropdownMenuItem asChild className="cursor-pointer rounded-md m-0.5 hover:bg-slate-700 focus:bg-slate-700">
+                      <Link href="/profile" className="flex items-center gap-3 px-3 py-2.5">
+                        <User className="h-4 w-4 text-blue-400" />
+                        <span className="text-sm text-slate-100">{t.profileMenu.profile}</span>
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      onClick={() => window.location.href = 'https://nyay-dashboard.netlify.app/'}
+                      className="cursor-pointer rounded-md m-0.5 hover:bg-slate-700 focus:bg-slate-700"
+                    >
+                      <div className="flex items-center gap-3 px-3 py-2.5 w-full">
+                        <BarChart2 className="h-4 w-4 text-emerald-400" />
+                        <span className="text-sm text-slate-100">{t.profileMenu.dashboard}</span>
+                      </div>
+                    </DropdownMenuItem>
+
+                    {profile?.role !== "lawyer" && (
+                      <DropdownMenuItem asChild className="cursor-pointer rounded-md m-0.5 hover:bg-slate-700 focus:bg-slate-700">
+                        <Link href="/all-bookings" className="flex items-center gap-3 px-3 py-2.5">
+                          <CalendarCheck className="h-4 w-4 text-purple-400" />
+                          <span className="text-sm text-slate-100">{t.profileMenu.bookings}</span>
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+
+                    <div className="h-px bg-slate-800 my-1" />
+
+                    <DropdownMenuItem
+                      onClick={() => { localStorage.removeItem("token"); window.location.reload(); }}
+                      className="cursor-pointer rounded-md m-0.5 hover:bg-red-500/20 focus:bg-red-500/20"
+                    >
+                      <div className="flex items-center gap-3 px-3 py-2.5">
+                        <LogOut className="h-4 w-4 text-red-400" />
+                        <span className="text-sm text-red-400">{t.profileMenu.logout}</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : mounted && (
+                <div className="flex items-center gap-2">
+                  <Link href="/auth/login">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-slate-300 hover:text-white hover:bg-white/10 rounded-full px-5"
+                    >
+                      {t.nav.login}
+                    </Button>
+                  </Link>
+                  <Link href="/auth/signup">
+                    <Button
+                      size="sm"
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5 shadow-md"
+                    >
+                      {t.nav.signup}
+                    </Button>
+                  </Link>
+                </div>
+              )}
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="md:hidden p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-200"
+              >
+                {isMenuOpen ? <X className="h-4 w-4 text-white" /> : <Menu className="h-4 w-4 text-white" />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden absolute top-full left-0 right-0 bg-slate-900 border-b border-slate-800 shadow-xl">
+            <div className="px-4 py-4 space-y-1">
+              {Object.entries(t.nav)
+                .filter(([key]) => !['login', 'signup'].includes(key))
+                .map(([key, value]) => (
+                  <Link
+                    key={key}
+                    href={
+                      key === "home" ? "/" :
+                        key === "legalGPT" ? "/legal-ai" :
+                          `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
+                    }
+                    className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {value}
+                  </Link>
                 ))}
 
-              {/* Show profile and logout when logged in */}
-              {mounted && isLoggedIn && (
+              <div className="h-px bg-slate-800 my-2" />
+
+              {mounted && isLoggedIn ? (
                 <>
-                  <Link
+                  {/* <Link
                     href="/profile"
-                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     {t.profileMenu.profile}
                   </Link>
                   <button
-                    onClick={() => {
-                      const token = localStorage.getItem('token');
-                      if (!token) {
-                        router.push('/auth/login');
-                        return;
-                      }
-
-                      // Redirect all authenticated users (lawyer or not) to the main dashboard
-                      window.location.href = 'https://nyay-dashboard.netlify.app/';
-                    }}
-                    className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    onClick={() => { window.location.href = 'https://nyay-dashboard.netlify.app/'; }}
+                    className="w-full text-left px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
                   >
-                    <span>{t.profileMenu.dashboard}</span>
+                    {t.profileMenu.dashboard}
                   </button>
-
-
                   {profile?.role !== "lawyer" && (
                     <Link
                       href="/all-bookings"
-                      className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                      className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
+                      onClick={() => setIsMenuOpen(false)}
                     >
                       {t.profileMenu.bookings}
                     </Link>
                   )}
-
                   <button
-                    onClick={() => {
-                      localStorage.removeItem("token");
-                      window.location.reload();
-                    }}
-                    className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    onClick={() => { localStorage.removeItem("token"); window.location.reload(); }}
+                    className="w-full text-left px-4 py-3 text-base font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-xl"
                   >
                     {t.profileMenu.logout}
-                  </button>
+                  </button> */}
                 </>
-              )}
-
-              {/* Show login/signup when not logged in */}
-              {mounted && !isLoggedIn && (
+              ) : (
                 <>
                   <Link
                     href="/auth/login"
-                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    className="block px-4 py-3 text-base font-medium text-slate-300 hover:text-white hover:bg-white/10 rounded-xl"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     {t.nav.login}
                   </Link>
                   <Link
                     href="/auth/signup"
-                    className="text-white/80 hover:text-white block px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10"
+                    className="block px-4 py-3 text-base font-medium text-blue-400 hover:text-blue-300 hover:bg-white/10 rounded-xl"
+                    onClick={() => setIsMenuOpen(false)}
                   >
                     {t.nav.signup}
                   </Link>
                 </>
               )}
-
-              {/* Language toggle for mobile */}
-              {/* <button
-                onClick={() => setLanguage(language === "en" ? "hi" : "en")}
-                className="text-white/80 hover:text-white block w-full text-left px-4 py-3 text-base font-medium transition-all duration-300 rounded-lg hover:bg-white/10 flex items-center"
-              >
-                <Globe className="h-5 w-5 mr-3" />
-                {language === "en" ? "हिंदी" : "English"}
-              </button> */}
             </div>
           </div>
         )}
       </nav>
-
       {/* Hero Section */}
       <section className="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-6xl mx-auto w-full">
