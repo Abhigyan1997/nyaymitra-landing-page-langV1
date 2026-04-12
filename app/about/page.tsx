@@ -267,80 +267,169 @@ export default function AboutPage() {
       </section>
 
       {/* Team */}
-      <section className="py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-24 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:radial-gradient(ellipse_at_center,white,transparent)] opacity-20"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">Leadership</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Meet Our Team</h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300">The passionate minds behind NyayMitra</p>
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-400/10 dark:to-purple-400/10 rounded-full px-4 py-2 mb-4 border border-gray-200 dark:border-gray-700">
+              <Users className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">The Minds Behind NyayMitra</span>
+            </div>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent">
+                Meet Our Leadership
+              </span>
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              A team of legal experts and technologists committed to making justice accessible for all
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
-            <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden dark:bg-gray-800">
-              <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <div className="w-32 h-32 relative">
-                  <Image
-                    src="/images/alok.jpg"
-                    alt="Alok Abhigyan"
-                    fill
-                    className="rounded-full object-cover ring-4 ring-white/50"
-                  />
-                </div>
-              </div>
-              <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">Alok Abhigyan</h3>
-                <p className="text-blue-600 dark:text-blue-400 font-medium mb-3">Founder & CEO</p>
-                <div className="flex justify-center gap-2 mb-4">
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Full Stack Development</Badge>
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Product Strategy</Badge>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  Leads product, technology, and strategic direction for NyayMitra, building a structured and trustworthy legal-tech platform.
-                </p>
-              </CardContent>
-            </Card>
+            {/* Team Member 1 - Alok */}
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+              <Card className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+                {/* Decorative top bar */}
+                <div className="h-1 w-full bg-gradient-to-r from-blue-600 to-purple-600"></div>
 
-            {/* Team Member 2 */}
-            <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden dark:bg-gray-800">
-              <div className="relative h-64 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-                <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
-                  <Users className="h-16 w-16 text-white" />
-                </div>
-              </div>
-              <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">Bharat Rajak</h3>
-                <p className="text-blue-600 dark:text-blue-400 font-medium mb-3">Director of Legal Affairs</p>
-                <div className="flex justify-center gap-2 mb-4">
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Civil Law</Badge>
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Criminal Law</Badge>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  Senior practicing advocate with 25+ years of experience in civil, criminal, and consumer law. Ensures legal integrity and compliance across the platform.
-                </p>
-              </CardContent>
-            </Card>
+                <CardContent className="p-8">
+                  <div className="text-center">
+                    <div className="relative inline-block mb-6">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                      <div className="relative w-28 h-28 mx-auto">
+                        <Image
+                          src="/images/alok.jpg"
+                          alt="Alok Abhigyan"
+                          fill
+                          className="rounded-full object-cover ring-4 ring-white dark:ring-gray-700 shadow-xl"
+                        />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 ring-2 ring-white dark:ring-gray-800">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      </div>
+                    </div>
 
-            {/* Team Member 3 */}
-            <Card className="group hover:shadow-xl transition-all duration-300 overflow-hidden dark:bg-gray-800">
-              <div className="relative h-64 bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center">
-                <div className="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center">
-                  <Users className="h-16 w-16 text-white" />
-                </div>
-              </div>
-              <CardContent className="p-6 text-center">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">Twinkle Chatterjee</h3>
-                <p className="text-blue-600 dark:text-blue-400 font-medium mb-3">Co-Founder</p>
-                <div className="flex justify-center gap-2 mb-4">
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Growth Strategy</Badge>
-                  <Badge variant="secondary" className="dark:bg-gray-700 dark:text-gray-300">Marketing</Badge>
-                </div>
-                <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-                  Focuses on brand positioning, organic marketing, and user acquisition strategy to strengthen NyayMitra's trust-driven growth.
-                </p>
-              </CardContent>
-            </Card>
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Alok Abhigyan</h3>
+                    <p className="text-blue-600 dark:text-blue-400 font-semibold text-sm mb-4">Founder & CEO</p>
+
+                    <div className="flex justify-center gap-2 mb-5 flex-wrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                        Full Stack Development
+                      </span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
+                        Product Strategy
+                      </span>
+                    </div>
+
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                      Visionary leader driving the convergence of legal expertise and cutting-edge technology to democratize legal access across India.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Team Member 2 - Bharat */}
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-green-600 to-teal-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+              <Card className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+                <div className="h-1 w-full bg-gradient-to-r from-green-600 to-teal-600"></div>
+
+                <CardContent className="p-8">
+                  <div className="text-center">
+                    <div className="relative inline-block mb-6">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-green-600 to-teal-600 blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                      <div className="relative w-28 h-28 mx-auto bg-gradient-to-br from-green-100 to-teal-100 dark:from-green-900/30 dark:to-teal-900/30 rounded-full flex items-center justify-center ring-4 ring-white dark:ring-gray-700 shadow-xl">
+                        <Scale className="h-12 w-12 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 ring-2 ring-white dark:ring-gray-800">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Bharat Rajak</h3>
+                    <p className="text-green-600 dark:text-green-400 font-semibold text-sm mb-4">Director of Legal Affairs</p>
+
+                    <div className="flex justify-center gap-2 mb-5 flex-wrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                        Civil Law
+                      </span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300">
+                        Criminal Law
+                      </span>
+                    </div>
+
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                      Senior advocate with 25+ years of experience ensuring legal integrity and compliance across the platform.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Team Member 3 - Twinkle */}
+            <div className="group relative">
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+              <Card className="relative bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-500">
+                <div className="h-1 w-full bg-gradient-to-r from-orange-600 to-red-600"></div>
+
+                <CardContent className="p-8">
+                  <div className="text-center">
+                    <div className="relative inline-block mb-6">
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-600 to-red-600 blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
+                      <div className="relative w-28 h-28 mx-auto bg-gradient-to-br from-orange-100 to-red-100 dark:from-orange-900/30 dark:to-red-900/30 rounded-full flex items-center justify-center ring-4 ring-white dark:ring-gray-700 shadow-xl">
+                        <Users className="h-12 w-12 text-orange-600 dark:text-orange-400" />
+                      </div>
+                      <div className="absolute -bottom-2 -right-2 bg-green-500 rounded-full p-1.5 ring-2 ring-white dark:ring-gray-800">
+                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      </div>
+                    </div>
+
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">Twinkle </h3>
+                    <p className="text-orange-600 dark:text-orange-400 font-semibold text-sm mb-4">Co-Founder</p>
+
+                    <div className="flex justify-center gap-2 mb-5 flex-wrap">
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">
+                        Growth Strategy
+                      </span>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300">
+                        Marketing
+                      </span>
+                    </div>
+
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+                      Drives brand positioning and user acquisition strategy to strengthen NyayMitra's trust-driven growth.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
+
+          {/* Optional: Social Proof / Stats */}
+          {/* <div className="mt-20 pt-10 border-t border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">100+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Legal Experts</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">25+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Years Combined Experience</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">500+</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Cases Resolved</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">24/7</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">Client Support</div>
+              </div>
+            </div>
+          </div> */}
         </div>
       </section>
 
@@ -349,15 +438,15 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-white mb-2">500+</div>
+              <div className="text-4xl font-bold text-white mb-2">100+</div>
               <div className="text-blue-100">Active Users</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">50+</div>
+              <div className="text-4xl font-bold text-white mb-2">5+</div>
               <div className="text-blue-100">Partner Law Firms</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">1000+</div>
+              <div className="text-4xl font-bold text-white mb-2">100+</div>
               <div className="text-blue-100">Legal Documents Processed</div>
             </div>
             <div>
