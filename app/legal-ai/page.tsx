@@ -79,6 +79,112 @@ interface User {
   email?: string
 }
 
+// Lawyer Cards Component - Fully Responsive
+const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[], onClose?: () => void }) => {
+  if (lawyers.length === 0) return null
+
+  return (
+    <div className="mt-3 space-y-2 w-full">
+      <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
+        <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+          <Users className="h-4 w-4 text-blue-400 shrink-0" />
+          <span>Recommended Lawyers</span>
+        </h3>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="text-white/50 hover:text-white/80 transition-colors shrink-0"
+            aria-label="Close suggestions"
+          >
+            <MinusCircle className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      <div className="space-y-2 max-h-80 overflow-y-auto">
+        {lawyers.map((lawyer, index) => {
+          const name = lawyer.userInfo.fullName || "Legal Professional"
+          const specializations = lawyer.lawyerDetails.specialization?.slice(0, 2).join(", ") || "General Legal Practice"
+          const experience = lawyer.lawyerDetails.experience || 0
+          const fee = lawyer.lawyerDetails.consultationFee || 0
+          const location = [lawyer.lawyerDetails.city, lawyer.lawyerDetails.state].filter(Boolean).join(", ")
+          const rating = lawyer.lawyerDetails.averageRating || 0
+          const isVerified = lawyer.lawyerDetails.verifiedByPlatform
+          const isPremium = lawyer.lawyerDetails.isPremium
+          const lawyerId = lawyer.lawyerDetails._id
+
+          return (
+            <div
+              key={lawyerId || index}
+              className="bg-white/5 border border-white/10 rounded-lg p-3 hover:border-blue-400/40 transition-all w-full"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap mb-1">
+                    <span className="font-semibold text-white text-sm truncate max-w-[150px] sm:max-w-[200px]">
+                      {name}
+                    </span>
+                    {isPremium && (
+                      <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px] shrink-0">
+                        Premium
+                      </Badge>
+                    )}
+                    {isVerified && (
+                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px] shrink-0">
+                        Verified
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="text-[11px] text-white/60 mb-1 break-words">
+                    {specializations}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2 text-[10px] text-white/50">
+                    <span className="flex items-center gap-0.5 shrink-0">
+                      <Briefcase className="h-2.5 w-2.5 shrink-0" /> {experience}y
+                    </span>
+                    {rating > 0 && (
+                      <span className="flex items-center gap-0.5 shrink-0">
+                        <Star className="h-2.5 w-2.5 text-yellow-400 shrink-0" /> {rating.toFixed(1)}
+                      </span>
+                    )}
+                    {fee > 0 && (
+                      <span className="flex items-center gap-0.5 shrink-0">
+                        <IndianRupee className="h-2.5 w-2.5 shrink-0" /> {fee}
+                      </span>
+                    )}
+                    {location && (
+                      <span className="flex items-center gap-0.5 min-w-0">
+                        <MapPin className="h-2.5 w-2.5 shrink-0 mt-0.5" />
+                        <span className="truncate">{location}</span>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <Link href={`/lawyers/${lawyerId}`} className="shrink-0 self-start sm:self-center">
+                  <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-xs h-8 px-3 w-full sm:w-auto">
+                    Book
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="text-center pt-2">
+        <Link href="/lawyers">
+          <Button variant="link" className="text-blue-400 hover:text-blue-300 text-xs h-auto p-0">
+            Browse All Lawyers →
+          </Button>
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 export default function LegalGPTPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
@@ -261,103 +367,6 @@ export default function LegalGPTPage() {
         return scoreB - scoreA
       })
       .slice(0, 5)
-  }
-
-  // Function to format lawyers as clickable cards
-  const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[], onClose?: () => void }) => {
-    if (lawyers.length === 0) return null
-
-    return (
-      <div className="mt-3 space-y-2">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-sm font-semibold text-white flex items-center gap-2">
-            <Users className="h-4 w-4 text-blue-400" />
-            Recommended Lawyers
-          </h3>
-          {onClose && (
-            <button
-              onClick={onClose}
-              className="text-white/50 hover:text-white/80 transition-colors"
-            >
-              <MinusCircle className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-        <div className="space-y-2 max-h-80 overflow-y-auto">
-          {lawyers.map((lawyer, index) => {
-            const name = lawyer.userInfo.fullName || "Legal Professional"
-            const specializations = lawyer.lawyerDetails.specialization?.slice(0, 2).join(", ") || "General Legal Practice"
-            const experience = lawyer.lawyerDetails.experience || 0
-            const fee = lawyer.lawyerDetails.consultationFee || 0
-            const location = [lawyer.lawyerDetails.city, lawyer.lawyerDetails.state].filter(Boolean).join(", ")
-            const rating = lawyer.lawyerDetails.averageRating || 0
-            const isVerified = lawyer.lawyerDetails.verifiedByPlatform
-            const isPremium = lawyer.lawyerDetails.isPremium
-            const lawyerId = lawyer.lawyerDetails._id
-
-            return (
-              <div
-                key={lawyerId || index}
-                className="bg-white/5 border border-white/10 rounded-lg p-3 hover:border-blue-400/40 transition-all"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap mb-1">
-                      <span className="font-semibold text-white text-sm truncate">{name}</span>
-                      {isPremium && (
-                        <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30 text-[10px]">
-                          Premium
-                        </Badge>
-                      )}
-                      {isVerified && (
-                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30 text-[10px]">
-                          Verified
-                        </Badge>
-                      )}
-                    </div>
-                    <div className="text-[11px] text-white/60 mb-1 truncate">
-                      {specializations}
-                    </div>
-                    <div className="flex flex-wrap gap-2 text-[10px] text-white/50">
-                      <span className="flex items-center gap-0.5">
-                        <Briefcase className="h-2.5 w-2.5" /> {experience}y
-                      </span>
-                      {rating > 0 && (
-                        <span className="flex items-center gap-0.5">
-                          <Star className="h-2.5 w-2.5 text-yellow-400" /> {rating.toFixed(1)}
-                        </span>
-                      )}
-                      {fee > 0 && (
-                        <span className="flex items-center gap-0.5">
-                          <IndianRupee className="h-2.5 w-2.5" /> {fee}
-                        </span>
-                      )}
-                      {location && (
-                        <span className="flex items-center gap-0.5 truncate">
-                          <MapPin className="h-2.5 w-2.5 shrink-0" /> {location}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  <Link href={`/lawyers/${lawyerId}`} className="shrink-0">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white text-[10px] h-7 px-2">
-                      Book
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-        <div className="text-center pt-1">
-          <Link href="/lawyers">
-            <Button variant="link" className="text-blue-400 hover:text-blue-300 text-xs h-auto p-0">
-              Browse All Lawyers →
-            </Button>
-          </Link>
-        </div>
-      </div>
-    )
   }
 
   // Function to format message with proper styling
@@ -990,12 +999,12 @@ export default function LegalGPTPage() {
                         className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-200`}
                       >
                         <div
-                          className={`max-w-[85%] rounded-2xl px-3 py-2 ${message.role === "user"
-                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
-                            : "bg-white/10 text-white/90"
+                          className={`max-w-[90%] sm:max-w-[85%] rounded-2xl px-3 py-2 ${message.role === "user"
+                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                              : "bg-white/10 text-white/90"
                             }`}
                         >
-                          <div className="text-xs md:text-sm leading-relaxed">
+                          <div className="text-xs md:text-sm leading-relaxed break-words">
                             {formatMessageWithMarkdown(message.content)}
                           </div>
                         </div>
@@ -1012,10 +1021,11 @@ export default function LegalGPTPage() {
                         </div>
                       </div>
                     )}
+
                     {/* Lawyer Suggestions Section */}
                     {showLawyerSuggestions && suggestedLawyers.length > 0 && (
-                      <div className="flex justify-start">
-                        <div className="max-w-[95%] rounded-2xl bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border border-blue-500/30 p-3">
+                      <div className="flex justify-start w-full">
+                        <div className="w-full rounded-2xl bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border border-blue-500/30 p-3">
                           <LawyerCardsComponent
                             lawyers={suggestedLawyers}
                             onClose={handleCloseLawyerSuggestions}
@@ -1033,7 +1043,7 @@ export default function LegalGPTPage() {
                         onClick={handleShowLawyers}
                         className="w-full mb-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs h-8"
                       >
-                        <Users className="h-3.5 w-3.5 mr-1.5" />
+                        <Users className="h-3.5 w-3.5 mr-1.5 shrink-0" />
                         View Recommended Lawyers ({suggestedLawyers.length})
                       </Button>
                     )}
