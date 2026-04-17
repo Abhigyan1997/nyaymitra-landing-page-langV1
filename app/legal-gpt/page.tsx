@@ -81,7 +81,6 @@ interface User {
 
 export default function LegalGPTPage() {
   const router = useRouter()
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
@@ -103,6 +102,7 @@ export default function LegalGPTPage() {
   const chatContainerRef = useRef<HTMLDivElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const [activeFeature, setActiveFeature] = useState(0)
+  const initializedRef = useRef(false)
 
   // Track scroll state to prevent unwanted jumps
   const [userHasScrolled, setUserHasScrolled] = useState(false)
@@ -456,7 +456,6 @@ export default function LegalGPTPage() {
   // Function to load a specific chat session
   const loadChatSession = async (sessionId: string, token: string) => {
     try {
-      setIsLoading(true)
       const response = await fetch(`http://localhost:5000/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
         method: "GET",
         headers: {
@@ -484,8 +483,6 @@ export default function LegalGPTPage() {
       }
     } catch (error) {
       console.error("Error loading chat session:", error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -520,24 +517,33 @@ export default function LegalGPTPage() {
 
   // Initialize session and load user data
   useEffect(() => {
+    // Prevent multiple initializations
+    if (initializedRef.current) return
+    initializedRef.current = true
+
     const initializeChat = async () => {
       const token = localStorage.getItem("token")
+
+      // Check if token exists
       if (!token) {
         router.push("/auth/login")
         return
       }
 
       try {
-        await fetchAllLawyers(token)
+        // Verify token is valid by fetching user profile
         const userData = await fetchUserProfile(token)
 
         if (!userData || (!userData.id && !userData.userId)) {
+          // Invalid token or user not found
+          localStorage.removeItem("token")
           router.push("/auth/login")
           return
         }
 
         const mongoUserId = userData.id || userData._id
         if (!mongoUserId) {
+          localStorage.removeItem("token")
           router.push("/auth/login")
           return
         }
@@ -545,8 +551,14 @@ export default function LegalGPTPage() {
         setUser(userData)
         setUserId(mongoUserId)
 
-        const sessions = await fetchUserChatSessions(mongoUserId, token)
+        // Fetch lawyers and chat data in parallel
+        await Promise.all([
+          fetchAllLawyers(token),
+          fetchUserChatSessions(mongoUserId, token)
+        ])
+
         const currentSessionId = localStorage.getItem(`currentSessionId_${mongoUserId}`)
+        const sessions = chatSessions.length > 0 ? chatSessions : await fetchUserChatSessions(mongoUserId, token)
 
         if (currentSessionId && sessions.find((s: ChatSession) => s.sessionId === currentSessionId)) {
           await loadChatSession(currentSessionId, token)
@@ -561,10 +573,10 @@ export default function LegalGPTPage() {
           startNewChat()
         }
 
-        setIsLoggedIn(true)
-
       } catch (error) {
         console.error("Error initializing chat:", error)
+        // On error, clear token and redirect to login
+        localStorage.removeItem("token")
         router.push("/auth/login")
       } finally {
         setIsLoading(false)
@@ -572,7 +584,7 @@ export default function LegalGPTPage() {
     }
 
     initializeChat()
-  }, [router])
+  }, []) // Empty dependency array - only run once on mount
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -594,6 +606,12 @@ export default function LegalGPTPage() {
 
     const token = localStorage.getItem("token")
 
+    // Check if token exists before sending
+    if (!token) {
+      router.push("/auth/login")
+      return
+    }
+
     try {
       const requestBody = {
         sessionId,
@@ -609,6 +627,13 @@ export default function LegalGPTPage() {
         },
         body: JSON.stringify(requestBody)
       })
+
+      // If unauthorized, redirect to login
+      if (response.status === 401) {
+        localStorage.removeItem("token")
+        router.push("/auth/login")
+        return
+      }
 
       if (!response.ok) {
         const errorData = await response.json()
@@ -717,25 +742,6 @@ export default function LegalGPTPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-3">
-              <Button
-                onClick={startNewChat}
-                variant="outline"
-                size="sm"
-                className="bg-white/5 border-white/20 text-white hover:bg-white/15"
-              >
-                <MessageSquare className="h-4 w-4 mr-2" />
-                New Chat
-              </Button>
-              <Button
-                onClick={() => setShowHistory(!showHistory)}
-                variant="outline"
-                size="sm"
-                className="bg-white/5 border-white/20 text-white hover:bg-white/15"
-              >
-                <History className="h-4 w-4 mr-2" />
-                History
-                {showHistory ? <ChevronUp className="h-4 w-4 ml-2" /> : <ChevronDown className="h-4 w-4 ml-2" />}
-              </Button>
               <Link href="/lawyers">
                 <Button variant="outline" size="sm" className="bg-white/5 border-white/20 text-white hover:bg-white/15">
                   <Users className="h-4 w-4 mr-2" />
@@ -771,28 +777,6 @@ export default function LegalGPTPage() {
                 className="md:hidden overflow-hidden border-t border-white/10 mt-2"
               >
                 <div className="py-3 space-y-2">
-                  <Button
-                    onClick={() => {
-                      startNewChat()
-                      setMobileMenuOpen(false)
-                    }}
-                    variant="outline"
-                    className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start"
-                  >
-                    <MessageSquare className="h-4 w-4 mr-2" />
-                    New Chat
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setShowHistory(!showHistory)
-                      setMobileMenuOpen(false)
-                    }}
-                    variant="outline"
-                    className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start"
-                  >
-                    <History className="h-4 w-4 mr-2" />
-                    History
-                  </Button>
                   <Link href="/lawyers" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start">
                       <Users className="h-4 w-4 mr-2" />
