@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Scale, Zap, ShieldCheck, BookOpen, MessageSquare, Send, Loader2, History, ChevronDown, ChevronUp, User, Star, MapPin, IndianRupee, Briefcase, Users, X, MinusCircle, AlertCircle, MessageCircle, Menu } from "lucide-react"
@@ -77,6 +77,36 @@ interface User {
   role: string
   name?: string
   email?: string
+}
+
+// Cache utility
+const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
+
+const getCachedData = (key: string) => {
+  try {
+    const cached = localStorage.getItem(key)
+    if (!cached) return null
+
+    const { data, timestamp } = JSON.parse(cached)
+    if (Date.now() - timestamp > CACHE_DURATION) {
+      localStorage.removeItem(key)
+      return null
+    }
+    return data
+  } catch {
+    return null
+  }
+}
+
+const setCachedData = (key: string, data: any) => {
+  try {
+    localStorage.setItem(key, JSON.stringify({
+      data,
+      timestamp: Date.now()
+    }))
+  } catch (error) {
+    console.error("Error caching data:", error)
+  }
 }
 
 // Lawyer Cards Component - Fully Responsive
@@ -185,6 +215,35 @@ const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[], onClose
   )
 }
 
+// Skeleton Loader Component
+const SkeletonLoader = () => (
+  <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
+      <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
+        {/* Left Sidebar Skeleton */}
+        <div className="hidden lg:block lg:col-span-1 space-y-5">
+          <div className="h-32 bg-white/5 rounded-xl animate-pulse" />
+          <div className="space-y-2">
+            <div className="h-8 bg-white/5 rounded-lg animate-pulse w-1/2" />
+            <div className="space-y-1.5">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="h-24 bg-white/5 rounded-xl animate-pulse" />
+              ))}
+            </div>
+          </div>
+          <div className="h-64 bg-white/5 rounded-xl animate-pulse" />
+          <div className="h-32 bg-white/5 rounded-xl animate-pulse" />
+        </div>
+
+        {/* Chat Interface Skeleton */}
+        <div className="lg:col-span-2">
+          <div className="h-[600px] bg-white/5 rounded-xl animate-pulse" />
+        </div>
+      </div>
+    </div>
+  </div>
+)
+
 export default function LegalGPTPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
@@ -276,8 +335,15 @@ export default function LegalGPTPage() {
     }
   }, [isSending])
 
-  // Function to fetch all lawyers from the API
-  const fetchAllLawyers = async (token: string) => {
+  // Optimized function to fetch all lawyers from the API with caching
+  const fetchAllLawyers = useCallback(async (token: string) => {
+    // Check cache first
+    const cached = getCachedData('lawyers_list')
+    if (cached && cached.length > 0) {
+      setAllLawyers(cached)
+      return cached
+    }
+
     try {
       setIsLoadingLawyers(true)
       const response = await fetch("https://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/all", {
@@ -299,6 +365,8 @@ export default function LegalGPTPage() {
           lawyers = data
         }
 
+        // Cache the result
+        setCachedData('lawyers_list', lawyers)
         setAllLawyers(lawyers)
         return lawyers
       }
@@ -309,10 +377,157 @@ export default function LegalGPTPage() {
     } finally {
       setIsLoadingLawyers(false)
     }
-  }
+  }, [])
+
+  // Optimized function to fetch user profile from backend
+  const fetchUserProfile = useCallback(async (token: string) => {
+    const cached = getCachedData('user_profile')
+    if (cached) {
+      return cached
+    }
+
+    try {
+      const response = await fetch("https://nyaymitra-backend-production.up.railway.app/api/v1/auth/profile", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile")
+      }
+
+      const data = await response.json()
+      let userData = null
+
+      if (data.user) {
+        userData = data.user
+      } else if (data.data) {
+        userData = data.data
+      } else if (data.id || data.userId) {
+        userData = data
+      }
+
+      if (userData) {
+        setCachedData('user_profile', userData)
+      }
+
+      return userData
+    } catch (error) {
+      console.error("Error fetching user profile:", error)
+      return null
+    }
+  }, [])
+
+  // Optimized function to fetch all chat sessions for the user
+  const fetchUserChatSessions = useCallback(async (userId: string, token: string) => {
+    const cacheKey = `chat_sessions_${userId}`
+    const cached = getCachedData(cacheKey)
+    if (cached && cached.length > 0) {
+      setChatSessions(cached)
+      return cached
+    }
+
+    try {
+      setLoadingHistory(true)
+      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/sessions?userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        let sessions = []
+        if (data.sessions) {
+          sessions = data.sessions
+        } else if (data.data) {
+          sessions = data.data
+        } else if (Array.isArray(data)) {
+          sessions = data
+        }
+
+        setCachedData(cacheKey, sessions)
+        setChatSessions(sessions)
+        return sessions
+      }
+      return []
+    } catch (error) {
+      console.error("Error fetching chat sessions:", error)
+      return []
+    } finally {
+      setLoadingHistory(false)
+    }
+  }, [])
+
+  // Function to load a specific chat session
+  const loadChatSession = useCallback(async (sessionId: string, token: string) => {
+    try {
+      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        if (data.messages && data.messages.length > 0) {
+          const formattedMessages = data.messages.map((msg: any) => ({
+            role: msg.role,
+            content: msg.content,
+            timestamp: msg.timestamp
+          }))
+          setMessages(formattedMessages)
+          setSessionId(sessionId)
+          setShowLawyerSuggestions(false)
+
+          if (userId) {
+            localStorage.setItem(`currentSessionId_${userId}`, sessionId)
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error loading chat session:", error)
+    }
+  }, [userId])
+
+  // Function to start a new chat session
+  const startNewChat = useCallback(() => {
+    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    setSessionId(newSessionId)
+    setMessages([
+      {
+        role: "assistant",
+        content: "Namaste! I'm NyayMitra, your AI legal assistant. I'm trained on Indian laws including IPC, CrPC, and landmark Supreme Court judgments. How can I help you with your legal query today?"
+      }
+    ])
+    setSeverity(null)
+    setSuggestedLawyers([])
+    setNextSteps(null)
+    setShowLawyerSuggestions(false)
+    setUserHasScrolled(false)
+    setShouldAutoScroll(true)
+
+    if (userId) {
+      localStorage.setItem(`currentSessionId_${userId}`, newSessionId)
+    }
+
+    if (userId) {
+      const token = localStorage.getItem("token")
+      if (token) {
+        fetchUserChatSessions(userId, token)
+      }
+    }
+  }, [userId, fetchUserChatSessions])
 
   // Function to filter lawyers based on legal issue
-  const filterLawyersByIssue = (lawyers: Lawyer[], userMessage: string, aiResponse?: ChatResponse): Lawyer[] => {
+  const filterLawyersByIssue = useCallback((lawyers: Lawyer[], userMessage: string, aiResponse?: ChatResponse): Lawyer[] => {
     const keywords = userMessage.toLowerCase()
 
     const specializationMap: { [key: string]: string[] } = {
@@ -367,7 +582,7 @@ export default function LegalGPTPage() {
         return scoreB - scoreA
       })
       .slice(0, 5)
-  }
+  }, [])
 
   // Function to format message with proper styling
   const formatMessageWithMarkdown = (content: string) => {
@@ -394,180 +609,40 @@ export default function LegalGPTPage() {
     return <div dangerouslySetInnerHTML={{ __html: formattedContent }} />
   }
 
-  // Function to fetch user profile from backend
-  const fetchUserProfile = async (token: string) => {
-    try {
-      const response = await fetch("https://nyaymitra-backend-production.up.railway.app/api/v1/auth/profile", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user profile")
-      }
-
-      const data = await response.json()
-      let userData = null
-
-      if (data.user) {
-        userData = data.user
-      } else if (data.data) {
-        userData = data.data
-      } else if (data.id || data.userId) {
-        userData = data
-      }
-
-      return userData
-    } catch (error) {
-      console.error("Error fetching user profile:", error)
-      return null
-    }
-  }
-
-  // Function to fetch all chat sessions for the user
-  const fetchUserChatSessions = async (userId: string, token: string) => {
-    try {
-      setLoadingHistory(true)
-      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/sessions?userId=${userId}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        let sessions = []
-        if (data.sessions) {
-          sessions = data.sessions
-        } else if (data.data) {
-          sessions = data.data
-        } else if (Array.isArray(data)) {
-          sessions = data
-        }
-
-        setChatSessions(sessions)
-        return sessions
-      }
-      return []
-    } catch (error) {
-      console.error("Error fetching chat sessions:", error)
-      return []
-    } finally {
-      setLoadingHistory(false)
-    }
-  }
-
-  // Function to load a specific chat session
-  const loadChatSession = async (sessionId: string, token: string) => {
-    try {
-      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        if (data.messages && data.messages.length > 0) {
-          const formattedMessages = data.messages.map((msg: any) => ({
-            role: msg.role,
-            content: msg.content,
-            timestamp: msg.timestamp
-          }))
-          setMessages(formattedMessages)
-          setSessionId(sessionId)
-          setShowLawyerSuggestions(false)
-
-          if (userId) {
-            localStorage.setItem(`currentSessionId_${userId}`, sessionId)
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Error loading chat session:", error)
-    }
-  }
-
-  // Function to start a new chat session
-  const startNewChat = () => {
-    const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-    setSessionId(newSessionId)
-    setMessages([
-      {
-        role: "assistant",
-        content: "Namaste! I'm NyayMitra, your AI legal assistant. I'm trained on Indian laws including IPC, CrPC, and landmark Supreme Court judgments. How can I help you with your legal query today?"
-      }
-    ])
-    setSeverity(null)
-    setSuggestedLawyers([])
-    setNextSteps(null)
-    setShowLawyerSuggestions(false)
-    setUserHasScrolled(false)
-    setShouldAutoScroll(true)
-
-    if (userId) {
-      localStorage.setItem(`currentSessionId_${userId}`, newSessionId)
-    }
-
-    if (userId) {
-      const token = localStorage.getItem("token")
-      if (token) {
-        fetchUserChatSessions(userId, token)
-      }
-    }
-  }
-
-  // Initialize session and load user data
+  // Initialize session and load user data - OPTIMIZED with parallel execution
   useEffect(() => {
-    // Prevent multiple initializations
     if (initializedRef.current) return
     initializedRef.current = true
 
     const initializeChat = async () => {
       const token = localStorage.getItem("token")
 
-      // Check if token exists
       if (!token) {
         router.push("/auth/login")
         return
       }
 
       try {
-        // Verify token is valid by fetching user profile
+        // Fetch user profile first to get userId
         const userData = await fetchUserProfile(token)
 
-        if (!userData || (!userData.id && !userData.userId)) {
-          // Invalid token or user not found
+        if (!userData || (!userData.id && !userData._id)) {
           localStorage.removeItem("token")
           router.push("/auth/login")
           return
         }
 
         const mongoUserId = userData.id || userData._id
-        if (!mongoUserId) {
-          localStorage.removeItem("token")
-          router.push("/auth/login")
-          return
-        }
-
         setUser(userData)
         setUserId(mongoUserId)
 
-        // Fetch lawyers and chat data in parallel
-        await Promise.all([
+        // PARALLEL execution of remaining API calls
+        const [lawyers, sessions] = await Promise.all([
           fetchAllLawyers(token),
           fetchUserChatSessions(mongoUserId, token)
         ])
 
         const currentSessionId = localStorage.getItem(`currentSessionId_${mongoUserId}`)
-        const sessions = chatSessions.length > 0 ? chatSessions : await fetchUserChatSessions(mongoUserId, token)
 
         if (currentSessionId && sessions.find((s: ChatSession) => s.sessionId === currentSessionId)) {
           await loadChatSession(currentSessionId, token)
@@ -584,7 +659,6 @@ export default function LegalGPTPage() {
 
       } catch (error) {
         console.error("Error initializing chat:", error)
-        // On error, clear token and redirect to login
         localStorage.removeItem("token")
         router.push("/auth/login")
       } finally {
@@ -593,7 +667,7 @@ export default function LegalGPTPage() {
     }
 
     initializeChat()
-  }, []) // Empty dependency array - only run once on mount
+  }, [fetchUserProfile, fetchAllLawyers, fetchUserChatSessions, loadChatSession, startNewChat, router])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -615,7 +689,6 @@ export default function LegalGPTPage() {
 
     const token = localStorage.getItem("token")
 
-    // Check if token exists before sending
     if (!token) {
       router.push("/auth/login")
       return
@@ -637,7 +710,6 @@ export default function LegalGPTPage() {
         body: JSON.stringify(requestBody)
       })
 
-      // If unauthorized, redirect to login
       if (response.status === 401) {
         localStorage.removeItem("token")
         router.push("/auth/login")
@@ -678,6 +750,9 @@ export default function LegalGPTPage() {
       }
 
       if (userId && token) {
+        // Invalidate cache for chat sessions
+        const cacheKey = `chat_sessions_${userId}`
+        localStorage.removeItem(cacheKey)
         await fetchUserChatSessions(userId, token)
       }
 
@@ -722,16 +797,9 @@ export default function LegalGPTPage() {
     }
   }, [inputMessage])
 
+  // Show skeleton loader while loading
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 flex items-center justify-center">
-        <div className="animate-pulse flex flex-col items-center">
-          <Scale className="h-12 w-12 text-blue-400 mb-4" />
-          <div className="h-4 w-32 bg-blue-900/50 rounded mb-2"></div>
-          <div className="h-4 w-24 bg-blue-900/30 rounded"></div>
-        </div>
-      </div>
-    )
+    return <SkeletonLoader />
   }
 
   return (
@@ -751,6 +819,15 @@ export default function LegalGPTPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowHistory(!showHistory)}
+                className="bg-white/5 border-white/20 text-white hover:bg-white/15"
+              >
+                <History className="h-4 w-4 mr-2" />
+                History
+              </Button>
               <Link href="/lawyers">
                 <Button variant="outline" size="sm" className="bg-white/5 border-white/20 text-white hover:bg-white/15">
                   <Users className="h-4 w-4 mr-2" />
@@ -786,6 +863,17 @@ export default function LegalGPTPage() {
                 className="md:hidden overflow-hidden border-t border-white/10 mt-2"
               >
                 <div className="py-3 space-y-2">
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setShowHistory(!showHistory)
+                      setMobileMenuOpen(false)
+                    }}
+                    className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start"
+                  >
+                    <History className="h-4 w-4 mr-2" />
+                    History
+                  </Button>
                   <Link href="/lawyers" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start">
                       <Users className="h-4 w-4 mr-2" />
@@ -817,9 +905,19 @@ export default function LegalGPTPage() {
             <div className="max-w-7xl mx-auto px-4 py-3">
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-base font-semibold text-white">Chat History</h3>
-                <Button variant="ghost" size="sm" onClick={() => setShowHistory(false)} className="text-white/50 h-8 w-8 p-0">
-                  <X className="h-4 w-4" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={startNewChat}
+                    className="text-white/70 hover:text-white text-xs h-8"
+                  >
+                    New Chat
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setShowHistory(false)} className="text-white/50 h-8 w-8 p-0">
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
               {loadingHistory ? (
                 <div className="flex justify-center py-6">
@@ -980,11 +1078,21 @@ export default function LegalGPTPage() {
                         NyayMitra AI
                       </h3>
                     </div>
-                    {severity && severity !== "Low" && (
-                      <Badge className={`text-[10px] ${severity === "High" ? "bg-red-500/20 text-red-300 border-red-500/30" : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"}`}>
-                        {severity === "High" ? "High Priority" : "Medium Priority"}
-                      </Badge>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {severity && severity !== "Low" && (
+                        <Badge className={`text-[10px] ${severity === "High" ? "bg-red-500/20 text-red-300 border-red-500/30" : "bg-yellow-500/20 text-yellow-300 border-yellow-500/30"}`}>
+                          {severity === "High" ? "High Priority" : "Medium Priority"}
+                        </Badge>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={startNewChat}
+                        className="text-white/70 hover:text-white text-xs h-7 px-2"
+                      >
+                        New Chat
+                      </Button>
+                    </div>
                   </div>
 
                   {/* Messages Container */}
@@ -1000,8 +1108,8 @@ export default function LegalGPTPage() {
                       >
                         <div
                           className={`max-w-[90%] sm:max-w-[85%] rounded-2xl px-3 py-2 ${message.role === "user"
-                              ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
-                              : "bg-white/10 text-white/90"
+                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white"
+                            : "bg-white/10 text-white/90"
                             }`}
                         >
                           <div className="text-xs md:text-sm leading-relaxed break-words">
