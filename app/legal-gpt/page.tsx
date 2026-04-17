@@ -174,7 +174,7 @@ export default function LegalGPTPage() {
   const fetchAllLawyers = async (token: string) => {
     try {
       setIsLoadingLawyers(true)
-      const response = await fetch("http://localhost:5000/api/v1/lawyer/all", {
+      const response = await fetch("http://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/all", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -388,7 +388,7 @@ export default function LegalGPTPage() {
   // Function to fetch user profile from backend
   const fetchUserProfile = async (token: string) => {
     try {
-      const response = await fetch("http://localhost:5000/api/v1/auth/profile", {
+      const response = await fetch("http://nyaymitra-backend-production.up.railway.app/api/v1/auth/profile", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -422,7 +422,7 @@ export default function LegalGPTPage() {
   const fetchUserChatSessions = async (userId: string, token: string) => {
     try {
       setLoadingHistory(true)
-      const response = await fetch(`http://localhost:5000/api/v1/ai-agent/chat/sessions?userId=${userId}`, {
+      const response = await fetch(`http://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/sessions?userId=${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -456,7 +456,7 @@ export default function LegalGPTPage() {
   // Function to load a specific chat session
   const loadChatSession = async (sessionId: string, token: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
+      const response = await fetch(`http://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -619,7 +619,7 @@ export default function LegalGPTPage() {
         userId: userId
       }
 
-      const response = await fetch("http://localhost:5000/api/v1/ai-agent/chat", {
+      const response = await fetch("http://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
