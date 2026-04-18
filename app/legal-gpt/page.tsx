@@ -629,7 +629,7 @@ export default function LegalGPTPage() {
     setMessages([
       {
         role: "assistant",
-        content: "👋 Namaste! Main NyayMitra hoon.\n\nAap apni legal problem simple language me likhiye — main aapko bataunga:\n\n• Aapka case kitna serious hai ⚖️\n• Aap kya next step le sakte hain 📌\n• Aur zarurat ho to sahi lawyer bhi suggest karunga 👨‍⚖️\n\nShuru karein — aapka issue kya hai?"
+        content: "👋 Namaste! Main NyayMitra hoon.\n\nAap apni legal problem simple language me likhiye main aapko bataunga:\n\n• Aapka case kitna serious hai ⚖️\n• Aap kya next step le sakte hain 📌\n• Aur zarurat ho to sahi lawyer bhi suggest karunga 👨‍⚖️\n\nShuru karein aapka issue kya hai?"
       }
     ])
     setSeverity(null)
