@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { Scale, Zap, ShieldCheck, BookOpen, MessageSquare, Send, Loader2, History, User, Star, MapPin, IndianRupee, Briefcase, Users, X, MinusCircle, AlertCircle, MessageCircle, Menu } from "lucide-react"
+import { Scale, Zap, ShieldCheck, BookOpen, MessageSquare, Send, Loader2, History, ChevronDown, ChevronUp, User, Star, MapPin, IndianRupee, Briefcase, Users, X, MinusCircle, AlertCircle, MessageCircle, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { motion, AnimatePresence } from "framer-motion"
@@ -109,7 +109,7 @@ const setCachedData = (key: string, data: any) => {
   }
 }
 
-// Lawyer Cards Component
+// Lawyer Cards Component - Fully Responsive
 const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[], onClose?: () => void }) => {
   if (lawyers.length === 0) return null
 
@@ -220,6 +220,7 @@ const SkeletonLoader = () => (
   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
       <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
+        {/* Left Sidebar Skeleton */}
         <div className="hidden lg:block lg:col-span-1 space-y-5">
           <div className="h-32 bg-white/5 rounded-xl animate-pulse" />
           <div className="space-y-2">
@@ -233,6 +234,8 @@ const SkeletonLoader = () => (
           <div className="h-64 bg-white/5 rounded-xl animate-pulse" />
           <div className="h-32 bg-white/5 rounded-xl animate-pulse" />
         </div>
+
+        {/* Chat Interface Skeleton */}
         <div className="lg:col-span-2">
           <div className="h-[600px] bg-white/5 rounded-xl animate-pulse" />
         </div>
@@ -266,6 +269,7 @@ export default function LegalGPTPage() {
   const [activeFeature, setActiveFeature] = useState(0)
   const initializedRef = useRef(false)
 
+  // Track scroll state to prevent unwanted jumps
   const [userHasScrolled, setUserHasScrolled] = useState(false)
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true)
 
@@ -292,6 +296,7 @@ export default function LegalGPTPage() {
     }
   ]
 
+  // Handle scroll events to detect if user manually scrolled up
   const handleScroll = () => {
     if (!chatContainerRef.current) return
 
@@ -307,6 +312,7 @@ export default function LegalGPTPage() {
     }
   }
 
+  // Scroll to bottom of messages
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
     if (chatContainerRef.current && shouldAutoScroll) {
       chatContainerRef.current.scrollTo({
@@ -329,7 +335,9 @@ export default function LegalGPTPage() {
     }
   }, [isSending])
 
+  // Optimized function to fetch all lawyers from the API with caching
   const fetchAllLawyers = useCallback(async (token: string) => {
+    // Check cache first
     const cached = getCachedData('lawyers_list')
     if (cached && cached.length > 0) {
       setAllLawyers(cached)
@@ -357,6 +365,7 @@ export default function LegalGPTPage() {
           lawyers = data
         }
 
+        // Cache the result
         setCachedData('lawyers_list', lawyers)
         setAllLawyers(lawyers)
         return lawyers
@@ -370,6 +379,7 @@ export default function LegalGPTPage() {
     }
   }, [])
 
+  // Optimized function to fetch user profile from backend
   const fetchUserProfile = useCallback(async (token: string) => {
     const cached = getCachedData('user_profile')
     if (cached) {
@@ -411,10 +421,9 @@ export default function LegalGPTPage() {
     }
   }, [])
 
-  const fetchUserChatSessions = useCallback(async (userIdParam: string, token: string) => {
-    if (!userIdParam) return []
-
-    const cacheKey = `chat_sessions_${userIdParam}`
+  // Optimized function to fetch all chat sessions for the user
+  const fetchUserChatSessions = useCallback(async (userId: string, token: string) => {
+    const cacheKey = `chat_sessions_${userId}`
     const cached = getCachedData(cacheKey)
     if (cached && cached.length > 0) {
       setChatSessions(cached)
@@ -423,7 +432,7 @@ export default function LegalGPTPage() {
 
     try {
       setLoadingHistory(true)
-      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/sessions?userId=${userIdParam}`, {
+      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/sessions?userId=${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -455,11 +464,10 @@ export default function LegalGPTPage() {
     }
   }, [])
 
-  const loadChatSession = useCallback(async (sessionIdParam: string, token: string) => {
-    if (!userId) return
-
+  // Function to load a specific chat session
+  const loadChatSession = useCallback(async (sessionId: string, token: string) => {
     try {
-      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/history?sessionId=${sessionIdParam}&userId=${userId}`, {
+      const response = await fetch(`https://nyaymitra-backend-production.up.railway.app/api/v1/ai-agent/chat/history?sessionId=${sessionId}&userId=${userId}`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -476,11 +484,11 @@ export default function LegalGPTPage() {
             timestamp: msg.timestamp
           }))
           setMessages(formattedMessages)
-          setSessionId(sessionIdParam)
+          setSessionId(sessionId)
           setShowLawyerSuggestions(false)
 
           if (userId) {
-            localStorage.setItem(`currentSessionId_${userId}`, sessionIdParam)
+            localStorage.setItem(`currentSessionId_${userId}`, sessionId)
           }
         }
       }
@@ -489,6 +497,7 @@ export default function LegalGPTPage() {
     }
   }, [userId])
 
+  // Function to start a new chat session
   const startNewChat = useCallback(() => {
     const newSessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
     setSessionId(newSessionId)
@@ -517,6 +526,7 @@ export default function LegalGPTPage() {
     }
   }, [userId, fetchUserChatSessions])
 
+  // Function to filter lawyers based on legal issue
   const filterLawyersByIssue = useCallback((lawyers: Lawyer[], userMessage: string, aiResponse?: ChatResponse): Lawyer[] => {
     const keywords = userMessage.toLowerCase()
 
@@ -574,13 +584,20 @@ export default function LegalGPTPage() {
       .slice(0, 5)
   }, [])
 
+  // Function to format message with proper styling
   const formatMessageWithMarkdown = (content: string) => {
     let formattedContent = content
 
+    // Bold text: **text**
     formattedContent = formattedContent.replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold">$1</strong>')
+
+    // Italic text: *text*
     formattedContent = formattedContent.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+
+    // Line breaks
     formattedContent = formattedContent.replace(/\n/g, '<br/>')
 
+    // Bullet points
     const bulletRegex = /^- (.*?)(?=<br\/>|$)/gm
     if (bulletRegex.test(formattedContent)) {
       formattedContent = formattedContent.replace(bulletRegex, '<li class="ml-4">• $1</li>')
@@ -592,17 +609,79 @@ export default function LegalGPTPage() {
     return <div dangerouslySetInnerHTML={{ __html: formattedContent }} />
   }
 
-  // FIXED: Complete rewrite of handleSendMessage to fix the display issue
+  // Initialize session and load user data - OPTIMIZED with parallel execution
+  useEffect(() => {
+    if (initializedRef.current) return
+    initializedRef.current = true
+
+    const initializeChat = async () => {
+      const token = localStorage.getItem("token")
+
+      if (!token) {
+        router.push("/auth/login")
+        return
+      }
+
+      try {
+        // Fetch user profile first to get userId
+        const userData = await fetchUserProfile(token)
+
+        if (!userData || (!userData.id && !userData._id)) {
+          localStorage.removeItem("token")
+          router.push("/auth/login")
+          return
+        }
+
+        const mongoUserId = userData.id || userData._id
+        setUser(userData)
+        setUserId(mongoUserId)
+
+        // PARALLEL execution of remaining API calls
+        const [lawyers, sessions] = await Promise.all([
+          fetchAllLawyers(token),
+          fetchUserChatSessions(mongoUserId, token)
+        ])
+
+        const currentSessionId = localStorage.getItem(`currentSessionId_${mongoUserId}`)
+
+        if (currentSessionId && sessions.find((s: ChatSession) => s.sessionId === currentSessionId)) {
+          await loadChatSession(currentSessionId, token)
+          setSessionId(currentSessionId)
+        } else if (sessions && sessions.length > 0) {
+          const mostRecentSession = sessions.sort((a: ChatSession, b: ChatSession) =>
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          )[0]
+          await loadChatSession(mostRecentSession.sessionId, token)
+          setSessionId(mostRecentSession.sessionId)
+        } else {
+          startNewChat()
+        }
+
+      } catch (error) {
+        console.error("Error initializing chat:", error)
+        localStorage.removeItem("token")
+        router.push("/auth/login")
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    initializeChat()
+  }, [fetchUserProfile, fetchAllLawyers, fetchUserChatSessions, loadChatSession, startNewChat, router])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveFeature((prev) => (prev + 1) % features.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [features.length])
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isSending) return
 
     const userMessage = inputMessage.trim()
     setInputMessage("")
-
-    // Add user message to chat immediately
-    const newUserMessage: Message = { role: "user", content: userMessage, timestamp: new Date() }
-    setMessages(prev => [...prev, newUserMessage])
-
+    setMessages(prev => [...prev, { role: "user", content: userMessage }])
     setIsSending(true)
     setShowLawyerSuggestions(false)
     setUserHasScrolled(false)
@@ -644,65 +723,34 @@ export default function LegalGPTPage() {
 
       const data: ChatResponse = await response.json()
 
-      // FIXED: Always add the assistant response to messages
-      let assistantResponse = ""
-
       if (data.messages && data.messages.length > 0) {
-        // Get the last assistant message from the response
-        const lastAssistantMsg = data.messages.filter(m => m.role === "assistant").pop()
-        if (lastAssistantMsg) {
-          assistantResponse = lastAssistantMsg.content
-        } else {
-          assistantResponse = data.reply
-        }
-      } else if (data.reply) {
-        assistantResponse = data.reply
+        setMessages(data.messages)
+      } else {
+        setMessages(prev => [...prev, { role: "assistant", content: data.reply }])
       }
 
-      // Add assistant message to chat
-      if (assistantResponse) {
-        const newAssistantMessage: Message = {
-          role: "assistant",
-          content: assistantResponse,
-          timestamp: new Date()
-        }
-        setMessages(prev => [...prev, newAssistantMessage])
-      }
-
-      // Update severity and next steps
       setSeverity(data.severity)
       setNextSteps(data.nextSteps)
 
-      // Handle lawyer suggestions
       let relevantLawyers: Lawyer[] = []
       if (allLawyers.length > 0) {
         relevantLawyers = filterLawyersByIssue(allLawyers, userMessage, data)
         setSuggestedLawyers(relevantLawyers)
       }
 
-      // Add next steps as separate message if provided and not already included
-      if (data.nextSteps && !assistantResponse.includes(data.nextSteps)) {
+      if (data.nextSteps) {
         let nextStepsMessage = `📋 **Suggested Next Steps:**\n${data.nextSteps}`
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: nextStepsMessage,
-          timestamp: new Date()
-        }])
+        setMessages(prev => [...prev, { role: "assistant", content: nextStepsMessage }])
       }
 
-      // Add severity message if needed and not already included
-      if (data.severity !== "Low" && !assistantResponse.includes(data.severity)) {
+      if (data.severity !== "Low") {
         const severityIcon = data.severity === "High" ? "🔴" : "🟡"
         const severityMessage = `${severityIcon} **Legal Severity Assessment:** ${data.severity} - Consider consulting a lawyer for this matter.`
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: severityMessage,
-          timestamp: new Date()
-        }])
+        setMessages(prev => [...prev, { role: "assistant", content: severityMessage }])
       }
 
-      // Refresh chat sessions cache
       if (userId && token) {
+        // Invalidate cache for chat sessions
         const cacheKey = `chat_sessions_${userId}`
         localStorage.removeItem(cacheKey)
         await fetchUserChatSessions(userId, token)
@@ -712,8 +760,7 @@ export default function LegalGPTPage() {
       console.error("Error sending message:", error)
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "❌ I apologize, but I'm having trouble connecting right now. Please check your internet connection and try again.",
-        timestamp: new Date()
+        content: "❌ I apologize, but I'm having trouble connecting right now. Please check your internet connection and try again."
       }])
     } finally {
       setIsSending(false)
@@ -742,6 +789,7 @@ export default function LegalGPTPage() {
     textareaRef.current?.focus()
   }
 
+  // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
@@ -749,71 +797,7 @@ export default function LegalGPTPage() {
     }
   }, [inputMessage])
 
-  // Initialize
-  useEffect(() => {
-    if (initializedRef.current) return
-    initializedRef.current = true
-
-    const initializeChat = async () => {
-      const token = localStorage.getItem("token")
-
-      if (!token) {
-        router.push("/auth/login")
-        return
-      }
-
-      try {
-        const userData = await fetchUserProfile(token)
-
-        if (!userData || (!userData.id && !userData._id)) {
-          localStorage.removeItem("token")
-          router.push("/auth/login")
-          return
-        }
-
-        const mongoUserId = userData.id || userData._id
-        setUser(userData)
-        setUserId(mongoUserId)
-
-        const [lawyers, sessions] = await Promise.all([
-          fetchAllLawyers(token),
-          fetchUserChatSessions(mongoUserId, token)
-        ])
-
-        const currentSessionId = localStorage.getItem(`currentSessionId_${mongoUserId}`)
-
-        if (currentSessionId && sessions.find((s: ChatSession) => s.sessionId === currentSessionId)) {
-          await loadChatSession(currentSessionId, token)
-          setSessionId(currentSessionId)
-        } else if (sessions && sessions.length > 0) {
-          const mostRecentSession = sessions.sort((a: ChatSession, b: ChatSession) =>
-            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          )[0]
-          await loadChatSession(mostRecentSession.sessionId, token)
-          setSessionId(mostRecentSession.sessionId)
-        } else {
-          startNewChat()
-        }
-
-      } catch (error) {
-        console.error("Error initializing chat:", error)
-        localStorage.removeItem("token")
-        router.push("/auth/login")
-      } finally {
-        setIsLoading(false)
-      }
-    }
-
-    initializeChat()
-  }, [fetchUserProfile, fetchAllLawyers, fetchUserChatSessions, loadChatSession, startNewChat, router])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveFeature((prev) => (prev + 1) % features.length)
-    }, 3000)
-    return () => clearInterval(interval)
-  }, [features.length])
-
+  // Show skeleton loader while loading
   if (isLoading) {
     return <SkeletonLoader />
   }
@@ -833,6 +817,7 @@ export default function LegalGPTPage() {
               </span>
             </Link>
 
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-3">
               <Button
                 variant="outline"
@@ -857,6 +842,7 @@ export default function LegalGPTPage() {
               )}
             </div>
 
+            {/* Mobile Menu Button */}
             <Button
               variant="ghost"
               size="sm"
@@ -867,6 +853,7 @@ export default function LegalGPTPage() {
             </Button>
           </div>
 
+          {/* Mobile Navigation */}
           <AnimatePresence>
             {mobileMenuOpen && (
               <motion.div
@@ -978,8 +965,9 @@ export default function LegalGPTPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-8">
         <div className="grid lg:grid-cols-3 gap-4 md:gap-6">
-          {/* Left Sidebar */}
+          {/* Left Sidebar - Hidden on mobile, visible on desktop */}
           <div className="hidden lg:block lg:col-span-1 space-y-5">
+            {/* Hero Section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -996,6 +984,7 @@ export default function LegalGPTPage() {
               </p>
             </motion.div>
 
+            {/* Features */}
             <div className="space-y-2">
               <h2 className="text-base font-semibold text-white/90 flex items-center gap-2">
                 <Zap className="h-4 w-4 text-blue-400" />
@@ -1024,6 +1013,7 @@ export default function LegalGPTPage() {
               </div>
             </div>
 
+            {/* Popular Questions */}
             <div>
               <h2 className="text-base font-semibold text-white/90 mb-2 flex items-center gap-2">
                 <MessageCircle className="h-4 w-4 text-blue-400" />
@@ -1055,6 +1045,7 @@ export default function LegalGPTPage() {
               </div>
             </div>
 
+            {/* Disclaimer */}
             <div className="bg-blue-900/20 p-3 rounded-xl border border-blue-500/20">
               <h3 className="text-xs font-semibold text-white mb-1 flex items-center gap-2">
                 <AlertCircle className="h-3.5 w-3.5 text-amber-400" />
@@ -1066,7 +1057,7 @@ export default function LegalGPTPage() {
             </div>
           </div>
 
-          {/* Chat Interface */}
+          {/* Right Side - Chat Interface (Full width on mobile) */}
           <div className="lg:col-span-2">
             <div>
               <h2 className="text-lg md:text-xl font-bold text-center mb-3 md:mb-4 bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
@@ -1079,6 +1070,7 @@ export default function LegalGPTPage() {
                 transition={{ duration: 0.6 }}
               >
                 <Card className="bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl overflow-hidden flex flex-col h-[calc(100vh-200px)] md:h-[600px]">
+                  {/* Chat Header */}
                   <div className="bg-gradient-to-r from-blue-900/40 to-indigo-900/40 p-3 border-b border-white/10 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="h-2 w-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -1103,6 +1095,7 @@ export default function LegalGPTPage() {
                     </div>
                   </div>
 
+                  {/* Messages Container */}
                   <div
                     ref={chatContainerRef}
                     onScroll={handleScroll}
@@ -1137,6 +1130,7 @@ export default function LegalGPTPage() {
                       </div>
                     )}
 
+                    {/* Lawyer Suggestions Section */}
                     {showLawyerSuggestions && suggestedLawyers.length > 0 && (
                       <div className="flex justify-start w-full">
                         <div className="w-full rounded-2xl bg-gradient-to-r from-blue-900/30 to-indigo-900/30 border border-blue-500/30 p-3">
@@ -1150,6 +1144,7 @@ export default function LegalGPTPage() {
                     <div ref={messagesEndRef} />
                   </div>
 
+                  {/* Input Area */}
                   <div className="p-3 border-t border-white/10 bg-black/30">
                     {suggestedLawyers.length > 0 && !showLawyerSuggestions && (
                       <Button
@@ -1190,6 +1185,7 @@ export default function LegalGPTPage() {
         </div>
       </div>
 
+      {/* Footer */}
       <footer className="border-t border-white/10 py-4 mt-6 bg-black/30">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col sm:flex-row justify-between items-center gap-2">
