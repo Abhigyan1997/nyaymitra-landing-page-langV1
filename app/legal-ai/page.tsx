@@ -629,7 +629,7 @@ export default function LegalGPTPage() {
     setMessages([
       {
         role: "assistant",
-        content: "Namaste! I'm NyayMitra, your AI legal assistant. I'm trained on Indian laws including IPC, CrPC, and landmark Supreme Court judgments. How can I help you with your legal query today?"
+        content: "👋 Namaste! Main NyayMitra hoon.\n\nAap apni legal problem simple language me likhiye — main aapko bataunga:\n\n• Aapka case kitna serious hai ⚖️\n• Aap kya next step le sakte hain 📌\n• Aur zarurat ho to sahi lawyer bhi suggest karunga 👨‍⚖️\n\nShuru karein — aapka issue kya hai?"
       }
     ])
     setSeverity(null)
@@ -962,7 +962,7 @@ export default function LegalGPTPage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-2 lg:gap-3">
-              <Button
+              {/* <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setShowHistory(!showHistory)}
@@ -970,7 +970,7 @@ export default function LegalGPTPage() {
               >
                 <History className="h-3.5 w-3.5 lg:h-4 lg:w-4 mr-1 lg:mr-2" />
                 History
-              </Button>
+              </Button> */}
               <Link href="/lawyers">
                 <Button variant="outline" size="sm" className="bg-white/5 border-white/20 text-white hover:bg-white/15 text-xs lg:text-sm">
                   <Users className="h-3.5 w-3.5 lg:h-4 lg:w-4 mr-1 lg:mr-2" />
@@ -1006,7 +1006,7 @@ export default function LegalGPTPage() {
                 className="md:hidden overflow-hidden border-t border-white/10 mt-2"
               >
                 <div className="py-2 sm:py-3 space-y-1.5 sm:space-y-2">
-                  <Button
+                  {/* <Button
                     variant="outline"
                     onClick={() => {
                       setShowHistory(!showHistory)
@@ -1016,7 +1016,7 @@ export default function LegalGPTPage() {
                   >
                     <History className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
                     History
-                  </Button>
+                  </Button> */}
                   <Link href="/lawyers" onClick={() => setMobileMenuOpen(false)}>
                     <Button variant="outline" className="w-full bg-white/5 border-white/20 text-white hover:bg-white/15 justify-start text-xs sm:text-sm">
                       <Users className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-2" />
