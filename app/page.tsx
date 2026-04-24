@@ -733,7 +733,7 @@ export default function HomePage() {
               {/* Trust Badge */}
               <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm">
                 <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                <span className="text-xs font-semibold text-blue-300 tracking-widest">TRUSTED BY 100K+ INDIANS</span>
+                <span className="text-xs font-semibold text-blue-300 tracking-widest">TRUSTED BY 500+ INDIANS</span>
               </div>
 
               {/* Title & Subtitle */}
