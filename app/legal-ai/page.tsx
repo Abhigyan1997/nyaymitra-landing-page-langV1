@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 
 interface Message {
-  _id?: string        // present in API responses from MongoDB, ignored by UI
+  _id?: string
   role: "user" | "assistant"
   content: string
   timestamp?: Date
@@ -24,16 +24,8 @@ interface ChatSession {
   updatedAt: Date
 }
 
-interface LawyerUserInfo {
-  fullName: string
-  email: string
-  phone: string
-  profileImage?: string | null
-  profilePhoto?: string | null
-  gender?: string
-}
-
-interface LawyerDetails {
+// 🔥 Updated to match your backend's actual response format
+interface LawyerData {
   _id: string
   userId: string
   specialization: string[]
@@ -56,11 +48,10 @@ interface LawyerDetails {
   languagesSpoken: string[]
   barCouncilId: string
   yearsPracticing?: number
-}
-
-interface Lawyer {
-  userInfo: LawyerUserInfo
-  lawyerDetails: LawyerDetails
+  fullName?: string
+  email?: string
+  phone?: string
+  profilePhoto?: string
 }
 
 interface ChatResponse {
@@ -69,10 +60,9 @@ interface ChatResponse {
   severity: "Low" | "Medium" | "High"
   nextSteps: string | null
   disclaimer: string
-  // FIX: The API returns the FULL conversation history including the user message
-  // we just sent. We must NOT use this to set messages directly — only extract
-  // the new assistant reply from it to avoid duplicates.
   messages: Message[]
+  lawyers?: LawyerData[]
+  shouldSuggestLawyers?: boolean
 }
 
 interface UserType {
@@ -112,11 +102,11 @@ const setCachedData = (key: string, data: unknown) => {
 }
 
 // ---------------------------------------------------------------------------
-// LawyerCards component (unchanged from original)
+// LawyerCards component - FIXED to handle backend format
 // ---------------------------------------------------------------------------
-const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[]; onClose?: () => void }) => {
+const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: LawyerData[]; onClose?: () => void }) => {
   const [expandedLawyer, setExpandedLawyer] = useState<string | null>(null)
-  if (lawyers.length === 0) return null
+  if (!lawyers || lawyers.length === 0) return null
 
   return (
     <div className="mt-3 space-y-2 w-full">
@@ -134,15 +124,16 @@ const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[]; onClose
 
       <div className="space-y-2 max-h-80 overflow-y-auto">
         {lawyers.map((lawyer, index) => {
-          const name = lawyer.userInfo.fullName || "Legal Professional"
-          const specializations = lawyer.lawyerDetails.specialization?.slice(0, 2).join(", ") || "General Legal Practice"
-          const experience = lawyer.lawyerDetails.experience || 0
-          const fee = lawyer.lawyerDetails.consultationFee || 0
-          const location = [lawyer.lawyerDetails.city, lawyer.lawyerDetails.state].filter(Boolean).join(", ")
-          const rating = lawyer.lawyerDetails.averageRating || 0
-          const isVerified = lawyer.lawyerDetails.verifiedByPlatform
-          const isPremium = lawyer.lawyerDetails.isPremium
-          const lawyerId = lawyer.lawyerDetails._id
+          // 🔥 Direct access since backend sends flat structure
+          const name = lawyer.fullName || "Legal Professional"
+          const specializations = lawyer.specialization?.slice(0, 2).join(", ") || "General Legal Practice"
+          const experience = lawyer.experience || 0
+          const fee = lawyer.consultationFee || 0
+          const location = [lawyer.city, lawyer.state].filter(Boolean).join(", ")
+          const rating = lawyer.averageRating || 0
+          const isVerified = lawyer.verifiedByPlatform || false
+          const isPremium = lawyer.isPremium || false
+          const lawyerId = lawyer._id
           const isExpanded = expandedLawyer === lawyerId
 
           return (
@@ -176,16 +167,16 @@ const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[]; onClose
                 {isExpanded && (
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="mt-3 pt-3 border-t border-white/10">
                     <div className="space-y-2 text-[10px] sm:text-xs">
-                      {lawyer.lawyerDetails.bio && <div><span className="text-white/50">Bio: </span><span className="text-white/70">{lawyer.lawyerDetails.bio.substring(0, 100)}</span></div>}
-                      {lawyer.lawyerDetails.languagesSpoken?.length > 0 && <div><span className="text-white/50">Languages: </span><span className="text-white/70">{lawyer.lawyerDetails.languagesSpoken.join(", ")}</span></div>}
-                      {lawyer.lawyerDetails.consultationModes && (
+                      {lawyer.bio && <div><span className="text-white/50">Bio: </span><span className="text-white/70">{lawyer.bio.substring(0, 100)}</span></div>}
+                      {lawyer.languagesSpoken?.length > 0 && <div><span className="text-white/50">Languages: </span><span className="text-white/70">{lawyer.languagesSpoken.join(", ")}</span></div>}
+                      {lawyer.consultationModes && (
                         <div>
                           <span className="text-white/50">Consultation Modes: </span>
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {lawyer.lawyerDetails.consultationModes.video && <Badge className="bg-blue-500/20 text-blue-300 text-[8px] sm:text-[9px]">Video</Badge>}
-                            {lawyer.lawyerDetails.consultationModes.call && <Badge className="bg-green-500/20 text-green-300 text-[8px] sm:text-[9px]">Call</Badge>}
-                            {lawyer.lawyerDetails.consultationModes.chat && <Badge className="bg-purple-500/20 text-purple-300 text-[8px] sm:text-[9px]">Chat</Badge>}
-                            {lawyer.lawyerDetails.consultationModes.inPerson && <Badge className="bg-yellow-500/20 text-yellow-300 text-[8px] sm:text-[9px]">In-Person</Badge>}
+                            {lawyer.consultationModes.video && <Badge className="bg-blue-500/20 text-blue-300 text-[8px] sm:text-[9px]">Video</Badge>}
+                            {lawyer.consultationModes.call && <Badge className="bg-green-500/20 text-green-300 text-[8px] sm:text-[9px]">Call</Badge>}
+                            {lawyer.consultationModes.chat && <Badge className="bg-purple-500/20 text-purple-300 text-[8px] sm:text-[9px]">Chat</Badge>}
+                            {lawyer.consultationModes.inPerson && <Badge className="bg-yellow-500/20 text-yellow-300 text-[8px] sm:text-[9px]">In-Person</Badge>}
                           </div>
                         </div>
                       )}
@@ -209,7 +200,7 @@ const LawyerCardsComponent = ({ lawyers, onClose }: { lawyers: Lawyer[]; onClose
 }
 
 // ---------------------------------------------------------------------------
-// Skeleton Loader (unchanged)
+// Skeleton Loader
 // ---------------------------------------------------------------------------
 const SkeletonLoader = () => (
   <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
@@ -231,7 +222,7 @@ const SkeletonLoader = () => (
 )
 
 // ---------------------------------------------------------------------------
-// SpeechRecognition interfaces (not in default TS lib — declared locally)
+// SpeechRecognition interfaces
 // ---------------------------------------------------------------------------
 interface ISpeechRecognitionEvent {
   results: { [index: number]: { [index: number]: { transcript: string } } }
@@ -251,7 +242,7 @@ interface ISpeechRecognitionConstructor {
 }
 
 // ---------------------------------------------------------------------------
-// WELCOME MESSAGE — defined outside component to avoid recreating on render
+// WELCOME MESSAGE
 // ---------------------------------------------------------------------------
 const WELCOME_MESSAGE: Message = {
   role: "assistant",
@@ -266,23 +257,19 @@ export default function LegalGPTPage() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
-  // Start with empty array — loadChatSession populates from API data,
-  // startNewChat sets WELCOME_MESSAGE. Never pre-populate with welcome here
-  // or it flashes before real session messages load in.
   const [messages, setMessages] = useState<Message[]>([])
-
   const [inputMessage, setInputMessage] = useState("")
   const [isSending, setIsSending] = useState(false)
   const [sessionId, setSessionId] = useState("")
   const [userId, setUserId] = useState<string | null>(null)
   const [user, setUser] = useState<UserType | null>(null)
   const [severity, setSeverity] = useState<"Low" | "Medium" | "High" | null>(null)
-  const [suggestedLawyers, setSuggestedLawyers] = useState<Lawyer[]>([])
+  const [suggestedLawyers, setSuggestedLawyers] = useState<LawyerData[]>([])
   const [nextSteps, setNextSteps] = useState<string | null>(null)
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([])
   const [showHistory, setShowHistory] = useState(false)
   const [loadingHistory, setLoadingHistory] = useState(false)
-  const [allLawyers, setAllLawyers] = useState<Lawyer[]>([])
+  const [allLawyers, setAllLawyers] = useState<LawyerData[]>([])
   const [isLoadingLawyers, setIsLoadingLawyers] = useState(false)
   const [showLawyerSuggestions, setShowLawyerSuggestions] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -318,9 +305,6 @@ export default function LegalGPTPage() {
 
   // ---------------------------------------------------------------------------
   // Speech recognition
-  // SpeechRecognition is not in the default TS DOM lib when using strict mode.
-  // We declare a minimal interface inline and cast through `unknown` to avoid
-  // all "Cannot find name 'SpeechRecognition'" errors.
   // ---------------------------------------------------------------------------
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -372,7 +356,7 @@ export default function LegalGPTPage() {
   // ---------------------------------------------------------------------------
   // API helpers
   // ---------------------------------------------------------------------------
-  const fetchAllLawyers = useCallback(async (token: string): Promise<Lawyer[]> => {
+  const fetchAllLawyers = useCallback(async (token: string): Promise<LawyerData[]> => {
     const cached = getCachedData("lawyers_list")
     if (cached?.length > 0) { setAllLawyers(cached); return cached }
     try {
@@ -382,7 +366,7 @@ export default function LegalGPTPage() {
       })
       if (!res.ok) return []
       const data = await res.json()
-      const lawyers: Lawyer[] = data.lawyers ?? data.data ?? (Array.isArray(data) ? data : [])
+      const lawyers: LawyerData[] = data.lawyers ?? data.data ?? (Array.isArray(data) ? data : [])
       setCachedData("lawyers_list", lawyers)
       setAllLawyers(lawyers)
       return lawyers
@@ -408,8 +392,6 @@ export default function LegalGPTPage() {
   const fetchUserChatSessions = useCallback(async (
     uid: string,
     token: string,
-    // bypassCache: pass true on page init so we always get the freshest
-    // messages[] for every session — stale cache caused truncated history on reload
     bypassCache = false
   ): Promise<ChatSession[]> => {
     const cacheKey = `chat_sessions_${uid}`
@@ -418,7 +400,6 @@ export default function LegalGPTPage() {
       const cached = getCachedData(cacheKey)
       if (cached?.length > 0) { setChatSessions(cached); return cached }
     } else {
-      // Wipe stale cache before fetching so nothing reads old truncated data
       localStorage.removeItem(cacheKey)
     }
 
@@ -438,18 +419,11 @@ export default function LegalGPTPage() {
   }, [])
 
   // ---------------------------------------------------------------------------
-  // FIX #1 — loadChatSession: no longer calls a missing /history endpoint.
-  //
-  // Strategy: The sessions list returned by /sessions already contains the
-  // messages[] array for each session (per your ChatSession interface).
-  // We restore messages from there. If for some reason the session object
-  // doesn't include messages, we gracefully fall back to the welcome message
-  // so the chat is never broken.
+  // loadChatSession
   // ---------------------------------------------------------------------------
   const loadChatSession = useCallback(
     (session: ChatSession, uid: string) => {
       if (session.messages && session.messages.length > 0) {
-        // Normalise timestamps (they come from JSON as strings, not Date objects)
         const formatted: Message[] = session.messages.map((m) => ({
           role: m.role,
           content: m.content,
@@ -457,7 +431,6 @@ export default function LegalGPTPage() {
         }))
         setMessages(formatted)
       } else {
-        // No messages in session — start fresh with welcome
         setMessages([WELCOME_MESSAGE])
       }
 
@@ -470,7 +443,7 @@ export default function LegalGPTPage() {
       setShouldAutoScroll(true)
       localStorage.setItem(`currentSessionId_${uid}`, session.sessionId)
     },
-    [] // no external deps — all state is set via setters
+    []
   )
 
   // ---------------------------------------------------------------------------
@@ -498,55 +471,7 @@ export default function LegalGPTPage() {
   )
 
   // ---------------------------------------------------------------------------
-  // Lawyer filtering
-  // ---------------------------------------------------------------------------
-  const filterLawyersByIssue = useCallback(
-    (lawyers: Lawyer[], userMessage: string): Lawyer[] => {
-      const keywords = userMessage.toLowerCase()
-      const specializationMap: Record<string, string[]> = {
-        criminal: ["Criminal Law", "Criminal"],
-        property: ["Property Law", "Property", "Real Estate"],
-        family: ["Family Law", "Matrimonial Law", "Divorce", "Child Custody"],
-        civil: ["Civil Law", "Civil Litigation"],
-        cyber: ["Cyber Law", "Cyber Crime"],
-        corporate: ["Corporate Law", "Business Law"],
-        consumer: ["Consumer Law", "Consumer Protection"],
-        land: ["Property Law", "Land Dispute", "Real Estate"],
-        divorce: ["Family Law", "Matrimonial Law"],
-        inheritance: ["Property Law", "Inheritance", "Succession"],
-        partition: ["Property Law", "Partition", "Family Law"],
-        "cheque bounce": ["Cheque Bounce", "Negotiable Instruments", "Banking Law"],
-        employment: ["Labor Law", "Employment Law"],
-        tax: ["Tax Law", "Income Tax"],
-        constitutional: ["Constitutional Law", "Writ"],
-      }
-
-      let relevantSpecializations: string[] = []
-      for (const [kw, specs] of Object.entries(specializationMap)) {
-        if (keywords.includes(kw)) relevantSpecializations.push(...specs)
-      }
-
-      const pool =
-        relevantSpecializations.length === 0
-          ? lawyers
-          : lawyers.filter((l) =>
-            (l.lawyerDetails.specialization ?? []).some((spec) =>
-              relevantSpecializations.some(
-                (rs) => spec.toLowerCase().includes(rs.toLowerCase()) || rs.toLowerCase().includes(spec.toLowerCase())
-              )
-            )
-          )
-
-      return pool
-        .sort((a, b) => (b.lawyerDetails.experience || 0) + (b.lawyerDetails.averageRating || 0) - ((a.lawyerDetails.experience || 0) + (a.lawyerDetails.averageRating || 0)))
-        .slice(0, isMobile ? 3 : 5)
-    },
-    [isMobile]
-  )
-
-  // ---------------------------------------------------------------------------
-  // FIX #2 — formatMessageWithMarkdown: no change needed functionally, but keep
-  // it as a stable reference to avoid re-renders.
+  // formatMessageWithMarkdown
   // ---------------------------------------------------------------------------
   const formatMessageWithMarkdown = useCallback((content: string) => {
     let html = content
@@ -562,7 +487,7 @@ export default function LegalGPTPage() {
   }, [])
 
   // ---------------------------------------------------------------------------
-  // Initialization (runs once)
+  // Initialization
   // ---------------------------------------------------------------------------
   useEffect(() => {
     if (initializedRef.current) return
@@ -584,9 +509,6 @@ export default function LegalGPTPage() {
         setUser(userData)
         setUserId(mongoUserId)
 
-        // Run lawyers + sessions in parallel.
-        // bypassCache=true so we always get the full fresh messages[] on reload —
-        // stale cache was the root cause of truncated history after page refresh.
         const [, sessions] = await Promise.all([fetchAllLawyers(token), fetchUserChatSessions(mongoUserId, token, true)])
 
         const savedSessionId = localStorage.getItem(`currentSessionId_${mongoUserId}`)
@@ -596,11 +518,9 @@ export default function LegalGPTPage() {
           if (savedSession) {
             loadChatSession(savedSession, mongoUserId)
           } else {
-            // Saved session no longer exists on server — start fresh
             startNewChat(mongoUserId)
           }
         } else if (sessions.length > 0) {
-          // Load the most recently updated session
           const mostRecent = [...sessions].sort(
             (a: ChatSession, b: ChatSession) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
           )[0]
@@ -626,20 +546,7 @@ export default function LegalGPTPage() {
   }, [features.length])
 
   // ---------------------------------------------------------------------------
-  // FIX #3 — handleSendMessage: completely rewritten to fix the two message bugs.
-  //
-  // BUG A (question not showing until next send):
-  //   The old code added the user message optimistically then tried to dedup by
-  //   comparing `messages` (stale closure). The dedupe logic often removed the
-  //   just-added user message from the UI. We now add the user message to local
-  //   state ONLY once, right before the API call, and we NEVER touch state
-  //   based on the API-returned messages array.
-  //
-  // BUG B (old + new response shown together):
-  //   The old code used data.messages (the full convo history) to derive new
-  //   messages, then ALSO appended data.reply, nextSteps and severity messages.
-  //   This caused 2-3 copies of the reply. We now ONLY use data.reply and append
-  //   it once, then conditionally add nextSteps / severity as separate messages.
+  // handleSendMessage - FIXED to handle backend response correctly
   // ---------------------------------------------------------------------------
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isSending) return
@@ -651,7 +558,7 @@ export default function LegalGPTPage() {
     setUserHasScrolled(false)
     setShouldAutoScroll(true)
 
-    // Step 1: Append user message immediately so it shows in the UI right away
+    // Append user message immediately
     const userMsg: Message = { role: "user", content: userText, timestamp: new Date() }
     setMessages((prev) => [...prev, userMsg])
 
@@ -673,39 +580,42 @@ export default function LegalGPTPage() {
 
       const data: ChatResponse = await res.json()
 
-      // Step 2: Append the AI reply ONCE using data.reply (the canonical field).
-      // We intentionally IGNORE data.messages to avoid duplicating the full
-      // conversation history that the API echoes back.
+      // Append AI reply
       const assistantReply = data.reply?.trim()
       if (assistantReply) {
         setMessages((prev) => [...prev, { role: "assistant", content: assistantReply, timestamp: new Date() }])
       }
 
-      // Step 3: Append nextSteps as a separate bubble if present
+      // Append nextSteps as a separate bubble if present
       if (data.nextSteps?.trim()) {
         const nextStepsContent = `📋 **Suggested Next Steps:**\n${data.nextSteps}`
         setMessages((prev) => [...prev, { role: "assistant", content: nextStepsContent, timestamp: new Date() }])
       }
 
-      // Step 4: Append severity warning bubble only for Medium/High
+      // Append severity warning bubble only for Medium/High
       if (data.severity && data.severity !== "Low") {
         const icon = data.severity === "High" ? "🔴" : "🟡"
         const severityContent = `${icon} **Legal Severity Assessment:** ${data.severity} — Consider consulting a lawyer for this matter.`
         setMessages((prev) => [...prev, { role: "assistant", content: severityContent, timestamp: new Date() }])
       }
 
-      // Step 5: Update derived UI state
+      // Update UI state
       setSeverity(data.severity ?? null)
       setNextSteps(data.nextSteps ?? null)
 
-      if (allLawyers.length > 0) {
-        const relevant = filterLawyersByIssue(allLawyers, userText)
-        setSuggestedLawyers(relevant)
+      // 🔥 FIX: Handle lawyers directly from backend response
+      if (data.shouldSuggestLawyers === true && data.lawyers && data.lawyers.length > 0) {
+        setSuggestedLawyers(data.lawyers)
+        // Auto-expand lawyer suggestions for high severity cases
+        if (data.severity === "High") {
+          setShowLawyerSuggestions(true)
+        }
+      } else {
+        setSuggestedLawyers([])
+        setShowLawyerSuggestions(false)
       }
 
-      // Refresh session cache so history panel shows updated message list.
-      // bypassCache=true ensures we fetch fresh data rather than reading the
-      // just-invalidated stale entry.
+      // Refresh session cache
       if (userId) {
         fetchUserChatSessions(userId, token, true)
       }
@@ -907,7 +817,6 @@ export default function LegalGPTPage() {
                         >
                           New Chat
                         </Button>
-                        {/* FIX: history button was hidden in original — wiring it up here */}
                         <Button
                           variant="ghost" size="sm"
                           onClick={() => setShowHistory(!showHistory)}
