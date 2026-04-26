@@ -408,8 +408,8 @@ const Hero = () => {
                     display: "flex", justifyContent: "center", gap: "clamp(16px, 6vw, 64px)", flexWrap: "wrap",
                 }}>
                     {[
-                        { v: "500+", l: "Verified Lawyers" },
-                        { v: "50K+", l: "Happy Clients" },
+                        { v: "60+", l: "Verified Lawyers" },
+                        { v: "100+", l: "Happy Clients" },
                         { v: "< 2 min", l: "Response Time" },
                         { v: "4.9 ★", l: "Client Rating" },
                     ].map((s, i) => (
@@ -829,7 +829,7 @@ const TestimonialsSection = () => {
                             lineHeight: 1.15, letterSpacing: "-0.02em", padding: "0 12px",
                         }}>
                             Trusted by{" "}
-                            <span style={{ color: "#fbbf24" }}>500+ Indians</span>
+                            <span style={{ color: "#fbbf24" }}>100+ Indians</span>
                         </h2>
                     </div>
                 </Reveal>
