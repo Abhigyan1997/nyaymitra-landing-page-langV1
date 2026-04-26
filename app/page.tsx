@@ -34,7 +34,6 @@ const content = {
     langToggle: "हि",
     langSwitchMobile: "हिंदी में देखें",
     hero: {
-      // badgeLive: "AI Online",
       badge: "500+ Indians helped",
       titleStatic: "Your Legal Problem,",
       titleAccents: ["Solved Today.", "Resolved Fast.", "In Your Hands."],
@@ -157,7 +156,6 @@ const content = {
     langToggle: "EN",
     langSwitchMobile: "View in English",
     hero: {
-      // badgeLive: "AI ऑनलाइन",
       badge: "500+ भारतीयों की मदद",
       titleStatic: "आपकी कानूनी समस्या,",
       titleAccents: ["आज हल होगी।", "जल्दी सुलझेगी।", "आपके हाथ में।"],
@@ -482,8 +480,8 @@ export default function HomePage() {
         )}
       </nav>
 
-      {/* ══ HERO ══ */}
-      <section className="relative z-10 min-h-[94vh] flex items-center px-4 sm:px-6 lg:px-8 py-20">
+      {/* ══ HERO — REDUCED SPACING (changed from py-20 to py-6) ══ */}
+      <section className="relative z-10 flex items-center px-4 sm:px-6 lg:px-8 py-6">
         <div className="max-w-[1200px] mx-auto w-full">
           <div className="grid lg:grid-cols-[1fr_420px] gap-12 xl:gap-24 items-center">
 
@@ -493,7 +491,6 @@ export default function HomePage() {
               <div className="flex flex-wrap items-center gap-2.5 mb-9">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/[0.2] bg-blue-500/[0.055]">
                   <LiveDot />
-                  {/* <span className="text-[10.5px] font-bold text-blue-300 uppercase tracking-[0.1em]">{t.hero.badgeLive}</span> */}
                 </div>
                 <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.07] bg-white/[0.025]">
                   <span className="text-[10.5px] font-medium text-slate-500">{t.hero.badge}</span>
@@ -509,10 +506,10 @@ export default function HomePage() {
                   {t.hero.titleStatic}
                 </h1>
 
-                {/* Animated line — final safe spacing */}
+                {/* Animated line */}
                 <div
                   style={{
-                    height: "clamp(76px,10.5vw,128px)", // final bump
+                    height: "clamp(76px,10.5vw,128px)",
                     overflow: "hidden",
                     paddingTop: "10px",
                     paddingBottom: "10px",
@@ -529,7 +526,7 @@ export default function HomePage() {
                       WebkitBackgroundClip: "text",
                       WebkitTextFillColor: "transparent",
                       backgroundClip: "text",
-                      transform: "translateY(3px)", // final alignment tweak
+                      transform: "translateY(3px)",
                       ...accentStyle,
                     }}
                   >
