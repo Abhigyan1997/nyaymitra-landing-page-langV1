@@ -349,7 +349,7 @@ const Hero = () => {
                 </div>
             </Reveal>
 
-            <Reveal delay={440}>
+            {/* <Reveal delay={440}>
                 <div style={{
                     display: "flex", gap: "clamp(20px, 4vw, 40px)",
                     flexWrap: "wrap", justifyContent: "center",
@@ -366,7 +366,7 @@ const Hero = () => {
                         </div>
                     ))}
                 </div>
-            </Reveal>
+            </Reveal> */}
 
             <div style={{
                 position: "absolute", bottom: 0, left: 0, right: 0,
