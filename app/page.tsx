@@ -563,12 +563,18 @@ export default function HomePage() {
               </div>
 
               {/* Stats inline */}
-              <div className="flex items-center flex-wrap gap-x-7 gap-y-2.5">
+              <div className="flex items-center justify-center sm:justify-start flex-wrap gap-x-4 sm:gap-x-7 gap-y-2.5">
                 {t.hero.stats.map((s, i) => (
-                  <div key={s.label} className="flex items-baseline gap-1.5">
-                    {i > 0 && <div className="w-px h-4 bg-white/[0.07] mr-5" />}
-                    <span className="text-[15px] font-bold text-white">{s.value}</span>
-                    <span className="text-[11.5px] text-slate-600">{s.label}</span>
+                  <div key={s.label} className="flex items-baseline gap-1.5 relative">
+                    {i > 0 && (
+                      <div className="absolute -left-3 sm:-left-4 top-1/2 -translate-y-1/2 w-px h-3 sm:h-4 bg-white/[0.07]" />
+                    )}
+                    <span className="text-sm sm:text-[15px] md:text-base font-bold text-white">
+                      {s.value}
+                    </span>
+                    <span className="text-[10px] sm:text-[11.5px] text-slate-500 sm:text-slate-600 whitespace-nowrap">
+                      {s.label}
+                    </span>
                   </div>
                 ))}
               </div>
