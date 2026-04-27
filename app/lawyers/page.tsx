@@ -1,77 +1,595 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
-  Scale,
-  Star,
-  MapPin,
-  Clock,
-  Phone,
-  Video,
-  MessageCircle,
-  Search,
-  User,
-  Award,
-  Calendar,
-  Loader,
-  AlertCircle,
-  SlidersHorizontal,
-  ArrowUpDown,
-  ChevronDown,
-  X,
+  Scale, Star, MapPin, Clock, Phone, Video, MessageCircle,
+  Search, User, Award, Calendar, Loader, AlertCircle,
+  SlidersHorizontal, ArrowUpDown, ChevronDown, X, Shield,
+  Briefcase, Globe, ChevronRight, Sparkles,
 } from "lucide-react"
 import Link from "next/link"
 import axios from "axios"
 import { cn } from "@/lib/utils"
 import { loadRazorpay } from "@/lib/razorpay"
 import { useToast } from "@/components/ui/use-toast"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog"
-import { DatePicker } from "@/components/ui/date-picker"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Skeleton } from "@/components/ui/skeleton"
+// DatePicker replaced with fully inline custom calendar (no Radix Popover portal)
+
+// ─── Style injection ──────────────────────────────────────────────────────────
+const GLOBAL_STYLES = `
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --ink:       #0c0f1a;
+    --ink-80:    rgba(12,15,26,0.8);
+    --surface:   #111827;
+    --surface-2: #1a2235;
+    --surface-3: #1f2d47;
+    --rim:       rgba(255,255,255,0.07);
+    --rim-hover: rgba(255,255,255,0.12);
+    --gold:      #c9a84c;
+    --gold-lt:   #e2c97e;
+    --gold-dim:  rgba(201,168,76,0.15);
+    --blue:      #3d7ff5;
+    --blue-dim:  rgba(61,127,245,0.12);
+    --text:      #e8edf5;
+    --text-muted:#8a95a8;
+    --text-dim:  #5a6478;
+    --emerald:   #34d399;
+    --red:       #f87171;
+    --radius-card: 18px;
+    --radius-btn:  10px;
+    --shadow-card: 0 1px 0 0 rgba(255,255,255,0.05) inset, 0 24px 48px -12px rgba(0,0,0,0.5);
+    --shadow-glow: 0 0 40px rgba(201,168,76,0.12);
+  }
+
+  .lawyers-root * { box-sizing: border-box; margin: 0; padding: 0; }
+  .lawyers-root {
+    min-height: 100vh;
+    background: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Ambient grain */
+  .lawyers-root::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Ambient blobs */
+  .blob-1 {
+    position: fixed; top: -20vh; right: -15vw; width: 70vw; height: 70vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(61,127,245,0.09) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+  .blob-2 {
+    position: fixed; bottom: -30vh; left: -20vw; width: 80vw; height: 80vw;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.07) 0%, transparent 70%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── Nav ── */
+  .lp-nav {
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(20px) saturate(1.4);
+    background: rgba(12,15,26,0.85);
+    border-bottom: 1px solid var(--rim);
+  }
+  .lp-nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 0 32px;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .lp-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--text);
+  }
+  .lp-logo-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--gold-lt) 100%);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.35);
+  }
+  .lp-logo-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; letter-spacing: -0.3px;
+  }
+  .lp-nav-actions { display: flex; align-items: center; gap: 8px; }
+
+  .btn-ghost {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 14px; font-family: 'DM Sans', sans-serif;
+    font-weight: 500; padding: 8px 14px; border-radius: var(--radius-btn);
+    transition: color 0.15s, background 0.15s;
+    text-decoration: none; display: inline-flex; align-items: center;
+  }
+  .btn-ghost:hover { color: var(--text); background: var(--rim); }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold) 0%, #b8932e 100%);
+    border: none; cursor: pointer;
+    color: #0c0f1a; font-size: 13.5px; font-family: 'DM Sans', sans-serif;
+    font-weight: 600; padding: 8px 18px; border-radius: var(--radius-btn);
+    transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+    display: inline-flex; align-items: center; gap: 6px;
+    text-decoration: none;
+  }
+  .btn-gold:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 24px rgba(201,168,76,0.4); }
+
+  .btn-primary {
+    background: var(--blue);
+    border: none; cursor: pointer;
+    color: #fff; font-size: 13.5px; font-family: 'DM Sans', sans-serif;
+    font-weight: 600; padding: 9px 18px; border-radius: var(--radius-btn);
+    transition: opacity 0.15s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--rim-hover); cursor: pointer;
+    color: var(--text-muted); font-size: 13px; font-family: 'DM Sans', sans-serif;
+    font-weight: 500; padding: 8px 16px; border-radius: var(--radius-btn);
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,0.2); color: var(--text); background: var(--rim); }
+
+  /* ── Hero ── */
+  .lp-hero {
+    max-width: 1280px; margin: 0 auto; padding: 56px 32px 40px;
+    position: relative; z-index: 1;
+  }
+  .lp-hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gold); background: var(--gold-dim);
+    padding: 5px 12px; border-radius: 100px; margin-bottom: 20px;
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+  .lp-hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.1; letter-spacing: -0.5px;
+    color: var(--text); max-width: 640px;
+  }
+  .lp-hero h1 em {
+    font-style: italic; color: var(--gold-lt);
+  }
+  .lp-hero-sub {
+    margin-top: 14px; font-size: 15px; color: var(--text-muted);
+    font-weight: 400; max-width: 480px; line-height: 1.6;
+  }
+  .lp-hero-stats {
+    display: flex; align-items: center; gap: 32px;
+    margin-top: 36px; padding-top: 32px;
+    border-top: 1px solid var(--rim);
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 2px; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px; color: var(--text); letter-spacing: -0.5px;
+  }
+  .stat-label { font-size: 12px; color: var(--text-dim); font-weight: 500; }
+  .stat-sep { width: 1px; height: 36px; background: var(--rim); }
+
+  /* ── Search area ── */
+  .lp-search-area {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px 28px;
+    position: relative; z-index: 1;
+  }
+  .search-bar-wrap {
+    display: flex; gap: 10px; align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--rim);
+    border-radius: 14px;
+    padding: 8px 8px 8px 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .search-bar-wrap:focus-within {
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
+  }
+  .search-input {
+    flex: 1; background: none; border: none; outline: none;
+    font-size: 14.5px; color: var(--text); font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+  }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  .filter-row {
+    display: flex; gap: 10px; align-items: center; margin-top: 12px; flex-wrap: wrap;
+  }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--text-muted);
+    background: var(--surface-2); border: 1px solid var(--rim);
+    padding: 6px 14px; border-radius: 8px; cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    font-family: 'DM Sans', sans-serif; font-weight: 500;
+  }
+  .filter-chip:hover, .filter-chip.active {
+    border-color: rgba(201,168,76,0.3); color: var(--gold-lt); background: var(--gold-dim);
+  }
+  .filter-chip svg { width: 13px; height: 13px; }
+
+  .filter-panel {
+    background: var(--surface-2);
+    border: 1px solid var(--rim);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-top: 12px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+  }
+
+  /* ── Results meta ── */
+  .lp-results-meta {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px 16px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1;
+  }
+  .results-count {
+    font-size: 13px; color: var(--text-dim); font-weight: 500;
+  }
+  .results-count strong { color: var(--text-muted); }
+
+  /* ── Cards ── */
+  .lp-cards {
+    max-width: 1280px; margin: 0 auto; padding: 0 32px 80px;
+    display: flex; flex-direction: column; gap: 12px;
+    position: relative; z-index: 1;
+  }
+
+  .lawyer-card {
+    background: var(--surface-2);
+    border: 1px solid var(--rim);
+    border-radius: var(--radius-card);
+    padding: 24px 28px;
+    display: flex; gap: 22px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    cursor: default;
+    animation: cardIn 0.35s ease both;
+  }
+  .lawyer-card:hover {
+    border-color: rgba(255,255,255,0.1);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Avatar */
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .avatar-img, .avatar-placeholder {
+    width: 58px; height: 58px; border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.08);
+  }
+  .avatar-placeholder {
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; font-weight: 400;
+  }
+  .avatar-badge {
+    position: absolute; bottom: -2px; right: -2px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, #b8932e 100%);
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--surface-2);
+  }
+  .avatar-badge svg { width: 8px; height: 8px; color: #0c0f1a; }
+
+  /* Card body */
+  .card-body { flex: 1; min-width: 0; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .card-name-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px; color: var(--text); letter-spacing: -0.2px;
+  }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .pill-kyc { background: rgba(52,211,153,0.1); color: var(--emerald); border: 1px solid rgba(52,211,153,0.2); }
+  .pill-avail { background: var(--blue-dim); color: #7aacff; border: 1px solid rgba(61,127,245,0.2); }
+  .pill-soon { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid var(--rim); }
+
+  .card-specs { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+  .spec-tag {
+    font-size: 12px; color: var(--text-dim);
+    background: var(--surface-3); border: 1px solid var(--rim);
+    padding: 3px 10px; border-radius: 6px; font-weight: 500;
+  }
+  .spec-more { font-size: 12px; color: var(--text-dim); padding: 3px 4px; }
+
+  .card-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 10px; }
+  .meta-item { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text-muted); }
+  .meta-item svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .meta-stars { color: #f5c842; fill: #f5c842; }
+
+  .card-bio {
+    font-size: 13.5px; color: var(--text-muted); line-height: 1.55;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    font-weight: 400;
+  }
+
+  .card-modes { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .mode-tag {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11.5px; color: var(--text-dim);
+    background: var(--surface-3); border: 1px solid var(--rim);
+    padding: 3px 9px; border-radius: 6px;
+  }
+  .mode-tag svg { width: 11px; height: 11px; }
+  .lang-tag {
+    font-size: 11.5px; color: var(--text-dim); padding: 3px 9px;
+    background: var(--gold-dim); border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 6px; font-weight: 500;
+  }
+
+  /* Card right */
+  .card-right {
+    display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between;
+    min-width: 160px; flex-shrink: 0; gap: 12px;
+  }
+  .card-fee { text-align: right; }
+  .fee-amount {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px; color: var(--text); letter-spacing: -0.5px;
+  }
+  .fee-label { font-size: 11px; color: var(--text-dim); margin-top: 2px; font-weight: 500; }
+  .card-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+
+  /* Skeleton */
+  .skeleton {
+    background: linear-gradient(90deg, var(--surface-2) 0%, var(--surface-3) 50%, var(--surface-2) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.6s infinite;
+    border-radius: 8px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skeleton-card {
+    background: var(--surface-2); border: 1px solid var(--rim);
+    border-radius: var(--radius-card); padding: 24px 28px;
+    display: flex; gap: 20px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    text-align: center; padding: 80px 24px;
+  }
+  .empty-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: var(--surface-2); border: 1px solid var(--rim);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; color: var(--text-dim);
+  }
+  .empty-state h3 {
+    font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 8px;
+  }
+  .empty-state p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+
+  /* Error state */
+  .error-state {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 32px;
+  }
+  .error-icon {
+    width: 56px; height: 56px; border-radius: 16px;
+    background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 20px; color: var(--red);
+  }
+  .error-state h3 { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+  .error-state p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+  .error-actions { display: flex; gap: 10px; justify-content: center; }
+
+  /* Select overrides */
+  .dark-select select { background: var(--surface-2) !important; }
+
+  /* ── Booking dialog ── */
+  .booking-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px); z-index: 200;
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    animation: fadeIn 0.15s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .booking-modal {
+    background: var(--surface);
+    border: 1px solid var(--rim-hover);
+    border-radius: 20px;
+    width: 100%; max-width: 460px;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid var(--rim);
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .modal-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); }
+  .modal-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+  .modal-close {
+    background: var(--surface-2); border: 1px solid var(--rim); cursor: pointer;
+    width: 30px; height: 30px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; color: var(--text-dim);
+    transition: background 0.15s, color 0.15s; flex-shrink: 0;
+  }
+  .modal-close:hover { background: var(--surface-3); color: var(--text); }
+  .modal-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 22px; }
+  .modal-section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--text-dim); margin-bottom: 10px;
+  }
+
+  .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .mode-option {
+    border: 1px solid var(--rim); border-radius: 10px; padding: 12px 14px;
+    cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    display: flex; align-items: center; gap: 10px;
+    color: var(--text-muted); font-size: 13.5px; font-weight: 500;
+    background: var(--surface-2);
+  }
+  .mode-option:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+  .mode-option.selected { border-color: var(--gold); background: var(--gold-dim); color: var(--gold-lt); }
+  .mode-option svg { width: 15px; height: 15px; flex-shrink: 0; }
+
+  .slot-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+  .slot-btn {
+    border: 1px solid var(--rim); border-radius: 8px; padding: 8px 4px;
+    cursor: pointer; font-size: 12px; font-family: 'DM Sans', sans-serif;
+    font-weight: 500; color: var(--text-muted); background: var(--surface-2);
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    text-align: center;
+  }
+  .slot-btn:hover { border-color: rgba(255,255,255,0.15); color: var(--text); }
+  .slot-btn.selected { border-color: var(--gold); background: var(--gold-dim); color: var(--gold-lt); }
+
+  .modal-total {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 16px; border-top: 1px solid var(--rim);
+  }
+  .modal-total-label { font-size: 13px; color: var(--text-muted); }
+  .modal-total-amt { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
+
+  /* ── Inline Calendar ── */
+  .cal-wrap {
+    background: var(--surface-3);
+    border: 1px solid var(--rim);
+    border-radius: 12px;
+    padding: 14px;
+    user-select: none;
+  }
+  .cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .cal-month-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: 15px; color: var(--text); letter-spacing: -0.2px;
+  }
+  .cal-nav {
+    background: var(--surface-2); border: 1px solid var(--rim);
+    border-radius: 7px; width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-muted);
+    transition: color 0.15s, background 0.15s;
+  }
+  .cal-nav:hover { color: var(--text); background: var(--rim-hover); }
+  .cal-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+  .cal-grid {
+    display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px;
+  }
+  .cal-dow {
+    text-align: center; font-size: 10px; font-weight: 600;
+    color: var(--text-dim); letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 0 6px;
+  }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 7px; font-size: 13px; font-weight: 500; cursor: pointer;
+    color: var(--text-muted); background: none; border: none;
+    transition: background 0.12s, color 0.12s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .cal-day:hover:not(:disabled):not(.cal-day-selected) {
+    background: var(--rim-hover); color: var(--text);
+  }
+  .cal-day-selected {
+    background: var(--gold) !important;
+    color: #0c0f1a !important; font-weight: 700;
+    box-shadow: 0 2px 10px rgba(201,168,76,0.4);
+  }
+  .cal-day-today:not(.cal-day-selected) {
+    color: var(--gold-lt); border: 1px solid rgba(201,168,76,0.3);
+  }
+  .cal-day:disabled, .cal-day-past {
+    color: var(--text-dim) !important; opacity: 0.35; cursor: not-allowed;
+  }
+  .cal-day-empty { pointer-events: none; }
+
+  /* ── Step indicator ── */
+  .booking-steps {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 24px;
+  }
+  .booking-step {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    flex: 1;
+  }
+  .step-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+    border: 1.5px solid var(--rim);
+    color: var(--text-dim); background: var(--surface-2);
+    transition: all 0.2s;
+  }
+  .step-dot.active {
+    border-color: var(--gold); color: var(--gold); background: var(--gold-dim);
+  }
+  .step-dot.done {
+    border-color: var(--emerald); color: #0c0f1a; background: var(--emerald);
+  }
+  .step-label { font-size: 10px; color: var(--text-dim); font-weight: 500; letter-spacing: 0.04em; }
+  .step-label.active { color: var(--gold-lt); }
+  .step-line { flex: 1; height: 1px; background: var(--rim); margin: 0 4px; margin-bottom: 16px; }
+  .step-line.done { background: var(--emerald); opacity: 0.4; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .lp-nav-inner { padding: 0 16px; }
+    .lp-hero { padding: 36px 16px 28px; }
+    .lp-search-area { padding: 0 16px 20px; }
+    .lp-results-meta { padding: 0 16px 12px; }
+    .lp-cards { padding: 0 16px 60px; }
+    .lp-hero-stats { gap: 20px; }
+    .filter-panel { grid-template-columns: 1fr 1fr; }
+    .lawyer-card { flex-direction: column; }
+    .card-top { flex-direction: column; }
+    .card-right { flex-direction: row; align-items: center; min-width: auto; width: 100%; }
+    .card-actions { flex-direction: row; width: auto; }
+  }
+`
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Lawyer {
-  id: string
-  userId: string
-  fullName: string
-  specialization: string[]
-  experience: number
-  rating: number
-  reviews: number
-  city: string
-  state: string
-  languages: string[]
-  consultationFee: number
-  availability: string
-  profilePhoto?: string
-  avatar?: string
-  verified: boolean
-  bio: string
+  id: string; userId: string; fullName: string; specialization: string[]
+  experience: number; rating: number; reviews: number; city: string; state: string
+  languages: string[]; consultationFee: number; availability: string
+  profilePhoto?: string; verified: boolean; bio: string
   consultationModes: { video: boolean; call: boolean; chat: boolean; inPerson: boolean }
-  barCouncilId: string
-  yearsPracticing: number
-  kycStatus: string
+  barCouncilId: string; yearsPracticing: number; kycStatus: string
 }
-
-interface AvailableSlot {
-  startTime: string
-  endTime: string
-  slot: string
-  durationMinutes: number
-}
+interface AvailableSlot { startTime: string; endTime: string; slot: string; durationMinutes: number }
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 const SPECIALIZATIONS = [
@@ -84,23 +602,18 @@ const SPECIALIZATIONS = [
   "High Court Law", "Supreme Court Law", "Service Matter Law", "RERA Law",
   "Environmental Law", "Constitutional Law",
 ]
-
 const STATES = [
-  "All States", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar",
-  "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand",
-  "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya",
-  "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu",
-  "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal",
+  "All States", "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh",
+  "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala",
+  "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland",
+  "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura",
+  "Uttar Pradesh", "Uttarakhand", "West Bengal",
 ]
-
 const EXPERIENCE_LEVELS = ["All Experience", "0-5 years", "5-10 years", "10-20 years", "20+ years"]
-
 const LANGUAGES = [
   "All Languages", "Hindi", "English", "Marathi", "Gujarati", "Telugu", "Tamil",
-  "Kannada", "Bengali", "Punjabi", "Malayalam", "Odia", "Assamese", "Maithili",
-  "Bhojpuri", "Rajasthani",
+  "Kannada", "Bengali", "Punjabi", "Malayalam", "Odia", "Assamese", "Maithili", "Bhojpuri", "Rajasthani",
 ]
-
 const SORT_OPTIONS = [
   { value: "rating", label: "Top Rated" },
   { value: "experience", label: "Most Experienced" },
@@ -108,133 +621,184 @@ const SORT_OPTIONS = [
   { value: "reviews", label: "Most Reviewed" },
 ]
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// Avatar color palettes
+const AVATAR_PALETTES = [
+  { bg: "#1a2a1e", text: "#4ade80", border: "rgba(74,222,128,0.2)" },
+  { bg: "#1e2035", text: "#818cf8", border: "rgba(129,140,248,0.2)" },
+  { bg: "#2a1a1a", text: "#f87171", border: "rgba(248,113,113,0.2)" },
+  { bg: "#1a2535", text: "#60a5fa", border: "rgba(96,165,250,0.2)" },
+  { bg: "#261e10", text: "#fbbf24", border: "rgba(251,191,36,0.2)" },
+]
 
-function FilterSelect({
-  label, value, onChange, options,
-}: { label: string; value: string; onChange: (v: string) => void; options: string[] }) {
+function Avatar({ lawyer }: { lawyer: Lawyer }) {
+  const initials = lawyer.fullName.split(" ").slice(0, 2).map(n => n[0]).join("").toUpperCase()
+  const palette = AVATAR_PALETTES[lawyer.fullName.charCodeAt(0) % AVATAR_PALETTES.length]
   return (
-    <div className="space-y-1.5">
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-400">{label}</p>
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="h-9 text-sm bg-white border-slate-200 text-slate-700 focus:ring-1 focus:ring-slate-300 rounded-lg">
-          <SelectValue placeholder={`Select ${label}`} />
-        </SelectTrigger>
-        <SelectContent className="rounded-xl border-slate-200 shadow-lg">
-          {options.map((opt) => (
-            <SelectItem key={opt} value={opt} className="text-sm">
-              {opt}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  )
-}
-
-function LawyerAvatar({ lawyer }: { lawyer: Lawyer }) {
-  const initials = lawyer.fullName
-    .split(" ")
-    .slice(0, 2)
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-
-  const colors = [
-    "bg-blue-50 text-blue-700",
-    "bg-emerald-50 text-emerald-700",
-    "bg-violet-50 text-violet-700",
-    "bg-amber-50 text-amber-700",
-  ]
-  const color = colors[lawyer.fullName.charCodeAt(0) % colors.length]
-
-  if (lawyer.profilePhoto) {
-    return (
-      <div className="relative w-14 h-14 shrink-0">
-        <img
-          src={lawyer.profilePhoto}
-          alt={lawyer.fullName}
-          className="w-14 h-14 rounded-full object-cover ring-2 ring-white"
-        />
-        {lawyer.verified && (
-          <span className="absolute -bottom-0.5 -right-0.5 bg-blue-600 rounded-full p-0.5">
-            <Award className="h-3 w-3 text-white" />
-          </span>
-        )}
-      </div>
-    )
-  }
-
-  return (
-    <div className="relative w-14 h-14 shrink-0">
-      <div className={cn("w-14 h-14 rounded-full flex items-center justify-center text-base font-semibold ring-2 ring-white", color)}>
-        {initials}
-      </div>
+    <div className="avatar-wrap">
+      {lawyer.profilePhoto ? (
+        <img src={lawyer.profilePhoto} alt={lawyer.fullName} className="avatar-img" />
+      ) : (
+        <div className="avatar-placeholder" style={{ background: palette.bg, color: palette.text, border: `2px solid ${palette.border}` }}>
+          {initials}
+        </div>
+      )}
       {lawyer.verified && (
-        <span className="absolute -bottom-0.5 -right-0.5 bg-blue-600 rounded-full p-0.5">
-          <Award className="h-3 w-3 text-white" />
-        </span>
+        <span className="avatar-badge"><Award /></span>
       )}
     </div>
   )
 }
 
-function ConsultationModeBadge({ mode, icon: Icon, label, active }: {
-  mode: string; icon: any; label: string; active: boolean
-}) {
-  if (!active) return null
+function SkeletonCard() {
   return (
-    <span className="inline-flex items-center gap-1 text-xs text-slate-500 border border-slate-200 rounded-md px-2 py-0.5">
-      <Icon className="h-3 w-3" />
-      {label}
-    </span>
-  )
-}
-
-function LawyerCardSkeleton() {
-  return (
-    <div className="bg-white rounded-2xl border border-slate-100 p-6">
-      <div className="flex gap-4">
-        <Skeleton className="w-14 h-14 rounded-full shrink-0" />
-        <div className="flex-1 space-y-2">
-          <Skeleton className="h-5 w-48" />
-          <Skeleton className="h-4 w-64" />
-          <Skeleton className="h-4 w-36" />
-        </div>
-        <div className="hidden md:flex flex-col gap-2 items-end w-36">
-          <Skeleton className="h-6 w-24" />
-          <Skeleton className="h-9 w-36" />
-          <Skeleton className="h-9 w-36" />
-        </div>
+    <div className="skeleton-card">
+      <div className="skeleton" style={{ width: 58, height: 58, borderRadius: "50%", flexShrink: 0 }} />
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="skeleton" style={{ height: 18, width: "40%" }} />
+        <div className="skeleton" style={{ height: 13, width: "65%" }} />
+        <div className="skeleton" style={{ height: 13, width: "50%" }} />
+        <div className="skeleton" style={{ height: 36, width: "100%", marginTop: 4 }} />
       </div>
-      <Skeleton className="h-4 w-full mt-4" />
-      <Skeleton className="h-4 w-3/4 mt-2" />
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-end", width: 160, flexShrink: 0 }}>
+        <div className="skeleton" style={{ height: 28, width: 80 }} />
+        <div className="skeleton" style={{ height: 36, width: 140 }} />
+        <div className="skeleton" style={{ height: 36, width: 140 }} />
+      </div>
     </div>
   )
 }
 
-// ─── Main Page ────────────────────────────────────────────────────────────────
+function DarkSelect({ label, value, onChange, options }: {
+  label: string; value: string; onChange: (v: string) => void; options: string[]
+}) {
+  return (
+    <div>
+      <p className="modal-section-label" style={{ marginBottom: 6 }}>{label}</p>
+      <select
+        value={value}
+        onChange={e => onChange(e.target.value)}
+        style={{
+          width: "100%", background: "var(--surface-2)", border: "1px solid var(--rim)",
+          borderRadius: 8, padding: "8px 12px", color: "var(--text-muted)",
+          fontSize: 13, fontFamily: "'DM Sans', sans-serif", outline: "none",
+          cursor: "pointer",
+        }}
+      >
+        {options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+      </select>
+    </div>
+  )
+}
+
+// ─── Inline Calendar (no portal, no z-index issues) ──────────────────────────
+const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+function InlineCalendar({ value, onChange }: { value: Date | undefined; onChange: (d: Date) => void }) {
+  const today = new Date(); today.setHours(0, 0, 0, 0)
+  const [view, setView] = useState(() => {
+    const d = value || new Date()
+    return new Date(d.getFullYear(), d.getMonth(), 1)
+  })
+
+  const year = view.getFullYear(), month = view.getMonth()
+  const firstDay = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const prevDisabled = new Date(year, month, 1) <= new Date(today.getFullYear(), today.getMonth(), 1)
+
+  const cells: (number | null)[] = [...Array(firstDay).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)]
+  // pad to full weeks
+  while (cells.length % 7 !== 0) cells.push(null)
+
+  const prevMonth = () => setView(new Date(year, month - 1, 1))
+  const nextMonth = () => setView(new Date(year, month + 1, 1))
+
+  return (
+    <div className="cal-wrap">
+      <div className="cal-header">
+        <button className="cal-nav" onClick={prevMonth} disabled={prevDisabled}>
+          <ChevronLeft size={14} />
+        </button>
+        <span className="cal-month-label">{MONTHS[month]} {year}</span>
+        <button className="cal-nav" onClick={nextMonth}>
+          <ChevronRight size={14} />
+        </button>
+      </div>
+      <div className="cal-grid">
+        {DAYS.map(d => <div key={d} className="cal-dow">{d}</div>)}
+        {cells.map((day, i) => {
+          if (!day) return <div key={`e-${i}`} className="cal-day cal-day-empty" />
+          const date = new Date(year, month, day)
+          const isPast = date < today
+          const isToday = date.getTime() === today.getTime()
+          const isSelected = value && date.getTime() === new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime()
+          return (
+            <button
+              key={day}
+              className={`cal-day ${isSelected ? "cal-day-selected" : ""} ${isToday && !isSelected ? "cal-day-today" : ""} ${isPast ? "cal-day-past" : ""}`}
+              disabled={isPast}
+              onClick={() => !isPast && onChange(date)}
+            >
+              {day}
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// Chevron icons for calendar nav (lucide doesn't export ChevronLeft by default above)
+function ChevronLeft({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="15 18 9 12 15 6" />
+    </svg>
+  )
+}
+
+// ─── Booking Step Indicator ───────────────────────────────────────────────────
+function BookingSteps({ step }: { step: number }) {
+  const steps = ["Mode", "Date", "Slot", "Pay"]
+  return (
+    <div className="booking-steps">
+      {steps.map((label, i) => (
+        <React.Fragment key={label}>
+          <div className="booking-step">
+            <div className={`step-dot ${i < step ? "done" : i === step ? "active" : ""}`}>
+              {i < step ? "✓" : i + 1}
+            </div>
+            <span className={`step-label ${i === step ? "active" : ""}`}>{label}</span>
+          </div>
+          {i < steps.length - 1 && <div className={`step-line ${i < step ? "done" : ""}`} />}
+        </React.Fragment>
+      ))}
+    </div>
+  )
+}
+
+
 export default function LawyersPage() {
   const router = useRouter()
   const { toast } = useToast()
 
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedSpecialization, setSelectedSpecialization] = useState("")
+  const [selectedSpec, setSelectedSpec] = useState("")
   const [selectedState, setSelectedState] = useState("")
-  const [selectedExperience, setSelectedExperience] = useState("")
-  const [selectedLanguage, setSelectedLanguage] = useState("")
+  const [selectedExp, setSelectedExp] = useState("")
+  const [selectedLang, setSelectedLang] = useState("")
   const [sortBy, setSortBy] = useState("rating")
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
   const [lawyers, setLawyers] = useState<Lawyer[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
   const [bookingOpen, setBookingOpen] = useState(false)
+  const [bookingStep, setBookingStep] = useState(0) // 0=mode, 1=date, 2=slot, 3=confirm
   const [selectedLawyer, setSelectedLawyer] = useState<Lawyer | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | undefined>()
-  const [selectedTime, setSelectedTime] = useState<string>("")
-  const [selectedMode, setSelectedMode] = useState<string>("video")
+  const [selectedTime, setSelectedTime] = useState("")
+  const [selectedMode, setSelectedMode] = useState("video")
   const [bookingLoading, setBookingLoading] = useState(false)
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
   const [fetchingSlots, setFetchingSlots] = useState(false)
@@ -249,41 +813,36 @@ export default function LawyersPage() {
       try {
         const token = localStorage.getItem("token")
         if (!token) return
-        setLoading(true)
-        setError(null)
+        setLoading(true); setError(null)
         const response = await axios.get(
           "https://nyaymitra-backend-production.up.railway.app/api/v1/lawyer/all",
           { headers: { Authorization: `Bearer ${token}` }, withCredentials: true }
         )
-        const lawyersData = response.data?.lawyers?.map((lawyer: any) => ({
-          id: lawyer.lawyerDetails?._id || lawyer._id || "",
-          userId: lawyer.lawyerDetails?.userId || lawyer.userId || "",
-          fullName: lawyer.userInfo?.fullName || "",
-          profilePhoto: lawyer.userInfo?.profilePhoto || lawyer.userInfo?.avatar || "",
-          specialization: lawyer.lawyerDetails?.specialization || [],
-          experience: Number(lawyer.lawyerDetails?.experience) || 0,
-          rating: lawyer.lawyerDetails?.averageRating || 0,
-          reviews: lawyer.lawyerDetails?.totalReviews || 0,
-          city: lawyer.userInfo?.address?.city || lawyer.lawyerDetails?.city || "",
-          state: lawyer.userInfo?.address?.state || lawyer.lawyerDetails?.state || "",
-          languages: lawyer.lawyerDetails?.languagesSpoken || [],
-          consultationFee: lawyer.lawyerDetails?.consultationFee || 0,
-          verified: lawyer.lawyerDetails?.verifiedByPlatform || false,
-          bio: lawyer.lawyerDetails?.bio || "Professional lawyer",
-          consultationModes: lawyer.lawyerDetails?.consultationModes || {
-            video: false, call: false, chat: false, inPerson: false,
-          },
-          barCouncilId: lawyer.lawyerDetails?.barCouncilId || "",
-          yearsPracticing: lawyer.lawyerDetails?.yearsPracticing || 0,
-          kycStatus: lawyer.lawyerDetails?.kycStatus || "pending",
-          availability: lawyer.lawyerDetails?.kycStatus === "verified" ? "Available" : "Soon",
+        const data = response.data?.lawyers?.map((l: any) => ({
+          id: l.lawyerDetails?._id || l._id || "",
+          userId: l.lawyerDetails?.userId || l.userId || "",
+          fullName: l.userInfo?.fullName || "",
+          profilePhoto: l.userInfo?.profilePhoto || l.userInfo?.avatar || "",
+          specialization: l.lawyerDetails?.specialization || [],
+          experience: Number(l.lawyerDetails?.experience) || 0,
+          rating: l.lawyerDetails?.averageRating || 0,
+          reviews: l.lawyerDetails?.totalReviews || 0,
+          city: l.userInfo?.address?.city || l.lawyerDetails?.city || "",
+          state: l.userInfo?.address?.state || l.lawyerDetails?.state || "",
+          languages: l.lawyerDetails?.languagesSpoken || [],
+          consultationFee: l.lawyerDetails?.consultationFee || 0,
+          verified: l.lawyerDetails?.verifiedByPlatform || false,
+          bio: l.lawyerDetails?.bio || "Professional lawyer",
+          consultationModes: l.lawyerDetails?.consultationModes || { video: false, call: false, chat: false, inPerson: false },
+          barCouncilId: l.lawyerDetails?.barCouncilId || "",
+          yearsPracticing: l.lawyerDetails?.yearsPracticing || 0,
+          kycStatus: l.lawyerDetails?.kycStatus || "pending",
+          availability: l.lawyerDetails?.kycStatus === "verified" ? "Available" : "Soon",
         })) || []
-        setLawyers(lawyersData)
+        setLawyers(data)
       } catch (err: any) {
-        setError(err.response?.data?.message || "Failed to fetch lawyers. Please try again.")
-      } finally {
-        setLoading(false)
-      }
+        setError(err.response?.data?.message || "Failed to fetch lawyers.")
+      } finally { setLoading(false) }
     }
     fetchLawyers()
   }, [])
@@ -300,529 +859,522 @@ export default function LawyersPage() {
         )
         setAvailableSlots(response.data.data?.availableSlots || [])
       } catch {
-        toast({ title: "Error", description: "Failed to fetch available slots", variant: "destructive" })
-      } finally {
-        setFetchingSlots(false)
-      }
+        toast({ title: "Error", description: "Failed to fetch slots", variant: "destructive" })
+      } finally { setFetchingSlots(false) }
     }
     fetchSlots()
   }, [selectedDate, selectedLawyer, toast])
 
-  const filteredLawyers = lawyers
-    .filter((lawyer) => {
+  const filtered = lawyers
+    .filter(l => {
       const q = searchTerm.toLowerCase()
-      const matchesSearch =
-        lawyer.fullName?.toLowerCase().includes(q) ||
-        lawyer.specialization?.some((s) => s.toLowerCase().includes(q)) ||
-        lawyer.bio?.toLowerCase().includes(q)
-      const matchesSpec =
-        !selectedSpecialization || selectedSpecialization === "All Specializations" ||
-        lawyer.specialization?.some((s) => s.toLowerCase().includes(selectedSpecialization.toLowerCase()))
-      const matchesState = !selectedState || selectedState === "All States" || lawyer.state === selectedState
-      const matchesExp =
-        !selectedExperience || selectedExperience === "All Experience" ||
-        (selectedExperience === "0-5 years" && lawyer.experience <= 5) ||
-        (selectedExperience === "5-10 years" && lawyer.experience > 5 && lawyer.experience <= 10) ||
-        (selectedExperience === "10-20 years" && lawyer.experience > 10 && lawyer.experience <= 20) ||
-        (selectedExperience === "20+ years" && lawyer.experience > 20)
-      const matchesLang =
-        !selectedLanguage || selectedLanguage === "All Languages" ||
-        lawyer.languages?.includes(selectedLanguage)
-      return matchesSearch && matchesSpec && matchesState && matchesExp && matchesLang
+      return (
+        (!q || l.fullName?.toLowerCase().includes(q) || l.specialization?.some(s => s.toLowerCase().includes(q)) || l.bio?.toLowerCase().includes(q)) &&
+        (!selectedSpec || selectedSpec === "All Specializations" || l.specialization?.some(s => s.toLowerCase().includes(selectedSpec.toLowerCase()))) &&
+        (!selectedState || selectedState === "All States" || l.state === selectedState) &&
+        (!selectedExp || selectedExp === "All Experience" ||
+          (selectedExp === "0-5 years" && l.experience <= 5) ||
+          (selectedExp === "5-10 years" && l.experience > 5 && l.experience <= 10) ||
+          (selectedExp === "10-20 years" && l.experience > 10 && l.experience <= 20) ||
+          (selectedExp === "20+ years" && l.experience > 20)) &&
+        (!selectedLang || selectedLang === "All Languages" || l.languages?.includes(selectedLang))
+      )
     })
     .sort((a, b) => {
-      const av = a[sortBy as keyof Lawyer] || 0
-      const bv = b[sortBy as keyof Lawyer] || 0
-      if (typeof av === "number" && typeof bv === "number") {
-        return sortOrder === "desc" ? bv - av : av - bv
-      }
+      const av = a[sortBy as keyof Lawyer] || 0, bv = b[sortBy as keyof Lawyer] || 0
+      if (typeof av === "number" && typeof bv === "number") return sortBy === "consultationFee" ? av - bv : bv - av
       return 0
     })
 
-  const activeFilterCount = [selectedSpecialization, selectedState, selectedExperience, selectedLanguage]
-    .filter((v) => v && !v.startsWith("All")).length
+  const activeFilters = [selectedSpec, selectedState, selectedExp, selectedLang].filter(v => v && !v.startsWith("All")).length
+  const resetFilters = () => { setSearchTerm(""); setSelectedSpec(""); setSelectedState(""); setSelectedExp(""); setSelectedLang(""); setSortBy("rating") }
 
-  const resetFilters = () => {
-    setSearchTerm("")
-    setSelectedSpecialization("")
-    setSelectedState("")
-    setSelectedExperience("")
-    setSelectedLanguage("")
-    setSortBy("rating")
-    setSortOrder("desc")
+  const openBooking = (lawyer: Lawyer) => {
+    setSelectedLawyer(lawyer); setBookingOpen(true); setBookingStep(0)
+    setSelectedDate(undefined); setSelectedTime(""); setAvailableSlots([])
+    const m = lawyer.consultationModes
+    setSelectedMode(m.video ? "video" : m.call ? "call" : m.chat ? "chat" : "inPerson")
   }
 
-  const openBookingDialog = (lawyer: Lawyer) => {
-    setSelectedLawyer(lawyer)
-    setBookingOpen(true)
-    setSelectedDate(undefined)
-    setSelectedTime("")
-    const modes = lawyer.consultationModes
-    setSelectedMode(modes.video ? "video" : modes.call ? "call" : modes.chat ? "chat" : "inPerson")
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date); setSelectedTime(""); setAvailableSlots([])
+    setBookingStep(2) // move to slot step
   }
+
+  const closeBooking = () => { setBookingOpen(false); setBookingStep(0) }
 
   const handleBooking = async () => {
     if (!selectedLawyer || !selectedDate || !selectedTime || !selectedMode) {
-      toast({ title: "Missing fields", description: "Please select all required fields", variant: "destructive" })
-      return
+      toast({ title: "Missing fields", description: "Please select all required fields", variant: "destructive" }); return
     }
     try {
-      setBookingLoading(true)
-      setBookingOpen(false)
-      const token = localStorage.getItem("token")
-      const userId = localStorage.getItem("userId")
-      if (!token || !userId) {
-        router.push("/auth/login?redirect=/lawyers")
-        return
-      }
+      setBookingLoading(true); setBookingOpen(false)
+      const token = localStorage.getItem("token"), userId = localStorage.getItem("userId")
+      if (!token || !userId) { router.push("/auth/login?redirect=/lawyers"); return }
       const orderRes = await axios.post(
         "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/create-order",
         {
-          amount: selectedLawyer.consultationFee,
-          currency: "INR",
-          receipt: `booking_${Date.now()}`,
-          notes: { userId, lawyerId: selectedLawyer.userId, mode: selectedMode, slot: selectedTime, date: selectedDate.toISOString() },
+          amount: selectedLawyer.consultationFee, currency: "INR", receipt: `booking_${Date.now()}`,
+          notes: { userId, lawyerId: selectedLawyer.userId, mode: selectedMode, slot: selectedTime, date: selectedDate.toISOString() }
         },
         { headers: { Authorization: `Bearer ${token}` } }
       )
       const order = orderRes.data.order
       await loadRazorpay()
-      await new Promise((r) => setTimeout(r, 300))
+      await new Promise(r => setTimeout(r, 300))
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: order.amount,
-        currency: order.currency,
+        amount: order.amount, currency: order.currency,
         name: "NyayMitra",
         description: `Consultation with ${selectedLawyer.fullName}`,
-        image: "/logo.png",
-        order_id: order.id,
+        image: "/logo.png", order_id: order.id,
         handler: async (response: any) => {
           try {
             const verifyRes = await axios.post(
               "https://nyaymitra-backend-production.up.railway.app/api/v1/payment/verify",
-              {
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              },
+              { razorpay_order_id: response.razorpay_order_id, razorpay_payment_id: response.razorpay_payment_id, razorpay_signature: response.razorpay_signature },
               { headers: { Authorization: `Bearer ${token}` } }
             )
             if (verifyRes.data.success) {
               const bookingRes = await axios.post(
                 "https://nyaymitra-backend-production.up.railway.app/api/v1/booking/book",
-                {
-                  userId, lawyerId: selectedLawyer.userId,
-                  date: selectedDate.toISOString(), slot: selectedTime,
-                  mode: selectedMode, paymentId: response.razorpay_payment_id,
-                  paymentMode: "razorpay", amount: selectedLawyer.consultationFee,
-                },
+                { userId, lawyerId: selectedLawyer.userId, date: selectedDate.toISOString(), slot: selectedTime, mode: selectedMode, paymentId: response.razorpay_payment_id, paymentMode: "razorpay", amount: selectedLawyer.consultationFee },
                 { headers: { Authorization: `Bearer ${token}` } }
               )
               toast({ title: "Booking Confirmed", description: `Consultation with ${selectedLawyer.fullName} is confirmed.` })
               router.push(`/bookings/${bookingRes.data.booking._id}`)
             }
-          } catch {
-            toast({ title: "Verification failed", description: "Please contact support.", variant: "destructive" })
-            setBookingOpen(true)
-          }
+          } catch { toast({ title: "Verification failed", description: "Contact support.", variant: "destructive" }); setBookingOpen(true); setBookingStep(3) }
         },
-        prefill: {
-          name: localStorage.getItem("userName") || "",
-          email: localStorage.getItem("userEmail") || "",
-          contact: localStorage.getItem("userPhone") || "",
-        },
-        theme: { color: "#1d4ed8" },
-        modal: { ondismiss: () => setBookingOpen(true) },
+        prefill: { name: localStorage.getItem("userName") || "", email: localStorage.getItem("userEmail") || "", contact: localStorage.getItem("userPhone") || "" },
+        theme: { color: "#c9a84c" },
+        modal: { ondismiss: () => { setBookingOpen(true); setBookingStep(3) } },
       }
       const rzp = new (window as any).Razorpay(options)
       rzp.open()
-    } catch {
-      toast({ title: "Booking failed", description: "Failed to process booking.", variant: "destructive" })
-      setBookingOpen(true)
-    } finally {
-      setBookingLoading(false)
-    }
+    } catch { toast({ title: "Booking failed", description: "Failed to process booking.", variant: "destructive" }); setBookingOpen(true); setBookingStep(3) }
+    finally { setBookingLoading(false) }
   }
 
-  // ── Error ──
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
-        <div className="max-w-sm text-center space-y-4">
-          <div className="mx-auto w-12 h-12 rounded-full bg-red-50 flex items-center justify-center">
-            <AlertCircle className="h-5 w-5 text-red-500" />
-          </div>
-          <div>
-            <h3 className="font-semibold text-slate-900">Something went wrong</h3>
-            <p className="text-sm text-slate-500 mt-1">{error}</p>
-          </div>
-          <div className="flex gap-2 justify-center">
-            <Button size="sm" onClick={() => window.location.reload()}>Try again</Button>
-            <Button size="sm" variant="outline" onClick={() => router.push("/")}>Go home</Button>
+      <div className="lawyers-root">
+        <style>{GLOBAL_STYLES}</style>
+        <div className="blob-1" /><div className="blob-2" />
+        <div className="error-state">
+          <div className="error-icon"><AlertCircle size={22} /></div>
+          <h3>Something went wrong</h3>
+          <p>{error}</p>
+          <div className="error-actions">
+            <button className="btn-primary" onClick={() => window.location.reload()}>Try again</button>
+            <button className="btn-outline" onClick={() => router.push("/")}>Go home</button>
           </div>
         </div>
       </div>
     )
   }
 
-  // ── Main render ──
+  const modeInfo = {
+    video: { icon: <Video size={15} />, label: "Video Call" },
+    call: { icon: <Phone size={15} />, label: "Phone Call" },
+    chat: { icon: <MessageCircle size={15} />, label: "Chat" },
+    inPerson: { icon: <User size={15} />, label: "In-Person" },
+  }
+
   return (
-    <div className="min-h-screen bg-slate-50 font-sans">
+    <div className="lawyers-root">
+      <style>{GLOBAL_STYLES}</style>
+      <div className="blob-1" /><div className="blob-2" />
+
       {/* ── Nav ── */}
-      <header className="bg-white border-b border-slate-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-15 flex items-center justify-between py-3.5">
-          <Link href="/" className="flex items-center gap-2 text-slate-900">
-            <div className="bg-blue-600 rounded-lg p-1.5">
-              <Scale className="h-4 w-4 text-white" />
-            </div>
-            <span className="font-semibold text-base tracking-tight">NyayMitra</span>
+      <header className="lp-nav">
+        <div className="lp-nav-inner">
+          <Link href="/" className="lp-logo">
+            <div className="lp-logo-icon"><Scale size={16} color="#0c0f1a" strokeWidth={2.2} /></div>
+            <span className="lp-logo-text">NyayMitra</span>
           </Link>
-          <nav className="flex items-center gap-2">
-            <Link href="/legal-gpt">
-              <Button variant="ghost" size="sm" className="text-slate-600 text-sm">
-                Ask AI
-              </Button>
+          <nav className="lp-nav-actions">
+            <Link href="/legal-gpt" className="btn-ghost">
+              <Sparkles size={14} style={{ marginRight: 6 }} />Ask AI
             </Link>
-            <Link href="/auth/signup">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-sm">
-                Join as Lawyer
-              </Button>
+            <Link href="/auth/signup" className="btn-gold">
+              <Briefcase size={13} />Join as Lawyer
             </Link>
           </nav>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        {/* ── Page heading ── */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-slate-900 tracking-tight">Find a Lawyer</h1>
-          <p className="text-slate-500 mt-1 text-sm">
-            Verified legal professionals across India — book a consultation in minutes.
-          </p>
+      {/* ── Hero ── */}
+      <section className="lp-hero">
+        <div className="lp-hero-eyebrow">
+          <Shield size={11} />Verified Legal Professionals
         </div>
-
-        {/* ── Search + Filter row ── */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
-            <Input
-              placeholder="Search by name, specialization or keyword..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 h-10 text-sm bg-white border-slate-200 rounded-xl focus-visible:ring-1 focus-visible:ring-blue-400"
-            />
+        <h1>Find Your <em>Perfect</em><br />Legal Counsel</h1>
+        <p className="lp-hero-sub">
+          Top tier lawyers across India, ready to take on your case. Book a consultation in minutes.
+        </p>
+        <div className="lp-hero-stats">
+          <div className="stat-item">
+            <span className="stat-num">60+</span>
+            <span className="stat-label">Verified Lawyers</span>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setFiltersOpen(!filtersOpen)}
-            className={cn(
-              "h-10 gap-2 rounded-xl border-slate-200 text-slate-600 text-sm shrink-0",
-              filtersOpen && "bg-slate-100"
-            )}
+          <div className="stat-sep" />
+          <div className="stat-item">
+            <span className="stat-num">28</span>
+            <span className="stat-label">Practice Areas</span>
+          </div>
+          <div className="stat-sep" />
+          <div className="stat-item">
+            <span className="stat-num">4.8★</span>
+            <span className="stat-label">Avg. Rating</span>
+          </div>
+          <div className="stat-sep" />
+          <div className="stat-item">
+            <span className="stat-num">10+</span>
+            <span className="stat-label">Cases Handled</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Search ── */}
+      <section className="lp-search-area">
+        <div className="search-bar-wrap">
+          <Search size={15} color="var(--text-dim)" />
+          <input
+            className="search-input"
+            placeholder="Search by name, specialization, keyword…"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)", display: "flex", padding: 4 }}
+            >
+              <X size={14} />
+            </button>
+          )}
+          <div style={{ width: 1, height: 24, background: "var(--rim)", margin: "0 4px" }} />
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            style={{
+              background: "none", border: "none", outline: "none",
+              color: "var(--text-muted)", fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+              cursor: "pointer", paddingRight: 8,
+            }}
           >
-            <SlidersHorizontal className="h-4 w-4" />
+            {SORT_OPTIONS.map(o => <option key={o.value} value={o.value} style={{ background: "#1a2235" }}>{o.label}</option>)}
+          </select>
+          <button
+            className={`filter-chip${filtersOpen ? " active" : ""}`}
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            style={{ marginLeft: 4, flexShrink: 0 }}
+          >
+            <SlidersHorizontal size={13} />
             Filters
-            {activeFilterCount > 0 && (
-              <span className="bg-blue-600 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                {activeFilterCount}
-              </span>
+            {activeFilters > 0 && (
+              <span style={{
+                background: "var(--gold)", color: "#0c0f1a",
+                width: 16, height: 16, borderRadius: "50%", fontSize: 10, fontWeight: 700,
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>{activeFilters}</span>
             )}
-          </Button>
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="h-10 w-44 text-sm bg-white border-slate-200 rounded-xl shrink-0">
-              <ArrowUpDown className="h-3.5 w-3.5 text-slate-400 mr-1.5" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-slate-200">
-              {SORT_OPTIONS.map((opt) => (
-                <SelectItem key={opt.value} value={opt.value} className="text-sm">
-                  {opt.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          </button>
         </div>
 
-        {/* ── Filter panel ── */}
         {filtersOpen && (
-          <div className="bg-white border border-slate-100 rounded-2xl p-5 mb-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <FilterSelect label="Area of Law" value={selectedSpecialization} onChange={setSelectedSpecialization} options={SPECIALIZATIONS} />
-            <FilterSelect label="State" value={selectedState} onChange={setSelectedState} options={STATES} />
-            <FilterSelect label="Experience" value={selectedExperience} onChange={setSelectedExperience} options={EXPERIENCE_LEVELS} />
-            <FilterSelect label="Language" value={selectedLanguage} onChange={setSelectedLanguage} options={LANGUAGES} />
-            {activeFilterCount > 0 && (
-              <div className="col-span-2 sm:col-span-4 flex justify-end">
+          <div className="filter-panel">
+            <DarkSelect label="Area of Law" value={selectedSpec} onChange={setSelectedSpec} options={SPECIALIZATIONS} />
+            <DarkSelect label="State" value={selectedState} onChange={setSelectedState} options={STATES} />
+            <DarkSelect label="Experience" value={selectedExp} onChange={setSelectedExp} options={EXPERIENCE_LEVELS} />
+            <DarkSelect label="Language" value={selectedLang} onChange={setSelectedLang} options={LANGUAGES} />
+            {activeFilters > 0 && (
+              <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "flex-end" }}>
                 <button
                   onClick={resetFilters}
-                  className="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors"
+                  style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-dim)", fontSize: 12, display: "flex", alignItems: "center", gap: 5, fontFamily: "'DM Sans', sans-serif" }}
                 >
-                  <X className="h-3 w-3" /> Clear filters
+                  <X size={12} /> Clear all filters
                 </button>
               </div>
             )}
           </div>
         )}
+      </section>
 
-        {/* ── Result count ── */}
-        {!loading && (
-          <p className="text-sm text-slate-400 mb-4">
-            {filteredLawyers.length === 0
-              ? "No lawyers match your search"
-              : `${filteredLawyers.length} lawyer${filteredLawyers.length !== 1 ? "s" : ""} found`}
-          </p>
-        )}
+      {/* ── Results meta ── */}
+      {!loading && (
+        <div className="lp-results-meta">
+          <span className="results-count">
+            {filtered.length === 0 ? "No results" : <><strong>{filtered.length}</strong> {filtered.length === 1 ? "lawyer" : "lawyers"} found</>}
+          </span>
+        </div>
+      )}
 
-        {/* ── Cards ── */}
-        <div className="space-y-4">
-          {loading
-            ? [...Array(4)].map((_, i) => <LawyerCardSkeleton key={i} />)
-            : filteredLawyers.map((lawyer) => (
-              <article
-                key={lawyer.id}
-                className="bg-white rounded-2xl border border-slate-100 p-6 hover:border-slate-200 hover:shadow-sm transition-all duration-200"
-              >
-                <div className="flex flex-col sm:flex-row gap-5">
-                  {/* Left: info */}
-                  <div className="flex gap-4 flex-1 min-w-0">
-                    <LawyerAvatar lawyer={lawyer} />
-                    <div className="min-w-0 flex-1">
-                      {/* Name + status */}
-                      <div className="flex flex-wrap items-center gap-2 mb-1">
-                        <h2 className="font-semibold text-slate-900 text-base leading-tight truncate">
-                          {lawyer.fullName}
-                        </h2>
-                        {lawyer.kycStatus === "verified" && (
-                          <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-xs px-2 py-0.5 rounded-full font-medium">
-                            <Award className="h-3 w-3" /> KYC Verified
-                          </span>
-                        )}
-                        <span className={cn(
-                          "text-xs px-2 py-0.5 rounded-full font-medium",
-                          lawyer.availability === "Available"
-                            ? "bg-blue-50 text-blue-700"
-                            : "bg-slate-100 text-slate-500"
-                        )}>
-                          {lawyer.availability}
-                        </span>
-                      </div>
+      {/* ── Cards ── */}
+      <main className="lp-cards">
+        {loading
+          ? [...Array(4)].map((_, i) => <SkeletonCard key={i} />)
+          : filtered.map((lawyer, idx) => (
+            <article
+              key={lawyer.id}
+              className="lawyer-card"
+              style={{ animationDelay: `${idx * 40}ms` }}
+            >
+              <Avatar lawyer={lawyer} />
 
-                      {/* Specializations */}
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {lawyer.specialization.slice(0, 3).map((spec, i) => (
-                          <span key={i} className="text-xs text-slate-500 border border-slate-200 rounded-md px-2 py-0.5">
-                            {spec}
-                          </span>
-                        ))}
-                        {lawyer.specialization.length > 3 && (
-                          <span className="text-xs text-slate-400 px-1">+{lawyer.specialization.length - 3} more</span>
-                        )}
-                      </div>
-
-                      {/* Meta row */}
-                      <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mb-3">
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {lawyer.experience} yrs experience
-                        </span>
-                        {(lawyer.city || lawyer.state) && (
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {[lawyer.city, lawyer.state].filter(Boolean).join(", ")}
-                          </span>
-                        )}
-                        {lawyer.reviews > 0 && (
-                          <span className="flex items-center gap-1">
-                            <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                            {lawyer.reviews} reviews
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Bio */}
-                      <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">
-                        {lawyer.bio}
-                      </p>
-
-                      {/* Modes + languages */}
-                      <div className="flex flex-wrap items-center gap-1.5 mt-3">
-                        <ConsultationModeBadge mode="video" icon={Video} label="Video" active={lawyer.consultationModes.video} />
-                        <ConsultationModeBadge mode="call" icon={Phone} label="Call" active={lawyer.consultationModes.call} />
-                        <ConsultationModeBadge mode="chat" icon={MessageCircle} label="Chat" active={lawyer.consultationModes.chat} />
-                        <ConsultationModeBadge mode="inPerson" icon={User} label="In-person" active={lawyer.consultationModes.inPerson} />
-                        {lawyer.languages.slice(0, 3).map((lang, i) => (
-                          <span key={i} className="text-xs text-slate-400 bg-slate-50 rounded-md px-2 py-0.5">
-                            {lang}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right: price + CTA */}
-                  <div className="flex sm:flex-col sm:items-end justify-between items-center sm:w-44 shrink-0 gap-3 pt-1">
-                    <div className="text-right">
-                      <p className="text-xl font-semibold text-slate-900">
-                        ₹{lawyer.consultationFee.toLocaleString()}
-                      </p>
-                      <p className="text-xs text-slate-400">per consultation</p>
-                    </div>
-                    <div className="flex sm:flex-col gap-2 w-full sm:w-auto">
-                      <Button
-                        size="sm"
-                        className="bg-blue-600 hover:bg-blue-700 text-white text-sm h-9 rounded-xl flex-1 sm:flex-none sm:w-full"
-                        onClick={() => openBookingDialog(lawyer)}
-                      >
-                        <Calendar className="h-3.5 w-3.5 mr-1.5" />
-                        Book
-                      </Button>
-                      <Link href={`/lawyers/${lawyer.id}`} className="flex-1 sm:flex-none sm:w-full">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="w-full text-sm h-9 rounded-xl border-slate-200 text-slate-600 hover:bg-slate-50"
-                        >
-                          View Profile
-                        </Button>
-                      </Link>
+              <div className="card-body">
+                <div className="card-top">
+                  <div>
+                    <div className="card-name-row">
+                      <span className="card-name">{lawyer.fullName}</span>
+                      {lawyer.kycStatus === "verified" && (
+                        <span className="pill pill-kyc"><Shield size={9} />KYC Verified</span>
+                      )}
+                      <span className={`pill ${lawyer.availability === "Available" ? "pill-avail" : "pill-soon"}`}>
+                        {lawyer.availability}
+                      </span>
                     </div>
                   </div>
                 </div>
-              </article>
-            ))}
-        </div>
 
-        {/* ── Empty state ── */}
-        {!loading && filteredLawyers.length === 0 && (
-          <div className="text-center py-20">
-            <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-              <User className="h-5 w-5 text-slate-400" />
-            </div>
-            <h3 className="font-semibold text-slate-900">No results found</h3>
-            <p className="text-sm text-slate-500 mt-1 mb-4">
-              Try adjusting your filters or search for something else.
-            </p>
-            <Button size="sm" variant="outline" onClick={resetFilters} className="rounded-xl">
-              Reset Filters
-            </Button>
+                <div className="card-specs">
+                  {lawyer.specialization.slice(0, 3).map((s, i) => (
+                    <span key={i} className="spec-tag">{s}</span>
+                  ))}
+                  {lawyer.specialization.length > 3 && (
+                    <span className="spec-more">+{lawyer.specialization.length - 3}</span>
+                  )}
+                </div>
+
+                <div className="card-meta">
+                  <span className="meta-item"><Clock size={12} />{lawyer.experience} yrs exp</span>
+                  {(lawyer.city || lawyer.state) && (
+                    <span className="meta-item"><MapPin size={12} />{[lawyer.city, lawyer.state].filter(Boolean).join(", ")}</span>
+                  )}
+                  {lawyer.reviews > 0 && (
+                    <span className="meta-item">
+                      <Star size={12} className="meta-stars" style={{ fill: "#f5c842", color: "#f5c842" }} />
+                      {lawyer.rating > 0 ? `${lawyer.rating.toFixed(1)} · ` : ""}{lawyer.reviews} reviews
+                    </span>
+                  )}
+                  {lawyer.languages.length > 0 && (
+                    <span className="meta-item"><Globe size={12} />{lawyer.languages.slice(0, 2).join(", ")}</span>
+                  )}
+                </div>
+
+                <p className="card-bio">{lawyer.bio}</p>
+
+                <div className="card-modes">
+                  {lawyer.consultationModes.video && <span className="mode-tag"><Video size={11} />Video</span>}
+                  {lawyer.consultationModes.call && <span className="mode-tag"><Phone size={11} />Call</span>}
+                  {lawyer.consultationModes.chat && <span className="mode-tag"><MessageCircle size={11} />Chat</span>}
+                  {lawyer.consultationModes.inPerson && <span className="mode-tag"><User size={11} />In-Person</span>}
+                  {lawyer.languages.slice(0, 2).map((lang, i) => (
+                    <span key={i} className="lang-tag">{lang}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="card-right">
+                <div className="card-fee">
+                  <div className="fee-amount">₹{lawyer.consultationFee.toLocaleString()}</div>
+                  <div className="fee-label">per consultation</div>
+                </div>
+                <div className="card-actions">
+                  <button className="btn-gold" style={{ width: "100%", justifyContent: "center" }} onClick={() => openBooking(lawyer)}>
+                    <Calendar size={13} />Book Now
+                  </button>
+                  <Link href={`/lawyers/${lawyer.id}`} style={{ width: "100%" }}>
+                    <button className="btn-outline" style={{ width: "100%", justifyContent: "center" }}>
+                      View Profile <ChevronRight size={13} />
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+
+        {!loading && filtered.length === 0 && (
+          <div className="empty-state">
+            <div className="empty-icon"><User size={22} /></div>
+            <h3>No lawyers found</h3>
+            <p>Try adjusting your filters or search for something else.</p>
+            <button className="btn-outline" onClick={resetFilters}>Reset Filters</button>
           </div>
         )}
       </main>
 
-      {/* ── Booking Dialog ── */}
-      <Dialog open={bookingOpen} onOpenChange={setBookingOpen}>
-        <DialogContent className="sm:max-w-md rounded-2xl p-0 overflow-hidden">
-          <div className="px-6 pt-6 pb-4 border-b border-slate-100">
-            <DialogTitle className="text-base font-semibold text-slate-900">
-              Book a Consultation
-            </DialogTitle>
-            <DialogDescription className="text-sm text-slate-500 mt-0.5">
-              {selectedLawyer?.fullName}
-            </DialogDescription>
-          </div>
-
-          {selectedLawyer && (
-            <div className="px-6 py-5 space-y-5">
-              {/* Mode */}
+      {bookingOpen && selectedLawyer && (
+        <div className="booking-overlay" onClick={e => { if (e.target === e.currentTarget) closeBooking() }}>
+          <div className="booking-modal">
+            <div className="modal-header">
               <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-slate-400 mb-2">
-                  Consultation Mode
-                </p>
-                <RadioGroup
-                  value={selectedMode}
-                  onValueChange={setSelectedMode}
-                  className="grid grid-cols-2 gap-2"
-                >
-                  {(["video", "call", "chat", "inPerson"] as const).map((mode) => {
-                    const icons = { video: Video, call: Phone, chat: MessageCircle, inPerson: User }
-                    const labels = { video: "Video Call", call: "Phone Call", chat: "Chat", inPerson: "In-Person" }
-                    if (!selectedLawyer.consultationModes[mode]) return null
-                    const Icon = icons[mode]
-                    return (
-                      <div key={mode}>
-                        <RadioGroupItem value={mode} id={mode} className="peer sr-only" />
-                        <Label
-                          htmlFor={mode}
-                          className="flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 p-3 text-sm text-slate-600 cursor-pointer hover:bg-slate-50 peer-data-[state=checked]:border-blue-500 peer-data-[state=checked]:bg-blue-50 peer-data-[state=checked]:text-blue-700 transition-all"
-                        >
-                          <Icon className="h-4 w-4" />
-                          {labels[mode]}
-                        </Label>
-                      </div>
-                    )
-                  })}
-                </RadioGroup>
+                <div className="modal-title">Book a Consultation</div>
+                <div className="modal-sub">{selectedLawyer.fullName} · ₹{selectedLawyer.consultationFee.toLocaleString()}</div>
               </div>
+              <button className="modal-close" onClick={closeBooking}><X size={14} /></button>
+            </div>
 
-              {/* Date */}
-              <div>
-                <p className="text-xs font-medium uppercase tracking-wider text-slate-400 mb-2">Date</p>
-                <DatePicker
-                  date={selectedDate}
-                  setDate={setSelectedDate}
-                  disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
-                />
-              </div>
+            <div className="modal-body">
+              <BookingSteps step={bookingStep} />
 
-              {/* Slots */}
-              {selectedDate && (
+              {/* ── Step 0: Mode ── */}
+              {bookingStep === 0 && (
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-wider text-slate-400 mb-2">
-                    Available Slots
-                  </p>
+                  <p className="modal-section-label">How would you like to consult?</p>
+                  <div className="mode-grid">
+                    {(["video", "call", "chat", "inPerson"] as const).map(mode => {
+                      if (!selectedLawyer.consultationModes[mode]) return null
+                      const { icon, label } = modeInfo[mode]
+                      return (
+                        <button
+                          key={mode}
+                          className={`mode-option${selectedMode === mode ? " selected" : ""}`}
+                          onClick={() => setSelectedMode(mode)}
+                        >
+                          {icon}{label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <button
+                    className="btn-gold"
+                    style={{ width: "100%", justifyContent: "center", padding: "11px 24px", fontSize: 14, borderRadius: 12, marginTop: 20 }}
+                    onClick={() => setBookingStep(1)}
+                  >
+                    Continue → Choose Date
+                  </button>
+                </div>
+              )}
+
+              {/* ── Step 1: Date ── */}
+              {bookingStep === 1 && (
+                <div>
+                  <p className="modal-section-label">Select a date</p>
+                  <InlineCalendar
+                    value={selectedDate}
+                    onChange={handleDateSelect}
+                  />
+                  <button
+                    className="btn-outline"
+                    style={{ marginTop: 14, fontSize: 13 }}
+                    onClick={() => setBookingStep(0)}
+                  >
+                    ← Back
+                  </button>
+                </div>
+              )}
+
+              {/* ── Step 2: Slot ── */}
+              {bookingStep === 2 && (
+                <div>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                    <p className="modal-section-label" style={{ marginBottom: 0 }}>
+                      Available slots — {selectedDate?.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short" })}
+                    </p>
+                    <button
+                      style={{ background: "none", border: "none", cursor: "pointer", color: "var(--gold)", fontSize: 12, fontFamily: "'DM Sans',sans-serif" }}
+                      onClick={() => { setBookingStep(1); setSelectedTime("") }}
+                    >
+                      Change date
+                    </button>
+                  </div>
                   {fetchingSlots ? (
-                    <div className="flex justify-center py-4">
-                      <Loader className="h-4 w-4 animate-spin text-slate-400" />
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 0", gap: 10 }}>
+                      <Loader size={18} style={{ animation: "spin 1s linear infinite", color: "var(--gold)" }} />
+                      <span style={{ fontSize: 12, color: "var(--text-dim)" }}>Checking availability…</span>
                     </div>
                   ) : availableSlots.length > 0 ? (
-                    <div className="grid grid-cols-3 gap-2">
-                      {availableSlots.map((slot) => (
-                        <button
-                          key={slot.slot}
-                          onClick={() => setSelectedTime(slot.slot)}
-                          className={cn(
-                            "text-xs py-2 rounded-lg border transition-all",
-                            selectedTime === slot.slot
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "border-slate-200 text-slate-600 hover:border-blue-300 hover:bg-blue-50"
-                          )}
-                        >
-                          {slot.startTime}
-                        </button>
-                      ))}
-                    </div>
+                    <>
+                      <div className="slot-grid" style={{ marginTop: 10 }}>
+                        {availableSlots.map(slot => (
+                          <button
+                            key={slot.slot}
+                            className={`slot-btn${selectedTime === slot.slot ? " selected" : ""}`}
+                            onClick={() => { setSelectedTime(slot.slot); setBookingStep(3) }}
+                          >
+                            {slot.startTime}
+                          </button>
+                        ))}
+                      </div>
+                      <p style={{ fontSize: 11, color: "var(--text-dim)", marginTop: 10 }}>
+                        Tap a slot to continue
+                      </p>
+                    </>
                   ) : (
-                    <p className="text-sm text-slate-400">No available slots for this date.</p>
+                    <div style={{ textAlign: "center", padding: "28px 0" }}>
+                      <p style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 12 }}>No slots available on this date.</p>
+                      <button
+                        className="btn-outline"
+                        style={{ fontSize: 13 }}
+                        onClick={() => { setBookingStep(1); setSelectedDate(undefined) }}
+                      >
+                        Pick another date
+                      </button>
+                    </div>
                   )}
                 </div>
               )}
 
-              {/* Summary */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
-                <span className="text-sm text-slate-500">Total</span>
-                <span className="text-lg font-semibold text-slate-900">
-                  ₹{selectedLawyer.consultationFee.toLocaleString()}
-                </span>
-              </div>
+              {/* ── Step 3: Confirm & Pay ── */}
+              {bookingStep === 3 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <p className="modal-section-label">Booking Summary</p>
 
-              <Button
-                className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl h-10 text-sm"
-                onClick={handleBooking}
-                disabled={!selectedDate || !selectedTime || bookingLoading}
-              >
-                {bookingLoading ? (
-                  <>
-                    <Loader className="h-3.5 w-3.5 mr-2 animate-spin" />
-                    Processing…
-                  </>
-                ) : (
-                  "Proceed to Payment"
-                )}
-              </Button>
+                  {/* Summary card */}
+                  <div style={{
+                    background: "var(--surface-3)", border: "1px solid var(--rim)",
+                    borderRadius: 12, padding: "16px 18px", display: "flex", flexDirection: "column", gap: 10
+                  }}>
+                    {[
+                      { label: "Lawyer", value: selectedLawyer.fullName },
+                      { label: "Mode", value: modeInfo[selectedMode as keyof typeof modeInfo]?.label || selectedMode },
+                      { label: "Date", value: selectedDate?.toLocaleDateString("en-IN", { weekday: "long", day: "numeric", month: "long", year: "numeric" }) },
+                      { label: "Time", value: availableSlots.find(s => s.slot === selectedTime)?.startTime || selectedTime },
+                    ].map(row => (
+                      <div key={row.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontSize: 12, color: "var(--text-dim)" }}>{row.label}</span>
+                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 500 }}>{row.value}</span>
+                      </div>
+                    ))}
+                    <div style={{ height: 1, background: "var(--rim)", margin: "4px 0" }} />
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>Total</span>
+                      <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: "var(--text)" }}>
+                        ₹{selectedLawyer.consultationFee.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn-gold"
+                    style={{ width: "100%", justifyContent: "center", padding: "13px 24px", fontSize: 14, borderRadius: 12 }}
+                    onClick={handleBooking}
+                    disabled={bookingLoading}
+                  >
+                    {bookingLoading ? (
+                      <><Loader size={14} style={{ animation: "spin 1s linear infinite" }} /> Processing…</>
+                    ) : "Pay ₹" + selectedLawyer.consultationFee.toLocaleString() + " →"}
+                  </button>
+
+                  <button
+                    className="btn-outline"
+                    style={{ fontSize: 13, justifyContent: "center" }}
+                    onClick={() => setBookingStep(2)}
+                  >
+                    ← Change slot
+                  </button>
+                </div>
+              )}
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }
