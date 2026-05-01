@@ -302,12 +302,15 @@ export default function LoginPage() {
 
           <div className="nm-d-quote">
             <span className="nm-q-mark">"</span>
-            <blockquote>NyayMitra helped me understand my tenant rights in minutes. What used to take days of research now takes seconds.</blockquote>
+            <blockquote>
+              I was confused about a payment dispute. NyayMitra gave me clarity on my next legal step within minutes.
+            </blockquote>
+
             <div className="nm-q-meta">
-              <div className="nm-q-av">RK</div>
+              <div className="nm-q-av">A</div>
               <div>
-                <div className="nm-q-name">Rajesh Kumar</div>
-                <div className="nm-q-role">Small Business Owner, Mumbai</div>
+                <div className="nm-q-name">Anonymous User</div>
+                <div className="nm-q-role">Early User</div>
               </div>
             </div>
           </div>
@@ -332,8 +335,8 @@ export default function LoginPage() {
               <div className="nm-m-btag">Legal Intelligence Platform</div>
             </div>
           </Link>
-          <h1 className="nm-m-h">Welcome back.</h1>
-          <p className="nm-m-sub">Sign in to access your legal workspace</p>
+          <h1 className="nm-f-h nm-fade nm-d2">Sign in to continue.</h1>
+          <p className="nm-f-sub nm-fade nm-d2">Access your legal workspace</p>
           <div className="nm-m-stats">
             <div className="nm-m-stat"><div className="nm-m-sn">100+</div><div className="nm-m-sl">Cases</div></div>
             <div className="nm-m-stat"><div className="nm-m-sn">60+</div><div className="nm-m-sl">Lawyers</div></div>
