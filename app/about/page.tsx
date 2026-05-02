@@ -19,13 +19,13 @@ export default function AboutPage() {
 
   const achievements = [
     {
-      number: "100+",
+      number: "25+",
       label: "Legal Queries Resolved",
       icon: Scale,
       description: "Successfully handled cases across various domains"
     },
     {
-      number: "100+",
+      number: "60+",
       label: "Verified Lawyers",
       icon: Users,
       description: "Rigorous verification process for quality assurance"
@@ -446,7 +446,7 @@ export default function AboutPage() {
               <div className="text-blue-100">Partner Law Firms</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-white mb-2">100+</div>
+              <div className="text-4xl font-bold text-white mb-2">50+</div>
               <div className="text-blue-100">Legal Documents Processed</div>
             </div>
             <div>
