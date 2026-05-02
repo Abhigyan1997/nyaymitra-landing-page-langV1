@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     "AI legal help India",
   ],
 
-  metadataBase: new URL("https://www.nyaymitra.tech"),
+  metadataBase: new URL("https://nyaymitra.tech"),
 
   alternates: {
     canonical: "/",
