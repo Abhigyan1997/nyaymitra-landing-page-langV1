@@ -73,7 +73,7 @@ const useInView = () => {
         }, { threshold: 0.1 });
         obs.observe(ref.current);
         return () => obs.disconnect();
-    }, []);
+    }, []); // ← Add the empty dependency array here
     return { ref, inView };
 };
 
@@ -181,7 +181,7 @@ const Hero = () => (
         <Reveal>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 99, padding: "6px 16px", marginBottom: 24, backdropFilter: "blur(8px)" }}>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.65)", fontFamily: "'DM Sans', sans-serif" }}>
-                    Trusted by <strong style={{ color: "#a5b4fc" }}>500+</strong> Indians · Rated <strong style={{ color: "#fbbf24" }}>4.9★</strong>
+                    Trusted by <strong style={{ color: "#a5b4fc" }}>100+</strong> Indians · Rated <strong style={{ color: "#fbbf24" }}>4.9★</strong>
                 </span>
             </div>
         </Reveal>
@@ -195,7 +195,7 @@ const Hero = () => (
 
         <Reveal delay={160}>
             <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(15px, 3.5vw, 18px)", color: "rgba(255,255,255,0.45)", lineHeight: 1.65, textAlign: "center", maxWidth: 580, margin: "0 auto 36px", padding: "0 12px" }}>
-                Lawyer-drafted, expert-reviewed, delivered in 2–4 hours. No court trips, no confusion — just peace of mind. Starting at ₹999.
+                Lawyer drafted, expert reviewed, delivered in 2–4 hours. No court trips, no confusion just peace of mind. Starting at ₹999.
             </p>
         </Reveal>
 
@@ -212,7 +212,7 @@ const Hero = () => (
 
         <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, borderTop: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)", backdropFilter: "blur(8px)", padding: "14px 20px" }}>
             <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", justifyContent: "center", gap: "clamp(24px, 6vw, 72px)", flexWrap: "wrap" }}>
-                {[{ v: "60+", l: "Verified Lawyers" }, { v: "500+", l: "Happy Clients" }, { v: "< 2 min", l: "Response Time" }, { v: "4.9 ★", l: "Client Rating" }].map((s, i) => (
+                {[{ v: "60+", l: "Verified Lawyers" }, { v: "100+", l: "Happy Clients" }, { v: "< 2 min", l: "Response Time" }, { v: "4.9 ★", l: "Client Rating" }].map((s, i) => (
                     <div key={i} style={{ textAlign: "center" }}>
                         <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(20px, 4vw, 24px)", fontWeight: 700, color: "#fff" }}>{s.v}</div>
                         <div style={{ fontSize: "clamp(10px, 2vw, 11px)", color: "rgba(255,255,255,0.35)", fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.04em", textTransform: "uppercase", marginTop: 3 }}>{s.l}</div>
@@ -259,17 +259,17 @@ const WhatIsAffidavit = () => (
 );
 
 // ─────────────────────────────────────────────
-// SERVICES
+// SERVICES (TYPES OF AFFIDAVITS) — FIXED ALIGNMENT & RESPONSIVENESS
 // ─────────────────────────────────────────────
 
 const TypesSection = () => {
     const services = [
         { icon: Icons.pen, title: "Name Change Affidavit", desc: "After marriage, divorce, or personal choice. Accepted by passport offices and government bodies.", time: "3 hrs", price: "₹1,199", popular: true },
         { icon: Icons.home, title: "Address Proof Affidavit", desc: "Verify your current residential address for KYC, banks, and government applications.", time: "2 hrs", price: "₹999" },
-        { icon: Icons.dollar, title: "Income Proof Affidavit", desc: "Income declaration for loans, visa applications, or government schemes. Court-admissible.", time: "2 hrs", price: "₹999" },
+        { icon: Icons.dollar, title: "Income Proof Affidavit", desc: "Income declaration for loans, visa applications, or government schemes. Court admissible.", time: "2 hrs", price: "₹999" },
         { icon: Icons.building, title: "Property Affidavit", desc: "Ownership, disputes, inheritance, or transfer matters. Essential for real estate transactions.", time: "4 hrs", price: "₹1,499" },
-        { icon: Icons.user, title: "Relationship Affidavit", desc: "Declaration of relationship between individuals — for nominees, insurance, bank accounts, and visa dependents.", time: "2 hrs", price: "₹999" },
-        { icon: Icons.file, title: "Lost Document Affidavit", desc: "Declaration for lost Aadhaar, PAN, passport, marksheet, or any government-issued document. Accepted by all authorities.", time: "2 hrs", price: "₹899" },
+        { icon: Icons.user, title: "Relationship Affidavit", desc: "Declaration of relationship between individuals for nominees, insurance, bank accounts, and visa dependents.", time: "2 hrs", price: "₹999" },
+        { icon: Icons.file, title: "Lost Document Affidavit", desc: "Declaration for lost Aadhaar, PAN, passport, marksheet, or any government issued document. Accepted by all authorities.", time: "2 hrs", price: "₹899" },
     ];
 
     return (
@@ -286,26 +286,126 @@ const TypesSection = () => {
                         </h2>
                     </div>
                 </Reveal>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 300px), 1fr))", gap: 22, alignItems: "stretch" }}>
+                {/* UPDATED GRID: Ensures consistent card heights and alignment */}
+                <div style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 320px), 1fr))",
+                    gap: 24,
+                    alignItems: "stretch"
+                }}>
                     {services.map((s, i) => (
                         <Reveal key={i} delay={i * 60} style={{ height: "100%" }}>
-                            <div style={{ position: "relative", background: "rgba(255,255,255,0.03)", border: s.popular ? "1px solid rgba(129,140,248,0.35)" : "1px solid rgba(255,255,255,0.07)", borderRadius: 18, padding: "26px 22px 22px", height: "100%", display: "flex", flexDirection: "column" }}>
+                            <div style={{
+                                position: "relative",
+                                background: "rgba(255,255,255,0.03)",
+                                border: s.popular ? "1px solid rgba(129,140,248,0.35)" : "1px solid rgba(255,255,255,0.07)",
+                                borderRadius: 18,
+                                padding: "26px 22px 22px",
+                                height: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                                transition: "transform 0.2s, border-color 0.2s",
+                                cursor: "pointer"
+                            }}>
                                 {s.popular && (
-                                    <div style={{ position: "absolute", top: -11, right: 18, background: "linear-gradient(135deg, #f59e0b, #ef4444)", borderRadius: 99, padding: "3px 10px", fontSize: 9, fontWeight: 700, color: "#fff", fontFamily: "'DM Sans', sans-serif", letterSpacing: "0.05em" }}>MOST POPULAR</div>
-                                )}
-                                <div style={{ width: 44, height: 44, flexShrink: 0, background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.2)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 18 }}>
-                                    <Icon d={s.icon} size={20} color="#818cf8" />
-                                </div>
-                                <h3 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, fontWeight: 700, color: "#fff", margin: "0 0 8px" }}>{s.title}</h3>
-                                <p style={{ fontSize: 13.5, color: "rgba(255,255,255,0.5)", lineHeight: 1.6, margin: "0 0 18px", fontFamily: "'DM Sans', sans-serif", flexGrow: 1 }}>{s.desc}</p>
-                                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 14, borderTop: "1px solid rgba(255,255,255,0.07)", marginBottom: 18, flexWrap: "wrap", gap: 8, flexShrink: 0 }}>
-                                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                                        <Icon d={Icons.clock} size={13} color="rgba(255,255,255,0.3)" />
-                                        <span style={{ fontSize: 12.5, color: "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', sans-serif" }}>{s.time}</span>
+                                    <div style={{
+                                        position: "absolute",
+                                        top: -11,
+                                        right: 18,
+                                        background: "linear-gradient(135deg, #f59e0b, #ef4444)",
+                                        borderRadius: 99,
+                                        padding: "3px 10px",
+                                        fontSize: 9,
+                                        fontWeight: 700,
+                                        color: "#fff",
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        letterSpacing: "0.05em"
+                                    }}>
+                                        MOST POPULAR
                                     </div>
-                                    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 700, color: "#818cf8" }}>{s.price}</span>
+                                )}
+                                <div style={{
+                                    width: 48,
+                                    height: 48,
+                                    flexShrink: 0,
+                                    background: "rgba(99,102,241,0.12)",
+                                    border: "1px solid rgba(99,102,241,0.2)",
+                                    borderRadius: 14,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    marginBottom: 20
+                                }}>
+                                    <Icon d={s.icon} size={22} color="#818cf8" />
                                 </div>
-                                <button onClick={() => document.querySelector("#get-started")?.scrollIntoView({ behavior: "smooth" })} style={{ width: "100%", background: "rgba(99,102,241,0.12)", border: "1px solid rgba(99,102,241,0.25)", borderRadius: 10, padding: "11px", color: "#a5b4fc", fontSize: 13.5, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, flexShrink: 0 }}>
+                                <h3 style={{
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    fontSize: 18,
+                                    fontWeight: 700,
+                                    color: "#fff",
+                                    margin: "0 0 10px",
+                                    lineHeight: 1.3
+                                }}>
+                                    {s.title}
+                                </h3>
+                                <p style={{
+                                    fontSize: 13.5,
+                                    color: "rgba(255,255,255,0.55)",
+                                    lineHeight: 1.6,
+                                    margin: "0 0 20px",
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    flexGrow: 1
+                                }}>
+                                    {s.desc}
+                                </p>
+                                <div style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    paddingTop: 16,
+                                    borderTop: "1px solid rgba(255,255,255,0.07)",
+                                    marginBottom: 20,
+                                    flexWrap: "wrap",
+                                    gap: 12,
+                                    flexShrink: 0
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                                        <Icon d={Icons.clock} size={14} color="rgba(255,255,255,0.4)" />
+                                        <span style={{ fontSize: 12.5, color: "rgba(255,255,255,0.45)", fontFamily: "'DM Sans', sans-serif" }}>{s.time}</span>
+                                    </div>
+                                    <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 24, fontWeight: 700, color: "#818cf8", lineHeight: 1 }}>
+                                        {s.price}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => document.querySelector("#get-started")?.scrollIntoView({ behavior: "smooth" })}
+                                    style={{
+                                        width: "100%",
+                                        background: "rgba(99,102,241,0.12)",
+                                        border: "1px solid rgba(99,102,241,0.25)",
+                                        borderRadius: 12,
+                                        padding: "12px",
+                                        color: "#a5b4fc",
+                                        fontSize: 14,
+                                        fontWeight: 600,
+                                        cursor: "pointer",
+                                        fontFamily: "'DM Sans', sans-serif",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: 8,
+                                        flexShrink: 0,
+                                        transition: "background 0.2s, border-color 0.2s"
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.background = "rgba(99,102,241,0.2)";
+                                        e.currentTarget.style.borderColor = "rgba(99,102,241,0.4)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.background = "rgba(99,102,241,0.12)";
+                                        e.currentTarget.style.borderColor = "rgba(99,102,241,0.25)";
+                                    }}
+                                >
                                     Get Quote <Icon d={Icons.arrow} size={14} color="#a5b4fc" />
                                 </button>
                             </div>
@@ -366,7 +466,7 @@ const ProcessSection = () => {
 };
 
 // ─────────────────────────────────────────────
-// INTAKE FORM SECTION ← NEW
+// INTAKE FORM SECTION
 // ─────────────────────────────────────────────
 
 type FormData = {
@@ -630,7 +730,7 @@ const GetStartedForm = () => {
 const PricingSection = () => {
     const tiers = [
         { name: "Essential", price: 999, desc: "For simple, straightforward affidavit needs", features: ["Standard affidavit drafting", "AI-powered generation", "Email support", "PDF download"], excluded: ["Expert lawyer review", "Notary guidance"], cta: "Get Essential" },
-        { name: "Professional", price: 1999, desc: "Most comprehensive — our recommended plan", features: ["Everything in Essential", "Expert lawyer review", "Unlimited revisions", "24/7 priority support", "Notary guidance"], excluded: [], cta: "Get Professional", popular: true },
+        { name: "Professional", price: 1999, desc: "Most comprehensive our recommended plan", features: ["Everything in Essential", "Expert lawyer review", "Unlimited revisions", "24/7 priority support", "Notary guidance"], excluded: [], cta: "Get Professional", popular: true },
         { name: "Enterprise", price: 4999, desc: "For businesses and bulk requirements", features: ["Everything in Professional", "Bulk document processing", "Dedicated account manager", "Legal compliance certificate", "Custom templates"], excluded: [], cta: "Contact Sales" },
     ];
 
@@ -706,7 +806,7 @@ const LegalValiditySection = () => (
             </Reveal>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
                 {[
-                    { icon: Icons.circle_check, color: "#22d3ee", title: "Legally Recognized", desc: "Yes — fully valid in India when prepared in the proper format. Recognized under the Indian Evidence Act, 1872. Our documents are reviewed by experienced lawyers." },
+                    { icon: Icons.circle_check, color: "#22d3ee", title: "Legally Recognized", desc: "Yes fully valid in India when prepared in the proper format. Recognized under the Indian Evidence Act, 1872. Our documents are reviewed by experienced lawyers." },
                     { icon: Icons.gavel, color: "#f59e0b", title: "Role of Notary & Stamp Paper", desc: "For most purposes, notarization is required. We provide complete guidance including recommended notary offices near you and exactly what documents to carry." },
                     { icon: Icons.building, color: "#4ade80", title: "Where It's Accepted", desc: "Courts, banks, passport offices, educational institutions, government departments, visa applications, property registrations, and all legal proceedings nationwide." },
                 ].map((card, i) => (
@@ -731,7 +831,7 @@ const LegalValiditySection = () => (
 
 const TestimonialsSection = () => {
     const testimonials = [
-        { initials: "SA", name: "Swapnil Anand", role: "Property Owner", content: "Took notary service for name change in property documents. The entire process was smooth — got my registered affidavit within 24 hours. Saved me 3 trips to the notary office!", service: "Name Change" },
+        { initials: "SA", name: "Swapnil Anand", role: "Property Owner", content: "Took notary service for name change in property documents. The entire process was smooth got my registered affidavit within 24 hours. Saved me 3 trips to the notary office!", service: "Name Change" },
         { initials: "JK", name: "Jay Kumar", role: "Homeowner", content: "Needed an affidavit for electricity connection at my new house. NyayMitra delivered within 2 hours. Accepted by the electricity department without any issues whatsoever.", service: "Address Proof" },
         { initials: "RS", name: "Ramesh Sharma", role: "Business Owner", content: "The affidavit was perfect and legally sound. Saved me from multiple visits to the notary. Highly recommended for anyone needing quick, professional legal documentation.", service: "Income Proof" },
     ];
@@ -742,7 +842,7 @@ const TestimonialsSection = () => {
                 <Reveal>
                     <div style={{ textAlign: "center", marginBottom: "clamp(36px, 7vw, 52px)" }}>
                         <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(30px, 7vw, 52px)", fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>
-                            Trusted by <span style={{ color: "#fbbf24" }}>500+ Indians</span>
+                            Trusted by <span style={{ color: "#fbbf24" }}>100+ Indians</span>
                         </h2>
                         <p style={{ fontSize: "clamp(13px, 3.5vw, 15px)", color: "rgba(255,255,255,0.4)", marginTop: 10, fontFamily: "'DM Sans', sans-serif" }}>Rated 4.9/5 based on 150+ verified reviews</p>
                     </div>
@@ -788,7 +888,7 @@ const FAQSection = () => {
         { q: "Is an online affidavit legally valid in India?", a: "Yes. Online affidavits are fully valid when properly notarized. Our documents follow the format prescribed by the Indian Evidence Act, 1872, and are accepted by courts, banks, and government offices. Expert lawyer review is included in our Professional and Enterprise plans." },
         { q: "Do I need to visit a notary after receiving my affidavit?", a: "For most purposes, a notarized affidavit is required. We provide complete notary guidance including nearby offices and what to carry. Some government portals accept e-stamped affidavits without physical notarization." },
         { q: "How long does it take to receive my affidavit?", a: "Most standard affidavits are delivered within 2–4 hours. Complex documents may take up to 24 hours. Express delivery is available. We'll update you throughout via WhatsApp." },
-        { q: "What documents are required?", a: "Typically: identity proof (Aadhaar, PAN, Voter ID, or Passport), address proof, and documents related to your affidavit type. Our team will guide you on WhatsApp — usually just clear photos are sufficient." },
+        { q: "What documents are required?", a: "Typically: identity proof (Aadhaar, PAN, Voter ID, or Passport), address proof, and documents related to your affidavit type. Our team will guide you on WhatsApp usually just clear photos are sufficient." },
         { q: "Can I use an affidavit for passport or visa applications?", a: "Absolutely. Many passport and visa applications require affidavits for name change, address proof, or relationship verification. Our affidavits are formatted to meet Passport Seva Kendra and embassy requirements." },
         { q: "What if I need changes after receiving the draft?", a: "We offer unlimited free revisions until you are 100% satisfied. Share your feedback on WhatsApp and we'll update promptly. No hidden charges, no questions asked." },
         { q: "Is my personal information kept secure?", a: "Your data is protected with 256-bit SSL encryption. Documents are permanently deleted from our servers after 30 days. We never share your information with third parties." },
@@ -849,11 +949,11 @@ const FinalCTA = () => (
                     Create Your Affidavit<br /><span style={{ color: "#818cf8" }}>in Minutes</span>
                 </h2>
                 <p style={{ fontSize: "clamp(14px, 4vw, 17px)", color: "rgba(255,255,255,0.4)", fontFamily: "'DM Sans', sans-serif", marginBottom: 36, lineHeight: 1.6, padding: "0 16px" }}>
-                    Join 500+ satisfied customers. Start your affidavit on WhatsApp or get a free quote now.
+                    Join 100+ satisfied customers. Start your affidavit on WhatsApp or get a free quote now.
                 </p>
                 <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginBottom: 28 }}>
                     <button onClick={() => document.querySelector("#get-started")?.scrollIntoView({ behavior: "smooth" })} style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6)", border: "none", borderRadius: 14, padding: "13px 28px", color: "#fff", fontSize: "clamp(14px, 3.5vw, 15px)", fontWeight: 700, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", boxShadow: "0 10px 32px rgba(99,102,241,0.4)", display: "flex", alignItems: "center", gap: 9 }}>
-                        <Icon d={Icons.file} size={17} color="#fff" /> Get Free Quote — from ₹999
+                        <Icon d={Icons.file} size={17} color="#fff" /> Get Free Quote from ₹999
                     </button>
                     <button onClick={() => openWhatsApp("Can I request a callback from NyayMitra?")} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 14, padding: "13px 28px", color: "rgba(255,255,255,0.8)", fontSize: "clamp(14px, 3.5vw, 15px)", fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif", display: "flex", alignItems: "center", gap: 9 }}>
                         <Icon d={Icons.phone} size={17} /> Request Callback
