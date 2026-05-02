@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /api/
+Disallow: /all-bookings
+ 
+Sitemap: https://nyaymitra.tech/sitemap.xml
