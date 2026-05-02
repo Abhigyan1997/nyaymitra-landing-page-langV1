@@ -28,7 +28,8 @@ import {
     XCircle,
     Clock,
     AlertCircle,
-    Mail
+    Mail,
+    Sparkles
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -82,64 +83,85 @@ const ContactCard = ({ booking, isLawyer }: { booking: Booking; isLawyer: boolea
     if (isLawyer || !booking.lawyerPhone) return null;
 
     return (
-        <Card className="mt-6 border-blue-200 bg-blue-50">
-            <CardHeader>
-                <CardTitle className="text-blue-800 flex items-center gap-2">
-                    <Phone className="w-5 h-5" />
-                    <span className="text-lg sm:text-xl">Contact Information</span>
-                </CardTitle>
-            </CardHeader>
-            <CardContent>
-                <div className="space-y-4">
-                    {/* Phone Section */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                        <Badge variant="secondary" className="gap-2 px-3 py-2 w-fit">
-                            <Phone className="w-4 h-4" />
-                            Direct Call
-                        </Badge>
-                        <p className="text-base sm:text-lg font-bold break-all">{booking.lawyerPhone}</p>
+        <div className="space-y-4 mt-8 pt-8 border-t border-gradient-to-r from-transparent via-slate-200 to-transparent">
+            <div className="flex items-center gap-2 mb-6">
+                <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-slate-300"></div>
+                <span className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Contact</span>
+                <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-slate-300"></div>
+            </div>
+
+            <div className="space-y-4">
+                {/* Phone Section */}
+                <div className="group p-4 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 hover:border-slate-300 transition-all duration-300">
+                    <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 flex-1">
+                            <div className="p-2.5 rounded-lg bg-white border border-slate-200 group-hover:border-slate-300 transition-all">
+                                <Phone className="w-4 h-4 text-slate-700" />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-1">Direct Phone</p>
+                                <p className="text-lg font-semibold text-slate-900 font-mono break-all">{booking.lawyerPhone}</p>
+                            </div>
+                        </div>
                         <Button
                             size="sm"
                             onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
-                            className="mt-2 sm:mt-0 w-full sm:w-auto"
+                            className="shrink-0 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all"
                         >
-                            Call Now
+                            <Phone className="w-3.5 h-3.5" />
                         </Button>
                     </div>
+                </div>
 
-                    {/* Email Section */}
-                    {booking.lawyerEmail && (
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-                            <Badge variant="secondary" className="gap-2 px-3 py-2 w-fit">
-                                <Mail className="w-4 h-4" />
-                                Email
-                            </Badge>
-                            <p className="text-base sm:text-lg font-medium break-all">{booking.lawyerEmail}</p>
+                {/* Email Section */}
+                {booking.lawyerEmail && (
+                    <div className="group p-4 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 hover:border-slate-300 transition-all duration-300">
+                        <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start gap-3 flex-1">
+                                <div className="p-2.5 rounded-lg bg-white border border-slate-200 group-hover:border-slate-300 transition-all">
+                                    <Mail className="w-4 h-4 text-slate-700" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-1">Email Address</p>
+                                    <p className="text-sm font-medium text-slate-900 break-all">{booking.lawyerEmail}</p>
+                                </div>
+                            </div>
                             <Button
                                 size="sm"
                                 variant="outline"
                                 onClick={() => window.open(`mailto:${booking.lawyerEmail}`)}
-                                className="mt-2 sm:mt-0 w-full sm:w-auto"
+                                className="shrink-0 border-slate-300 hover:border-slate-400"
                             >
-                                Send Email
+                                <Mail className="w-3.5 h-3.5" />
                             </Button>
                         </div>
-                    )}
+                    </div>
+                )}
 
-                    {/* Alert Section */}
-                    <Alert className="mt-4 border-yellow-200 bg-yellow-50">
-                        <div className="flex items-start gap-2">
-                            <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-                            <AlertDescription className="text-yellow-800 text-sm sm:text-base">
-                                Please contact only during your scheduled slot: {format(new Date(booking.date), 'PPP')} at {booking.slot}
-                            </AlertDescription>
+                {/* Scheduled Time Alert */}
+                <div className="p-4 rounded-lg bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200">
+                    <div className="flex items-start gap-3">
+                        <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                        <div>
+                            <p className="text-xs uppercase tracking-wider font-semibold text-amber-900 mb-1">Contact During</p>
+                            <p className="text-sm text-amber-800">
+                                {format(new Date(booking.date), 'MMMM d, yyyy')} at {booking.slot}
+                            </p>
                         </div>
-                    </Alert>
+                    </div>
                 </div>
-            </CardContent>
-        </Card>
+            </div>
+        </div>
     );
 };
+
+const PremiumBadge = ({ children, variant = "default" }: { children: React.ReactNode; variant?: string }) => {
+    const variants = {
+        status: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider",
+        mode: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider",
+    }
+    return <span className={variants[variant as keyof typeof variants] || variants.status}>{children}</span>
+}
 
 export default function BookingDetails() {
     const [booking, setBooking] = useState<Booking | null>(null)
@@ -216,94 +238,75 @@ export default function BookingDetails() {
         if (!booking) return;
 
         const receiptContent = `
-LegalConnect Payment Receipt
-----------------------------------------
+PAYMENT RECEIPT
+════════════════════════════════════════
+
 Booking ID: ${booking._id || 'N/A'}
 Date: ${booking.date ? format(new Date(booking.date), 'PPPP') : 'N/A'}
 Time Slot: ${booking.slot || 'N/A'}
 Consultation Mode: ${booking.mode ? booking.mode.toUpperCase() : 'N/A'}
-----------------------------------------
-Client Details:
+
+CLIENT DETAILS
+─────────────────────────────────────────
 Name: ${booking.userName || 'N/A'}
-----------------------------------------
-Lawyer Details:
+
+LEGAL PROFESSIONAL DETAILS
+─────────────────────────────────────────
 Name: ${booking.lawyerName || 'N/A'}
 Contact: ${booking.lawyerPhone || 'N/A'}
-Specialization: Criminal Lawyer
-----------------------------------------
-Payment Information:
-Amount: Rs.${booking.amount || '0'}
+
+PAYMENT SUMMARY
+─────────────────────────────────────────
+Amount: ₹${booking.amount || '0'}
 Payment Method: ${booking.paymentMode ? booking.paymentMode.toUpperCase() : 'N/A'}
 Transaction ID: ${booking.paymentId || 'N/A'}
-Payment Status: ${booking.paymentStatus ? booking.paymentStatus.toUpperCase() : 'N/A'}
-----------------------------------------
-Thank you for using LegalConnect!
-For any queries, please contact nyaymitra.ai@gmail.com
+Status: ${booking.paymentStatus ? booking.paymentStatus.toUpperCase() : 'N/A'}
+
+════════════════════════════════════════
+Thank you for choosing our legal services.
+Contact: nyaymitra.ai@gmail.com
     `.trim();
 
         const blob = new Blob([receiptContent], { type: 'text/plain' })
         const url = URL.createObjectURL(blob)
         const a = document.createElement('a')
         a.href = url
-        a.download = `LegalConnect_Receipt_${booking._id ? booking._id.slice(0, 8) : 'N/A'}.txt`
+        a.download = `Receipt_${booking._id ? booking._id.slice(0, 8) : 'N/A'}_${format(new Date(), 'yyyyMMdd')}.txt`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
     }
 
-    const getStatusBadge = () => {
-        const statusSteps = [
-            { id: 'pending', label: 'Pending', icon: <Clock className="w-4 h-4" />, color: 'text-yellow-500' },
-            { id: 'confirmed', label: 'Confirmed', icon: <CheckCircle2 className="w-4 h-4" />, color: 'text-green-500' },
-            { id: 'completed', label: 'Completed', icon: <Star className="w-4 h-4" />, color: 'text-blue-500' },
-            { id: 'cancelled', label: 'Cancelled', icon: <XCircle className="w-4 h-4" />, color: 'text-destructive' },
-        ]
-
-        const status = statusSteps.find(step => step.id === booking?.status.toLowerCase()) ||
-            { icon: <Clock className="w-4 h-4" />, color: 'text-muted-foreground', label: 'Unknown' }
-
-        return (
-            <Badge
-                variant={
-                    booking?.status === 'confirmed' ? 'default' :
-                        booking?.status === 'completed' ? 'secondary' :
-                            booking?.status === 'cancelled' ? 'destructive' : 'outline'
-                }
-                className="gap-2 px-3 py-1.5 rounded-lg"
-            >
-                <span className={status.color}>{status.icon}</span>
-                <span>{status.label}</span>
-            </Badge>
-        )
+    const getStatusConfig = () => {
+        const configs = {
+            pending: { label: 'Pending', icon: <Clock className="w-4 h-4" />, color: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', text: 'text-amber-900' },
+            confirmed: { label: 'Confirmed', icon: <CheckCircle2 className="w-4 h-4" />, color: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', text: 'text-emerald-900' },
+            completed: { label: 'Completed', icon: <Star className="w-4 h-4" />, color: 'from-blue-500 to-cyan-500', bg: 'bg-blue-50', text: 'text-blue-900' },
+            cancelled: { label: 'Cancelled', icon: <XCircle className="w-4 h-4" />, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-50', text: 'text-slate-900' },
+        }
+        return configs[booking?.status?.toLowerCase() as keyof typeof configs] || configs.pending
     }
 
-    const getModeBadge = () => {
+    const getModeConfig = () => {
         if (!booking) return null;
-
-        const modeConfig = {
-            video: { icon: <Video className="w-4 h-4" />, color: 'bg-purple-100 text-purple-800' },
-            phone: { icon: <Phone className="w-4 h-4" />, color: 'bg-blue-100 text-blue-800' },
-            chat: { icon: <MessageSquare className="w-4 h-4" />, color: 'bg-green-100 text-green-800' },
-            default: { icon: <MessageSquare className="w-4 h-4" />, color: 'bg-gray-100 text-gray-800' }
+        const modes = {
+            video: { label: 'Video Call', icon: <Video className="w-4 h-4" />, color: 'from-purple-500 to-pink-500' },
+            phone: { label: 'Phone Call', icon: <Phone className="w-4 h-4" />, color: 'from-blue-500 to-cyan-500' },
+            chat: { label: 'Text Chat', icon: <MessageSquare className="w-4 h-4" />, color: 'from-emerald-500 to-teal-500' },
         }
-
-        const mode = modeConfig[booking.mode as keyof typeof modeConfig] || modeConfig.default
-
-        return (
-            <Badge className={`gap-2 ${mode.color}`}>
-                {mode.icon}
-                <span className="capitalize">{booking.mode}</span>
-            </Badge>
-        )
+        return modes[booking.mode as keyof typeof modes] || modes.chat
     }
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20">
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
                 <div className="flex flex-col items-center gap-4">
-                    <Loader className="animate-spin w-10 h-10 text-primary" />
-                    <p className="text-muted-foreground animate-pulse">Loading your booking details...</p>
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-xl opacity-20 animate-pulse"></div>
+                        <Loader className="relative animate-spin w-12 h-12 text-slate-700" />
+                    </div>
+                    <p className="text-slate-500 font-medium">Loading your booking details</p>
                 </div>
             </div>
         )
@@ -311,682 +314,522 @@ For any queries, please contact nyaymitra.ai@gmail.com
 
     if (!booking) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-6 bg-gradient-to-br from-background to-muted/20 p-6">
+            <div className="min-h-screen flex flex-col items-center justify-center gap-8 bg-gradient-to-br from-slate-50 via-white to-slate-50 px-4">
                 <div className="relative">
-                    <FileWarning className="w-16 h-16 text-destructive" />
-                    <div className="absolute -inset-2 rounded-full bg-destructive/10 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-red-500 rounded-full blur-2xl opacity-10"></div>
+                    <FileWarning className="relative w-20 h-20 text-slate-400" />
                 </div>
-                <div className="text-center space-y-2">
-                    <h2 className="text-3xl font-bold bg-gradient-to-r from-destructive to-foreground bg-clip-text text-transparent">
-                        Booking not found
-                    </h2>
-                    <p className="text-muted-foreground max-w-md">
+                <div className="text-center space-y-3 max-w-md">
+                    <h2 className="text-3xl font-bold text-slate-900">Booking Not Found</h2>
+                    <p className="text-slate-600 text-sm leading-relaxed">
                         The booking you're looking for doesn't exist or may have been removed.
                     </p>
                 </div>
-                <Button onClick={() => router.push("/all-bookings")}>
+                <Button onClick={() => router.push("/all-bookings")} className="bg-slate-900 hover:bg-slate-800 text-white shadow-lg">
                     View All Bookings
                 </Button>
             </div>
         )
     }
 
+    const statusConfig = getStatusConfig()
+    const modeConfig = getModeConfig()
     const statusSteps = [
-        { id: 'pending', label: 'Pending', icon: <Clock className="w-4 h-4" />, color: 'text-yellow-500' },
-        { id: 'confirmed', label: 'Confirmed', icon: <CheckCircle2 className="w-4 h-4" />, color: 'text-green-500' },
-        { id: 'completed', label: 'Completed', icon: <Star className="w-4 h-4" />, color: 'text-blue-500' },
-        { id: 'cancelled', label: 'Cancelled', icon: <XCircle className="w-4 h-4" />, color: 'text-destructive' },
+        { id: 'pending', label: 'Pending' },
+        { id: 'confirmed', label: 'Confirmed' },
+        { id: 'completed', label: 'Completed' },
     ]
-
     const currentStatusIndex = statusSteps.findIndex(step => step.id === booking.status.toLowerCase())
-    const progressValue = (currentStatusIndex / (statusSteps.length - 1)) * 100
 
     return (
-        <div className="max-w-6xl mx-auto my-8 px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
             <Toaster position="top-center" richColors />
 
-            {/* Header with Navigation */}
-            <div className="flex items-center justify-between">
-                <Button
-                    onClick={() => router.back()}
-                    variant="ghost"
-                    className="gap-2 text-muted-foreground hover:text-primary transition-colors"
-                >
-                    <ArrowLeft className="w-4 h-4" />
-                    Back
-                </Button>
-                <Button onClick={() => router.push("/all-bookings")}>
-                    View All Bookings
-                </Button>
+            {/* Header Navigation */}
+            <div className="sticky top-0 z-40 border-b border-slate-200/50 backdrop-blur-xl bg-white/80">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+                    <Button
+                        onClick={() => router.back()}
+                        variant="ghost"
+                        className="text-slate-600 hover:text-slate-900 gap-2 -ml-2"
+                    >
+                        <ArrowLeft className="w-4 h-4" />
+                        <span className="hidden sm:inline">Back</span>
+                    </Button>
+                    <Button
+                        onClick={() => router.push("/all-bookings")}
+                        className="bg-slate-900 hover:bg-slate-800 text-white"
+                    >
+                        All Bookings
+                    </Button>
+                </div>
             </div>
 
-            {/* Booking Header */}
-            <div className="space-y-4">
-                <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                    <div className="space-y-2">
-                        <Badge variant="secondary" className="flex items-center gap-2 w-fit">
-                            <Zap className="w-3 h-3" />
-                            <span>Booking ID: {booking._id.slice(0, 8)}</span>
-                        </Badge>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tighter bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-                            {booking.status === 'cancelled' ? 'Booking Cancelled' : 'Booking Details'}
-                        </h1>
-                        <p className="text-muted-foreground">
-                            {booking.status === 'cancelled'
-                                ? 'This booking has been cancelled'
-                                : `Your consultation ${isLawyer ? 'with client' : 'with lawyer'} ${isLawyer ? booking.userName : booking.lawyerName} is scheduled for ${format(new Date(booking.date), 'MMMM d, yyyy')} at ${booking.slot}`}
-                        </p>
-                    </div>
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
 
-                    <div className="flex items-center gap-2">
-                        {getStatusBadge()}
-                        {getModeBadge()}
+                {/* Hero Section */}
+                <div className="space-y-6">
+                    <div className="space-y-4">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                            <div className="space-y-3 flex-1">
+                                <div className="flex items-center gap-2">
+                                    <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-purple-600"></div>
+                                    <span className="text-xs uppercase tracking-widest font-bold text-slate-500">Booking ID</span>
+                                </div>
+                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
+                                    {booking.status === 'cancelled' ? 'Booking Cancelled' : 'Consultation Scheduled'}
+                                </h1>
+                                <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
+                                    {booking.status === 'cancelled'
+                                        ? 'This booking is no longer active.'
+                                        : `Your ${booking.mode} consultation with ${isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`} is scheduled for ${format(new Date(booking.date), 'MMMM d, yyyy')} at ${booking.slot}`}
+                                </p>
+                            </div>
+                            <div className="flex flex-col gap-3 items-start md:items-end">
+                                <div className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r ${statusConfig.color} text-white font-semibold text-sm shadow-lg`}>
+                                    {statusConfig.icon}
+                                    {statusConfig.label}
+                                </div>
+                                {modeConfig && (
+                                    <div className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r ${modeConfig.color} text-white font-semibold text-sm shadow-lg`}>
+                                        {modeConfig.icon}
+                                        {modeConfig.label}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Status Progress */}
+                        <div className="pt-6 space-y-4">
+                            <p className="text-xs uppercase tracking-widest font-bold text-slate-500">Timeline</p>
+                            <div className="flex items-center justify-between">
+                                {statusSteps.map((step, index) => (
+                                    <div key={step.id} className="flex flex-col items-center flex-1">
+                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all ${index <= currentStatusIndex
+                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                                                : 'bg-slate-200 text-slate-400'
+                                            }`}>
+                                            {index + 1}
+                                        </div>
+                                        <p className={`text-xs mt-2 font-semibold tracking-wider uppercase ${index <= currentStatusIndex ? 'text-slate-900' : 'text-slate-400'
+                                            }`}>
+                                            {step.label}
+                                        </p>
+                                        {index < statusSteps.length - 1 && (
+                                            <div className={`h-1 w-12 mt-4 rounded-full ${index < currentStatusIndex ? 'bg-gradient-to-r from-blue-600 to-purple-600' : 'bg-slate-200'
+                                                }`}></div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <Progress value={progressValue} className="h-[6px] bg-muted/50" indicatorClassName="bg-gradient-to-r from-primary to-emerald-500" />
-            </div>
-
-            {/* Status Alert */}
-            {booking.status === 'pending' && (
-                <Alert variant="default" className="border-yellow-500 bg-yellow-50">
-                    <AlertCircle className="h-4 w-4 text-yellow-500" />
-                    <AlertTitle>Pending Confirmation</AlertTitle>
-                    <AlertDescription>
-                        This booking is awaiting confirmation from the {isLawyer ? 'you' : 'lawyer'}.
-                        {!isLawyer && ' You will receive a notification once confirmed.'}
-                    </AlertDescription>
-                </Alert>
-            )}
-
-            {booking.status === 'cancelled' && (
-                <Alert variant="destructive">
-                    <XCircle className="h-4 w-4" />
-                    <AlertTitle>Booking Cancelled</AlertTitle>
-                    <AlertDescription>
-                        This booking was cancelled on {format(new Date(booking.updatedAt || booking.createdAt || new Date()), 'PPPP')}
-                    </AlertDescription>
-                </Alert>
-            )}
-
-            {/* Main Content Tabs */}
-            <Tabs defaultValue="details" className="space-y-6">
-                <TabsList className="bg-muted/50 p-1.5 h-auto rounded-xl">
-                    <TabsTrigger value="details" className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-4 py-2">
-                        <ShieldCheck className="w-4 h-4 mr-2" />
-                        Details
-                    </TabsTrigger>
-                    <TabsTrigger
-                        value={isLawyer ? "client" : "lawyer"}
-                        className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-4 py-2"
-                    >
-                        <User className="w-4 h-4 mr-2" />
-                        {isLawyer ? 'Client Info' : 'Lawyer Info'}
-                    </TabsTrigger>
-                    <TabsTrigger value="actions" className="data-[state=active]:bg-background data-[state=active]:shadow-sm rounded-lg px-4 py-2">
-                        <Zap className="w-4 h-4 mr-2" />
-                        Actions
-                    </TabsTrigger>
-                </TabsList>
-
-                {/* Details Tab */}
-                <TabsContent value="details">
-                    <Card className="border-none shadow-lg rounded-2xl overflow-hidden bg-gradient-to-br from-background to-muted/10">
-                        <CardHeader>
-                            <CardTitle>Booking Information</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-8 space-y-8">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {!isLawyer && (
-                                    <InfoRow icon={<User className="text-primary" />} label="Client" value={booking.userName} />
-                                )}
-                                <InfoRow
-                                    icon={isLawyer ? <User className="text-primary" /> : <ShieldCheck className="text-primary" />}
-                                    label={isLawyer ? "Client" : "Lawyer"}
-                                    value={isLawyer ? booking.userName : booking.lawyerName}
-                                />
-
-                                <InfoRow
-                                    icon={<CalendarDays className="text-primary" />}
-                                    label="Date"
-                                    value={
-                                        <div className="flex items-center gap-2">
-                                            <span>{format(new Date(booking.date), 'PPP')}</span>
-                                            <Badge variant="outline" className="px-2 py-0.5">
-                                                {format(new Date(booking.date), 'EEEE')}
-                                            </Badge>
-                                        </div>
-                                    }
-                                />
-
-                                <InfoRow
-                                    icon={<Clock3 className="text-primary" />}
-                                    label="Time Slot"
-                                    value={
-                                        <Badge variant="secondary" className="px-3 py-1 rounded-lg">
-                                            {booking.slot}
-                                        </Badge>
-                                    }
-                                />
-
-                                <InfoRow
-                                    label="Mode"
-                                    value={
-                                        <div className="flex items-center gap-3">
-                                            {booking.mode === 'video' ? (
-                                                <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-lg">
-                                                    <Video className="w-4 h-4 text-primary" />
-                                                    <span className="capitalize font-medium">{booking.mode}</span>
-                                                </div>
-                                            ) : booking.mode === 'phone' ? (
-                                                <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-lg">
-                                                    <Phone className="w-4 h-4 text-primary" />
-                                                    <span className="capitalize font-medium">{booking.mode}</span>
-                                                </div>
-                                            ) : (
-                                                <div className="flex items-center gap-2 bg-primary/10 px-3 py-1.5 rounded-lg">
-                                                    <MessageSquare className="w-4 h-4 text-primary" />
-                                                    <span className="capitalize font-medium">{booking.mode}</span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    }
-                                />
-
-                                <InfoRow
-                                    icon={<Wallet className="text-primary" />}
-                                    label="Amount"
-                                    value={
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-                                                ₹{booking.amount}
-                                            </span>
-                                            <Badge variant={booking.paymentStatus === 'paid' ? 'default' : 'destructive'}>
-                                                {booking.paymentStatus}
-                                            </Badge>
-                                        </div>
-                                    }
-                                />
+                {/* Alert Sections */}
+                {booking.status === 'pending' && (
+                    <div className="p-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
+                        <div className="flex gap-4 items-start">
+                            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                            <div>
+                                <h3 className="font-bold text-amber-900 mb-1">Awaiting Confirmation</h3>
+                                <p className="text-sm text-amber-800">
+                                    This booking is pending confirmation from the {isLawyer ? 'client' : 'legal professional'}. You'll receive a notification once confirmed.
+                                </p>
                             </div>
+                        </div>
+                    </div>
+                )}
 
-                            <Separator className="bg-muted/30" />
+                {booking.status === 'cancelled' && (
+                    <div className="p-6 rounded-xl border border-slate-300 bg-gradient-to-br from-slate-50 to-slate-100">
+                        <div className="flex gap-4 items-start">
+                            <XCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
+                            <div>
+                                <h3 className="font-bold text-slate-900 mb-1">Booking Cancelled</h3>
+                                <p className="text-sm text-slate-700">
+                                    Cancelled on {format(new Date(booking.updatedAt || booking.createdAt || new Date()), 'MMMM d, yyyy')}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-4">Status Timeline</h3>
-                                    <div className="space-y-4">
-                                        {statusSteps.map((step, index) => (
-                                            <div key={step.id} className="flex items-center gap-4">
-                                                <div className={`flex flex-col items-center ${index < currentStatusIndex ? 'text-primary' : 'text-muted-foreground'}`}>
-                                                    <div className={cn(
-                                                        "w-8 h-8 rounded-full flex items-center justify-center",
-                                                        index <= currentStatusIndex ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground',
-                                                        step.color
-                                                    )}>
-                                                        {step.icon}
-                                                    </div>
-                                                    {index < statusSteps.length - 1 && (
-                                                        <div className={cn(
-                                                            "w-0.5 h-6",
-                                                            index < currentStatusIndex ? 'bg-primary' : 'bg-muted'
-                                                        )}></div>
-                                                    )}
-                                                </div>
-                                                <div>
-                                                    <p className={cn(
-                                                        "font-medium",
-                                                        index <= currentStatusIndex ? 'text-foreground' : 'text-muted-foreground'
-                                                    )}>
-                                                        {step.label}
-                                                    </p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {index === 0 && "Booking received"}
-                                                        {index === 1 && isLawyer ? "You confirmed this booking" : "Lawyer confirmed"}
-                                                        {index === 2 && "Consultation completed"}
-                                                        {index === 3 && "Booking cancelled"}
-                                                    </p>
-                                                </div>
+                {/* Content Tabs */}
+                <Tabs defaultValue="overview" className="space-y-6">
+                    <TabsList className="bg-white border border-slate-200 rounded-xl p-1.5 h-auto inline-flex shadow-sm">
+                        <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
+                            <Briefcase className="w-4 h-4 mr-2" />
+                            Overview
+                        </TabsTrigger>
+                        <TabsTrigger value={isLawyer ? "client" : "lawyer"} className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
+                            <User className="w-4 h-4 mr-2" />
+                            {isLawyer ? 'Client' : 'Lawyer'}
+                        </TabsTrigger>
+                        <TabsTrigger value="actions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
+                            <Zap className="w-4 h-4 mr-2" />
+                            Actions
+                        </TabsTrigger>
+                    </TabsList>
+
+                    {/* Overview Tab */}
+                    <TabsContent value="overview" className="space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            {/* Key Details Grid */}
+                            <div className="lg:col-span-2 space-y-6">
+                                <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
+                                    <div className="space-y-6">
+                                        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
+                                                <Sparkles className="w-4 h-4 text-white" />
                                             </div>
-                                        ))}
+                                            Booking Details
+                                        </h2>
+
+                                        {/* Details Grid */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                            <DetailCard
+                                                icon={<CalendarDays className="w-5 h-5 text-blue-600" />}
+                                                label="Date"
+                                                value={format(new Date(booking.date), 'MMMM d, yyyy')}
+                                                subtext={format(new Date(booking.date), 'EEEE')}
+                                            />
+                                            <DetailCard
+                                                icon={<Clock3 className="w-5 h-5 text-blue-600" />}
+                                                label="Time Slot"
+                                                value={booking.slot}
+                                            />
+                                            <DetailCard
+                                                icon={modeConfig?.icon}
+                                                label="Consultation Mode"
+                                                value={modeConfig?.label || booking.mode}
+                                            />
+                                            <DetailCard
+                                                icon={<Wallet className="w-5 h-5 text-blue-600" />}
+                                                label="Amount"
+                                                value={`₹${booking.amount}`}
+                                                subtext={booking.paymentStatus}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div>
-                                    <h3 className="text-lg font-semibold mb-4">Payment Details</h3>
-                                    <Card className="p-6">
-                                        <div className="space-y-4">
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-muted-foreground">Method</span>
-                                                <Badge variant="outline" className="capitalize">
-                                                    {booking.paymentMode}
-                                                </Badge>
+                                    <div className="border-t border-slate-200"></div>
+
+                                    {/* Payment Section */}
+                                    <div className="space-y-4">
+                                        <h3 className="font-bold text-slate-900 flex items-center gap-2">
+                                            <CreditCard className="w-4 h-4 text-blue-600" />
+                                            Payment Information
+                                        </h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                                <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Method</p>
+                                                <p className="font-semibold text-slate-900 capitalize">{booking.paymentMode}</p>
                                             </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-muted-foreground">Status</span>
-                                                <Badge variant={booking.paymentStatus === 'paid' ? 'default' : 'destructive'}>
+                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
+                                                <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Status</p>
+                                                <Badge variant={booking.paymentStatus === 'paid' ? 'default' : 'destructive'} className="rounded-lg">
                                                     {booking.paymentStatus}
                                                 </Badge>
                                             </div>
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-muted-foreground">Transaction ID</span>
-                                                <span className="font-mono text-sm">
-                                                    {booking.paymentId || `TRX_${booking._id.slice(0, 8)}`}
-                                                </span>
-                                            </div>
-                                            <div className="pt-4">
-                                                <Button
-                                                    variant="outline"
-                                                    className="w-full gap-2"
-                                                    onClick={downloadPaymentReceipt}
-                                                >
-                                                    <Download className="w-4 h-4" />
-                                                    Download Payment Receipt
-                                                </Button>
-                                            </div>
                                         </div>
-                                    </Card>
+                                        <Button
+                                            onClick={downloadPaymentReceipt}
+                                            variant="outline"
+                                            className="w-full gap-2 border-slate-300 hover:border-slate-400 text-slate-900 hover:bg-slate-50"
+                                        >
+                                            <Download className="w-4 h-4" />
+                                            Download Payment Receipt
+                                        </Button>
+                                    </div>
+
+                                    {/* Contact Info */}
+                                    <ContactCard booking={booking} isLawyer={isLawyer} />
                                 </div>
                             </div>
-                            <ContactCard booking={booking} isLawyer={isLawyer} />
 
-                        </CardContent>
-                        {/* </CardContent> */}
+                            {/* Sidebar */}
+                            <div className="space-y-6">
+                                {/* Parties Card */}
+                                <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
+                                    <h3 className="font-bold text-slate-900">Parties</h3>
+                                    <div className="space-y-3">
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-1">Client</p>
+                                            <p className="font-semibold text-slate-900">{booking.userName}</p>
+                                        </div>
+                                        <div className="border-t border-slate-200"></div>
+                                        <div>
+                                            <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-1">Legal Professional</p>
+                                            <p className="font-semibold text-slate-900">{booking.lawyerName}</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                    </Card>
-                </TabsContent>
+                                {/* Quick Actions */}
+                                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-6 space-y-3">
+                                    <h3 className="font-bold text-slate-900">Quick Actions</h3>
+                                    <Button
+                                        onClick={downloadPaymentReceipt}
+                                        variant="outline"
+                                        className="w-full justify-start gap-2 border-blue-300 text-slate-900 hover:bg-white"
+                                    >
+                                        <Download className="w-4 h-4" />
+                                        <span className="text-sm font-medium">Receipt</span>
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                    </TabsContent>
 
-                {/* Client/Lawyer Info Tab */}
-                <TabsContent value={isLawyer ? "client" : "lawyer"}>
-                    <Card className="border-none shadow-lg rounded-2xl overflow-hidden bg-gradient-to-br from-background to-muted/10">
-                        <CardHeader>
-                            <CardTitle>{isLawyer ? 'Client Information' : 'Lawyer Profile'}</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-8 space-y-8">
-                            <div className="flex flex-col md:flex-row items-start gap-6">
-                                <div className="relative">
-                                    <Avatar className="h-20 w-20">
-                                        <AvatarImage src={isLawyer ? "/user-avatar.jpg" : "/lawyer-avatar.jpg"} />
-                                        <AvatarFallback className="bg-gradient-to-br from-primary to-secondary text-white font-bold text-2xl">
+                    {/* Lawyer/Client Info Tab */}
+                    <TabsContent value={isLawyer ? "client" : "lawyer"} className="space-y-6">
+                        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+                            <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-32"></div>
+                            <div className="px-8 pb-8">
+                                <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-end -mt-16 mb-8">
+                                    <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
+                                        <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold text-3xl">
                                             {isLawyer ? booking.userName.charAt(0).toUpperCase() : booking.lawyerName.charAt(0).toUpperCase()}
                                         </AvatarFallback>
                                     </Avatar>
-                                    <Badge variant="default" className="absolute -bottom-2 -right-2 px-2 py-1 rounded-lg shadow-sm">
-                                        <Shield className="w-3 h-3 mr-1" />
-                                        Verified
-                                    </Badge>
-                                </div>
-                                <div className="flex-1">
-                                    <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
-                                        {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
-                                    </h3>
-
-                                    <p className="text-muted-foreground">
-                                        {isLawyer ? "Client" : "Legal Expert "}
-                                    </p>
-                                    <div className="flex flex-wrap items-center gap-2 mt-3">
-                                        {!isLawyer && (
-                                            <>
-                                                {booking.lawyerDetails?.averageRating !== undefined && (
-                                                    <Badge variant="secondary" className="flex items-center gap-1 px-3 py-1 rounded-lg">
-                                                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                                                        <span>{booking.lawyerDetails.averageRating} ({booking.lawyerDetails.totalReviews} reviews)</span>
+                                    <div className="flex-1">
+                                        <h2 className="text-3xl font-bold text-slate-900">
+                                            {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
+                                        </h2>
+                                        <p className="text-slate-600 mt-1">{isLawyer ? 'Client' : 'Legal Expert'}</p>
+                                        {!isLawyer && booking.lawyerDetails?.experience && (
+                                            <div className="flex flex-wrap gap-2 mt-3">
+                                                <Badge variant="secondary" className="rounded-full px-3 py-1">
+                                                    <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
+                                                    {booking.lawyerDetails.averageRating} ({booking.lawyerDetails.totalReviews})
+                                                </Badge>
+                                                <Badge variant="secondary" className="rounded-full px-3 py-1">
+                                                    {booking.lawyerDetails.experience}+ years
+                                                </Badge>
+                                                {booking.lawyerCity && (
+                                                    <Badge variant="secondary" className="rounded-full px-3 py-1">
+                                                        <MapPin className="w-3 h-3 mr-1" />
+                                                        {booking.lawyerCity}
                                                     </Badge>
                                                 )}
-
-                                                {booking.lawyerDetails?.experience !== undefined && (
-                                                    <Badge variant="outline" className="px-3 py-1 rounded-lg">
-                                                        {booking.lawyerDetails.experience}+ years experience
-                                                    </Badge>
-                                                )}
-
-                                            </>
-                                        )}
-                                        {booking.lawyerCity && (
-                                            <Badge variant="outline" className="px-3 py-1 rounded-lg">
-                                                <MapPin className="w-3 h-3 mr-1" />
-                                                {booking.lawyerCity}
-                                            </Badge>
+                                            </div>
                                         )}
                                     </div>
                                 </div>
-                            </div>
 
-                            <Separator className="bg-muted/30" />
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {!isLawyer && (
-                                    <div className="space-y-4">
-                                        <h4 className="font-semibold text-lg flex items-center gap-2">
-                                            <ShieldCheck className="w-5 h-5 text-primary" />
-                                            Specializations
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
-                                            {booking.lawyerDetails?.specialization?.map((spec, index) => (
-                                                <TooltipProvider key={spec}>
-                                                    <Tooltip>
-                                                        <TooltipTrigger>
-                                                            <Badge variant="outline" className="rounded-lg px-3 py-1">
-                                                                {spec}
-                                                            </Badge>
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>Specialized in {spec.toLowerCase()}</p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </TooltipProvider>
-                                            ))}
+                                <div className="space-y-6">
+                                    {!isLawyer && booking.lawyerDetails?.specialization && (
+                                        <div>
+                                            <h3 className="font-bold text-slate-900 mb-3">Specializations</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {booking.lawyerDetails.specialization.map(spec => (
+                                                    <Badge key={spec} variant="outline" className="rounded-full px-3 py-1.5">
+                                                        {spec}
+                                                    </Badge>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-
-                                <div className="space-y-4">
-                                    <h4 className="font-semibold text-lg flex items-center gap-2">
-                                        <MessageSquare className="w-5 h-5 text-primary" />
-                                        Languages
-                                    </h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        {booking.lawyerDetails?.languages?.map((lang, index) => (
-                                            <Badge key={lang} variant="outline" className="rounded-lg px-3 py-1">
-                                                {lang}
-                                            </Badge>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                <h4 className="font-semibold text-lg">About</h4>
-                                <p className="text-muted-foreground">
-                                    {isLawyer ? (
-                                        `Client ${booking.userName} has booked a consultation for legal advice.`
-                                    ) : (
-                                        booking.lawyerDetails?.bio || 'No bio available.'
                                     )}
-                                </p>
-                            </div>
 
-
-                            {/* {!isLawyer && (
-                                <div className="space-y-4">
-                                    <h4 className="font-semibold text-lg">Education</h4>
-                                    <div className="space-y-3">
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
-                                            <div>
-                                                <p className="font-medium">LL.M. (Criminal Law)</p>
-                                                <p className="text-sm text-muted-foreground">National Law University, Delhi | 2010</p>
+                                    {booking.lawyerDetails?.languages && (
+                                        <div>
+                                            <h3 className="font-bold text-slate-900 mb-3">Languages</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {booking.lawyerDetails.languages.map(lang => (
+                                                    <Badge key={lang} variant="outline" className="rounded-full px-3 py-1.5">
+                                                        {lang}
+                                                    </Badge>
+                                                ))}
                                             </div>
                                         </div>
-                                        <div className="flex items-start gap-3">
-                                            <div className="w-2 h-2 mt-2 rounded-full bg-primary"></div>
-                                            <div>
-                                                <p className="font-medium">LL.B. (Hons)</p>
-                                                <p className="text-sm text-muted-foreground">Faculty of Law, Delhi University | 2008</p>
-                                            </div>
+                                    )}
+
+                                    {booking.lawyerDetails?.bio && (
+                                        <div>
+                                            <h3 className="font-bold text-slate-900 mb-3">About</h3>
+                                            <p className="text-slate-600 leading-relaxed">{booking.lawyerDetails.bio}</p>
                                         </div>
-                                    </div>
+                                    )}
                                 </div>
-                            )} */}
 
-                            {/* Add Contact Card here */}
-                            <ContactCard booking={booking} isLawyer={isLawyer} />
-                        </CardContent>
-                    </Card>
-                </TabsContent>
+                                <div className="border-t border-slate-200 mt-8 pt-8">
+                                    <ContactCard booking={booking} isLawyer={isLawyer} />
+                                </div>
+                            </div>
+                        </div>
+                    </TabsContent>
 
-                {/* Actions Tab */}
-                <TabsContent value="actions">
-                    <Card className="border-none shadow-lg rounded-2xl overflow-hidden bg-gradient-to-br from-background to-muted/10">
-                        <CardHeader>
-                            <CardTitle>Booking Actions</CardTitle>
-                        </CardHeader>
-                        <CardContent className="p-8 space-y-8">
-                            <div className="space-y-6">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <Button
-                                        variant="outline"
-                                        className="h-16 rounded-xl border-primary/20 hover:border-primary/40 transition-colors"
+                    {/* Actions Tab */}
+                    <TabsContent value="actions" className="space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div className="lg:col-span-2 space-y-4">
+                                {/* Action Buttons */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <ActionButton
+                                        icon={<Download className="w-5 h-5" />}
+                                        title="Download Receipt"
+                                        description="Payment confirmation"
                                         onClick={downloadPaymentReceipt}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <Download className="w-5 h-5 text-primary" />
-                                            <div className="text-left">
-                                                <p className="font-medium">Download Receipt</p>
-                                                <p className="text-xs text-muted-foreground">Get payment confirmation</p>
-                                            </div>
-                                        </div>
-                                    </Button>
+                                        variant="outline"
+                                    />
 
                                     {!isLawyer && booking.status !== 'cancelled' && booking.status !== 'completed' && (
                                         <>
-                                            <Button
+                                            <ActionButton
+                                                icon={<CalendarDays className="w-5 h-5" />}
+                                                title="Reschedule"
+                                                description="Change appointment"
                                                 variant="outline"
-                                                className="h-16 rounded-xl border-primary/20 hover:border-primary/40 transition-colors"
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    <CalendarDays className="w-5 h-5 text-primary" />
-                                                    <div className="text-left">
-                                                        <p className="font-medium">Reschedule</p>
-                                                        <p className="text-xs text-muted-foreground">Change appointment time</p>
-                                                    </div>
-                                                </div>
-                                            </Button>
-                                            <Button
-                                                variant="destructive"
-                                                className="h-16 rounded-xl"
+                                            />
+                                            <ActionButton
+                                                icon={<FileWarning className="w-5 h-5" />}
+                                                title="Cancel Booking"
+                                                description="Cancel this appointment"
                                                 onClick={handleCancelBooking}
-                                                disabled={cancelling}
-                                            >
-                                                <div className="flex items-center gap-3">
-                                                    {cancelling ? (
-                                                        <Loader className="animate-spin w-5 h-5" />
-                                                    ) : (
-                                                        <FileWarning className="w-5 h-5" />
-                                                    )}
-                                                    <div className="text-left">
-                                                        <p className="font-medium">Cancel Booking</p>
-                                                        <p className="text-xs text-white/70">Cancel this appointment</p>
-                                                    </div>
-                                                </div>
-                                            </Button>
+                                                isLoading={cancelling}
+                                                variant="destructive"
+                                            />
                                         </>
                                     )}
 
                                     {isLawyer && booking.status === 'confirmed' && (
-                                        <Button
-                                            variant="default"
-                                            className="h-16 rounded-xl"
+                                        <ActionButton
+                                            icon={<CheckCircle2 className="w-5 h-5" />}
+                                            title="Mark Complete"
+                                            description="Finish consultation"
                                             onClick={handleCompleteBooking}
-                                            disabled={completing}
-                                        >
-                                            <div className="flex items-center gap-3">
-                                                {completing ? (
-                                                    <Loader className="animate-spin w-5 h-5" />
-                                                ) : (
-                                                    <CheckCircle2 className="w-5 h-5" />
-                                                )}
-                                                <div className="text-left">
-                                                    <p className="font-medium">Mark as Completed</p>
-                                                    <p className="text-xs text-white/70">Finish this consultation</p>
-                                                </div>
-                                            </div>
-                                        </Button>
+                                            isLoading={completing}
+                                            variant="default"
+                                        />
+                                    )}
+
+                                    {booking.status === 'completed' && (
+                                        <ActionButton
+                                            icon={<FileText className="w-5 h-5" />}
+                                            title="Download Summary"
+                                            description="Consultation notes"
+                                            variant="outline"
+                                        />
                                     )}
                                 </div>
 
-                                {booking.status === 'completed' && (
-                                    <Button
-                                        variant="outline"
-                                        className="h-16 w-full rounded-xl border-primary/20 hover:border-primary/40 transition-colors"
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <FileText className="w-5 h-5 text-primary" />
-                                            <div className="text-left">
-                                                <p className="font-medium">Download Summary</p>
-                                                <p className="text-xs text-muted-foreground">Get your consultation notes</p>
+                                {/* Meeting Details */}
+                                <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-6 mt-8">
+                                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                        {modeConfig?.icon}
+                                        <span>{modeConfig?.label} Details</span>
+                                    </h3>
+
+                                    {booking.mode === 'video' && (
+                                        <div className="space-y-4">
+                                            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-200 p-6">
+                                                <p className="text-sm text-slate-600 mb-2">
+                                                    Your video consultation will be conducted via our secure platform. Ensure you have a stable internet connection and a device with camera and microphone.
+                                                </p>
                                             </div>
+                                            <Button className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-xl">
+                                                <Video className="w-4 h-4 mr-2" />
+                                                Join Video Call
+                                            </Button>
+                                            <p className="text-xs text-center text-slate-500">
+                                                Link available 10 minutes before your scheduled time
+                                            </p>
                                         </div>
-                                    </Button>
-                                )}
-
-                                <Button
-                                    className="h-16 w-full rounded-xl bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 transition-all"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <MessageSquare className="w-5 h-5" />
-                                        <div className="text-left">
-                                            <p className="font-medium">Contact Support</p>
-                                            <p className="text-xs text-white/70">Need help with your booking?</p>
-                                        </div>
-                                    </div>
-                                </Button>
-                            </div>
-
-                            <Separator className="bg-muted/30" />
-
-                            <div className="space-y-6">
-                                <h3 className="text-xl font-bold flex items-center gap-2">
-                                    {booking.mode === 'video' ? (
-                                        <Video className="w-5 h-5 text-primary" />
-                                    ) : booking.mode === 'phone' ? (
-                                        <Phone className="w-5 h-5 text-primary" />
-                                    ) : (
-                                        <MessageSquare className="w-5 h-5 text-primary" />
                                     )}
-                                    <span>Meeting Details</span>
-                                </h3>
-                                {booking.mode === 'video' ? (
-                                    <div className="space-y-4">
-                                        <Card className="bg-primary/5 border-primary/20 p-6 rounded-xl">
-                                            <div className="flex items-start gap-4">
-                                                <div className="bg-primary/10 p-3 rounded-lg">
-                                                    <Video className="w-6 h-6 text-primary" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-semibold">Video Consultation</h4>
-                                                    <p className="text-sm text-muted-foreground mt-1">
-                                                        Your video consultation will be conducted via our secure platform.
-                                                        You'll need a device with camera and microphone.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                        <Button
-                                            variant="default"
-                                            className="w-full h-14 rounded-xl bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 transition-all"
-                                        >
-                                            Join Video Call
-                                        </Button>
-                                        <p className="text-xs text-center text-muted-foreground">
-                                            Link will be active 10 minutes before your scheduled time at {booking.slot}
-                                        </p>
-                                        {/* Add Contact Card for video consultations */}
-                                        <ContactCard booking={booking} isLawyer={isLawyer} />
-                                    </div>
-                                ) : booking.mode === 'phone' ? (
-                                    <div className="space-y-4">
-                                        <Card className="bg-primary/5 border-primary/20 p-6 rounded-xl">
-                                            <div className="flex items-start gap-4">
-                                                <div className="bg-primary/10 p-3 rounded-lg">
-                                                    <Phone className="w-6 h-6 text-primary" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-semibold">Phone Consultation</h4>
-                                                    <p className="text-sm text-muted-foreground mt-1">
-                                                        {isLawyer
-                                                            ? "You will call the client at their registered phone number."
-                                                            : "You can call the lawyer directly at their contact number."
-                                                        }
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </Card>
-                                        {/* Enhanced contact display for phone consultations */}
-                                        {!isLawyer && booking.lawyerPhone && (
-                                            <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            Lawyer's Direct Number
-                                                        </p>
-                                                        <p className="text-xl font-bold text-blue-800">
-                                                            {booking.lawyerPhone}
-                                                        </p>
+
+                                    {booking.mode === 'phone' && (
+                                        <div className="space-y-4">
+                                            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-200 p-6">
+                                                <p className="text-sm text-slate-600 mb-3">
+                                                    {isLawyer ? 'You will call the client at their registered number.' : 'Call the lawyer at the number below at your scheduled time.'}
+                                                </p>
+                                                {!isLawyer && booking.lawyerPhone && (
+                                                    <div className="bg-white rounded-lg p-4 border border-blue-200 mb-4">
+                                                        <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Direct Number</p>
+                                                        <p className="text-2xl font-bold text-slate-900 font-mono">{booking.lawyerPhone}</p>
                                                     </div>
-                                                    <Button
-                                                        onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
-                                                    >
-                                                        <Phone className="w-4 h-4 mr-2" /> Call Now
-                                                    </Button>
-                                                </div>
-                                                <div className="mt-3 flex items-center justify-between">
-                                                    <div>
-                                                        <p className="text-sm text-muted-foreground">
-                                                            Scheduled Call Time
-                                                        </p>
-                                                        <p className="font-medium">
-                                                            {format(new Date(booking.date), 'PPP')} at {booking.slot}
-                                                        </p>
-                                                    </div>
-                                                    <Button variant="outline">
-                                                        <CalendarDays className="w-4 h-4 mr-2" /> Add to Calendar
-                                                    </Button>
-                                                </div>
+                                                )}
                                             </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div className="space-y-4">
-                                        <Card className="bg-primary/5 border-primary/20 p-6 rounded-xl">
-                                            <div className="flex items-start gap-4">
-                                                <div className="bg-primary/10 p-3 rounded-lg">
-                                                    <MessageSquare className="w-6 h-6 text-primary" />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-semibold">Chat Consultation</h4>
-                                                    <p className="text-sm text-muted-foreground mt-1">
-                                                        Your chat consultation will be available in your messages.
-                                                        You can discuss your legal matter via text with the {isLawyer ? 'client' : 'lawyer'}.
-                                                    </p>
-                                                </div>
+                                            {!isLawyer && (
+                                                <Button
+                                                    onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                                                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl"
+                                                >
+                                                    <Phone className="w-4 h-4 mr-2" />
+                                                    Call Now
+                                                </Button>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {booking.mode === 'chat' && (
+                                        <div className="space-y-4">
+                                            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 p-6">
+                                                <p className="text-sm text-slate-600">
+                                                    Your chat consultation is available in your messages. Start the conversation during your scheduled time.
+                                                </p>
                                             </div>
-                                        </Card>
-                                        <Button
-                                            variant="default"
-                                            className="w-full h-14 rounded-xl bg-gradient-to-r from-primary to-emerald-600 hover:from-primary/90 hover:to-emerald-600/90 transition-all"
-                                        >
-                                            Open Chat
-                                        </Button>
-                                        {/* Add Contact Card for chat consultations */}
-                                        <ContactCard booking={booking} isLawyer={isLawyer} />
-                                    </div>
-                                )}
+                                            <Button className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold rounded-xl">
+                                                <MessageSquare className="w-4 h-4 mr-2" />
+                                                Open Chat
+                                            </Button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-            </Tabs>
+
+                            {/* Support Card */}
+                            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 text-white h-fit space-y-4">
+                                <h3 className="text-lg font-bold">Need Help?</h3>
+                                <p className="text-slate-300 text-sm">
+                                    Our support team is available to assist with any questions about your booking.
+                                </p>
+                                <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-xl">
+                                    <MessageSquare className="w-4 h-4 mr-2" />
+                                    Contact Support
+                                </Button>
+                                <div className="pt-4 border-t border-slate-700 space-y-2 text-sm">
+                                    <p className="text-slate-400">nyaymitra.ai@gmail.com</p>
+                                </div>
+                            </div>
+                        </div>
+                    </TabsContent>
+                </Tabs>
+            </div>
         </div>
     )
 }
 
-function InfoRow({
-    icon,
-    label,
-    value,
-}: {
-    icon?: React.ReactNode
-    label: string
-    value: React.ReactNode
-}) {
+// Helper Components
+function DetailCard({ icon, label, value, subtext }: { icon?: React.ReactNode; label: string; value: string; subtext?: string }) {
     return (
-        <div className="flex items-start gap-4">
-            <div className="flex items-center gap-2 text-muted-foreground w-40">
-                {icon}
-                <span className="font-medium">{label}</span>
+        <div className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-lg p-4 border border-slate-200">
+            <div className="flex items-center gap-2 mb-2">
+                {icon && <span className="text-slate-600">{icon}</span>}
+                <p className="text-xs uppercase tracking-wider font-bold text-slate-500">{label}</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground mt-0.5" />
-            <div className="font-medium flex-1 break-words">{value}</div>
+            <p className="font-bold text-slate-900 text-lg">{value}</p>
+            {subtext && <p className="text-xs text-slate-500 mt-1">{subtext}</p>}
         </div>
+    )
+}
+
+function ActionButton({ icon, title, description, onClick, isLoading = false, variant = "outline" }: { icon: React.ReactNode; title: string; description: string; onClick?: () => void; isLoading?: boolean; variant?: string }) {
+    return (
+        <Button
+            onClick={onClick}
+            disabled={isLoading}
+            variant={variant as any}
+            className={`h-24 rounded-xl flex flex-col items-start justify-center gap-1 p-4 transition-all ${variant === 'destructive' ? 'border-red-300 hover:border-red-400' : variant === 'default' ? 'border-none shadow-md' : 'border-slate-300 hover:border-slate-400'
+                }`}
+        >
+            <div className="flex items-center gap-2 w-full">
+                {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : icon}
+                <span className="font-semibold text-sm">{title}</span>
+            </div>
+            <p className="text-xs text-slate-600 dark:text-slate-400">{description}</p>
+        </Button>
     )
 }
