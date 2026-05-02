@@ -57,7 +57,7 @@ const content = {
     langToggle: "हि",
     langSwitchMobile: "हिंदी में देखें",
     hero: {
-      badge: "1000+ Indians helped",
+      badge: "100+ Indians helped",
       titleStatic: "Your Legal Problem,",
       titleAccents: ["Solved Today.", "Resolved Fast.", "In Your Hands."],
       description: "FIR, property disputes, family matters understand your rights instantly and connect with verified lawyers in minutes. Serving Patna, Lucknow, Indore, Jaipur, Ranchi & across India.",
