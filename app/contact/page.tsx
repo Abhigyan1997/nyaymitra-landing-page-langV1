@@ -1,481 +1,457 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Scale, MapPin, Phone, Mail, Clock, Send, MessageCircle, Users, CheckCircle, AlertCircle, Loader2, Globe, Headphones, BookOpen, ChevronRight, Star, Menu, X } from "lucide-react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { useTheme } from "next-themes"
-import { useEffect, useState as useState_ } from "react"
 
+// ─── Icons ────────────────────────────────────────────────────────────────────
+const ShieldIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-5 h-5">
+    <path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z" />
+    <path d="M9 12l2 2 4-4" />
+  </svg>
+)
+const MapPinIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z" /><circle cx="12" cy="10" r="3" />
+  </svg>
+)
+const PhoneIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
+  </svg>
+)
+const MailIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
+  </svg>
+)
+const ClockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+  </svg>
+)
+const SendIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+  </svg>
+)
+const CheckIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-6 h-6">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+)
+const SpinnerIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 animate-spin">
+    <circle cx="12" cy="12" r="10" strokeOpacity={0.25} />
+    <path d="M12 2a10 10 0 0110 10" />
+  </svg>
+)
+const ArrowRightIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+  </svg>
+)
+const AlertIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4 flex-shrink-0">
+    <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+  </svg>
+)
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const CONTACT_INFO = [
+  {
+    icon: <MapPinIcon />,
+    title: "Office Address",
+    lines: ["NyayMitra Technologies Pvt. Ltd.", "Koramangala, 5th Block", "Bangalore, Karnataka – 560095"],
+  },
+  {
+    icon: <MapPinIcon />,
+    title: "Registered Address",
+    lines: ["NyayMitra Technologies Pvt. Ltd.", "Bhagalpur, Bihar, India"],
+  },
+  {
+    icon: <PhoneIcon />,
+    title: "Emergency Line",
+    lines: ["+91 79705 96183"],
+  },
+  {
+    icon: <MailIcon />,
+    title: "Email",
+    lines: ["support@nyaymitra.tech"],
+  },
+  {
+    icon: <ClockIcon />,
+    title: "Business Hours",
+    lines: ["Mon–Fri: 9 AM – 8 PM", "Sat: 10 AM – 6 PM", "Sun: 10 AM – 4 PM"],
+  },
+]
+
+const CATEGORIES = [
+  "General Inquiry",
+  "Legal Advice",
+  "Lawyer Registration",
+  "Technical Support",
+  "Billing & Payments",
+  "Partnership",
+  "Media & Press",
+  "Other",
+]
+
+const FAQS = [
+  {
+    q: "How do I book a consultation with a lawyer?",
+    a: "Browse verified lawyers on our platform and book a consultation by selecting a date, time, and preferred mode.",
+  },
+  {
+    q: "Is the first consultation free?",
+    a: "Yes — every user gets one free consultation with a verified lawyer after signing up.",
+  },
+  {
+    q: "How do lawyers get verified?",
+    a: "We verify lawyers by checking their Bar Council ID and professional details before approving their profiles.",
+  },
+  {
+    q: "Is my data safe on NyayMitra?",
+    a: "Absolutely. We follow strict data privacy standards and never share your information without consent.",
+  },
+  {
+    q: "How does AI legal support work?",
+    a: "Our AI provides 24/7 guidance based on Indian laws. For complex issues, it connects you to a real lawyer.",
+  },
+  {
+    q: "Can I reschedule or cancel a booking?",
+    a: "Yes — manage your bookings through your dashboard. Please inform the lawyer in advance for any changes.",
+  },
+]
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+type FormData = {
+  name: string
+  email: string
+  phone: string
+  subject: string
+  category: string
+  message: string
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
 export default function ContactPage() {
-  const { theme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState_(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState_(false)
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    subject: "",
-    category: "",
-    message: "",
-  })
-  const [isSubmitted, setIsSubmitted] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [form, setForm] = useState<FormData>({ name: "", email: "", phone: "", subject: "", category: "", message: "" })
+  const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  useEffect(() => setMounted(true), [])
+
+  const set = (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+    setForm((p) => ({ ...p, [field]: e.target.value }))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setIsLoading(true)
+    setLoading(true)
     setError("")
-
     try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Failed to send message')
-      setIsSubmitted(true)
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An unknown error occurred')
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.message || "Failed to send message")
+      setSubmitted(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred")
     } finally {
-      setIsLoading(false)
+      setLoading(false)
     }
   }
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const contactInfo = [
-    {
-      icon: MapPin,
-      title: "Office Address",
-      details: ["NyayMitra Technologies Pvt. Ltd.", "Koramangala, 5th Block", "Bangalore, Karnataka - 560095", "India"],
-      color: "blue"
-    },
-    {
-      icon: MapPin,
-      title: "Registered Address",
-      details: ["NyayMitra Technologies Pvt. Ltd.", "Bhagalpur, Bihar", "India"],
-      color: "green"
-    },
-    {
-      icon: Phone,
-      title: "Phone Numbers",
-      details: ["Emergency: +91 79705 96183"],
-      color: "purple"
-    },
-    {
-      icon: Mail,
-      title: "Email Addresses",
-      details: ["Support: support@nyaymitra.tech"],
-      color: "orange"
-    },
-    {
-      icon: Clock,
-      title: "Business Hours",
-      details: ["Monday - Friday: 9:00 AM - 8:00 PM", "Saturday: 10:00 AM - 6:00 PM", "Sunday: 10:00 AM - 4:00 PM"],
-      color: "red"
-    },
-  ]
-
-  const colorClasses = {
-    blue: "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400",
-    green: "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400",
-    purple: "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400",
-    orange: "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400",
-    red: "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400"
-  }
-
-  const faqs = [
-    {
-      question: "How do I book a consultation with a lawyer?",
-      answer: "You can browse verified lawyers on our platform and book a consultation by selecting a date, time, and mode of consultation."
-    },
-    {
-      question: "Is the first consultation free?",
-      answer: "Yes, every user gets one free consultation with a verified lawyer after signing up."
-    },
-    {
-      question: "How do lawyers get verified?",
-      answer: "We verify lawyers by checking their Bar Council ID and other professional details before approving their profiles."
-    },
-    {
-      question: "Is my data safe on NyayMitra?",
-      answer: "Absolutely. We follow strict data privacy standards and never share your information without consent."
-    },
-    {
-      question: "How does AI legal support work?",
-      answer: "Our AI Legal Assistant provides 24/7 guidance based on Indian laws and previously answered queries. For complex issues, we connect you to a real lawyer."
-    },
-    {
-      question: "Can I reschedule or cancel a booking?",
-      answer: "Yes, you can manage your bookings through your dashboard. Please inform the lawyer in advance for any changes."
-    }
-  ]
 
   if (!mounted) return null
 
-  if (isSubmitted) {
+  // ── Success State ──────────────────────────────────────────────────────────
+  if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
-        <Card className="max-w-md w-full dark:bg-gray-800 dark:border-gray-700">
-          <CardContent className="text-center py-10 px-6">
-            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="h-8 w-8 sm:h-10 sm:w-10 text-green-600 dark:text-green-400" />
+      <>
+        <style>{`@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');`}</style>
+        <div className="min-h-screen bg-white flex items-center justify-center px-6" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+          <div className="max-w-md w-full text-center">
+            <div className="w-16 h-16 bg-[#e6f4f1] rounded-full flex items-center justify-center mx-auto mb-6 text-[#1a6b5e]">
+              <CheckIcon />
             </div>
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Message Sent!</h2>
-            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6">
-              Thank you for contacting us. We've sent a confirmation to your email and our team will get back to you within 24 hours.
+            <h2 className="font-serif text-3xl text-[#0d1117] mb-3" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+              Message sent.
+            </h2>
+            <p className="text-[#6b7280] leading-[1.7] mb-8">
+              Thank you for reaching out. We've sent a confirmation to your email and will get back to you within 24 hours.
             </p>
-            <div className="space-y-3">
-              <Button className="w-full" onClick={() => {
-                setIsSubmitted(false)
-                setFormData({ name: "", email: "", phone: "", subject: "", category: "", message: "" })
-              }}>
-                Send Another Message
-              </Button>
-              <Link href="/">
-                <Button variant="outline" className="w-full dark:bg-gray-700 dark:text-white dark:border-gray-600">
-                  Back to Home
-                </Button>
+            <div className="flex flex-col gap-3">
+              <button
+                onClick={() => { setSubmitted(false); setForm({ name: "", email: "", phone: "", subject: "", category: "", message: "" }) }}
+                className="w-full py-2.5 px-5 rounded bg-[#1a3a6b] text-white text-sm font-medium hover:bg-[#2952a3] transition-colors"
+              >
+                Send another message
+              </button>
+              <Link href="/" className="w-full py-2.5 px-5 rounded border border-black/10 text-[#374151] text-sm font-medium hover:bg-gray-50 transition-colors text-center">
+                Back to home
               </Link>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </div>
+      </>
     )
   }
 
+  // ── Main Page ──────────────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Navigation */}
-      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center space-x-2 group flex-shrink-0">
-              <Scale className="h-7 w-7 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400 group-hover:rotate-12 transition-transform duration-300" />
-              <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Nyay Mitra</span>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
+        .font-serif { font-family: 'DM Serif Display', Georgia, serif !important; }
+        input, textarea, select {
+          font-family: 'DM Sans', system-ui, sans-serif;
+          font-size: 0.9rem;
+          width: 100%;
+          padding: 9px 13px;
+          border: 1px solid rgba(13,17,23,0.12);
+          border-radius: 6px;
+          background: #fff;
+          color: #0d1117;
+          outline: none;
+          transition: border-color 0.2s;
+          appearance: none;
+        }
+        input::placeholder, textarea::placeholder { color: #9ca3af; }
+        input:focus, textarea:focus, select:focus { border-color: #1a3a6b; box-shadow: 0 0 0 3px rgba(26,58,107,0.07); }
+        textarea { resize: none; }
+        select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 16px; padding-right: 36px; }
+        label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #6b7280; margin-bottom: 6px; }
+      `}</style>
+
+      <div className="min-h-screen bg-white text-[#0d1117]" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+
+        {/* ── NAV ───────────────────────────────────────────────────────────── */}
+        <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/[0.06] h-16 flex items-center justify-between px-6 lg:px-16">
+          <Link href="/" className="flex items-center gap-2.5 no-underline">
+            <div className="w-8 h-8 bg-[#1a3a6b] rounded flex items-center justify-center text-white flex-shrink-0">
+              <ShieldIcon />
+            </div>
+            <span className="font-serif text-xl text-[#0d1117]" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+              NyayMitra
+            </span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/lawyers" className="inline-flex items-center text-sm font-medium px-4 py-2 rounded border border-black/10 text-[#374151] hover:bg-gray-50 transition-colors">
+              Find Lawyers
             </Link>
-
-            {/* Desktop Nav */}
-            <div className="hidden sm:flex items-center space-x-3">
-              <Link href="/lawyers">
-                <Button variant="outline" size="sm" className="dark:bg-gray-800 dark:text-white dark:border-gray-700 dark:hover:bg-gray-700">
-                  Find Lawyers
-                </Button>
-              </Link>
-              <Link href="/legal-gpt">
-                <Button size="sm" className="dark:bg-blue-600 dark:hover:bg-blue-700">Get AI Advice</Button>
-              </Link>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="dark:text-white dark:hover:bg-gray-800"
-              >
-                {theme === "dark" ? "🌞" : "🌙"}
-              </Button>
-            </div>
-
-            {/* Mobile Nav Controls */}
-            <div className="flex sm:hidden items-center space-x-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                className="dark:text-white dark:hover:bg-gray-800 h-8 w-8"
-              >
-                {theme === "dark" ? "🌞" : "🌙"}
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="dark:text-white dark:hover:bg-gray-800 h-8 w-8"
-              >
-                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
-            </div>
+            <div className="w-px h-5 bg-black/10" />
+            <Link href="/legal-gpt" className="inline-flex items-center text-sm font-medium px-4 py-2 rounded bg-[#1a3a6b] text-white hover:bg-[#2952a3] transition-colors">
+              Get AI Advice
+            </Link>
           </div>
+        </nav>
 
-          {/* Mobile Dropdown Menu */}
-          {mobileMenuOpen && (
-            <div className="sm:hidden border-t border-gray-200 dark:border-gray-700 py-3 space-y-2">
-              <Link href="/lawyers" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full dark:bg-gray-800 dark:text-white dark:border-gray-700">
-                  Find Lawyers
-                </Button>
-              </Link>
-              <Link href="/legal-gpt" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full dark:bg-blue-600 dark:hover:bg-blue-700">Get AI Advice</Button>
-              </Link>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      {/* Header */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 sm:py-16 md:py-20 overflow-hidden">
-        <div className="absolute top-10 right-10 w-48 h-48 sm:w-72 sm:h-72 bg-blue-200 dark:bg-blue-900/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-48 h-48 sm:w-72 sm:h-72 bg-purple-200 dark:bg-purple-900/20 rounded-full blur-3xl"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mb-4 sm:mb-6">
-              <Headphones className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 dark:text-blue-400" />
-              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">24/7 Support Available</span>
-            </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-6">
-              Contact Us
+        {/* ── HERO ──────────────────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden bg-white px-6 lg:px-16 py-20 lg:py-28">
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundImage: "linear-gradient(rgba(13,17,23,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(13,17,23,0.05) 1px, transparent 1px)",
+              backgroundSize: "64px 64px",
+            }}
+          />
+          <div className="absolute top-0 right-0 w-[480px] h-[480px] -translate-y-1/3 translate-x-1/4 rounded-full bg-[#1a3a6b]/[0.05] blur-3xl pointer-events-none" />
+          <div className="relative z-10 max-w-2xl">
+            <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm bg-[#e8eef8] text-[#2952a3] mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2952a3]" />
+              24/7 Support Available
+            </span>
+            <h1 className="font-serif text-[clamp(2.8rem,6vw,5rem)] leading-[1.05] tracking-tight text-[#0d1117] mb-5" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+              We're here<br />to <em className="italic text-[#1a3a6b]">help you.</em>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-xl sm:max-w-2xl md:max-w-3xl mx-auto leading-relaxed px-2">
-              Have questions about our services? Need legal assistance? We're here to help you navigate your legal journey.
+            <div className="w-16 h-0.5 bg-[#c6973f] rounded-full mb-5" />
+            <p className="text-[clamp(1rem,1.6vw,1.15rem)] text-[#6b7280] max-w-lg leading-[1.75] font-light">
+              Have questions about our services? Need legal assistance? Reach out and we'll help you navigate your legal journey.
             </p>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 lg:py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          {/* Contact Form */}
-          <div className="lg:col-span-2 order-1">
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
-              <CardHeader className="pb-4">
-                <CardTitle className="text-xl sm:text-2xl dark:text-white">Send us a Message</CardTitle>
-                <CardDescription className="dark:text-gray-400 text-sm">
-                  Fill out the form below and we'll get back to you as soon as possible
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-5">
-                  {/* Name + Email */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="name" className="dark:text-gray-300 text-sm">Full Name *</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
-                        placeholder="Enter your full name"
-                        required
-                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="email" className="dark:text-gray-300 text-sm">Email Address *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        placeholder="Enter your email"
-                        required
-                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400"
-                      />
-                    </div>
+        <hr className="border-none border-t border-black/[0.06]" />
+
+        {/* ── MAIN CONTENT ──────────────────────────────────────────────────── */}
+        <section className="px-6 lg:px-16 py-16 lg:py-24">
+          <div className="grid lg:grid-cols-[1fr_340px] gap-10 lg:gap-16 items-start">
+
+            {/* ── FORM ──────────────────────────────────────────────────────── */}
+            <div>
+              <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-3">Send a message</span>
+              <h2 className="font-serif text-[2rem] text-[#0d1117] mb-8" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+                Tell us what you need
+              </h2>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="name">Full name *</label>
+                    <input id="name" value={form.name} onChange={set("name")} placeholder="Your full name" required />
                   </div>
-
-                  {/* Phone + Category */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="phone" className="dark:text-gray-300 text-sm">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
-                        placeholder="+91 98765 43210"
-                        className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="category" className="dark:text-gray-300 text-sm">Query Category *</Label>
-                      <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
-                        <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white w-full">
-                          <SelectValue placeholder="Select category" />
-                        </SelectTrigger>
-                        <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
-                          <SelectItem value="general" className="dark:text-white dark:focus:bg-gray-700">General Inquiry</SelectItem>
-                          <SelectItem value="legal-advice" className="dark:text-white dark:focus:bg-gray-700">Legal Advice</SelectItem>
-                          <SelectItem value="lawyer-registration" className="dark:text-white dark:focus:bg-gray-700">Lawyer Registration</SelectItem>
-                          <SelectItem value="technical-support" className="dark:text-white dark:focus:bg-gray-700">Technical Support</SelectItem>
-                          <SelectItem value="billing" className="dark:text-white dark:focus:bg-gray-700">Billing & Payments</SelectItem>
-                          <SelectItem value="partnership" className="dark:text-white dark:focus:bg-gray-700">Partnership</SelectItem>
-                          <SelectItem value="media" className="dark:text-white dark:focus:bg-gray-700">Media & Press</SelectItem>
-                          <SelectItem value="other" className="dark:text-white dark:focus:bg-gray-700">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                  <div>
+                    <label htmlFor="email">Email address *</label>
+                    <input id="email" type="email" value={form.email} onChange={set("email")} placeholder="you@example.com" required />
                   </div>
+                </div>
 
-                  {/* Subject */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="subject" className="dark:text-gray-300 text-sm">Subject *</Label>
-                    <Input
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => handleInputChange("subject", e.target.value)}
-                      placeholder="Brief subject of your query"
-                      required
-                      className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400"
-                    />
+                <div className="grid sm:grid-cols-2 gap-5">
+                  <div>
+                    <label htmlFor="phone">Phone number</label>
+                    <input id="phone" value={form.phone} onChange={set("phone")} placeholder="+91 98765 43210" />
                   </div>
-
-                  {/* Message */}
-                  <div className="space-y-1.5">
-                    <Label htmlFor="message" className="dark:text-gray-300 text-sm">Message *</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => handleInputChange("message", e.target.value)}
-                      placeholder="Describe your query in detail..."
-                      rows={5}
-                      required
-                      className="dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:placeholder:text-gray-400 resize-none"
-                    />
+                  <div>
+                    <label htmlFor="category">Query category *</label>
+                    <select id="category" value={form.category} onChange={set("category")} required>
+                      <option value="" disabled>Select a category</option>
+                      {CATEGORIES.map((c) => <option key={c} value={c.toLowerCase().replace(/\s+/g, "-")}>{c}</option>)}
+                    </select>
                   </div>
+                </div>
 
-                  <div className="space-y-3 pt-1">
-                    <Button type="submit" className="w-full" size="lg" disabled={isLoading}>
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="h-4 w-4 mr-2" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                    {error && (
-                      <div className="flex items-start gap-2 text-red-600 dark:text-red-400 text-sm p-3 bg-red-50 dark:bg-red-900/20 rounded-md">
-                        <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
-                        <span>{error}</span>
+                <div>
+                  <label htmlFor="subject">Subject *</label>
+                  <input id="subject" value={form.subject} onChange={set("subject")} placeholder="Brief subject of your query" required />
+                </div>
+
+                <div>
+                  <label htmlFor="message">Message *</label>
+                  <textarea id="message" rows={5} value={form.message} onChange={set("message")} placeholder="Describe your query in detail…" required />
+                </div>
+
+                {error && (
+                  <div className="flex items-start gap-2.5 text-sm text-[#a32d2d] bg-[#fcebeb] border border-[#f09595] rounded-md px-4 py-3">
+                    <AlertIcon />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 px-7 py-3 rounded bg-[#1a3a6b] text-white text-sm font-medium hover:bg-[#2952a3] disabled:opacity-60 transition-colors mt-1"
+                >
+                  {loading ? <><SpinnerIcon /> Sending…</> : <><SendIcon /> Send Message</>}
+                </button>
+              </form>
+            </div>
+
+            {/* ── SIDEBAR ───────────────────────────────────────────────────── */}
+            <div className="space-y-6 lg:sticky lg:top-24">
+
+              {/* Contact info card */}
+              <div className="border border-black/[0.08] rounded-xl overflow-hidden">
+                <div className="px-6 py-5 border-b border-black/[0.06]">
+                  <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-1">Contact details</span>
+                  <h3 className="font-serif text-xl text-[#0d1117]" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>Get in touch</h3>
+                </div>
+                <div className="divide-y divide-black/[0.05]">
+                  {CONTACT_INFO.map((item, i) => (
+                    <div key={i} className="px-6 py-4 flex items-start gap-3 hover:bg-[#f8f7f4] transition-colors">
+                      <div className="w-8 h-8 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0 mt-0.5">
+                        {item.icon}
                       </div>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-5 order-2">
-            {/* Contact Details */}
-            <Card className="dark:bg-gray-800 dark:border-gray-700">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg sm:text-xl dark:text-white">Get in Touch</CardTitle>
-                <CardDescription className="dark:text-gray-400 text-sm">
-                  Multiple ways to reach us for your convenience
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-5">
-                {contactInfo.map((info, index) => {
-                  const IconComponent = info.icon
-                  return (
-                    <div key={index} className="flex items-start space-x-3 group">
-                      <div className={`w-9 h-9 sm:w-10 sm:h-10 ${colorClasses[info.color as keyof typeof colorClasses]} rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                        <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
-                      </div>
-                      <div className="min-w-0">
-                        <h3 className="font-semibold text-gray-900 dark:text-white text-sm mb-0.5">{info.title}</h3>
-                        <div className="space-y-0.5">
-                          {info.details.map((detail, idx) => (
-                            <p key={idx} className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 break-words">
-                              {detail}
-                            </p>
-                          ))}
-                        </div>
+                      <div>
+                        <p className="text-[11px] font-semibold tracking-wide uppercase text-[#9ca3af] mb-0.5">{item.title}</p>
+                        {item.lines.map((l, j) => (
+                          <p key={j} className="text-[0.875rem] text-[#374151] leading-[1.6]">{l}</p>
+                        ))}
                       </div>
                     </div>
-                  )
-                })}
-              </CardContent>
-            </Card>
+                  ))}
+                </div>
+              </div>
 
-            {/* Quick Support */}
-            <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-0">
-              <CardContent className="pt-6 pb-5 px-5">
-                <div className="text-center">
-                  <MessageCircle className="h-10 w-10 sm:h-12 sm:w-12 text-blue-600 dark:text-blue-400 mx-auto mb-3" />
-                  <h3 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-1.5">Need Quick Help?</h3>
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-4">
-                    Try our AI Legal Assistant for instant answers
+              {/* AI CTA */}
+              <div className="relative overflow-hidden rounded-xl bg-[#0d1117] px-6 py-7">
+                <div className="absolute top-0 right-0 w-40 h-40 translate-x-1/3 -translate-y-1/3 rounded-full bg-[#1a3a6b]/60 blur-2xl pointer-events-none" />
+                <div className="relative z-10">
+                  <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-2">Need instant help?</span>
+                  <p className="font-serif text-lg text-white leading-snug mb-4" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+                    Try our AI Legal Assistant for immediate guidance
                   </p>
-                  <Link href="/legal-gpt">
-                    <Button variant="outline" className="w-full dark:bg-gray-800 dark:text-white dark:border-gray-700 text-sm">
-                      Ask Legal GPT
-                      <ChevronRight className="h-4 w-4 ml-1.5" />
-                    </Button>
+                  <Link
+                    href="/legal-gpt"
+                    className="inline-flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded bg-white text-[#0d1117] hover:bg-gray-100 transition-colors"
+                  >
+                    Ask Legal GPT
+                    <ArrowRightIcon />
                   </Link>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <hr className="border-none border-t border-black/[0.06] mx-6 lg:mx-16" />
+
+        {/* ── FAQ ───────────────────────────────────────────────────────────── */}
+        <section className="bg-[#f8f7f4] px-6 lg:px-16 py-16 lg:py-24">
+          <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-3">Knowledge base</span>
+          <h2 className="font-serif text-[clamp(1.8rem,4vw,2.8rem)] text-[#0d1117] mb-3" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+            Frequently asked questions
+          </h2>
+          <p className="text-[1rem] text-[#6b7280] max-w-md leading-[1.7] mb-10">
+            Quick answers to common questions about our platform and services.
+          </p>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {FAQS.map((faq, i) => (
+              <div key={i} className="bg-white border border-black/[0.07] rounded-xl p-6 hover:shadow-[0_8px_32px_rgba(26,58,107,0.07)] hover:-translate-y-0.5 transition-all duration-300">
+                <div className="w-6 h-6 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] mb-4 flex-shrink-0">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-3.5 h-3.5">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </div>
+                <h3 className="font-serif text-[1.05rem] text-[#0d1117] mb-2 leading-snug" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+                  {faq.q}
+                </h3>
+                <p className="text-[0.875rem] text-[#6b7280] leading-[1.7]">{faq.a}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── TRUST BAR ─────────────────────────────────────────────────────── */}
+        <section className="bg-[#1a3a6b]">
+          <div className="grid grid-cols-2 lg:grid-cols-4 max-w-none">
+            {[
+              { value: "1000+", label: "Trusted users" },
+              { value: "100%", label: "Verified lawyers" },
+              { value: "Pan India", label: "Coverage" },
+              { value: "24/7", label: "AI support" },
+            ].map((s, i) => (
+              <div key={i} className="px-8 py-9 border-r border-b border-white/10 last:border-r-0 lg:[&:nth-child(n+3)]:border-b-0">
+                <div className="font-serif text-[1.8rem] text-white leading-none mb-1" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+                  {s.value}
+                </div>
+                <div className="text-xs font-medium tracking-wide text-white/50 uppercase">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── FOOTER ────────────────────────────────────────────────────────── */}
+        <div className="bg-[#0d1117] border-t border-white/[0.06] px-6 lg:px-16 py-5 flex items-center justify-between flex-wrap gap-3">
+          <span className="text-[0.8rem] text-white/30">© 2025 NyayMitra. All rights reserved.</span>
+          <div className="flex gap-6">
+            {["Privacy", "Terms", "Contact"].map((l) => (
+              <Link key={l} href="#" className="text-[0.8rem] text-white/30 hover:text-white/70 transition-colors no-underline">
+                {l}
+              </Link>
+            ))}
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-12 sm:mt-14 lg:mt-16">
-          <Card className="dark:bg-gray-800 dark:border-gray-700">
-            <CardHeader className="text-center pb-4">
-              <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 rounded-full px-3 py-1.5 sm:px-4 sm:py-2 mx-auto mb-3">
-                <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 dark:text-blue-400" />
-                <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">Knowledge Base</span>
-              </div>
-              <CardTitle className="text-xl sm:text-2xl dark:text-white">Frequently Asked Questions</CardTitle>
-              <CardDescription className="dark:text-gray-400 text-sm max-w-md mx-auto">
-                Find quick answers to common questions about our platform and services
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="pt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-                {faqs.map((faq, index) => (
-                  <div key={index}>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1.5 flex items-start gap-2 text-sm sm:text-base">
-                      <Star className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                      {faq.question}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 pl-5 sm:pl-6">
-                      {faq.answer}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Trust Indicators */}
-        <div className="mt-10 sm:mt-12 lg:mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          {[
-            { icon: Users, color: "green", label: "Trusted by 1000+ Users" },
-            { icon: CheckCircle, color: "blue", label: "100% Verified Lawyers" },
-            { icon: Globe, color: "purple", label: "Pan India Coverage" },
-            { icon: Headphones, color: "orange", label: "24/7 Support" },
-          ].map(({ icon: Icon, color, label }, i) => (
-            <div key={i} className="text-center p-3 sm:p-4">
-              <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-${color}-100 dark:bg-${color}-900/30 rounded-full flex items-center justify-center mx-auto mb-2`}>
-                <Icon className={`h-5 w-5 sm:h-6 sm:w-6 text-${color}-600 dark:text-${color}-400`} />
-              </div>
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{label}</p>
-            </div>
-          ))}
-        </div>
       </div>
-    </div>
+    </>
   )
 }
