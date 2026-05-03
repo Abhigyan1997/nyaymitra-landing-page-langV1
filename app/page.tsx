@@ -1203,7 +1203,7 @@ export default function HomePage() {
                     { href: "/privacy-policy", label: t.footer.privacy },
                     { href: "/cancellation", label: t.footer.cancellation },
                     // ✅ SEO FIX: URL changed from /Shipping&DeliveryPolicy → /shipping-delivery-policy
-                    { href: "/shipping-delivery-policy", label: t.footer.deliveryPolicy },
+                    { href: "/Shipping&DeliveryPolicy", label: t.footer.deliveryPolicy },
                     { href: "/contact", label: t.footer.contact },
                   ].map(l => (
                     <li key={l.href}><Link href={l.href} className="text-[11px] sm:text-[12px] text-slate-700 hover:text-slate-300 transition-colors">{l.label}</Link></li>
