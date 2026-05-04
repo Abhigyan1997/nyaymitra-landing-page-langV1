@@ -82,10 +82,24 @@ export default function LoginPage() {
           --serif: 'Cormorant Garamond', 'Georgia', serif;
           --sans: 'DM Sans', system-ui, sans-serif;
           --mono: 'DM Mono', monospace;
+
+          /* Light theme */
+          --page-bg: #ffffff;
+          --panel-bg: #ffffff;
+          --text-primary: #0a0a0a;
+          --text-secondary: #3a3a3a;
+          --text-muted: #6b6b6b;
+          --text-faint: #9a9a9a;
+          --border-light: rgba(0,0,0,0.09);
+          --border-medium: rgba(0,0,0,0.14);
+          --input-bg: #fafaf9;
+          --input-bg-focus: #ffffff;
+          --toggle-bg: #f4f3f0;
+          --toggle-border: rgba(0,0,0,0.1);
         }
 
         body {
-          background: var(--ink);
+          background: var(--page-bg);
           font-family: var(--sans);
         }
 
@@ -93,7 +107,7 @@ export default function LoginPage() {
           min-height: 100vh;
           display: grid;
           grid-template-columns: 1fr;
-          background: var(--ink);
+          background: var(--page-bg);
         }
 
         @media (min-width: 768px) {
@@ -116,7 +130,7 @@ export default function LoginPage() {
           .form-title { font-size: 1.8rem !important; }
         }
 
-        /* Desktop Left Panel */
+        /* Desktop Left Panel — keeps dark */
         .desktop-left {
           display: none;
           position: relative;
@@ -125,23 +139,23 @@ export default function LoginPage() {
           flex-direction: column;
           justify-content: space-between;
           padding: 2.5rem;
-          border-right: 1px solid rgba(255, 255, 255, 0.06);
+          border-right: 1px solid rgba(201,168,76,0.18);
         }
 
         .glow-effect {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background: radial-gradient(ellipse 70% 55% at 15% 88%, rgba(201, 168, 76, 0.08) 0%, transparent 70%),
-                      radial-gradient(ellipse 55% 45% at 85% 15%, rgba(201, 168, 76, 0.05) 0%, transparent 70%);
+          background: radial-gradient(ellipse 70% 55% at 15% 88%, rgba(201, 168, 76, 0.1) 0%, transparent 70%),
+                      radial-gradient(ellipse 55% 45% at 85% 15%, rgba(201, 168, 76, 0.07) 0%, transparent 70%);
         }
 
         .grid-lines {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background-image: linear-gradient(rgba(201, 168, 76, 0.03) 1px, transparent 1px),
-                            linear-gradient(90deg, rgba(201, 168, 76, 0.03) 1px, transparent 1px);
+          background-image: linear-gradient(rgba(201, 168, 76, 0.04) 1px, transparent 1px),
+                            linear-gradient(90deg, rgba(201, 168, 76, 0.04) 1px, transparent 1px);
           background-size: 44px 44px;
         }
 
@@ -157,7 +171,7 @@ export default function LoginPage() {
           margin-bottom: 12px;
         }
         .desktop-brand-name { font-size: 18px; font-weight: 600; color: #e8e3dc; letter-spacing: -0.01em; font-family: var(--serif); }
-        .desktop-brand-tag { font-size: 9px; color: var(--gold-dk); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px; font-family: var(--mono); }
+        .desktop-brand-tag { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 2px; font-family: var(--mono); }
 
         .quote-section { position: relative; z-index: 1; margin-top: auto; margin-bottom: auto; }
         .quote-mark {
@@ -192,12 +206,12 @@ export default function LoginPage() {
           justify-content: center;
           font-size: 11px;
           font-weight: 600;
-          color: var(--ink);
+          color: #0a0a0a;
           flex-shrink: 0;
           font-family: var(--mono);
         }
         .quote-name { font-size: 12px; font-weight: 500; color: #c0bbb4; }
-        .quote-role { font-size: 10px; color: var(--gold-dk); font-family: var(--mono); letter-spacing: 0.06em; }
+        .quote-role { font-size: 10px; color: var(--gold); font-family: var(--mono); letter-spacing: 0.06em; }
 
         .desktop-stats {
           position: relative;
@@ -205,9 +219,9 @@ export default function LoginPage() {
           display: flex;
           gap: 1.8rem;
           padding-top: 1rem;
-          border-top: 1px solid rgba(255, 255, 255, 0.06);
+          border-top: 1px solid rgba(201,168,76,0.15);
         }
-        .stat-sep { width: 1px; background: rgba(255, 255, 255, 0.06); align-self: stretch; }
+        .stat-sep { width: 1px; background: rgba(201,168,76,0.15); align-self: stretch; }
         .stat-number {
           font-family: var(--serif);
           font-size: 1.6rem;
@@ -217,14 +231,14 @@ export default function LoginPage() {
         }
         .stat-label { font-size: 9px; color: #4a4845; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; font-family: var(--mono); }
 
-        /* Mobile Hero */
+        /* Mobile Hero — keeps dark */
         .mobile-hero {
           display: none;
           position: relative;
           overflow: hidden;
           background: linear-gradient(135deg, #0d0f16 0%, #0a0b0f 100%);
           padding: 2rem 1.5rem 1.8rem;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+          border-bottom: 1px solid rgba(201,168,76,0.18);
         }
         .mobile-brand {
           position: relative;
@@ -245,7 +259,7 @@ export default function LoginPage() {
           justify-content: center;
         }
         .mobile-brand-name { font-size: 16px; font-weight: 600; color: #e8e3dc; font-family: var(--serif); }
-        .mobile-brand-tag { font-size: 9px; color: var(--gold-dk); text-transform: uppercase; letter-spacing: 0.12em; font-family: var(--mono); }
+        .mobile-brand-tag { font-size: 9px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; font-family: var(--mono); }
         .mobile-title {
           font-family: var(--serif);
           font-style: italic;
@@ -257,7 +271,7 @@ export default function LoginPage() {
         }
         .mobile-sub {
           font-size: 12px;
-          color: #4a4845;
+          color: #5a5754;
           margin-bottom: 1.2rem;
         }
         .mobile-stats {
@@ -265,16 +279,13 @@ export default function LoginPage() {
           z-index: 1;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          background: rgba(255, 255, 255, 0.03);
+          background: rgba(255, 255, 255, 0.04);
           border-radius: 12px;
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          border: 1px solid rgba(201,168,76,0.15);
         }
-        .mobile-stat {
-          padding: 10px 0;
-          text-align: center;
-        }
-        .mobile-stat + .mobile-stat { border-left: 1px solid rgba(255, 255, 255, 0.06); }
+        .mobile-stat { padding: 10px 0; text-align: center; }
+        .mobile-stat + .mobile-stat { border-left: 1px solid rgba(201,168,76,0.15); }
         .mobile-stat-number {
           font-family: var(--serif);
           font-size: 1.2rem;
@@ -291,12 +302,12 @@ export default function LoginPage() {
           font-family: var(--mono);
         }
 
-        /* Form Panel */
+        /* Form Panel — white */
         .form-panel {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: var(--ink);
+          background: var(--panel-bg);
         }
         .form-inner { width: 100%; }
 
@@ -315,19 +326,20 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
         }
-        .form-brand-name { font-size: 14px; font-weight: 600; color: #d0cbc4; font-family: var(--serif); letter-spacing: -0.01em; }
+        .form-brand-name { font-size: 14px; font-weight: 600; color: var(--ink-3); font-family: var(--serif); letter-spacing: -0.01em; }
+
         .form-title {
           font-family: var(--serif);
           font-style: italic;
           font-size: 2rem;
-          color: #f0ede8;
+          color: var(--ink);
           letter-spacing: -0.025em;
           line-height: 1.2;
           margin-bottom: 0.4rem;
         }
         .form-sub {
           font-size: 12px;
-          color: #4a4845;
+          color: var(--text-muted);
           margin-bottom: 1.6rem;
         }
 
@@ -335,8 +347,8 @@ export default function LoginPage() {
         .user-toggle {
           display: flex;
           gap: 6px;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.06);
+          background: var(--toggle-bg);
+          border: 1px solid var(--toggle-border);
           border-radius: 12px;
           padding: 4px;
           margin-bottom: 1.5rem;
@@ -351,7 +363,7 @@ export default function LoginPage() {
           font-size: 13px;
           font-weight: 500;
           cursor: pointer;
-          color: #4a4845;
+          color: var(--text-muted);
           background: transparent;
           display: flex;
           align-items: center;
@@ -360,9 +372,10 @@ export default function LoginPage() {
           transition: all 0.2s ease;
         }
         .toggle-btn.active {
-          background: rgba(201, 168, 76, 0.1);
-          color: var(--gold);
-          border: 1px solid rgba(201, 168, 76, 0.25);
+          background: #ffffff;
+          color: var(--gold-dk);
+          border: 1px solid rgba(201, 168, 76, 0.3);
+          box-shadow: 0 1px 4px rgba(0,0,0,0.08);
         }
         .toggle-dot {
           width: 5px;
@@ -380,7 +393,7 @@ export default function LoginPage() {
           display: block;
           font-size: 10px;
           font-weight: 600;
-          color: #4a4845;
+          color: var(--text-muted);
           text-transform: uppercase;
           letter-spacing: 0.1em;
           margin-bottom: 6px;
@@ -388,21 +401,24 @@ export default function LoginPage() {
         }
         .form-input {
           width: 100%;
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          background: var(--input-bg);
+          border: 1px solid var(--border-light);
           border-radius: 10px;
           padding: 12px 14px;
           font-family: var(--sans);
           font-size: 14px;
-          color: #e0dbd3;
+          color: var(--ink);
           outline: none;
           transition: all 0.2s;
         }
-        .form-input::placeholder { color: #2a2826; }
+        .form-input::placeholder { color: #b8b4ae; }
         .form-input:focus {
-          border-color: rgba(201, 168, 76, 0.5);
+          border-color: rgba(201, 168, 76, 0.6);
           box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.1);
+          background: var(--input-bg-focus);
         }
+        .form-input:hover:not(:focus) { border-color: var(--border-medium); }
+
         .input-wrapper { position: relative; }
         .password-toggle {
           position: absolute;
@@ -413,13 +429,13 @@ export default function LoginPage() {
           background: none;
           border: none;
           cursor: pointer;
-          color: #4a4845;
+          color: var(--text-faint);
           display: flex;
           align-items: center;
           justify-content: center;
           transition: color 0.2s;
         }
-        .password-toggle:hover { color: var(--gold); }
+        .password-toggle:hover { color: var(--gold-dk); }
 
         /* Options */
         .form-options {
@@ -438,13 +454,14 @@ export default function LoginPage() {
         .checkbox-custom {
           width: 17px;
           height: 17px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          border: 1px solid var(--border-medium);
           border-radius: 4px;
-          background: transparent;
+          background: var(--input-bg);
           appearance: none;
           cursor: pointer;
           position: relative;
           transition: all 0.2s;
+          flex-shrink: 0;
         }
         .checkbox-custom:checked {
           background: var(--gold);
@@ -457,19 +474,20 @@ export default function LoginPage() {
           top: 2px;
           width: 4px;
           height: 8px;
-          border: 2px solid var(--ink);
+          border: 2px solid #ffffff;
           border-top: none;
           border-left: none;
           transform: rotate(45deg);
         }
-        .remember-label { font-size: 12px; color: #4a4845; cursor: pointer; }
+        .remember-label { font-size: 12px; color: var(--text-muted); cursor: pointer; }
         .forgot-link {
           font-size: 12px;
-          color: var(--gold);
+          color: var(--gold-dk);
           text-decoration: none;
+          font-weight: 500;
           transition: color 0.2s;
         }
-        .forgot-link:hover { color: var(--gold-lt); }
+        .forgot-link:hover { color: var(--gold); }
 
         /* Submit Button */
         .submit-btn {
@@ -481,7 +499,7 @@ export default function LoginPage() {
           font-family: var(--sans);
           font-size: 14px;
           font-weight: 600;
-          color: var(--ink);
+          color: #ffffff;
           cursor: pointer;
           letter-spacing: 0.02em;
           transition: all 0.2s;
@@ -492,15 +510,16 @@ export default function LoginPage() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+          background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), transparent);
           pointer-events: none;
         }
         .submit-btn:hover:not(:disabled) {
           transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(201, 168, 76, 0.3);
+          box-shadow: 0 4px 14px rgba(201, 168, 76, 0.35);
         }
         .submit-btn:active:not(:disabled) { transform: scale(0.98); }
-        .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .submit-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
         .spinner {
           display: inline-flex;
           align-items: center;
@@ -510,8 +529,8 @@ export default function LoginPage() {
           width: 15px;
           height: 15px;
           border-radius: 50%;
-          border: 2px solid rgba(10, 10, 10, 0.3);
-          border-top-color: var(--ink);
+          border: 2px solid rgba(255,255,255,0.3);
+          border-top-color: #ffffff;
           animation: spin 0.6s linear infinite;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
@@ -523,22 +542,22 @@ export default function LoginPage() {
           gap: 12px;
           margin: 1.2rem 0;
         }
-        .divider-line { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.06); }
-        .divider-text { font-size: 11px; color: #2a2826; font-family: var(--mono); }
+        .divider-line { flex: 1; height: 1px; background: rgba(0,0,0,0.08); }
+        .divider-text { font-size: 11px; color: var(--text-faint); font-family: var(--mono); }
 
         /* Signup Link */
         .signup-link {
           text-align: center;
           font-size: 12px;
-          color: #4a4845;
+          color: var(--text-muted);
           margin-bottom: 1.2rem;
         }
         .signup-link a {
-          color: var(--gold);
+          color: var(--gold-dk);
           text-decoration: none;
           font-weight: 500;
         }
-        .signup-link a:hover { color: var(--gold-lt); }
+        .signup-link a:hover { color: var(--gold); }
 
         /* Trust Badges */
         .trust-badges {
@@ -548,7 +567,7 @@ export default function LoginPage() {
           flex-wrap: wrap;
           gap: 8px;
           font-size: 9px;
-          color: #2a2825;
+          color: #b0aba4;
           font-family: var(--mono);
           letter-spacing: 0.05em;
         }
@@ -556,13 +575,11 @@ export default function LoginPage() {
           width: 3px;
           height: 3px;
           border-radius: 50%;
-          background: #1e1c1a;
+          background: #d0cbc4;
         }
 
         /* Animations */
-        .fade-in {
-          animation: fadeIn 0.5s ease both;
-        }
+        .fade-in { animation: fadeIn 0.5s ease both; }
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(8px); }
           to { opacity: 1; transform: translateY(0); }
@@ -585,10 +602,10 @@ export default function LoginPage() {
 
           <div className="desktop-brand">
             <div className="desktop-icon">
-              <Scale size={22} color="var(--ink)" />
+              <Scale size={22} color="#0a0a0a" />
             </div>
             <div className="desktop-brand-name">NyayMitra</div>
-            <div className="desktop-brand-tag">Legal Intelligence Platform</div>
+            <div className="desktop-brand-tag">Know your next legal step</div>
           </div>
 
           <div className="quote-section">
@@ -630,11 +647,11 @@ export default function LoginPage() {
 
           <Link href="/" className="mobile-brand">
             <div className="mobile-icon">
-              <Scale size={18} color="var(--ink)" />
+              <Scale size={18} color="#0a0a0a" />
             </div>
             <div>
               <div className="mobile-brand-name">NyayMitra</div>
-              <div className="mobile-brand-tag">Legal Intelligence Platform</div>
+              <div className="mobile-brand-tag">Know your next legal step</div>
             </div>
           </Link>
 
@@ -662,7 +679,7 @@ export default function LoginPage() {
           <div className="form-inner">
             <Link href="/" className="form-brand fade-in delay-1" style={{ display: "flex" }}>
               <div className="form-icon">
-                <Scale size={14} color="var(--ink)" />
+                <Scale size={14} color="#0a0a0a" />
               </div>
               <span className="form-brand-name">NyayMitra</span>
             </Link>
