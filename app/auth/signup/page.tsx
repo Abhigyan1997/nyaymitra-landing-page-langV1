@@ -150,7 +150,10 @@ export default function SignupPage() {
 
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault()
-    const data = userType === "user" ? user : lawyer
+    const data =
+      userType === "user"
+        ? user
+        : { ...lawyer, experience: Number(lawyer.experience) }
     if (data.password !== data.confirmPassword) { toast.error("Passwords do not match"); return }
     setLoading(true)
     try {
@@ -870,7 +873,12 @@ export default function SignupPage() {
                       <SelectInput value={lawyer.specialization} onChange={v => setL("specialization", v)} options={SPECIALIZATIONS} placeholder="Select specialization" />
                     </Field>
                     <Field label="Years of experience">
-                      <SelectInput value={lawyer.experience} onChange={v => setL("experience", v)} options={Array.from({ length: 41 }, (_, i) => `${i} ${i === 1 ? "year" : "years"}`)} placeholder="Select experience" />
+                      <SelectInput
+                        value={lawyer.experience}
+                        onChange={v => setL("experience", v)}
+                        options={Array.from({ length: 41 }, (_, i) => i.toString())}
+                        placeholder="Select experience"
+                      />
                     </Field>
                   </div>
                   <div className="signup-row2">
