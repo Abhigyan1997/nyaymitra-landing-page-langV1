@@ -7,18 +7,21 @@ import {
   Mail, Phone, Users, Menu, X, Sparkles, Star, ChevronRight
 } from "lucide-react"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 
-/* ─── design tokens ─────────────────────────────────────────────────────── */
-const NAVY = "#060d1f"
-const NAVY2 = "#0b1630"
-const ACCENT = "#4f6ef7"
-const ACCENT2 = "#7c3aed"
-const MUTED = "rgba(255,255,255,0.45)"
-const BORDER = "rgba(255,255,255,0.07)"
+/* ─── design tokens (White Background, Black & Gold) ─────────────────────── */
+const WHITE = "#ffffff"
+const BLACK = "#0a0a0a"
+const BLACK2 = "#1a1a1a"
+const GOLD = "#c9a84c"
+const GOLD_LT = "#e8c96a"
+const GOLD_DK = "#8b6914"
+const GOLD_PALE = "rgba(201,168,76,0.08)"
+const MUTED = "rgba(0,0,0,0.45)"
+const MUTED_LIGHT = "rgba(0,0,0,0.55)"
+const BORDER = "rgba(0,0,0,0.08)"
+const BORDER_GOLD = "rgba(201,168,76,0.25)"
 
-/* ─── floating grid dots ─────────────────────────────────────────────────── */
+/* ─── floating grid dots (subtle gold) ───────────────────────────────────── */
 const DOTS = Array.from({ length: 24 }, (_, i) => ({
   id: i,
   left: (i * 37 + 13) % 100,
@@ -27,57 +30,57 @@ const DOTS = Array.from({ length: 24 }, (_, i) => ({
   size: i % 3 === 0 ? 2 : 1,
 }))
 
-/* ─── services data ──────────────────────────────────────────────────────── */
+/* ─── services data (Affidavit focused) ──────────────────────────────────── */
 const SERVICES = [
   {
-    id: "notary-service",
-    title: "Remote Notary",
-    subtitle: "Via licensed lawyer",
-    description: "Get documents notarized remotely or via courier. Delivered in 1–4 business days, fully legal.",
+    id: "name-change",
+    title: "Name Change Affidavit",
+    subtitle: "Marriage / Divorce / Personal",
+    description: "Get a legally valid name change affidavit accepted by passport offices, government bodies, and courts.",
     icon: PenTool,
-    accentColor: "#4f6ef7",
-    glowColor: "rgba(79,110,247,0.15)",
+    accentColor: GOLD,
+    glowColor: "rgba(201,168,76,0.08)",
     popular: true,
-    tags: ["Affidavit", "Authorization", "Power of Attorney"],
-    features: ["PDF Generation", "Manual Notarization", "Email / Courier"],
-    pricing: "₹399",
-    pricingNote: "e-copy · ₹799 courier",
-    href: "/services/notary",
-    ctaText: "Notarize now",
-    ctaIcon: PenTool,
+    tags: ["Name Change", "Passport", "Marriage"],
+    features: ["PDF Generation", "Lawyer Reviewed", "Instant Download"],
+    pricing: "₹1,199",
+    pricingNote: "includes notary guidance",
+    href: "/services/name-change",
+    ctaText: "Create affidavit",
+    ctaIcon: FileText,
   },
   {
-    id: "instant-download",
-    title: "Document Downloads",
-    subtitle: "Self-attested, instant",
-    description: "Pre-filled rent agreements, affidavits, and complaint letters — pay once, download immediately.",
-    icon: Download,
-    accentColor: "#10b981",
-    glowColor: "rgba(16,185,129,0.13)",
-    popular: true,
-    tags: ["Rent Agreement", "Affidavit", "Police Complaint"],
-    features: ["Pre-fillable PDF", "Instant Download", "Razorpay Checkout"],
-    pricing: "₹49",
-    pricingNote: "per document",
-    href: "/services/downloads",
-    ctaText: "Download now",
-    ctaIcon: Download,
-  },
-  {
-    id: "stamp-duty",
-    title: "Stamp Duty Calculator",
-    subtitle: "State-wise, instant",
-    description: "Find the exact stamp paper value for your document and state. Auto-detection included.",
-    icon: Calculator,
-    accentColor: "#f59e0b",
-    glowColor: "rgba(245,158,11,0.12)",
+    id: "address-proof",
+    title: "Address Proof Affidavit",
+    subtitle: "KYC & Bank approved",
+    description: "Legal address verification affidavit for bank KYC, government applications, and property registration.",
+    icon: FileText,
+    accentColor: GOLD,
+    glowColor: "rgba(201,168,76,0.08)",
     popular: false,
-    tags: ["Affidavit", "Agreements", "Power of Attorney"],
-    features: ["Auto-State Detection", "Value Suggestion", "Legal Tips"],
-    pricing: "Free",
-    pricingNote: "no sign-up needed",
-    href: "/services/stamp-calculator",
-    ctaText: "Calculate duty",
+    tags: ["Address Proof", "Bank KYC", "Rental"],
+    features: ["Pre-fillable PDF", "Expert Review", "2hr Delivery"],
+    pricing: "₹999",
+    pricingNote: "express option available",
+    href: "/services/address-affidavit",
+    ctaText: "Create now",
+    ctaIcon: FileText,
+  },
+  {
+    id: "income-proof",
+    title: "Income Proof Affidavit",
+    subtitle: "Loans & Visa ready",
+    description: "Court-admissible income declaration affidavit for loan applications, visa processing, and government schemes.",
+    icon: Calculator,
+    accentColor: GOLD,
+    glowColor: "rgba(201,168,76,0.08)",
+    popular: false,
+    tags: ["Income Proof", "Visa", "Loans"],
+    features: ["Court Admissible", "Lawyer Drafted", "24hr Support"],
+    pricing: "₹999",
+    pricingNote: "includes free revisions",
+    href: "/services/income-affidavit",
+    ctaText: "Get started",
     ctaIcon: Calculator,
   },
 ]
@@ -109,17 +112,17 @@ function AnimatedStat({ value, suffix, label }: { value: number; suffix: string;
 
   return (
     <div ref={ref} className="text-center">
-      <div style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "2rem", color: "#fff", letterSpacing: "-0.02em" }}>
+      <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.6rem, 4vw, 2rem)", color: BLACK, letterSpacing: "-0.02em" }}>
         {count.toLocaleString()}{suffix}
       </div>
-      <div style={{ fontSize: "0.72rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "4px" }}>
+      <div style={{ fontSize: "0.7rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "4px" }}>
         {label}
       </div>
     </div>
   )
 }
 
-/* ─── service card ──────────────────────────────────────────────────────── */
+/* ─── service card (White Background, Black & Gold) ──────────────────────── */
 function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: number }) {
   const [hovered, setHovered] = useState(false)
   const Icon = service.icon
@@ -135,50 +138,41 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
       onMouseLeave={() => setHovered(false)}
       style={{ position: "relative", height: "100%" }}
     >
-      {/* glow blob */}
-      <div style={{
-        position: "absolute", inset: -1, borderRadius: 20,
-        background: hovered ? service.glowColor : "transparent",
-        filter: "blur(20px)", transition: "background 0.4s", zIndex: 0, pointerEvents: "none"
-      }} />
-
       <div style={{
         position: "relative", zIndex: 1, height: "100%",
-        background: hovered
-          ? `linear-gradient(145deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.02) 100%)`
-          : "rgba(255,255,255,0.025)",
-        border: `0.5px solid ${hovered ? service.accentColor + "44" : BORDER}`,
+        background: WHITE,
+        border: `1px solid ${hovered ? GOLD : BORDER}`,
         borderRadius: 20, padding: "1.75rem",
         transition: "all 0.35s cubic-bezier(0.22,1,0.36,1)",
         transform: hovered ? "translateY(-4px)" : "translateY(0)",
+        boxShadow: hovered ? "0 20px 35px -12px rgba(0,0,0,0.1)" : "0 1px 3px rgba(0,0,0,0.03)",
         display: "flex", flexDirection: "column", gap: "1.25rem",
-        backdropFilter: "blur(12px)",
       }}>
 
         {/* top row */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
           <div style={{
             width: 48, height: 48, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center",
-            background: service.accentColor + "18", border: `0.5px solid ${service.accentColor}30`,
+            background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
             transition: "transform 0.3s", transform: hovered ? "rotate(8deg) scale(1.05)" : "none"
           }}>
-            <Icon size={20} color={service.accentColor} />
+            <Icon size={20} color={GOLD} />
           </div>
           {service.popular && (
             <div style={{
               display: "flex", alignItems: "center", gap: 4,
-              background: "rgba(79,110,247,0.12)", border: "0.5px solid rgba(79,110,247,0.3)",
+              background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
               borderRadius: 100, padding: "3px 10px",
-              fontSize: "10px", color: "#7b9fff", fontWeight: 500, letterSpacing: "0.05em", textTransform: "uppercase"
+              fontSize: "10px", color: GOLD_DK, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase"
             }}>
-              <Star size={9} fill="#7b9fff" color="#7b9fff" /> Popular
+              <Star size={9} fill={GOLD} color={GOLD} /> Popular
             </div>
           )}
         </div>
 
         {/* heading */}
         <div>
-          <div style={{ fontFamily: "'DM Serif Display', Georgia, serif", fontSize: "1.3rem", color: "#fff", lineHeight: 1.2, marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "1.3rem", color: BLACK, lineHeight: 1.2, marginBottom: 4, fontWeight: 600 }}>
             {service.title}
           </div>
           <div style={{ fontSize: "0.75rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.07em" }}>
@@ -188,14 +182,14 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
 
         {/* price */}
         <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-          <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: "1.6rem", color: service.accentColor }}>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", color: GOLD_DK, fontWeight: 700 }}>
             {service.pricing}
           </span>
           <span style={{ fontSize: "0.72rem", color: MUTED }}>{service.pricingNote}</span>
         </div>
 
         {/* description */}
-        <p style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.6)", lineHeight: 1.65, margin: 0 }}>
+        <p style={{ fontSize: "0.85rem", color: MUTED_LIGHT, lineHeight: 1.65, margin: 0 }}>
           {service.description}
         </p>
 
@@ -204,8 +198,8 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
           {service.features.map(f => (
             <span key={f} style={{
               fontSize: "11px", padding: "4px 10px", borderRadius: 100,
-              background: service.accentColor + "12", color: service.accentColor,
-              border: `0.5px solid ${service.accentColor}30`, fontWeight: 500
+              background: GOLD_PALE, color: GOLD_DK,
+              border: `1px solid ${BORDER_GOLD}`, fontWeight: 500
             }}>{f}</span>
           ))}
         </div>
@@ -215,7 +209,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
           {service.tags.map(t => (
             <span key={t} style={{
               fontSize: "11px", padding: "3px 9px", borderRadius: 100,
-              border: `0.5px solid ${BORDER}`, color: MUTED
+              border: `1px solid ${BORDER}`, color: MUTED
             }}>{t}</span>
           ))}
         </div>
@@ -227,7 +221,7 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
         <Link href={service.href} style={{ textDecoration: "none" }}>
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            color: service.accentColor, fontSize: "0.85rem", fontWeight: 500,
+            color: GOLD_DK, fontSize: "0.85rem", fontWeight: 600,
             cursor: "pointer", transition: "gap 0.2s"
           }}>
             <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -260,69 +254,65 @@ export default function ServicesPage() {
     <>
       {/* Google Fonts */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
 
         *, *::before, *::after { box-sizing: border-box; }
 
         body {
           font-family: 'DM Sans', sans-serif;
-          background: ${NAVY};
-          color: #fff;
+          background: ${WHITE};
+          color: ${BLACK};
           margin: 0;
           -webkit-font-smoothing: antialiased;
         }
 
-        .cyber-grid-bg {
+        .grid-bg {
           background-image:
-            linear-gradient(rgba(79,110,247,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(79,110,247,0.04) 1px, transparent 1px);
+            linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
           background-size: 60px 60px;
         }
 
-        .noise-overlay {
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-        }
-
-        ::selection { background: rgba(79,110,247,0.35); color: #fff; }
+        ::selection { background: rgba(201,168,76,0.25); color: ${BLACK}; }
 
         .nav-glass {
-          background: ${scrolled ? "rgba(6,13,31,0.92)" : "transparent"};
+          background: ${scrolled ? `rgba(255,255,255,0.98)` : "transparent"};
           backdrop-filter: ${scrolled ? "blur(20px)" : "none"};
-          border-bottom: 0.5px solid ${scrolled ? BORDER : "transparent"};
+          border-bottom: 1px solid ${scrolled ? BORDER : "transparent"};
           transition: all 0.35s ease;
+        }
+
+        .eyebrow {
+          display: inline-flex; align-items: center; gap: 10px;
+          font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 500;
+          letter-spacing: 0.2em; text-transform: uppercase; color: ${GOLD_DK};
+        }
+        .eyebrow::before, .eyebrow::after {
+          content:''; width: 22px; height: 1px; background: ${GOLD}; flex-shrink:0;
+        }
+
+        @keyframes pulse {
+          from { opacity: 0.2; }
+          to { opacity: 0.6; }
         }
       `}</style>
 
-      <div style={{ minHeight: "100vh", background: NAVY, position: "relative", overflow: "hidden" }}>
+      <div style={{ minHeight: "100vh", background: WHITE, position: "relative", overflow: "hidden" }}>
 
         {/* background layers */}
-        <div className="cyber-grid-bg" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
-        <div className="noise-overlay" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
+        <div className="grid-bg" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
 
-        {/* deep radial glows */}
-        <div style={{
-          position: "fixed", top: "-20%", left: "-10%", width: "60vw", height: "60vw",
-          borderRadius: "50%", background: "radial-gradient(circle, rgba(79,110,247,0.07) 0%, transparent 70%)",
-          zIndex: 0, pointerEvents: "none"
-        }} />
-        <div style={{
-          position: "fixed", bottom: "-15%", right: "-10%", width: "50vw", height: "50vw",
-          borderRadius: "50%", background: "radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%)",
-          zIndex: 0, pointerEvents: "none"
-        }} />
-
-        {/* floating dots */}
+        {/* floating dots - gold */}
         <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
           {DOTS.map(d => (
             <div key={d.id} style={{
               position: "absolute", left: `${d.left}%`, top: `${d.top}%`,
               width: d.size, height: d.size, borderRadius: "50%",
-              background: d.id % 2 === 0 ? "rgba(79,110,247,0.5)" : "rgba(124,58,237,0.4)",
+              background: d.id % 2 === 0 ? `rgba(201,168,76,0.3)` : `rgba(139,107,20,0.2)`,
               animation: `pulse ${2 + d.delay}s ease-in-out ${d.delay}s infinite alternate`
             }} />
           ))}
         </div>
-        <style>{`@keyframes pulse { from { opacity: 0.2; } to { opacity: 0.8; } }`}</style>
 
         {/* ── NAV ──────────────────────────────────────────────────────────── */}
         <nav className="nav-glass" style={{ position: "sticky", top: 0, zIndex: 100, padding: "0 2rem" }}>
@@ -331,15 +321,20 @@ export default function ServicesPage() {
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
               <div style={{
                 width: 36, height: 36, borderRadius: 10,
-                background: "linear-gradient(135deg, rgba(79,110,247,0.25), rgba(124,58,237,0.2))",
-                border: "0.5px solid rgba(79,110,247,0.3)",
+                background: `linear-gradient(135deg, ${GOLD_PALE}, rgba(139,107,20,0.1))`,
+                border: `1px solid ${BORDER_GOLD}`,
                 display: "flex", alignItems: "center", justifyContent: "center"
               }}>
-                <Scale size={18} color={ACCENT} />
+                <Scale size={18} color={GOLD_DK} />
               </div>
-              <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: "1.25rem", color: "#fff", letterSpacing: "-0.01em" }}>
-                NyayMitra
-              </span>
+              <div>
+                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem", fontWeight: 700, color: BLACK }}>
+                  Nyay<span style={{ color: GOLD_DK }}>Mitra</span>
+                </div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6.5px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+                  Legal Tech · India
+                </div>
+              </div>
             </Link>
 
             {/* desktop nav */}
@@ -347,7 +342,7 @@ export default function ServicesPage() {
               {["Services", "Find lawyers", "About", "Contact"].map(item => (
                 <Link key={item} href={`/${item.toLowerCase().replace(" ", "-")}`}
                   style={{ fontSize: "0.85rem", color: MUTED, padding: "6px 14px", borderRadius: 8, textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
+                  onMouseEnter={e => (e.currentTarget.style.color = BLACK)}
                   onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
                 >
                   {item}
@@ -356,9 +351,9 @@ export default function ServicesPage() {
               <Link href="/legal-gpt" style={{ textDecoration: "none" }}>
                 <div style={{
                   display: "flex", alignItems: "center", gap: 6,
-                  background: "linear-gradient(135deg, #4f6ef7, #7c3aed)",
+                  background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
                   borderRadius: 8, padding: "8px 18px",
-                  fontSize: "0.85rem", fontWeight: 500, color: "#fff", cursor: "pointer"
+                  fontSize: "0.85rem", fontWeight: 600, color: WHITE, cursor: "pointer"
                 }}>
                   <Sparkles size={13} /> AI assistant
                 </div>
@@ -367,11 +362,11 @@ export default function ServicesPage() {
 
             {/* mobile hamburger */}
             <button
-              style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 8 }}
+              style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: BLACK, cursor: "pointer", padding: "7px 10px" }}
               className="md:hidden"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+              {menuOpen ? <X size={18} /> : <Menu size={18} />}
             </button>
           </div>
 
@@ -380,18 +375,19 @@ export default function ServicesPage() {
             {menuOpen && (
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                style={{ overflow: "hidden", borderTop: `0.5px solid ${BORDER}` }}
+                style={{ overflow: "hidden", borderTop: `1px solid ${BORDER}`, background: "rgba(255,255,255,0.98)", backdropFilter: "blur(20px)" }}
               >
                 <div style={{ padding: "1rem 0", display: "flex", flexDirection: "column", gap: 4 }}>
                   {["Services", "Find lawyers", "About", "Contact"].map(item => (
                     <Link key={item} href={`/${item.toLowerCase().replace(" ", "-")}`}
                       style={{ color: MUTED, fontSize: "0.9rem", padding: "10px 0", textDecoration: "none" }}
+                      onClick={() => setMenuOpen(false)}
                     >{item}</Link>
                   ))}
-                  <Link href="/legal-gpt" style={{ textDecoration: "none" }}>
+                  <Link href="/legal-gpt" style={{ textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
                     <div style={{
-                      marginTop: 8, background: "linear-gradient(135deg, #4f6ef7, #7c3aed)",
-                      borderRadius: 8, padding: "10px 18px", fontSize: "0.9rem", color: "#fff",
+                      marginTop: 8, background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
+                      borderRadius: 8, padding: "10px 18px", fontSize: "0.9rem", color: WHITE,
                       display: "flex", alignItems: "center", gap: 6
                     }}>
                       <Sparkles size={13} /> AI assistant
@@ -410,42 +406,35 @@ export default function ServicesPage() {
         >
           <div style={{ maxWidth: 1200, margin: "0 auto", padding: "6rem 2rem 4rem", textAlign: "center" }}>
 
-            {/* badge */}
+            {/* eyebrow */}
             <motion.div
               initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                background: "rgba(79,110,247,0.1)", border: "0.5px solid rgba(79,110,247,0.3)",
-                borderRadius: 100, padding: "7px 18px", marginBottom: "2rem"
-              }}
+              className="eyebrow"
+              style={{ justifyContent: "center", marginBottom: "1.5rem" }}
             >
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: ACCENT, animation: "pulse 2s infinite" }} />
-              <span style={{ fontSize: "0.72rem", color: "#a5b4fc", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500 }}>
-                Instant legal solutions — powered by AI
-              </span>
+              Instant legal solutions
             </motion.div>
 
             {/* headline */}
             <motion.h1
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
               style={{
-                fontFamily: "'DM Serif Display', Georgia, serif",
+                fontFamily: "'Cormorant Garamond', Georgia, serif",
                 fontSize: "clamp(2.6rem, 6vw, 4.2rem)",
-                lineHeight: 1.1, letterSpacing: "-0.025em",
+                lineHeight: 1.1, letterSpacing: "-0.02em",
                 margin: "0 0 1.5rem",
-                background: "linear-gradient(160deg, #fff 40%, rgba(165,180,252,0.8) 100%)",
-                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"
+                color: BLACK,
               }}
             >
               Smart legal services<br />
-              <em>at your fingertips</em>
+              <span style={{ color: GOLD_DK }}>at your fingertips</span>
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-              style={{ fontSize: "1.05rem", color: MUTED, maxWidth: 520, margin: "0 auto 3rem", lineHeight: 1.7 }}
+              style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.05rem)", color: MUTED, maxWidth: 520, margin: "0 auto 3rem", lineHeight: 1.7 }}
             >
-              Notary services, legal documents, and expert consultations — AI-powered and delivered within days.
+              Affidavits, legal documents, and expert consultations — lawyer-drafted and delivered within hours.
             </motion.p>
 
             {/* stat strip */}
@@ -453,15 +442,15 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35 }}
               style={{
                 display: "inline-flex", gap: "3rem", alignItems: "center",
-                background: "rgba(255,255,255,0.03)", border: `0.5px solid ${BORDER}`,
-                borderRadius: 16, padding: "1.25rem 2.5rem", backdropFilter: "blur(12px)"
+                background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
+                borderRadius: 16, padding: "1.25rem 2.5rem",
               }}
             >
-              <AnimatedStat value={10} suffix="+" label="Documents processed" />
+              <AnimatedStat value={100} suffix="+" label="Documents processed" />
               <div style={{ width: "0.5px", height: 40, background: BORDER }} />
               <AnimatedStat value={98} suffix="%" label="Satisfaction rate" />
               <div style={{ width: "0.5px", height: 40, background: BORDER }} />
-              <AnimatedStat value={4} suffix=" days" label="Max turnaround" />
+              <AnimatedStat value={4} suffix=" hrs" label="Max turnaround" />
             </motion.div>
           </div>
         </motion.section>
@@ -471,7 +460,7 @@ export default function ServicesPage() {
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "2.5rem" }}>
-              <span style={{ fontSize: "0.7rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 500 }}>Our services</span>
+              <span className="eyebrow" style={{ fontSize: "0.7rem", letterSpacing: "0.12em" }}>Our services</span>
               <div style={{ flex: 1, height: "0.5px", background: BORDER }} />
             </div>
 
@@ -490,8 +479,8 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
               style={{
                 position: "relative", overflow: "hidden",
-                background: `linear-gradient(135deg, ${NAVY2} 0%, rgba(79,110,247,0.08) 100%)`,
-                border: `0.5px solid rgba(79,110,247,0.2)`,
+                background: `linear-gradient(135deg, ${GOLD_PALE} 0%, rgba(201,168,76,0.03) 100%)`,
+                border: `1px solid ${BORDER_GOLD}`,
                 borderRadius: 24, padding: "4rem 3rem", textAlign: "center"
               }}
             >
@@ -499,26 +488,21 @@ export default function ServicesPage() {
               <div style={{
                 position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
                 width: "60%", height: "1px",
-                background: "linear-gradient(90deg, transparent, rgba(79,110,247,0.6), transparent)"
+                background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`
               }} />
               <div style={{
                 position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)",
                 width: "40%", height: "1px",
-                background: "linear-gradient(90deg, transparent, rgba(124,58,237,0.4), transparent)"
+                background: `linear-gradient(90deg, transparent, ${GOLD_DK}, transparent)`
               }} />
 
-              <div style={{
-                display: "inline-flex", alignItems: "center", gap: 6, marginBottom: "1.25rem",
-                background: "rgba(79,110,247,0.1)", border: "0.5px solid rgba(79,110,247,0.25)",
-                borderRadius: 100, padding: "5px 14px", fontSize: "11px", color: "#a5b4fc",
-                textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500
-              }}>
-                <Sparkles size={11} /> Custom documents
+              <div className="eyebrow" style={{ justifyContent: "center", marginBottom: "1.25rem" }}>
+                Custom documents
               </div>
 
               <h2 style={{
-                fontFamily: "'DM Serif Display', serif", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
-                color: "#fff", marginBottom: "1rem", lineHeight: 1.2, letterSpacing: "-0.02em"
+                fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+                color: BLACK, marginBottom: "1rem", lineHeight: 1.2, letterSpacing: "-0.02em"
               }}>
                 Need a custom legal document?
               </h2>
@@ -533,9 +517,9 @@ export default function ServicesPage() {
                     whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}
                     style={{
                       display: "flex", alignItems: "center", gap: 8,
-                      background: "linear-gradient(135deg, #4f6ef7, #7c3aed)",
+                      background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
                       borderRadius: 10, padding: "12px 24px",
-                      fontSize: "0.9rem", fontWeight: 500, color: "#fff", cursor: "pointer"
+                      fontSize: "0.9rem", fontWeight: 600, color: WHITE, cursor: "pointer"
                     }}
                   >
                     <Users size={15} /> Consult a lawyer <ChevronRight size={14} />
@@ -546,12 +530,12 @@ export default function ServicesPage() {
                     whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}
                     style={{
                       display: "flex", alignItems: "center", gap: 8,
-                      background: "rgba(255,255,255,0.05)", border: `0.5px solid ${BORDER}`,
+                      background: WHITE, border: `1px solid ${BORDER_GOLD}`,
                       borderRadius: 10, padding: "12px 24px",
-                      fontSize: "0.9rem", fontWeight: 500, color: "rgba(255,255,255,0.8)", cursor: "pointer"
+                      fontSize: "0.9rem", fontWeight: 500, color: BLACK, cursor: "pointer"
                     }}
                   >
-                    <Sparkles size={15} /> Try AI assistant <ChevronRight size={14} />
+                    <Sparkles size={15} color={GOLD_DK} /> Try AI assistant <ChevronRight size={14} />
                   </motion.div>
                 </Link>
               </div>
@@ -562,8 +546,9 @@ export default function ServicesPage() {
         {/* ── FOOTER ───────────────────────────────────────────────────────── */}
         <footer style={{
           position: "relative", zIndex: 10,
-          background: "rgba(0,0,0,0.4)", backdropFilter: "blur(20px)",
-          borderTop: `0.5px solid ${BORDER}`, padding: "3rem 2rem"
+          background: BLACK,
+          borderTop: `1px solid rgba(255,255,255,0.08)`,
+          padding: "3rem 2rem"
         }}>
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
             <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "3rem" }} className="footer-grid">
@@ -572,53 +557,60 @@ export default function ServicesPage() {
                 <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: "1rem" }}>
                   <div style={{
                     width: 32, height: 32, borderRadius: 9,
-                    background: "linear-gradient(135deg, rgba(79,110,247,0.25), rgba(124,58,237,0.2))",
-                    border: "0.5px solid rgba(79,110,247,0.3)",
+                    background: `linear-gradient(135deg, ${GOLD_PALE}, rgba(139,107,20,0.15))`,
+                    border: `1px solid ${BORDER_GOLD}`,
                     display: "flex", alignItems: "center", justifyContent: "center"
                   }}>
-                    <Scale size={15} color={ACCENT} />
+                    <Scale size={15} color={GOLD} />
                   </div>
-                  <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: "1.1rem", color: "#fff" }}>NyayMitra</span>
+                  <div>
+                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontWeight: 700, color: WHITE }}>
+                      Nyay<span style={{ color: GOLD }}>Mitra</span>
+                    </div>
+                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+                      Legal Tech · India
+                    </div>
+                  </div>
                 </Link>
-                <p style={{ fontSize: "0.82rem", color: MUTED, lineHeight: 1.65, maxWidth: 280 }}>
-                  Empowering citizens with accessible legal solutions through technology. Trusted by thousands across India.
+                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.65, maxWidth: 280 }}>
+                  Legally valid affidavits online in minutes. Expert reviewed, court approved, trusted by Indians.
                 </p>
               </div>
 
               <div>
-                <div style={{ fontSize: "0.72rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
+                <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
                   Quick links
                 </div>
                 {["Home", "Services", "About us", "Contact"].map(link => (
                   <div key={link} style={{ marginBottom: "0.6rem" }}>
                     <Link href={`/${link.toLowerCase().replace(" ", "-")}`}
-                      style={{ fontSize: "0.85rem", color: MUTED, textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={e => (e.currentTarget.style.color = "#fff")}
-                      onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
+                      style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.45)", textDecoration: "none", transition: "color 0.2s" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = WHITE)}
+                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
                     >{link}</Link>
                   </div>
                 ))}
               </div>
 
               <div>
-                <div style={{ fontSize: "0.72rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
+                <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
                   Contact us
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: MUTED, marginBottom: "0.75rem" }}>
-                  <Mail size={13} color="#4ade80" /> contact@nyaymitra.tech
+                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", marginBottom: "0.75rem" }}>
+                  <Mail size={13} color={GOLD} /> contact@nyaymitra.tech
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: MUTED }}>
-                  <Phone size={13} color="#4ade80" /> +91 79705 96183
+                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "rgba(255,255,255,0.45)" }}>
+                  <Phone size={13} color={GOLD} /> +91 79705 96183
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: `0.5px solid ${BORDER}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+            <div style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.08)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
               <span style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>
                 © {new Date().getFullYear()} NyayMitra. All rights reserved.
               </span>
               <span style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>
-                Built with care for Indian citizens
+                Made with care in India 🇮🇳
               </span>
             </div>
           </div>
@@ -628,6 +620,9 @@ export default function ServicesPage() {
           @media (max-width: 768px) {
             .footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
             .hidden.md\\:flex { display: none !important; }
+          }
+          @media (max-width: 480px) {
+            .nav-glass { padding: 0 1rem !important; }
           }
         `}</style>
       </div>
