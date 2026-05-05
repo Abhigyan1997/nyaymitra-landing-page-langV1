@@ -988,14 +988,27 @@ export default function HomePage() {
                 </div>
 
                 {/* Headline */}
+                {/* Headline - FIXED FOR HINDI */}
                 <h1 style={{
                   fontFamily: "var(--serif)",
                   fontSize: "clamp(44px, 6.5vw, 78px)",
-                  fontWeight: 600, lineHeight: 1.02,
-                  letterSpacing: "-0.03em", color: "var(--ink)", marginBottom: 0,
+                  fontWeight: 600,
+                  lineHeight: 1.3,              // Increased significantly
+                  letterSpacing: "-0.03em",
+                  color: "var(--ink)",
+                  marginBottom: 0,
+                  paddingTop: "0.3rem",         // Add top padding
+                  paddingBottom: "0.1rem",      // Maintain balance
+                  overflow: "visible",          // Ensure no clipping
                 }}>
                   {lang === "en" ? "Know your next" : "अपना अगला"}<br />
-                  <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                  <span className="gold-text" style={{
+                    fontStyle: "italic",
+                    fontWeight: 300,
+                    display: "inline-block",
+                    lineHeight: 1.4,
+                    overflow: "visible",
+                  }}>
                     {lang === "en" ? "legal step." : "कानूनी कदम जानें."}
                   </span>
                 </h1>
@@ -1737,15 +1750,23 @@ export default function HomePage() {
                   {lang === "en" ? "Free to start" : "शुरू करने के लिए मुफ्त"}
                 </span>
               </div>
-
               <h2 style={{
                 fontFamily: "var(--serif)",
                 fontSize: "clamp(32px, 5.5vw, 60px)",
-                fontWeight: 600, color: "var(--ink)",
-                letterSpacing: "-0.028em", lineHeight: 1.08, marginBottom: 18,
+                fontWeight: 600,
+                color: "var(--ink)",
+                letterSpacing: "-0.028em",
+                lineHeight: 1.4,        // Changed from 1.08 to 1.4 for Hindi support
+                marginBottom: 18,
               }}>
                 {lang === "en" ? "From confusion" : "भ्रम से"}<br />
-                <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                <span className="gold-text" style={{
+                  fontStyle: "italic",
+                  fontWeight: 300,
+                  display: "inline-block",
+                  lineHeight: 1.4,      // Match parent line-height
+                  paddingTop: "0.15rem", // Small top padding to prevent cropping
+                }}>
                   {lang === "en" ? "to action." : "कार्रवाई तक।"}
                 </span>
               </h2>
