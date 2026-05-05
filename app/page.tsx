@@ -1,12 +1,15 @@
 "use client"
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import {
   BarChart2, CalendarCheck, PenTool, IndianRupee, LogOut,
   User, Scale, MessageCircle, Star, Menu, X,
   ArrowRight, MapPin, Mail, PhoneCall, Sparkles, FileText,
   Bot, FileCheck, Stamp, CheckCircle, ArrowUpRight,
   Gavel, Clock, Zap, Shield, ThumbsUp,
-  Instagram, Linkedin, ChevronDown,
+  Instagram, Linkedin, ChevronDown, ChevronRight,
+  Building2, Home, Banknote, FileSignature, Briefcase,
+  Users, Landmark, AlertCircle, FileQuestion, HeartHandshake,
+  Handshake, TrendingUp,
 } from "lucide-react"
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -17,29 +20,34 @@ import Head from "next/head"
 /* ─── GLOBAL STYLES ─────────────────────────────────────────────────────────── */
 const GlobalStyles = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --ink:        #0a0a0a;
-      --ink-2:      #1a1a1a;
-      --ink-3:      #3a3a3a;
-      --ink-4:      #6b6b6b;
-      --ink-5:      #9a9a9a;
-      --ink-6:      #c8c8c8;
-      --ink-7:      #e8e8e8;
-      --ink-8:      #f4f3f0;
-      --parchment:  #faf9f6;
-      --white:      #ffffff;
+      --ink:        #0c0b09;
+      --ink-2:      #1a1916;
+      --ink-3:      #2e2c28;
+      --ink-4:      #5c5850;
+      --ink-5:      #8a8680;
+      --ink-6:      #b8b4ae;
+      --ink-7:      #e0ddd8;
+      --ink-8:      #f2f0eb;
+      --ink-9:      #faf8f4;
+      --white:      #fffefb;
       --gold:       #c9a84c;
-      --gold-lt:    #e8c96a;
-      --gold-dk:    #8b6914;
-      --gold-pale:  #fdf6e3;
+      --gold-lt:    #e2c87a;
+      --gold-dk:    #8b6d22;
+      --gold-pale:  #fdf6e0;
+      --gold-rich:  #d4a843;
       --red:        #c0392b;
-      --serif:      'Cormorant Garamond', 'Georgia', serif;
-      --sans:       'DM Sans', system-ui, sans-serif;
+      --green:      #15803d;
+      --serif:      'Cormorant Garamond', Georgia, serif;
+      --sans:       'Outfit', system-ui, sans-serif;
       --mono:       'DM Mono', monospace;
+      --radius:     8px;
+      --radius-lg:  14px;
+      --radius-xl:  20px;
     }
 
     html { scroll-behavior: smooth; }
@@ -49,585 +57,414 @@ const GlobalStyles = () => (
       font-family: var(--sans);
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
+      cursor: default;
     }
 
-    @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-    @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
-    @keyframes pulse-ring {
-      0%   { box-shadow: 0 0 0 0 rgba(201,168,76,0.5); }
-      70%  { box-shadow: 0 0 0 10px rgba(201,168,76,0); }
-      100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
-    }
+    /* ── Keyframes ── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes fadeIn   { from { opacity:0 } to { opacity:1 } }
+    @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes floatSlow{ 0%,100%{transform:translateY(0) rotate(0deg)} 50%{transform:translateY(-6px) rotate(1deg)} }
+    @keyframes marquee  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes shimmer  { 0%{background-position:-300% center} 100%{background-position:300% center} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.75)} }
+    @keyframes drawLine { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+    @keyframes rotateSlow { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    @keyframes slideUp  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes glowPulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
 
+    /* ── Reveal ── */
     .reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1),
-                  transform 0.7s cubic-bezier(0.22,1,0.36,1);
-      will-change: opacity, transform;
+      transform: translateY(22px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
     }
-    .reveal.is-on {
-      opacity: 1 !important;
-      transform: translateY(0) !important;
-    }
+    .reveal.is-on { opacity:1 !important; transform:translateY(0) !important; }
 
-    .gold-shimmer {
-      background: linear-gradient(100deg,var(--gold-dk) 0%,var(--gold) 30%,var(--gold-lt) 50%,var(--gold) 70%,var(--gold-dk) 100%);
-      background-size: 200% auto;
+    /* ── Gold shimmer text ── */
+    .gold-text {
+      background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
+      background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      animation: shimmer 4s linear infinite;
+      animation: shimmer 7s linear infinite;
     }
 
-    .mq-track { display:flex; width:max-content; animation: marquee 30s linear infinite; }
+    /* ── Marquee ── */
+    .mq-track { display:flex; width:max-content; animation: marquee 40s linear infinite; }
     .mq-track:hover { animation-play-state: paused; }
 
+    /* ── Eyebrow label ── */
     .eyebrow {
-      display: inline-flex; align-items: center; gap: 10px;
-      font-family: var(--mono); font-size: 9.5px; font-weight: 500;
-      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-dk);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold-dk);
     }
     .eyebrow::before, .eyebrow::after {
-      content:''; width:22px; height:1px; background:var(--gold); flex-shrink:0;
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+      flex-shrink: 0;
     }
 
+    /* ── Buttons ── */
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 8px; font-family: var(--sans); font-size: 13px; font-weight: 600;
-      letter-spacing: 0.03em; border-radius: 6px; padding: 13px 24px;
-      cursor: pointer; border: none; text-decoration: none;
-      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1),
-                  background 0.22s, box-shadow 0.22s, color 0.22s, border-color 0.22s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      border-radius: var(--radius);
+      padding: 14px 26px;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: transform 0.22s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 0.22s, background 0.22s, color 0.22s, border-color 0.22s;
+      white-space: nowrap;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .btn-ink {
+      background: var(--ink);
+      color: var(--white);
+    }
+    .btn-ink:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(12,11,9,0.3), 0 2px 8px rgba(12,11,9,0.15);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold-dk) 0%, var(--gold) 50%, var(--gold-lt) 100%);
+      color: var(--ink);
+      font-weight: 700;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(201,168,76,0.4);
+    }
+    .btn-ghost {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--ink-6);
+    }
+    .btn-ghost:hover {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--ink);
+      transform: translateY(-2px);
+    }
+    .btn-gw {
+      background: transparent;
+      color: rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-gw:hover {
+      border-color: rgba(201,168,76,0.5);
+      color: var(--gold-lt);
+      transform: translateY(-2px);
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      transition: transform 0.28s cubic-bezier(0.16,1,0.3,1),
+                  box-shadow 0.28s, border-color 0.28s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 56px rgba(12,11,9,0.08), 0 2px 12px rgba(12,11,9,0.04);
+      border-color: var(--ink-5);
+    }
+
+    /* ── Nav ── */
+    .nav-link {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-4);
+      text-decoration: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      transition: all 0.16s;
+      letter-spacing: 0.01em;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--ink-8); }
+
+    /* ── Problem pills ── */
+    .problem-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid var(--ink-7);
+      border-radius: 100px;
+      background: var(--white);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--ink-3);
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+      text-decoration: none;
       white-space: nowrap;
     }
-    @media (max-width: 480px) {
-      .btn { white-space: normal; text-align: center; padding: 12px 18px; font-size: 12px; }
+    .problem-pill:hover {
+      background: var(--ink);
+      color: white;
+      border-color: var(--ink);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(12,11,9,0.18);
     }
-    .btn-ink   { background:var(--ink); color:var(--white); }
-    .btn-ink:hover { background:var(--ink-2); transform:translateY(-2px); box-shadow:0 8px 28px rgba(0,0,0,0.18); }
-    .btn-gold  { background:var(--gold); color:var(--ink); font-weight:700; text-transform:uppercase; letter-spacing:0.06em; animation:pulse-ring 3s ease-in-out infinite; }
-    .btn-gold:hover { background:var(--gold-lt); transform:translateY(-2px); }
-    .btn-ghost { background:transparent; color:var(--ink); border:1.5px solid var(--ink-7); }
-    .btn-ghost:hover { background:var(--ink); color:var(--white); border-color:var(--ink); transform:translateY(-2px); }
-    .btn-wa    { background:#f0faf5; color:#15803d; border:1.5px solid #bbf7d0; }
-    .btn-wa:hover { background:#dcfce7; transform:translateY(-2px); }
-    .btn-gw    { background:transparent; color:rgba(255,255,255,0.75); border:1px solid rgba(255,255,255,0.2); }
-    .btn-gw:hover { background:rgba(255,255,255,0.07); color:white; border-color:rgba(255,255,255,0.35); transform:translateY(-2px); }
 
-    .card {
-      background:var(--white); border:1px solid var(--ink-7); border-radius:14px;
-      transition: transform 0.28s cubic-bezier(0.22,1,0.36,1),
-                  box-shadow 0.28s cubic-bezier(0.22,1,0.36,1),
-                  border-color 0.28s;
+    /* ── Action cards ── */
+    .action-card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      padding: 28px 26px;
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
     }
-    .card:hover { transform:translateY(-4px); box-shadow:0 20px 56px rgba(0,0,0,0.08); border-color:var(--ink-6); }
-    .card-ink { background:var(--ink); border-color:transparent; }
-
-    .nav-link {
-      font-family:var(--sans); font-size:13px; font-weight:500;
-      color:var(--ink-4); text-decoration:none; padding:8px 13px;
-      border-radius:5px; transition:all 0.18s; letter-spacing:0.01em;
+    .action-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
     }
-    .nav-link:hover { color:var(--ink); background:var(--ink-8); }
+    .action-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 64px rgba(12,11,9,0.1);
+      border-color: var(--ink-5);
+    }
+    .action-card:hover::after { transform: scaleX(1); }
 
-    .faq-row { border-top:1px solid var(--ink-7); }
-    .faq-row:last-child { border-bottom:1px solid var(--ink-7); }
+    /* ── FAQ ── */
+    .faq-row { border-top: 1px solid var(--ink-7); }
+    .faq-row:last-child { border-bottom: 1px solid var(--ink-7); }
     .faq-btn {
-      width:100%; display:flex; align-items:center; justify-content:space-between;
-      padding:22px 0; background:none; border:none; cursor:pointer; gap:20px; text-align:left;
-    }
-    @media (max-width: 540px) {
-      .faq-btn { gap: 12px; padding: 18px 0; }
-      .faq-btn span { font-size: 15px !important; }
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      background: none;
+      border: none;
+      cursor: pointer;
+      gap: 20px;
+      text-align: left;
     }
 
+    /* ── Trust pills ── */
     .trust-pill {
-      display:inline-flex; align-items:center; gap:10px;
-      padding:9px 22px; border:1px solid var(--ink-7); border-radius:100px;
-      margin:0 8px; white-space:nowrap; background:var(--white);
-    }
-    @media (max-width: 480px) {
-      .trust-pill { padding: 6px 14px; gap: 6px; margin: 0 4px; }
-      .trust-pill span:first-child { font-size: 12px; }
-      .trust-pill span:last-child { font-size: 9px; }
-    }
-
-    .step-ghost {
-      position:absolute; top:-10px; left:20px;
-      font-family:var(--serif); font-size:90px; font-weight:700; line-height:1;
-      color:transparent; -webkit-text-stroke:1px var(--ink-7);
-      pointer-events:none; user-select:none; z-index:0;
-    }
-    @media (max-width: 768px) {
-      .step-ghost { font-size: 70px; top: -5px; left: 16px; }
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 22px;
+      border: 1px solid var(--ink-7);
+      border-radius: 100px;
+      margin: 0 6px;
+      white-space: nowrap;
+      background: var(--white);
     }
 
-    .stat-block { text-align:center; padding:32px 20px; }
-    @media (max-width: 640px) { .stat-block { padding: 24px 16px; } }
+    /* ── Layout helpers ── */
+    .section-pad { padding: 104px 24px; }
+    @media (max-width: 768px) { .section-pad { padding: 72px 20px; } }
+    @media (max-width: 480px) { .section-pad { padding: 52px 16px; } }
 
-    ::-webkit-scrollbar { width:5px; }
-    ::-webkit-scrollbar-track { background:var(--parchment); }
-    ::-webkit-scrollbar-thumb { background:var(--ink-6); border-radius:3px; }
-
-    /* ========== FULLY RESPONSIVE ========== */
-    .mob-btn { display: none !important; }
-    .desk-nav { display: flex; }
-    .mobile-menu-panel { display: none; }
-
-    @media (max-width: 768px) {
-      .mob-btn { display: flex !important; }
-      .desk-nav { display: none !important; }
-      .desk-social { display: none !important; }
-      .mobile-menu-panel { display: block; }
-    }
+    .max-w { max-width: 1200px; margin: 0 auto; }
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 64px;
-      align-items: center;
-    }
-    .hero-card-col { display: block; }
-    @media (max-width: 1024px) {
-      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
-      .hero-card-col { display: block; }
-    }
-
-    .step-grid {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 0;
-    }
-    @media (max-width: 768px) {
-      .step-grid { grid-template-columns: 1fr; }
-      .step-cell { border-right:none !important; border-bottom:1px solid var(--ink-7) !important; }
-      .step-cell:last-child { border-bottom:none !important; }
-      .step-cell { padding: 40px 24px 32px !important; }
-    }
-
-    .svc-grid {
-      display: grid;
-      grid-template-columns: 5fr 4fr;
-      gap: 20px;
-      align-items: start;
-    }
-    @media (max-width: 900px) {
-      .svc-grid { grid-template-columns: 1fr; gap: 24px; }
-    }
-
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 440px;
       gap: 80px;
       align-items: start;
     }
-    @media (max-width: 900px) {
-      .why-grid { grid-template-columns: 1fr; gap: 48px; }
-    }
+    @media (max-width: 1060px) { .hero-grid { grid-template-columns: 1fr; gap: 56px; } }
 
-    .feat-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 560px) {
-      .feat-grid { grid-template-columns: 1fr; gap: 12px; }
-    }
-
-    .prob-grid {
+    .actions-grid {
       display: grid;
       grid-template-columns: repeat(4,1fr);
-      gap: 0;
+      gap: 16px;
     }
-    @media (max-width: 900px) {
-      .prob-grid { grid-template-columns: 1fr 1fr; }
-      .prob-cell { border-right:none !important; border-bottom:1px solid rgba(255,255,255,0.06) !important; }
-      .prob-cell { padding: 30px 20px !important; }
-    }
-    @media (max-width: 540px) {
-      .prob-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 920px) { .actions-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .actions-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
 
-    .test-grid {
+    .startup-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+    @media (max-width: 900px) { .startup-grid { grid-template-columns: 1fr; gap: 44px; } }
+
+    .outcomes-grid {
       display: grid;
       grid-template-columns: repeat(3,1fr);
       gap: 20px;
     }
-    @media (max-width: 900px) { 
-      .test-grid { grid-template-columns: 1fr; gap: 16px; }
-    }
+    @media (max-width: 860px) { .outcomes-grid { grid-template-columns: 1fr; } }
 
-    .stat-grid {
+    .stat-bar {
       display: grid;
       grid-template-columns: repeat(4,1fr);
     }
-    @media (max-width: 640px) {
-      .stat-grid { grid-template-columns: 1fr 1fr; }
-      .stat-block { border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.07); }
-    }
+    @media (max-width: 640px) { .stat-bar { grid-template-columns: repeat(2,1fr); } }
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 2.2fr 1fr 1fr 1.2fr;
+      grid-template-columns: 2fr 1fr 1fr 1.3fr;
       gap: 48px;
     }
-    @media (max-width: 960px) {
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
-    }
-    @media (max-width: 640px) {
-      .footer-grid { grid-template-columns: 1fr; gap: 32px; text-align: center; }
-      .footer-grid > div { display: flex; flex-direction: column; align-items: center; text-align: center; }
-      .footer-grid address div { justify-content: center; }
-      .footer-grid ul { text-align: center; }
-      .footer-grid .btn, .footer-grid a { justify-content: center; }
-    }
-
-    .hero-stats { display:flex; align-items:center; flex-wrap:wrap; gap:0; }
-    @media (max-width: 540px) {
-      .hero-stats { gap: 16px; justify-content: space-between; }
-      .hero-stats-sep { display:none !important; }
-      .hero-stats > div { flex: 1; min-width: 90px; }
-      .hero-stats > div div:first-child { font-size: 24px !important; }
+    @media (max-width: 960px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 36px; } }
+    @media (max-width: 600px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
     }
 
     .hero-ctas { display:flex; flex-wrap:wrap; gap:10px; }
-    @media (max-width: 540px) {
+    @media (max-width: 520px) {
       .hero-ctas { flex-direction:column; }
       .hero-ctas .btn { width:100%; justify-content:center; }
     }
 
-    .cta-btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-    @media (max-width: 540px) {
-      .cta-btns { flex-direction:column; align-items:center; }
-      .cta-btns .btn { width:100%; max-width:280px; justify-content:center; }
+    .cta-row { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    @media (max-width: 520px) {
+      .cta-row { flex-direction:column; align-items:stretch; }
+      .cta-row .btn { justify-content:center; }
     }
 
-    .section-pad { padding: 100px 28px; }
-    @media (max-width: 768px) { .section-pad { padding: 64px 20px; } }
-    @media (max-width: 480px) { .section-pad { padding: 48px 16px; } }
+    .mob-only { display:none !important; }
+    .desk-only { display:flex; }
+    @media (max-width: 768px) {
+      .mob-only { display:flex !important; }
+      .desk-only { display:none !important; }
+    }
 
-    .nav-container {
-      max-width: 1240px;
-      margin: 0 auto;
-      padding: 0 24px;
+    .pills-wrap { display:flex; flex-wrap:wrap; gap:10px; }
+
+    /* ── Floating WA ── */
+    .floating-wa {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 300;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: #128C7E;
+      color: white;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 66px;
+      justify-content: center;
+      box-shadow: 0 8px 32px rgba(18,140,126,0.45), 0 0 0 0 rgba(18,140,126,0.3);
+      transition: all 0.24s cubic-bezier(0.16,1,0.3,1);
+      text-decoration: none;
     }
-    @media (max-width: 640px) {
-      .nav-container { padding: 0 16px; }
+    .floating-wa:hover {
+      transform: scale(1.1) translateY(-2px);
+      background: #25d366;
+      box-shadow: 0 14px 40px rgba(37,211,102,0.4);
+    }
+    @media (max-width: 480px) { .floating-wa { width:48px; height:48px; bottom:20px; right:18px; } }
+
+    /* ── Decorative elements ── */
+    .ornament-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .ornament-line::before, .ornament-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--ink-7), transparent);
     }
 
-    /* Services card fixes */
-    .svc-card-content {
-      transition: all 0.2s ease;
-    }
-    @media (max-width: 900px) {
-      .svc-card-content { flex-direction: column; align-items: flex-start !important; gap: 12px !important; }
-      .svc-card-content .svc-right { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; margin-top: 8px; }
-    }
-    @media (max-width: 480px) {
-      .svc-card-content { padding: 18px !important; }
-      .svc-card-content .svc-icon { width: 36px; height: 36px; }
-      .svc-card-content h3 { font-size: 15px !important; }
-      .svc-card-content p { font-size: 11px !important; white-space: normal !important; }
+    /* ── Custom scrollbar ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--ink-9); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; opacity: 0.4; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dk); }
+
+    /* ── Selection ── */
+    ::selection { background: var(--gold-pale); color: var(--gold-dk); }
+
+    /* ── Noise texture overlay ── */
+    .noise-overlay {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      opacity: 0.4;
+      mix-blend-mode: multiply;
     }
 
-    /* Featured service card responsive */
-    @media (max-width: 640px) {
-      .featured-card { padding: 28px 20px !important; }
-      .featured-card h3 { font-size: 24px !important; }
-      .featured-card .tags { gap: 6px; }
-      .featured-card .tags span { font-size: 7px !important; padding: 3px 8px !important; }
-      .featured-card .meta { gap: 12px; flex-wrap: wrap; }
-    }
-
-    /* Hero card responsive */
-    @media (max-width: 640px) {
-      .hero-card-inner { padding: 20px !important; }
-      .hero-card-steps { padding: 14px 18px !important; }
-      .hero-card-steps .step-icon { width: 32px; height: 32px; }
-      .hero-card-steps .step-title { font-size: 11px !important; }
-      .hero-card-steps .step-desc { font-size: 10px !important; }
-      .floating-badge-1 { bottom: -10px; left: -10px !important; padding: 6px 12px !important; font-size: 9px !important; }
-      .floating-badge-2 { top: -10px; right: -10px !important; padding: 5px 10px !important; font-size: 8px !important; }
-    }
-
-    /* Stat blocks */
-    @media (max-width: 640px) {
-      .stat-block .stat-value { font-size: 28px !important; }
-    }
-
-    /* Footer fixes */
-    @media (max-width: 640px) {
-      footer { padding: 48px 20px 32px !important; }
-      .footer-disclaimer { text-align: center !important; margin-top: 16px; }
-      .footer-copyright { text-align: center !important; width: 100%; }
-      .footer-bottom { flex-direction: column; align-items: center; gap: 12px; }
-    }
-
-    /* Floating WhatsApp */
-    @media (max-width: 480px) {
-      .floating-wa { bottom: 20px; right: 20px; width: 48px; height: 48px; }
-      .floating-wa svg { width: 22px; height: 22px; }
+    /* ── Number counter pill ── */
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--gold-pale);
+      border: 1px solid var(--gold);
+      font-family: var(--mono);
+      font-size: 8px;
+      color: var(--gold-dk);
+      font-weight: 500;
+      flex-shrink: 0;
     }
   `}</style>
 )
 
-/* ─── CONTENT ───────────────────────────────────────────────────────────────── */
-const content = {
-  en: {
-    nav: { home: "Home", services: "Services", lawyers: "Find Lawyers", legalGPT: "Legal GPT", about: "About", contact: "Contact", login: "Login", signup: "Sign Up" },
-    profileMenu: { profile: "My Profile", dashboard: "My Dashboard", bookings: "My Bookings", logout: "Logout" },
-    langToggle: "हि", langSwitchMobile: "हिंदी में देखें",
-    hero: {
-      badge: "100+ Indians Helped",
-      titleStatic: "Your Legal Problem,",
-      titleAccents: ["Solved Today.", "Resolved Fast.", "In Your Hands."],
-      description: "FIR, property disputes, family matters understand your rights instantly and connect with verified lawyers in minutes. Serving Patna, Lucknow, Indore, Jaipur, Ranchi & across India.",
-      ctaPrimary: "Talk to Legal AI", ctaSecondary: "Find a Lawyer", ctaWhatsapp: "Chat on WhatsApp",
-      whatsappNumber: "919661644025",
-      cardTitle: "How It Works",
-      cardSteps: [
-        { n: "01", title: "Tell your problem", desc: "Describe your issue in Hindi or English" },
-        { n: "02", title: "Get instant guidance", desc: "AI advice based on Indian law" },
-        { n: "03", title: "Talk to a lawyer", desc: "Book verified experts when needed" },
-      ],
-      cardFooter: "Available 24/7 · Zero hidden costs",
-      stats: [{ value: "25+", label: "Cases Resolved" }, { value: "60+", label: "Expert Lawyers" }, { value: "99.9%", label: "Success Rate" }, { value: "<30m", label: "Response Time" }],
-    },
-    trustBar: [{ label: "Verified Lawyers", value: "60+" }, { label: "Happy Clients", value: "25+" }, { label: "Avg Response", value: "< 2 min" }, { label: "Client Rating", value: "4.9 ★" }, { label: "Affidavits Delivered", value: "20+" }, { label: "Cities Served", value: "10+" }],
-    howItWorks: {
-      eyebrow: "Process", title: "Three steps to resolution",
-      steps: [
-        { n: "01", title: "Tell your problem", desc: "Describe your legal issue in simple Hindi or English no jargon needed.", icon: "file" },
-        { n: "02", title: "Get free guidance", desc: "Understand instantly what steps you should take, backed by Indian law.", icon: "bot" },
-        { n: "03", title: "Talk to a lawyer", desc: "Book a background verified lawyer if you need professional representation.", icon: "thumb" },
-      ],
-    },
-    services: {
-      eyebrow: "Our Services", title: "Legal help, every kind", subtitle: "Comprehensive solutions for your legal needs", allServices: "View all services",
-      featured: {
-        badge: "Most Popular",
-        title: "Affidavit Online India",
-        desc: "Get legally valid affidavits drafted, reviewed by experts, and delivered in hours. Address proof, name change, income declaration, property all covered.",
-        tags: ["Address Proof", "Name Change", "Income Declaration", "Property", "Identity"],
-        meta: ["2–4 hour delivery", "Lawyer reviewed", "From ₹999"],
-      },
-      cards: [
-        { title: "Legal AI Chat", desc: "Trained on Indian law. Ask about FIR, property, family, consumer rights instant answers 24/7.", footer: "Free to start", href: "/legal-gpt" },
-        { title: "Find Lawyers", desc: "Browse 60+ verified lawyers by specialization. Book consultations with real time availability.", footer: "< 30 min response", href: "/lawyers" },
-        { title: "Document Generator", desc: "Create rent agreements, legal notices, complaints using AI-powered forms in minutes.", footer: "Instant download", href: "/services" },
-      ],
-    },
-    whyUs: {
-      eyebrow: "Why NyayMitra", title: "Built for Bharat,", titleLine2: "not for boardrooms",
-      desc: "Legal help in India has always been expensive, confusing, and inaccessible. NyayMitra changes that plain language, transparent pricing, and real lawyers on demand.",
-      quote: '"Legal aid is not a privilege. It is the foundation of a just society."',
-      quoteAttr: "— NyayMitra Founding Principle",
-      cta: "Try for free",
-      features: [
-        { n: "01", title: "Transparent Pricing", desc: "No surprise charges. Fixed, upfront rates for every service we offer." },
-        { n: "02", title: "Always Available", desc: "AI on WhatsApp, call, or web 24 hours a day, 7 days a week." },
-        { n: "03", title: "Verified Lawyers", desc: "Every lawyer is background checked and bar council enrolled." },
-        { n: "04", title: "Plain Language", desc: "No legal jargon. Complex law explained simply for every Indian." },
-      ],
-    },
-    problems: {
-      eyebrow: "We solve these every day", title: "Common Legal Problems",
-      items: [
-        { title: "FIR Not Registered", desc: "Understand your rights and compel action from authorities.", emoji: "📋" },
-        { title: "Property Dispute", desc: "Protect your ownership, boundaries and land records.", emoji: "🏠" },
-        { title: "Divorce & Family", desc: "Expert guidance on custody, alimony and settlements.", emoji: "👨‍👩‍👧" },
-        { title: "Online Fraud", desc: "Recover lost money and file cyber crime complaints.", emoji: "🔒" },
-      ],
-    },
-    testimonials: {
-      eyebrow: "Client Stories", title: "Trusted across India", verified: "Verified",
-      items: [
-        { name: "Swapnil Anand", location: "Bhagalpur, Bihar", avatar: "SA", rating: 5, text: "Their remote notary service saved me a court trip. Needed an affidavit urgently NyayMitra handled everything, notarized and home delivered in 2 days without any hassle." },
-        { name: "Anand Upadhyay", location: "Indore, MP", avatar: "AU", rating: 4, text: "Facing delayed salary issues. Through NyayMitra I connected with a lawyer instantly who guided me on the right steps and helped resolve the situation effectively." },
-        { name: "Dinesh Chand", location: "Gurgaon, Haryana", avatar: "DC", rating: 5, text: "Got a challan in Delhi and was unsure about the process. NyayMitra gave quick, clear guidance I understood exactly what to do without any confusion at all." },
-      ],
-    },
-    faq: {
-      eyebrow: "Frequently Asked", title: "Legal questions, answered simply",
-      subtitle: "Everything you need to know before getting legal help",
-      items: [
-        { q: "How do I file an FIR online in India?", a: "In India, you can file an FIR at your nearest police station. If the police refuse, you can send a written complaint to the Superintendent of Police. Many states like UP, Bihar, Maharashtra, and Delhi offer e-FIR services. NyayMitra's Legal AI guides you step by step in Hindi or English, 24/7." },
-        { q: "What is an affidavit and when do I need one?", a: "An affidavit is a sworn written statement legally binding in Indian courts and government offices. You need one for address proof, name change, income declaration, property matters, and passport applications. NyayMitra delivers notarized affidavits starting at ₹999 within 2–4 hours." },
-        { q: "How much does a lawyer consultation cost on NyayMitra?", a: "Initial AI-powered legal guidance is completely free. Paid lawyer consultations start from ₹150 for a 15-minute session. There are no hidden charges the price you see is the price you pay." },
-        { q: "Are the lawyers on NyayMitra verified and legitimate?", a: "Yes. Every lawyer is verified through Bar Council enrollment number, practice certificate, and professional background checks. We have 60+ verified lawyers covering civil, criminal, family, property, consumer rights, labour, and cyber crime law." },
-        { q: "Can I get legal help in Hindi on NyayMitra?", a: "Absolutely. NyayMitra is built for Bharat our Legal AI, services, and consultations are available in both Hindi and English." },
-        { q: "What types of legal problems can NyayMitra help with?", a: "NyayMitra covers FIR registration, property disputes, divorce, consumer complaints, online fraud, labour disputes, rent agreements, legal notices, and affidavit creation." },
-        { q: "Is NyayMitra a law firm?", a: "No. NyayMitra is a technology platform connecting people with verified legal professionals. AI guidance is for informational purposes. For formal representation, you'll be connected with a licensed advocate." },
-        { q: "Which cities does NyayMitra serve?", a: "NyayMitra serves all of India online. Strong presence in Patna, Lucknow, Indore, Jaipur, Ranchi, Bengaluru, Delhi, Mumbai, Hyderabad, and Kolkata." },
-      ],
-    },
-    cta: {
-      title: "Ready to solve your legal problem?",
-      subtitle: "Join thousands of Indians who trust NyayMitra. Free AI consultation, verified lawyers, transparent pricing all in one place.",
-      primary: "Start Free Consultation", secondary: "Browse Lawyers",
-    },
-    footer: {
-      company: "NyayMitra", tagline: "Making legal help accessible to every Indian",
-      quickLinks: "Quick Links", legal: "Legal",
-      address: "Koramangala, Bengaluru - 560034, Karnataka, India",
-      email: "support@nyaymitra.tech", phone: "+91 79705 96183",
-      privacy: "Privacy Policy", terms: "Terms of Service",
-      deliveryPolicy: "Shipping & Delivery", about: "About NyayMitra",
-      affidavit: "Affidavit Online", signup: "Sign Up",
-      cancellation: "Cancellation & Refund", contact: "Contact Us",
-      copyright: "All rights reserved.",
-      disclaimerLabel: "Disclaimer:",
-      disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations and notary services are delivered by licensed third-party professionals.",
-      followUs: "Follow Us",
-    },
-    social: { instagram: "https://www.instagram.com/nyaymitra.tech", linkedin: "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" },
-  },
-  hi: {
-    nav: { home: "होम", services: "सेवाएं", lawyers: "वकील खोजें", legalGPT: "लीगल GPT", about: "हमारे बारे में", contact: "संपर्क", login: "लॉगिन", signup: "साइन अप" },
-    profileMenu: { profile: "मेरी प्रोफ़ाइल", dashboard: "मेरा डैशबोर्ड", bookings: "मेरी बुकिंग्स", logout: "लॉगआउट" },
-    langToggle: "EN", langSwitchMobile: "View in English",
-    hero: {
-      badge: "100+ भारतीयों की मदद",
-      titleStatic: "आपकी कानूनी समस्या,",
-      titleAccents: ["आज हल होगी।", "जल्दी सुलझेगी।", "आपके हाथ में।"],
-      description: "FIR, संपत्ति विवाद, पारिवारिक मामले तुरंत अपने अधिकार समझें और मिनटों में सत्यापित वकील से जुड़ें। पटना, लखनऊ, इंदौर, जयपुर, रांची और पूरे भारत में।",
-      ctaPrimary: "लीगल AI से बात करें", ctaSecondary: "वकील खोजें", ctaWhatsapp: "व्हाट्सऐप पर बात करें",
-      whatsappNumber: "919661644025",
-      cardTitle: "यह कैसे काम करता है",
-      cardSteps: [
-        { n: "01", title: "समस्या बताएं", desc: "हिंदी या अंग्रेज़ी में समस्या बताएं" },
-        { n: "02", title: "तुरंत मार्गदर्शन पाएं", desc: "भारतीय कानून पर आधारित AI सलाह" },
-        { n: "03", title: "वकील से जुड़ें", desc: "सत्यापित विशेषज्ञ बुक करें" },
-      ],
-      cardFooter: "24/7 उपलब्ध · कोई छुपा शुल्क नहीं",
-      stats: [{ value: "25+", label: "मामले हल" }, { value: "60+", label: "विशेषज्ञ वकील" }, { value: "99.9%", label: "सफलता दर" }, { value: "<30मि", label: "जवाब समय" }],
-    },
-    trustBar: [{ label: "सत्यापित वकील", value: "60+" }, { label: "संतुष्ट ग्राहक", value: "25+" }, { label: "औसत जवाब", value: "< 2 मिनट" }, { label: "रेटिंग", value: "4.9 ★" }, { label: "शपथपत्र", value: "200+" }, { label: "शहर", value: "10+" }],
-    howItWorks: {
-      eyebrow: "प्रक्रिया", title: "तीन स्टेप में समाधान",
-      steps: [
-        { n: "01", title: "समस्या बताएं", desc: "अपनी कानूनी समस्या हिंदी या अंग्रेज़ी में बताएं।", icon: "file" },
-        { n: "02", title: "मुफ्त मार्गदर्शन पाएं", desc: "तुरंत समझें कि आपको क्या करना चाहिए।", icon: "bot" },
-        { n: "03", title: "वकील से बात करें", desc: "जरूरत हो तो सत्यापित वकील से सीधे बात करें।", icon: "thumb" },
-      ],
-    },
-    services: {
-      eyebrow: "हमारी सेवाएं", title: "हर तरह की कानूनी मदद", subtitle: "आपकी जरूरतों के लिए व्यापक समाधान", allServices: "सभी सेवाएं देखें",
-      featured: { badge: "सबसे लोकप्रिय", title: "ऑनलाइन शपथपत्र", desc: "विशेषज्ञों द्वारा समीक्षित कानूनी रूप से वैध शपथपत्र घंटों में पाएं।", tags: ["पते का प्रमाण", "नाम परिवर्तन", "आय घोषणा", "संपत्ति", "पहचान"], meta: ["2–4 घंटे में डिलीवरी", "वकील द्वारा जांचा गया", "₹999 से शुरू"] },
-      cards: [
-        { title: "लीगल AI चैट", desc: "भारतीय कानून पर प्रशिक्षित। FIR, संपत्ति, परिवार — 24/7 तुरंत जवाब।", footer: "मुफ्त में शुरू करें", href: "/legal-gpt" },
-        { title: "वकील खोजें", desc: "60+ सत्यापित वकीलों को ब्राउज़ करें। रीयल-टाइम बुकिंग।", footer: "< 30 मिनट जवाब", href: "/lawyers" },
-        { title: "दस्तावेज़ जनरेटर", desc: "AI फॉर्म से किराया समझौते, कानूनी नोटिस मिनटों में।", footer: "तुरंत डाउनलोड", href: "/services" },
-      ],
-    },
-    whyUs: {
-      eyebrow: "हम क्यों", title: "भारत के लिए बना,", titleLine2: "बड़े दफ्तरों के लिए नहीं",
-      desc: "NyayMitra बदलाव लाता है — सरल भाषा, पारदर्शी मूल्य, और मांग पर असली वकील।",
-      quote: '"कानूनी मदद विशेषाधिकार नहीं — यह न्यायपूर्ण समाज की नींव है।"',
-      quoteAttr: "— न्यायमित्र संस्थापक सिद्धांत",
-      cta: "मुफ्त में आज़माएं",
-      features: [
-        { n: "01", title: "पारदर्शी मूल्य", desc: "कोई छुपा शुल्क नहीं। हर सेवा की तय दर।" },
-        { n: "02", title: "हमेशा उपलब्ध", desc: "व्हाट्सऐप, कॉल या वेब पर 24/7।" },
-        { n: "03", title: "सत्यापित वकील", desc: "हर वकील बार काउंसिल में नामांकित।" },
-        { n: "04", title: "सरल भाषा", desc: "कोई जटिल शब्द नहीं। कानून सबके लिए आसान।" },
-      ],
-    },
-    problems: {
-      eyebrow: "हम रोज़ इन समस्याओं को हल करते हैं", title: "सामान्य कानूनी समस्याएं",
-      items: [
-        { title: "FIR दर्ज नहीं हो रही", desc: "अपने अधिकार समझें और सही कदम उठाएं।", emoji: "📋" },
-        { title: "संपत्ति विवाद", desc: "मालिकाना हक और सीमाओं की रक्षा करें।", emoji: "🏠" },
-        { title: "तलाक / परिवार", desc: "कस्टडी और सेटलमेंट पर सही मार्गदर्शन।", emoji: "👨‍👩‍👧" },
-        { title: "ऑनलाइन धोखाधड़ी", desc: "पैसे वापस पाने में मदद।", emoji: "🔒" },
-      ],
-    },
-    testimonials: {
-      eyebrow: "क्लाइंट स्टोरीज़", title: "पूरे भारत में भरोसेमंद", verified: "सत्यापित",
-      items: [
-        { name: "स्वप्निल आनंद", location: "भागलपुर, बिहार", avatar: "SA", rating: 5, text: "2 दिनों में नोटरीकृत और घर पहुंचा दिया बिना किसी परेशानी के। शानदार सेवा।" },
-        { name: "आनंद उपाध्याय", location: "इंदौर, एमपी", avatar: "AU", rating: 4, text: "NyayMitra के माध्यम से तुरंत वकील से जुड़ा और वेतन विवाद सुलझ गया।" },
-        { name: "दिनेश चंद", location: "गुड़गांव, हरियाणा", avatar: "DC", rating: 5, text: "दिल्ली में चालान मिला न्यायमित्र ने त्वरित मार्गदर्शन दिया, बिना किसी भ्रम के।" },
-      ],
-    },
-    faq: {
-      eyebrow: "अक्सर पूछे जाने वाले सवाल", title: "कानूनी सवाल, आसान जवाब",
-      subtitle: "कानूनी मदद लेने से पहले जो जानना जरूरी है",
-      items: [
-        { q: "भारत में FIR ऑनलाइन कैसे दर्ज करें?", a: "पुलिस स्टेशन में या e-FIR पोर्टल पर। NyayMitra का Legal AI 24/7 हिंदी में मार्गदर्शन करता है।" },
-        { q: "शपथपत्र क्या होता है और कब जरूरी होता है?", a: "₹999 से शुरू, 2-4 घंटे में नोटरी शपथपत्र पते का प्रमाण, नाम परिवर्तन, आय घोषणा सब।" },
-        { q: "NyayMitra पर वकील परामर्श की कीमत?", a: "AI मार्गदर्शन बिल्कुल मुफ्त। वकील परामर्श ₹150 से शुरू। कोई छुपा शुल्क नहीं।" },
-        { q: "NyayMitra के वकील कितने विश्वसनीय हैं?", a: "60+ सत्यापित वकील Bar Council verified, practice certificate जांचा गया।" },
-        { q: "क्या NyayMitra पर हिंदी में मदद मिलती है?", a: "बिल्कुल Legal AI चैट, सेवाएं और परामर्श हिंदी और अंग्रेज़ी दोनों में।" },
-        { q: "NyayMitra किन समस्याओं में मदद करता है?", a: "FIR, संपत्ति, तलाक, उपभोक्ता शिकायत, ऑनलाइन धोखाधड़ी, वेतन विवाद, शपथपत्र सभी में।" },
-        { q: "क्या NyayMitra एक law firm है?", a: "नहीं — यह एक technology platform है जो लोगों को verified lawyers से जोड़ता है।" },
-        { q: "NyayMitra किन शहरों में सेवा देता है?", a: "पूरे भारत में ऑनलाइन। पटना, लखनऊ, दिल्ली, मुंबई सहित 10+ शहरों में मजबूत उपस्थिति।" },
-      ],
-    },
-    cta: { title: "अपनी कानूनी समस्या हल करने के लिए तैयार हैं?", subtitle: "मुफ्त AI परामर्श, सत्यापित वकील, पारदर्शी मूल्य सब एक जगह।", primary: "मुफ्त परामर्श शुरू करें", secondary: "वकील देखें" },
-    footer: { company: "न्यायमित्र", tagline: "हर भारतीय के लिए कानूनी सहायता को सुलभ बनाना", quickLinks: "त्वरित लिंक", legal: "कानूनी", address: "कोरामंगला, बेंगलुरु - 560034, कर्नाटक, भारत", email: "support@nyaymitra.tech", phone: "+91 79705 96183", privacy: "गोपनीयता नीति", terms: "सेवा की शर्तें", deliveryPolicy: "शिपिंग और डिलीवरी", about: "न्यायमित्र के बारे में", affidavit: "ऑनलाइन शपथपत्र", signup: "साइन अप", cancellation: "रद्दीकरण और धनवापसी", contact: "संपर्क करें", copyright: "सर्वाधिकार सुरक्षित।", disclaimerLabel: "अस्वीकरण:", disclaimer: "NyayMitra एक प्रौद्योगिकी मंच है। हम कानूनी फर्म नहीं हैं।", followUs: "फॉलो करें" },
-    social: { instagram: "https://www.instagram.com/nyaymitra.tech", linkedin: "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" },
-  },
-}
-
-/* ─── TYPEWRITER ─────────────────────────────────────────────────────────────── */
-function useTypewriter(words: string[], interval = 2600) {
-  const [idx, setIdx] = useState(0)
-  const [phase, setPhase] = useState<"in" | "hold" | "out">("hold")
-  useEffect(() => { setIdx(0); setPhase("hold") }, [words.join("|")])
-  useEffect(() => {
-    let t: ReturnType<typeof setTimeout>
-    if (phase === "hold") t = setTimeout(() => setPhase("out"), interval - 400)
-    else if (phase === "out") t = setTimeout(() => { setIdx(i => (i + 1) % words.length); setPhase("in") }, 320)
-    else t = setTimeout(() => setPhase("hold"), 360)
-    return () => clearTimeout(t)
-  }, [phase, idx])
-  return {
-    word: words[idx],
-    style: {
-      opacity: phase === "out" ? 0 : 1,
-      transform: phase === "in" ? "translateY(0)" : phase === "out" ? "translateY(-10px)" : "translateY(0)",
-      transition: "opacity 0.3s ease, transform 0.3s ease",
-    } as React.CSSProperties,
-  }
-}
-
-/* ─── ONE-WAY REVEAL ────────────────────────────────────────────────────────── */
-function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+/* ─── HELPERS ────────────────────────────────────────────────────────────────── */
+function Reveal({ children, delay = 0, style = {} }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    const el = ref.current; if (!el) return
     const tid = setTimeout(() => {
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            el.classList.add("is-on")
-            obs.disconnect()
-          }
-        },
-        { threshold: 0.07, rootMargin: "0px 0px -24px 0px" }
-      )
+      const obs = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { el.classList.add("is-on"); obs.disconnect() }
+      }, { threshold: 0.05, rootMargin: "0px 0px -24px 0px" })
       obs.observe(el)
       return () => obs.disconnect()
     }, 60)
     return () => clearTimeout(tid)
   }, [])
-  return (
-    <div ref={ref} className="reveal" style={{ transitionDelay: `${delay}ms` }}>
-      {children}
-    </div>
-  )
+  return <div ref={ref} className="reveal" style={{ transitionDelay: `${delay}ms`, ...style }}>{children}</div>
 }
 
-/* ─── ATOMS ──────────────────────────────────────────────────────────────────── */
 const WaSvg = ({ size = 16 }: { size?: number }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: size, height: size, flexShrink: 0 }}>
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.677-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.897 6.994c-.004 5.45-4.437 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.181-1.24-6.162-3.495-8.411" />
@@ -636,25 +473,62 @@ const WaSvg = ({ size = 16 }: { size?: number }) => (
 
 const SocialIcon = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
-    style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, borderRadius: "50%", border: "1px solid var(--ink-7)", color: "var(--ink-5)", textDecoration: "none", transition: "all 0.2s", flexShrink: 0 }}
-    onMouseEnter={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.borderColor = "var(--ink-5)"; a.style.color = "var(--ink-2)"; a.style.background = "var(--ink-8)" }}
-    onMouseLeave={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.borderColor = "var(--ink-7)"; a.style.color = "var(--ink-5)"; a.style.background = "" }}>
+    style={{
+      display: "flex", alignItems: "center", justifyContent: "center",
+      width: 32, height: 32, borderRadius: "50%",
+      border: "1px solid var(--ink-7)", color: "var(--ink-5)",
+      textDecoration: "none", transition: "all 0.2s",
+    }}
+    onMouseEnter={e => {
+      const a = e.currentTarget as HTMLAnchorElement
+      a.style.borderColor = "var(--gold)"; a.style.color = "var(--gold-dk)"; a.style.background = "var(--gold-pale)"
+    }}
+    onMouseLeave={e => {
+      const a = e.currentTarget as HTMLAnchorElement
+      a.style.borderColor = "var(--ink-7)"; a.style.color = "var(--ink-5)"; a.style.background = ""
+    }}>
     <Icon style={{ width: 13, height: 13 }} />
   </a>
 )
 
-function FaqItem({ q, a }: { q: string; a: string }) {
+function FaqItem({ q, a, qHi, aHi, lang }: { q: string; a: string; qHi: string; aHi: string; lang: "en" | "hi" }) {
   const [open, setOpen] = useState(false)
   return (
     <div className="faq-row">
       <button className="faq-btn" onClick={() => setOpen(o => !o)} aria-expanded={open}>
-        <span style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "var(--ink-2)", lineHeight: 1.4 }}>{q}</span>
-        <div style={{ width: 28, height: 28, borderRadius: "50%", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, transition: "all 0.28s", background: open ? "var(--ink)" : "transparent" }}>
-          <ChevronDown style={{ width: 13, height: 13, color: open ? "white" : "var(--gold-dk)", transform: open ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.28s" }} />
+        <span style={{
+          fontFamily: "var(--serif)", fontSize: "19px", fontWeight: 500,
+          color: "var(--ink-2)", lineHeight: 1.4, flex: 1,
+        }}>
+          {lang === "en" ? q : qHi}
+        </span>
+        <div style={{
+          width: 28, height: 28, borderRadius: "50%",
+          border: `1.5px solid ${open ? "var(--gold)" : "var(--ink-7)"}`,
+          display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+          transition: "all 0.28s cubic-bezier(0.16,1,0.3,1)",
+          background: open ? "var(--gold-pale)" : "transparent",
+        }}>
+          <ChevronDown style={{
+            width: 12, height: 12,
+            color: open ? "var(--gold-dk)" : "var(--ink-5)",
+            transform: open ? "rotate(180deg)" : "none",
+            transition: "transform 0.28s cubic-bezier(0.16,1,0.3,1)",
+          }} />
         </div>
       </button>
-      <div style={{ maxHeight: open ? "400px" : "0", overflow: "hidden", transition: "max-height 0.44s cubic-bezier(0.22,1,0.36,1)" }}>
-        <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-4)", lineHeight: 1.85, paddingBottom: 22, maxWidth: 680 }}>{a}</p>
+      <div style={{
+        maxHeight: open ? "500px" : "0",
+        overflow: "hidden",
+        transition: "max-height 0.45s cubic-bezier(0.16,1,0.3,1)",
+      }}>
+        <p style={{
+          fontFamily: "var(--sans)", fontSize: "14px",
+          color: "var(--ink-4)", lineHeight: 1.9,
+          paddingBottom: 24, maxWidth: 700,
+        }}>
+          {lang === "en" ? a : aHi}
+        </p>
       </div>
     </div>
   )
@@ -662,7 +536,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 
 interface Profile { id: string; name: string; email: string; role: "lawyer" | "user"; avatar?: string; phoneNumber?: string }
 
-/* ─── MAIN PAGE ──────────────────────────────────────────────────────────────── */
+/* ─── MAIN ───────────────────────────────────────────────────────────────────── */
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [profile, setProfile] = useState<Profile | null>(null)
@@ -670,286 +544,658 @@ export default function HomePage() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-
-  const t = content[lang]
-  const { word: accentWord, style: accentStyle } = useTypewriter(t.hero.titleAccents)
+  const [activeHeroTab, setActiveHeroTab] = useState(0)
 
   useEffect(() => {
     setMounted(true)
     setLoggedIn(!!localStorage.getItem("token"))
     try { const s = localStorage.getItem("userProfile"); if (s) setProfile(JSON.parse(s)) } catch { }
-    const onScroll = () => setScrolled(window.scrollY > 16)
+    const onScroll = () => setScrolled(window.scrollY > 8)
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
   if (!mounted) return null
 
-  const navLinks = Object.entries(t.nav).filter(([k]) => !["login", "signup"].includes(k))
-  const navHref = (key: string) => key === "home" ? "/" : key === "legalGPT" ? "/legal-ai" : `/${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`
-  const waUrl = `https://wa.me/${t.hero.whatsappNumber}?text=${encodeURIComponent("I need help with my legal issue")}`
+  const waBase = "https://wa.me/919661644025?text="
+  const waGeneral = waBase + encodeURIComponent(lang === "en" ? "I need legal help." : "मुझे कानूनी मदद चाहिए।")
 
-  const stepIcon = (icon: string) =>
-    icon === "file" ? <FileCheck style={{ width: 22, height: 22 }} /> :
-      icon === "bot" ? <Bot style={{ width: 22, height: 22 }} /> :
-        <ThumbsUp style={{ width: 22, height: 22 }} />
+  const waProblems: Record<string, string> = {
+    money: waBase + encodeURIComponent(lang === "en" ? "I need help recovering money that was not returned to me." : "मुझे वह पैसा वापस पाने में मदद चाहिए।"),
+    property: waBase + encodeURIComponent(lang === "en" ? "I have a property dispute I need help with." : "मुझे एक संपत्ति विवाद है जिसमें मदद चाहिए।"),
+    tenant: waBase + encodeURIComponent(lang === "en" ? "I have a tenant or landlord issue." : "मेरे पास किरायेदार या मकान मालिक का मुद्दा है।"),
+    consumer: waBase + encodeURIComponent(lang === "en" ? "I have a consumer complaint." : "मेरे पास उपभोक्ता शिकायत है।"),
+    family: waBase + encodeURIComponent(lang === "en" ? "I need help with a family matter." : "मुझे पारिवारिक मामले में मदद चाहिए।"),
+    employment: waBase + encodeURIComponent(lang === "en" ? "I have an employment issue." : "मेरे पास रोजगार का मुद्दा है।"),
+    criminal: waBase + encodeURIComponent(lang === "en" ? "I need help for a criminal matter." : "मुझे आपराधिक मामले के लिए मदद चाहिए।"),
+    cyber: waBase + encodeURIComponent(lang === "en" ? "I am facing cyber crime or online fraud." : "मैं साइबर अपराध का सामना कर रहा हूं।"),
+    contract: waBase + encodeURIComponent(lang === "en" ? "I need help with a contract or agreement." : "मुझे एक अनुबंध में मदद चाहिए।"),
+    other: waBase + encodeURIComponent(lang === "en" ? "I have a legal issue and need guidance." : "मुझे कानूनी मार्गदर्शन चाहिए।"),
+  }
 
-  const svcIcons = [
-    <Bot style={{ width: 18, height: 18 }} />,
-    <Gavel style={{ width: 18, height: 18 }} />,
-    <FileText style={{ width: 18, height: 18 }} />,
+  const navLinks = [
+    { key: "home", label: lang === "en" ? "Home" : "होम", href: "/" },
+    { key: "services", label: lang === "en" ? "Services" : "सेवाएं", href: "/services" },
+    { key: "lawyers", label: lang === "en" ? "Find Lawyers" : "वकील खोजें", href: "/lawyers" },
+    { key: "legalGPT", label: lang === "en" ? "Legal AI" : "कानूनी एआई", href: "/legal-ai" },
+    { key: "about", label: lang === "en" ? "About" : "हमारे बारे में", href: "/about" },
   ]
 
+  const problems = [
+    { key: "money", labelEn: "Money not returned", labelHi: "पैसा वापस नहीं आया", icon: <Banknote style={{ width: 13, height: 13 }} /> },
+    { key: "property", labelEn: "Property dispute", labelHi: "संपत्ति विवाद", icon: <Home style={{ width: 13, height: 13 }} /> },
+    { key: "tenant", labelEn: "Tenant / Landlord", labelHi: "किरायेदार / मकान मालिक", icon: <Building2 style={{ width: 13, height: 13 }} /> },
+    { key: "consumer", labelEn: "Consumer complaint", labelHi: "उपभोक्ता शिकायत", icon: <Shield style={{ width: 13, height: 13 }} /> },
+    { key: "family", labelEn: "Family matter", labelHi: "पारिवारिक मामला", icon: <HeartHandshake style={{ width: 13, height: 13 }} /> },
+    { key: "employment", labelEn: "Employment issue", labelHi: "रोजगार मुद्दा", icon: <Briefcase style={{ width: 13, height: 13 }} /> },
+    { key: "criminal", labelEn: "Criminal matter", labelHi: "आपराधिक मामला", icon: <Gavel style={{ width: 13, height: 13 }} /> },
+    { key: "cyber", labelEn: "Cyber crime", labelHi: "साइबर अपराध", icon: <AlertCircle style={{ width: 13, height: 13 }} /> },
+    { key: "contract", labelEn: "Contract / Agreement", labelHi: "अनुबंध / समझौता", icon: <FileSignature style={{ width: 13, height: 13 }} /> },
+    { key: "other", labelEn: "Something else", labelHi: "कुछ और", icon: <FileText style={{ width: 13, height: 13 }} /> },
+  ]
+
+  const actions = [
+    {
+      titleEn: "Recover your money", titleHi: "अपना पैसा वापस पाएं",
+      descEn: "Unpaid loans, fraud, or disputes legal notice drafted in hours.",
+      descHi: "अवैतनिक ऋण, धोखाधड़ी कानूनी नोटिस घंटों में तैयार।",
+      icon: <Banknote style={{ width: 22, height: 22 }} />,
+      href: waBase + encodeURIComponent(lang === "en" ? "I need help recovering money." : "मुझे पैसा वापस पाने में मदद चाहिए।"),
+      badge: "Most Popular",
+    },
+    {
+      titleEn: "Solve property issues", titleHi: "संपत्ति के मुद्दे सुलझाएं",
+      descEn: "Boundary disputes, title issues, illegal possession.",
+      descHi: "सीमा विवाद, शीर्षक मुद्दे, अवैध कब्जा।",
+      icon: <Home style={{ width: 22, height: 22 }} />,
+      href: "/lawyers",
+      badge: null,
+    },
+    {
+      titleEn: "Get documents done", titleHi: "दस्तावेज़ तैयार करवाएं",
+      descEn: "Affidavits, rent agreements, legal notices ready fast.",
+      descHi: "हलफनामे, किराया समझौते जल्दी तैयार।",
+      icon: <FileSignature style={{ width: 22, height: 22 }} />,
+      href: "/affidavit-online-india",
+      badge: "₹999 onwards",
+    },
+    {
+      titleEn: "Talk to a lawyer", titleHi: "वकील से बात करें",
+      descEn: "Connect with a verified expert in under 30 minutes.",
+      descHi: "30 मिनट के भीतर सत्यापित विशेषज्ञ से जुड़ें।",
+      icon: <Gavel style={{ width: 22, height: 22 }} />,
+      href: "/lawyers",
+      badge: "From ₹150",
+    },
+  ]
+
+  const flowSteps = [
+    {
+      n: "01", icon: <FileCheck style={{ width: 16, height: 16 }} />,
+      titleEn: "Tell your problem", titleHi: "अपनी समस्या बताएं",
+      descEn: "No legal jargon needed. Hindi or English, any device.",
+      descHi: "कानूनी शब्दावली की जरूरत नहीं। हिंदी या अंग्रेजी।",
+    },
+    {
+      n: "02", icon: <ArrowRight style={{ width: 16, height: 16 }} />,
+      titleEn: "Get your next step", titleHi: "अगला कदम जानें",
+      descEn: "AI-powered clarity backed by Indian law, instantly.",
+      descHi: "भारतीय कानून द्वारा समर्थित, तुरंत स्पष्टता।",
+    },
+    {
+      n: "03", icon: <CheckCircle style={{ width: 16, height: 16 }} />,
+      titleEn: "Take action", titleHi: "कार्रवाई करें",
+      descEn: "Send a notice, book a lawyer, or get a document. Done.",
+      descHi: "नोटिस भेजें, वकील बुक करें, दस्तावेज़ पाएं।",
+    },
+  ]
+
+  const testimonials = [
+    { name: "Swapnil Anand", location: "Bhagalpur, Bihar", avatar: "SA", rating: 5, textEn: "Notarized affidavit home delivered in 2 days. Every detail handled without hassle.", textHi: "2 दिनों में नोटरीकृत हलफनामा घर पहुंचा। बिना किसी परेशानी के।" },
+    { name: "Anand Upadhyay", location: "Indore, MP", avatar: "AU", rating: 4, textEn: "Connected with a lawyer instantly. My delayed salary issue was resolved effectively.", textHi: "तुरंत एक वकील से जुड़े। विलंबित वेतन का प्रभावी समाधान।" },
+    { name: "Dinesh Chand", location: "Gurgaon, Haryana", avatar: "DC", rating: 5, textEn: "Delhi traffic challan NyayMitra told me exactly what to do. Clear, fast, no confusion.", textHi: "दिल्ली चालान न्यायमित्र ने बताया कि वास्तव में क्या करना है।" },
+  ]
+
+  const faqs = [
+    {
+      qEn: "How do I file an FIR online in India?",
+      aEn: "In India, you can file an FIR at your nearest police station. If the police refuse, you can write to the Superintendent of Police. Many states offer e-FIR services. NyayMitra's Legal AI guides you step by step in Hindi or English, 24/7.",
+      qHi: "भारत में ऑनलाइन एफआईआर कैसे दर्ज कराएं?",
+      aHi: "भारत में, आप अपने नजदीकी पुलिस स्टेशन में एफआईआर दर्ज करा सकते हैं। यदि पुलिस मना करती है, तो आप पुलिस अधीक्षक को लिख सकते हैं। कई राज्य ई-एफआईआर सेवाएं प्रदान करते हैं।",
+    },
+    {
+      qEn: "What is an affidavit and when do I need one?",
+      aEn: "An affidavit is a sworn written statement legally binding in Indian courts and government offices. You need one for address proof, name change, income declaration, property matters. NyayMitra delivers notarized affidavits from ₹999, within 2–4 hours.",
+      qHi: "हलफनामा क्या है और कब चाहिए?",
+      aHi: "हलफनामा एक शपथ पत्र है भारतीय अदालतों में बाध्यकारी। पते के प्रमाण, नाम परिवर्तन के लिए आवश्यक। न्यायमित्र ₹999 से 2-4 घंटों में प्रदान करता है।",
+    },
+    {
+      qEn: "How much does a lawyer consultation cost?",
+      aEn: "AI-powered legal guidance is completely free. Paid lawyer consultations start from ₹150 for 15 minutes. No hidden charges the price you see is what you pay.",
+      qHi: "वकील परामर्श की लागत कितनी है?",
+      aHi: "एआई-संचालित कानूनी मार्गदर्शन पूरी तरह मुफ्त है। सशुल्क परामर्श ₹150 से शुरू होता है। कोई छिपा शुल्क नहीं।",
+    },
+    {
+      qEn: "Are the lawyers on NyayMitra verified?",
+      aEn: "Yes. Every lawyer is verified through Bar Council enrollment, practice certificate, and background checks. 60+ verified lawyers across civil, criminal, family, property, consumer, labour, and cyber law.",
+      qHi: "क्या न्यायमित्र पर वकील सत्यापित हैं?",
+      aHi: "हाँ। बार काउंसिल पंजीकरण और बैकग्राउंड चेक के माध्यम से। 60+ सत्यापित वकील।",
+    },
+    {
+      qEn: "Is NyayMitra a law firm?",
+      aEn: "No. NyayMitra is a technology platform connecting people with verified legal professionals. AI guidance is for informational purposes. For representation, you'll be connected with a licensed advocate.",
+      qHi: "क्या न्यायमित्र एक कानूनी फर्म है?",
+      aHi: "नहीं। न्यायमित्र एक प्रौद्योगिकी मंच है। एआई मार्गदर्शन सूचनात्मक उद्देश्यों के लिए है।",
+    },
+  ]
+
+  /* ─── Render ─────────────────────────────────────────────────────────────── */
   return (
     <>
       <GlobalStyles />
       <Head>
-        <title>NyayMitra – Online Legal Help India | Lawyers & Affidavit</title>
-        <meta name="description" content="Instant legal help in India — AI guidance, verified lawyers, affidavits. Hindi & English. Serving Patna, Lucknow, Indore & all India." />
+        <title>NyayMitra {lang === "en" ? "Know your next legal step" : "अपना अगला कानूनी कदम जानें"}</title>
+        <meta name="description" content="India's most accessible legal platform. Free AI guidance, verified lawyers, instant documents." />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href="https://nyaymitra.tech" />
       </Head>
 
-      <div style={{ minHeight: "100vh", background: "var(--white)", color: "var(--ink)" }}>
+      <div style={{ minHeight: "100vh", background: "var(--white)" }}>
 
-        {/* Announcement Bar */}
-        <div style={{ background: "var(--ink)", color: "white", textAlign: "center", padding: "9px 16px", fontSize: "11px", fontFamily: "var(--mono)", letterSpacing: "0.1em" }}>
-          🇮🇳&nbsp; Free AI Legal Guidance in Hindi & English &nbsp;·&nbsp; 24/7 &nbsp;·&nbsp;
-          <a href={waUrl} target="_blank" rel="noopener noreferrer" style={{ color: "var(--gold)", textDecoration: "none", fontWeight: 600 }}>WhatsApp Now →</a>
+        {/* ── Announcement Bar ─────────────────────────────────────────────────── */}
+        <div style={{
+          background: "linear-gradient(90deg, var(--ink) 0%, var(--ink-2) 40%, var(--ink-3) 100%)",
+          color: "white",
+          textAlign: "center",
+          padding: "9px 16px",
+          fontSize: "11px",
+          fontFamily: "var(--mono)",
+          letterSpacing: "0.1em",
+          position: "relative",
+          overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.06) 50%, transparent 100%)",
+            pointerEvents: "none",
+          }} />
+          <span style={{ color: "rgba(255,255,255,0.55)" }}>🇮🇳</span>{" "}
+          <span style={{ color: "rgba(255,255,255,0.7)" }}>
+            {lang === "en" ? "Free legal guidance in Hindi & English 24/7" : "हिंदी और अंग्रेजी में मुफ्त कानूनी मार्गदर्शन 24/7"}
+          </span>
+          &nbsp;·&nbsp;
+          <a href={waGeneral} target="_blank" rel="noopener noreferrer"
+            style={{ color: "var(--gold-lt)", textDecoration: "none", fontWeight: 600, letterSpacing: "0.12em" }}>
+            {lang === "en" ? "WhatsApp Now →" : "अभी व्हाट्सएप करें →"}
+          </a>
         </div>
 
-        {/* Enhanced Navbar */}
+        {/* ── Navbar ───────────────────────────────────────────────────────────── */}
         <nav style={{
           position: "sticky", top: 0, zIndex: 100,
-          background: scrolled ? "rgba(255,255,255,0.96)" : "var(--white)",
-          backdropFilter: scrolled ? "blur(18px)" : "none",
-          borderBottom: "1px solid var(--ink-7)",
-          boxShadow: scrolled ? "0 2px 16px rgba(0,0,0,0.06)" : "none",
-          transition: "background 0.3s, box-shadow 0.3s",
+          background: scrolled ? "rgba(255,254,251,0.96)" : "var(--white)",
+          backdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
+          borderBottom: `1px solid ${scrolled ? "var(--ink-7)" : "transparent"}`,
+          boxShadow: scrolled ? "0 2px 24px rgba(12,11,9,0.06)" : "none",
+          transition: "all 0.32s cubic-bezier(0.16,1,0.3,1)",
         }}>
-          <div className="nav-container">
+          <div style={{
+            maxWidth: 1200, margin: "0 auto", padding: "0 28px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            height: 66,
+          }}>
+            {/* Logo */}
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 11, textDecoration: "none", flexShrink: 0 }}>
-              <div style={{ width: 38, height: 38, background: "var(--ink)", borderRadius: 9, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 10px rgba(0,0,0,0.18)", flexShrink: 0 }}>
-                <Scale style={{ color: "white", width: 17, height: 17 }} />
+              <div style={{
+                width: 38, height: 38, borderRadius: 10,
+                background: "var(--ink)",
+                display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                boxShadow: "0 2px 12px rgba(12,11,9,0.2)",
+                position: "relative", overflow: "hidden",
+              }}>
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%)",
+                }} />
+                <Scale style={{ color: "var(--gold)", width: 16, height: 16, position: "relative", zIndex: 1 }} />
               </div>
               <div>
-                <div style={{ fontFamily: "var(--serif)", fontSize: "19px", fontWeight: 700, color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.01em" }}>{t.footer.company}</div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 1 }}>Legal Tech · India</div>
+                <div style={{
+                  fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                  color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em",
+                }}>NyayMitra</div>
+                <div style={{
+                  fontFamily: "var(--mono)", fontSize: "7px", color: "var(--gold-dk)",
+                  letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2,
+                }}>{lang === "en" ? "Legal Tech · India" : "कानूनी तकनीक · भारत"}</div>
               </div>
             </Link>
 
-            <div className="desk-nav" style={{ alignItems: "center", gap: 2 }}>
-              {navLinks.map(([key, val]) => (
-                <Link key={key} href={navHref(key)} className="nav-link">{val}</Link>
-              ))}
+            {/* Desktop nav */}
+            <div className="desk-only" style={{ alignItems: "center", gap: 2 }}>
+              {navLinks.map(l => <Link key={l.key} href={l.href} className="nav-link">{l.label}</Link>)}
             </div>
 
+            {/* Right */}
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-              <div className="desk-social desk-nav" style={{ alignItems: "center", gap: 6 }}>
-                <SocialIcon href={t.social.instagram} icon={Instagram} label="Instagram" />
-                <SocialIcon href={t.social.linkedin} icon={Linkedin} label="LinkedIn" />
+              <div className="desk-only" style={{ alignItems: "center", gap: 7 }}>
+                <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                 <div style={{ width: 1, height: 18, background: "var(--ink-7)", margin: "0 2px" }} />
               </div>
 
-              <button onClick={() => setLang(l => l === "en" ? "hi" : "en")}
-                style={{ width: 33, height: 33, borderRadius: "50%", border: "1.5px solid var(--ink-7)", background: "none", cursor: "pointer", fontFamily: "var(--mono)", fontSize: "9.5px", fontWeight: 700, color: "var(--ink-5)", transition: "all 0.18s", flexShrink: 0 }}
-                aria-label="Switch language">
-                {t.langToggle}
+              {/* Lang toggle */}
+              <button
+                onClick={() => setLang(l => l === "en" ? "hi" : "en")}
+                style={{
+                  width: 34, height: 34, borderRadius: "50%",
+                  border: "1.5px solid var(--ink-7)", background: "none",
+                  cursor: "pointer", fontFamily: "var(--mono)", fontSize: "9px",
+                  fontWeight: 600, color: "var(--ink-4)",
+                  transition: "all 0.2s", flexShrink: 0,
+                }}
+                onMouseEnter={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "var(--gold)"; b.style.color = "var(--gold-dk)"; }}
+                onMouseLeave={e => { const b = e.currentTarget as HTMLButtonElement; b.style.borderColor = "var(--ink-7)"; b.style.color = "var(--ink-4)"; }}
+              >
+                {lang === "en" ? "हि" : "EN"}
               </button>
 
               {loggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button style={{ display: "flex", alignItems: "center", gap: 8, background: "var(--ink-8)", border: "1px solid var(--ink-7)", borderRadius: 100, padding: "5px 14px 5px 5px", cursor: "pointer", flexShrink: 0 }}>
-                      <div style={{ width: 27, height: 27, borderRadius: "50%", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <User style={{ color: "white", width: 12, height: 12 }} />
+                    <button style={{
+                      display: "flex", alignItems: "center", gap: 8,
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                      borderRadius: 100, padding: "5px 14px 5px 5px", cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}>
+                      <div style={{
+                        width: 28, height: 28, borderRadius: "50%", background: "var(--ink)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
+                        <User style={{ color: "var(--gold)", width: 12, height: 12 }} />
                       </div>
-                      <span style={{ fontFamily: "var(--sans)", fontSize: "12px", fontWeight: 600, color: "var(--ink)" }}>{profile?.name?.split(" ")[0] || "Account"}</span>
+                      <span style={{ fontFamily: "var(--sans)", fontSize: "12px", fontWeight: 600, color: "var(--ink)" }}>
+                        {profile?.name?.split(" ")[0] || (lang === "en" ? "Account" : "खाता")}
+                      </span>
                     </button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" style={{ background: "white", border: "1px solid var(--ink-7)", borderRadius: 10, padding: 6, minWidth: 186, boxShadow: "0 12px 40px rgba(0,0,0,0.1)" }}>
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 5, textDecoration: "none", color: "var(--ink)", fontFamily: "var(--sans)", fontSize: "13px" }}>
-                        <User style={{ width: 13, height: 13 }} />{t.profileMenu.profile}
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => window.location.href = "https://nyay-dashboard.netlify.app/"} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 5, cursor: "pointer", fontFamily: "var(--sans)", fontSize: "13px" }}>
-                      <BarChart2 style={{ width: 13, height: 13 }} />{t.profileMenu.dashboard}
+                  <DropdownMenuContent align="end" style={{
+                    background: "white", border: "1px solid var(--ink-7)",
+                    borderRadius: 12, padding: 6, minWidth: 185,
+                    boxShadow: "0 16px 48px rgba(12,11,9,0.12)",
+                  }}>
+                    {[
+                      { href: "/profile", icon: User, labelEn: "My Profile", labelHi: "मेरी प्रोफाइल" },
+                    ].map(item => (
+                      <DropdownMenuItem key={item.href} asChild>
+                        <Link href={item.href} style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "10px 12px", borderRadius: 7,
+                          textDecoration: "none", color: "var(--ink)",
+                          fontFamily: "var(--sans)", fontSize: "13px",
+                        }}>
+                          <item.icon style={{ width: 13, height: 13, color: "var(--gold-dk)" }} />
+                          {lang === "en" ? item.labelEn : item.labelHi}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                    <DropdownMenuItem onClick={() => window.location.href = "https://nyay-dashboard.netlify.app/"} style={{
+                      display: "flex", alignItems: "center", gap: 10, padding: "10px 12px",
+                      borderRadius: 7, cursor: "pointer", fontFamily: "var(--sans)", fontSize: "13px",
+                    }}>
+                      <BarChart2 style={{ width: 13, height: 13, color: "var(--gold-dk)" }} />
+                      {lang === "en" ? "Dashboard" : "डैशबोर्ड"}
                     </DropdownMenuItem>
                     {profile?.role !== "lawyer" && (
                       <DropdownMenuItem asChild>
-                        <Link href="/all-bookings" style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 5, textDecoration: "none", color: "var(--ink)", fontFamily: "var(--sans)", fontSize: "13px" }}>
-                          <CalendarCheck style={{ width: 13, height: 13 }} />{t.profileMenu.bookings}
+                        <Link href="/all-bookings" style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "10px 12px", borderRadius: 7,
+                          textDecoration: "none", color: "var(--ink)",
+                          fontFamily: "var(--sans)", fontSize: "13px",
+                        }}>
+                          <CalendarCheck style={{ width: 13, height: 13, color: "var(--gold-dk)" }} />
+                          {lang === "en" ? "My Bookings" : "मेरी बुकिंग"}
                         </Link>
                       </DropdownMenuItem>
                     )}
                     <div style={{ height: 1, background: "var(--ink-7)", margin: "4px 0" }} />
-                    <DropdownMenuItem onClick={() => { localStorage.removeItem("token"); window.location.reload() }} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderRadius: 5, cursor: "pointer", color: "var(--red)", fontFamily: "var(--sans)", fontSize: "13px" }}>
-                      <LogOut style={{ width: 13, height: 13 }} />{t.profileMenu.logout}
+                    <DropdownMenuItem onClick={() => { localStorage.removeItem("token"); window.location.reload() }} style={{
+                      display: "flex", alignItems: "center", gap: 10,
+                      padding: "10px 12px", borderRadius: 7, cursor: "pointer",
+                      color: "var(--red)", fontFamily: "var(--sans)", fontSize: "13px",
+                    }}>
+                      <LogOut style={{ width: 13, height: 13 }} />
+                      {lang === "en" ? "Logout" : "लॉगआउट"}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <div className="desk-nav" style={{ gap: 6, alignItems: "center" }}>
-                  <Link href="/auth/login" className="nav-link" style={{ color: "var(--ink-4)" }}>{t.nav.login}</Link>
-                  <Link href="/auth/signup" className="btn btn-ink" style={{ textDecoration: "none", padding: "9px 18px", fontSize: "13px", borderRadius: 6 }}>{t.nav.signup}</Link>
+                <div className="desk-only" style={{ gap: 7, alignItems: "center" }}>
+                  <Link href="/auth/login" className="nav-link">{lang === "en" ? "Login" : "लॉगिन"}</Link>
+                  <Link href="/auth/signup" className="btn btn-ink" style={{ textDecoration: "none", padding: "9px 18px", fontSize: "12.5px" }}>
+                    {lang === "en" ? "Sign Up" : "साइन अप"}
+                  </Link>
                 </div>
               )}
 
-              <button onClick={() => setMenuOpen(!menuOpen)}
-                className="mob-btn"
-                style={{ width: 38, height: 38, border: "1px solid var(--ink-7)", background: "none", borderRadius: 7, cursor: "pointer", alignItems: "center", justifyContent: "center", flexShrink: 0 }}
-                aria-label="Menu">
-                {menuOpen ? <X style={{ width: 16, height: 16 }} /> : <Menu style={{ width: 16, height: 16 }} />}
+              {/* Mobile burger */}
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="mob-only"
+                style={{
+                  width: 38, height: 38, border: "1px solid var(--ink-7)",
+                  background: "none", borderRadius: 8, cursor: "pointer",
+                  alignItems: "center", justifyContent: "center", transition: "all 0.2s",
+                }}>
+                {menuOpen ? <X style={{ width: 15, height: 15 }} /> : <Menu style={{ width: 15, height: 15 }} />}
               </button>
             </div>
           </div>
 
+          {/* Mobile menu */}
           {menuOpen && (
-            <div className="mobile-menu-panel" style={{ borderTop: "1px solid var(--ink-7)", background: "white", padding: "16px 24px 28px", boxShadow: "0 8px 20px rgba(0,0,0,0.08)" }}>
-              {navLinks.map(([key, val]) => (
-                <Link key={key} href={navHref(key)} onClick={() => setMenuOpen(false)}
-                  style={{ display: "block", padding: "14px 0", fontFamily: "var(--sans)", fontSize: "16px", fontWeight: 500, color: "var(--ink-2)", textDecoration: "none", borderBottom: "1px solid var(--ink-8)" }}>
-                  {val}
+            <div style={{
+              borderTop: "1px solid var(--ink-7)", background: "var(--white)",
+              padding: "16px 22px 28px",
+              boxShadow: "0 12px 32px rgba(12,11,9,0.08)",
+              animation: "slideUp 0.22s cubic-bezier(0.16,1,0.3,1) both",
+            }}>
+              {navLinks.map((l, i) => (
+                <Link key={l.key} href={l.href} onClick={() => setMenuOpen(false)}
+                  style={{
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "14px 0", fontFamily: "var(--sans)", fontSize: "15px",
+                    fontWeight: 500, color: "var(--ink-2)", textDecoration: "none",
+                    borderBottom: i < navLinks.length - 1 ? "1px solid var(--ink-8)" : "none",
+                  }}>
+                  {l.label}
+                  <ChevronRight style={{ width: 13, height: 13, color: "var(--ink-6)" }} />
                 </Link>
               ))}
-              <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-                <Link href="/auth/login" onClick={() => setMenuOpen(false)} style={{ flex: 1, padding: "12px", textAlign: "center", border: "1px solid var(--ink-6)", borderRadius: 8, fontFamily: "var(--sans)", fontSize: "14px", fontWeight: 500, color: "var(--ink)", textDecoration: "none", background: "var(--white)" }}>{t.nav.login}</Link>
-                <Link href="/auth/signup" onClick={() => setMenuOpen(false)} style={{ flex: 1, padding: "12px", textAlign: "center", background: "var(--ink)", borderRadius: 8, fontFamily: "var(--sans)", fontSize: "14px", fontWeight: 600, color: "white", textDecoration: "none" }}>{t.nav.signup}</Link>
-              </div>
-              <button onClick={() => { setLang(l => l === "en" ? "hi" : "en"); setMenuOpen(false) }}
-                style={{ marginTop: 16, width: "100%", padding: "12px", border: "1px dashed var(--ink-6)", background: "var(--ink-8)", borderRadius: 8, fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 500, cursor: "pointer", color: "var(--ink-3)" }}>
-                {t.langSwitchMobile}
-              </button>
-              <div style={{ display: "flex", gap: 14, alignItems: "center", marginTop: 20, paddingTop: 12, borderTop: "1px solid var(--ink-7)" }}>
-                <span style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--ink-5)", letterSpacing: "0.1em" }}>Follow us:</span>
-                <SocialIcon href={t.social.instagram} icon={Instagram} label="Instagram" />
-                <SocialIcon href={t.social.linkedin} icon={Linkedin} label="LinkedIn" />
+              <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
+                <Link href="/auth/login" onClick={() => setMenuOpen(false)} style={{
+                  flex: 1, padding: "12px", textAlign: "center",
+                  border: "1.5px solid var(--ink-6)", borderRadius: 9,
+                  fontFamily: "var(--sans)", fontSize: "13.5px", fontWeight: 500,
+                  color: "var(--ink)", textDecoration: "none",
+                }}>{lang === "en" ? "Login" : "लॉगिन"}</Link>
+                <Link href="/auth/signup" onClick={() => setMenuOpen(false)} style={{
+                  flex: 1, padding: "12px", textAlign: "center",
+                  background: "var(--ink)", borderRadius: 9,
+                  fontFamily: "var(--sans)", fontSize: "13.5px", fontWeight: 600,
+                  color: "white", textDecoration: "none",
+                }}>{lang === "en" ? "Sign Up" : "साइन अप"}</Link>
               </div>
             </div>
           )}
         </nav>
 
-        {/* Hero Section */}
-        <section style={{ position: "relative", overflow: "hidden", padding: "72px 24px 72px" }}>
-          <div style={{ position: "absolute", top: 0, right: 0, width: "50%", height: "100%", background: "var(--parchment)", clipPath: "polygon(8% 0,100% 0,100% 100%,0 100%)", zIndex: 0 }} />
-          <div style={{ position: "absolute", top: "50%", right: "23%", transform: "translate(50%,-50%)", width: 460, height: 460, borderRadius: "50%", border: "1px solid rgba(0,0,0,0.05)", zIndex: 0, pointerEvents: "none" }} />
-          <div style={{ position: "absolute", top: "50%", right: "23%", transform: "translate(50%,-50%)", width: 300, height: 300, borderRadius: "50%", border: "1px solid rgba(0,0,0,0.04)", zIndex: 0, pointerEvents: "none" }} />
+        {/* ═══════════════════════════════════════════════════════════════════════
+            HERO
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section style={{ padding: "80px 28px 96px", position: "relative", overflow: "hidden" }}>
+          {/* Background layers */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse 80% 60% at 75% 30%, rgba(201,168,76,0.055) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 70%, rgba(12,11,9,0.025) 0%, transparent 60%)",
+            pointerEvents: "none",
+          }} />
+          {/* Decorative grid lines */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
+            backgroundSize: "80px 80px",
+            pointerEvents: "none",
+          }} />
+          {/* Large decorative scale watermark */}
+          <div style={{
+            position: "absolute", right: "-4%", top: "6%",
+            width: 560, height: 560, opacity: 0.025,
+            pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center",
+          }}>
+            <Scale style={{ width: "100%", height: "100%", color: "var(--gold-dk)" }} />
+          </div>
 
           <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
             <div className="hero-grid">
-              <div style={{ animation: "fadeUp 0.75s cubic-bezier(0.22,1,0.36,1) both" }}>
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, marginBottom: 28 }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 15px", border: "1px solid var(--gold)", borderRadius: 100, background: "rgba(201,168,76,0.07)" }}>
-                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--gold)", flexShrink: 0, boxShadow: "0 0 8px var(--gold)", animation: "pulse-ring 2.6s ease-in-out infinite" }} />
-                    <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase" }}>{t.hero.badge}</span>
+
+              {/* ── Left column ── */}
+              <div style={{ animation: "fadeUp 0.72s cubic-bezier(0.16,1,0.3,1) both" }}>
+
+                {/* Live indicator */}
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: 9,
+                  padding: "6px 16px 6px 9px",
+                  border: "1px solid var(--ink-7)", borderRadius: 100,
+                  marginBottom: 36, background: "var(--white)",
+                  boxShadow: "0 2px 12px rgba(12,11,9,0.04)",
+                }}>
+                  <div style={{
+                    width: 22, height: 22, borderRadius: "50%",
+                    background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <span style={{
+                      width: 7, height: 7, borderRadius: "50%", background: "#22c55e",
+                      animation: "pulseDot 2.2s ease-in-out infinite", display: "block",
+                    }} />
                   </div>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
+                    {lang === "en" ? "100+ Indians helped · Active now" : "100+ भारतीयों की मदद · अभी सक्रिय"}
+                  </span>
                 </div>
 
+                {/* Headline */}
                 <h1 style={{
                   fontFamily: "var(--serif)",
-                  fontSize: "clamp(34px,5.8vw,66px)",
-                  fontWeight: 600,
-                  lineHeight: 1.1,
-                  letterSpacing: "-0.022em",
-                  color: "var(--ink)",
-                  marginBottom: 0,
-                  overflow: "visible",
+                  fontSize: "clamp(44px, 6.5vw, 78px)",
+                  fontWeight: 600, lineHeight: 1.02,
+                  letterSpacing: "-0.03em", color: "var(--ink)", marginBottom: 0,
                 }}>
-                  <span style={{ display: "block", marginBottom: 6 }}>{t.hero.titleStatic}</span>
-                  <span style={{
-                    display: "block",
-                    fontStyle: "italic",
-                    fontWeight: 300,
-                    background: "linear-gradient(110deg,var(--ink) 0%,var(--gold-dk) 32%,var(--gold) 52%,var(--gold-dk) 72%,var(--ink) 100%)",
-                    backgroundSize: "200% auto",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                    animation: "shimmer 4.5s linear infinite",
-                    paddingTop: "0.15em",
-                    paddingBottom: "0.08em",
-                    paddingRight: "0.1em",
-                    overflow: "visible",
-                    minHeight: "1.2em",
-                    ...accentStyle,
-                  }}>{accentWord}</span>
+                  {lang === "en" ? "Know your next" : "अपना अगला"}<br />
+                  <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                    {lang === "en" ? "legal step." : "कानूनी कदम जानें."}
+                  </span>
                 </h1>
 
-                <div style={{ width: 52, height: 2, background: "linear-gradient(90deg,var(--gold),var(--gold-lt))", marginTop: 22, marginBottom: 22 }} />
-
-                <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.82, maxWidth: 480, marginBottom: 34 }}>
-                  {t.hero.description}
-                </p>
-
-                <div className="hero-ctas" style={{ marginBottom: 44 }}>
-                  <Link href="/legal-gpt" className="btn btn-ink" style={{ textDecoration: "none" }}>
-                    <MessageCircle style={{ width: 15, height: 15 }} />{t.hero.ctaPrimary}
-                  </Link>
-                  <Link href="/lawyers" className="btn btn-ghost" style={{ textDecoration: "none" }}>
-                    <Gavel style={{ width: 15, height: 15 }} />{t.hero.ctaSecondary}
-                  </Link>
-                  <a href={waUrl} target="_blank" rel="noopener noreferrer" className="btn btn-wa" style={{ textDecoration: "none" }}>
-                    <WaSvg />{t.hero.ctaWhatsapp}
-                  </a>
+                {/* Ornamental divider */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "28px 0" }}>
+                  <div style={{ width: 44, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+                  <Scale style={{ width: 10, height: 10, color: "var(--gold)" }} />
+                  <div style={{ width: 24, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
                 </div>
 
-                <div className="hero-stats" style={{ paddingTop: 28, borderTop: "1px solid var(--ink-7)" }}>
-                  {t.hero.stats.map((s, i) => (
-                    <div key={s.label} style={{ display: "flex", alignItems: "center" }}>
-                      {i > 0 && <div className="hero-stats-sep" style={{ width: 1, height: 38, background: "var(--ink-7)", margin: "0 24px" }} />}
-                      <div>
-                        <div style={{ fontFamily: "var(--serif)", fontSize: "28px", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>{s.value}</div>
-                        <div style={{ fontFamily: "var(--sans)", fontSize: "10.5px", color: "var(--ink-5)", letterSpacing: "0.04em", marginTop: 3 }}>{s.label}</div>
-                      </div>
+                <p style={{
+                  fontFamily: "var(--sans)", fontSize: "15.5px",
+                  color: "var(--ink-4)", lineHeight: 1.85,
+                  maxWidth: 440, marginBottom: 44, fontWeight: 300,
+                }}>
+                  {lang === "en"
+                    ? "From confusion to action get legal clarity and take action instantly. Hindi or English, 24/7."
+                    : "भ्रम से कार्रवाई तक तुरंत कानूनी स्पष्टता पाएं। हिंदी या अंग्रेजी, 24/7।"}
+                </p>
+
+                {/* Problem selector */}
+                <div style={{
+                  marginBottom: 40, padding: "24px",
+                  border: "1px solid var(--ink-7)", borderRadius: "var(--radius-xl)",
+                  background: "var(--ink-9)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 8px rgba(12,11,9,0.04)",
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                      {lang === "en" ? "Select your issue" : "अपनी समस्या चुनें"}
+                    </span>
+                    <div style={{ flex: 1, height: 1, background: "var(--ink-7)" }} />
+                  </div>
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(175px, 1fr))", gap: 9 }}>
+                    {problems.map(p => (
+                      <a key={p.key} href={waProblems[p.key]} target="_blank" rel="noopener noreferrer"
+                        className="problem-pill" style={{ justifyContent: "flex-start" }}>
+                        <span style={{ color: "var(--gold-dk)", flexShrink: 0 }}>{p.icon}</span>
+                        <span style={{ fontSize: "12px" }}>{lang === "en" ? p.labelEn : p.labelHi}</span>
+                      </a>
+                    ))}
+                  </div>
+                  <p style={{
+                    fontFamily: "var(--sans)", fontSize: "10.5px",
+                    color: "var(--ink-6)", marginTop: 14, letterSpacing: "0.01em",
+                    display: "flex", alignItems: "center", gap: 6,
+                  }}>
+                    <WaSvg size={10} />
+                    {lang === "en" ? "Tap to get help on WhatsApp instantly" : "तुरंत व्हाट्सएप पर मदद पाने के लिए टैप करें"}
+                  </p>
+                </div>
+
+                {/* CTAs */}
+                <div className="hero-ctas">
+                  <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 10 }}>
+                    <WaSvg size={15} />
+                    {lang === "en" ? "Get Help on WhatsApp" : "व्हाट्सएप पर मदद लें"}
+                  </a>
+                  <Link href="/startup-legal" className="btn btn-ghost" style={{ textDecoration: "none" }}>
+                    {lang === "en" ? "For Startups" : "स्टार्टअप्स के लिए"}
+                    <ArrowRight style={{ width: 14, height: 14 }} />
+                  </Link>
+                </div>
+
+                {/* Trust row */}
+                <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 30, flexWrap: "wrap" }}>
+                  {[
+                    { icon: <Shield style={{ width: 10, height: 10 }} />, enText: "Bar Council Verified", hiText: "बार काउंसिल सत्यापित" },
+                    { icon: <CheckCircle style={{ width: 10, height: 10 }} />, enText: "No Hidden Charges", hiText: "कोई छिपा शुल्क नहीं" },
+                    { icon: <Star style={{ width: 10, height: 10 }} />, enText: "4.9★ Rated", hiText: "4.9★ रेटेड" },
+                  ].map(t => (
+                    <div key={t.enText} style={{
+                      display: "flex", alignItems: "center", gap: 6,
+                      fontFamily: "var(--mono)", fontSize: "9px",
+                      color: "var(--ink-5)", letterSpacing: "0.08em",
+                    }}>
+                      <span style={{ color: "var(--gold-dk)" }}>{t.icon}</span>
+                      {lang === "en" ? t.enText : t.hiText}
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="hero-card-col" style={{ animation: "fadeUp 0.8s 0.18s cubic-bezier(0.22,1,0.36,1) both" }}>
-                <div style={{ animation: "float 7s ease-in-out infinite", position: "relative" }}>
-                  <div style={{ background: "var(--white)", border: "1px solid var(--ink-7)", borderRadius: 18, boxShadow: "0 40px 80px rgba(0,0,0,0.09), 0 0 0 1px rgba(0,0,0,0.02)", overflow: "hidden" }}>
-                    <div style={{ background: "var(--ink)", padding: "16px 22px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--gold)", boxShadow: "0 0 9px var(--gold)" }} />
-                        <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "rgba(255,255,255,0.55)", letterSpacing: "0.16em", textTransform: "uppercase" }}>{t.hero.cardTitle}</span>
+              {/* ── Right column — floating card ── */}
+              <div style={{ animation: "fadeUp 0.82s 0.12s cubic-bezier(0.16,1,0.3,1) both" }}>
+                <div style={{ animation: "floatSlow 9s ease-in-out infinite", position: "relative" }}>
+                  <div className="card" style={{
+                    overflow: "hidden",
+                    boxShadow: "0 40px 80px rgba(12,11,9,0.1), 0 8px 24px rgba(12,11,9,0.06), 0 0 0 1px rgba(12,11,9,0.03)",
+                  }}>
+                    {/* Card header */}
+                    <div style={{
+                      background: "var(--ink)",
+                      padding: "16px 22px",
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      position: "relative", overflow: "hidden",
+                    }}>
+                      <div style={{
+                        position: "absolute", inset: 0,
+                        background: "linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 60%)",
+                      }} />
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
+                        <div style={{
+                          width: 8, height: 8, borderRadius: "50%", background: "var(--gold)",
+                          boxShadow: "0 0 12px rgba(201,168,76,0.6)", animation: "glowPulse 2.5s ease-in-out infinite",
+                        }} />
+                        <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.5)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                          {lang === "en" ? "NyayMitra · How it works" : "न्यायमित्र · यह कैसे काम करता है"}
+                        </span>
                       </div>
-                      <div style={{ display: "flex", gap: 6 }}>
-                        {["#ff5f57", "#febc2e", "#28c840"].map(c => <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />)}
+                      <div style={{ display: "flex", gap: 5, position: "relative", zIndex: 1 }}>
+                        {["#ff5f57", "#febc2e", "#28c840"].map(c => (
+                          <div key={c} style={{ width: 9, height: 9, borderRadius: "50%", background: c, opacity: 0.9 }} />
+                        ))}
                       </div>
                     </div>
 
-                    {t.hero.cardSteps.map((step, i) => (
-                      <div key={step.n} style={{ padding: "17px 22px", display: "flex", gap: 14, alignItems: "flex-start", borderBottom: i < 2 ? "1px solid var(--ink-8)" : "none", transition: "background 0.18s", cursor: "default" }}
-                        onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = "var(--parchment)"}
-                        onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = ""}>
-                        <div style={{ width: 36, height: 36, borderRadius: 9, background: "var(--parchment)", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "var(--gold-dk)" }}>
-                          {i === 0 ? <FileCheck style={{ width: 14, height: 14 }} /> : i === 1 ? <Bot style={{ width: 14, height: 14 }} /> : <CalendarCheck style={{ width: 14, height: 14 }} />}
-                        </div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                            <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold)", letterSpacing: "0.1em" }}>{step.n}</span>
-                            <span style={{ fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 600, color: "var(--ink)" }}>{step.title}</span>
+                    {/* Steps */}
+                    <div style={{ padding: "4px 0" }}>
+                      {flowSteps.map((step, i) => (
+                        <div key={step.n}
+                          style={{
+                            padding: "20px 24px",
+                            display: "flex", gap: 16, alignItems: "flex-start",
+                            borderBottom: i < 2 ? "1px solid var(--ink-8)" : "none",
+                            transition: "background 0.2s", cursor: "default",
+                            background: i === 2 ? "var(--gold-pale)" : "transparent",
+                          }}
+                          onMouseEnter={e => { if (i !== 2) (e.currentTarget as HTMLDivElement).style.background = "var(--ink-9)" }}
+                          onMouseLeave={e => { if (i !== 2) (e.currentTarget as HTMLDivElement).style.background = "" }}>
+                          <div style={{
+                            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                            background: i === 2 ? "var(--ink)" : "var(--ink-9)",
+                            border: `1px solid ${i === 2 ? "transparent" : "var(--ink-7)"}`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            color: i === 2 ? "var(--gold)" : "var(--gold-dk)",
+                            boxShadow: i === 2 ? "0 4px 16px rgba(12,11,9,0.2)" : "none",
+                          }}>
+                            {step.icon}
                           </div>
-                          <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.55 }}>{step.desc}</p>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 4 }}>
+                              <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold)", letterSpacing: "0.12em" }}>{step.n}</span>
+                              <span style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "var(--ink)" }}>
+                                {lang === "en" ? step.titleEn : step.titleHi}
+                              </span>
+                            </div>
+                            <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.6 }}>
+                              {lang === "en" ? step.descEn : step.descHi}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
 
-                    <div style={{ padding: "13px 22px", background: "var(--parchment)", borderTop: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                      <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.07em" }}>{t.hero.cardFooter}</span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 5, color: "#15803d", background: "#f0fdf4", padding: "4px 10px", borderRadius: 100, border: "1px solid #bbf7d0" }}>
-                        <WaSvg size={10} /><span style={{ fontFamily: "var(--mono)", fontSize: "9px", letterSpacing: "0.08em", fontWeight: 600 }}>WhatsApp</span>
+                    {/* Card footer */}
+                    <div style={{
+                      padding: "13px 22px",
+                      background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                    }}>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
+                        {lang === "en" ? "Available 24/7 · Zero hidden costs" : "24/7 उपलब्ध · कोई छिपी लागत नहीं"}
+                      </span>
+                      <div style={{
+                        display: "flex", alignItems: "center", gap: 5,
+                        background: "#f0fdf4", border: "1px solid #bbf7d0",
+                        padding: "4px 10px", borderRadius: 100, color: "#15803d",
+                      }}>
+                        <WaSvg size={9} />
+                        <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 600 }}>WhatsApp</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="floating-badge-1" style={{ position: "absolute", bottom: -14, left: -20, background: "var(--ink)", color: "white", borderRadius: 9, padding: "10px 16px", boxShadow: "0 10px 32px rgba(0,0,0,0.17)", fontFamily: "var(--sans)", fontSize: "11.5px", fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
-                    <Shield style={{ width: 12, height: 12, color: "var(--gold)" }} /> Bar Council Verified
+                  {/* Floating badges */}
+                  <div style={{
+                    position: "absolute", bottom: -18, left: -20,
+                    background: "var(--ink)", color: "white", borderRadius: 10,
+                    padding: "10px 16px",
+                    boxShadow: "0 12px 36px rgba(12,11,9,0.22), 0 0 0 1px rgba(255,255,255,0.05) inset",
+                    fontFamily: "var(--sans)", fontSize: "11.5px", fontWeight: 600,
+                    display: "flex", alignItems: "center", gap: 8,
+                    animation: "float 7s 1s ease-in-out infinite",
+                  }}>
+                    <Shield style={{ width: 12, height: 12, color: "var(--gold)" }} />
+                    {lang === "en" ? "Bar Council Verified" : "बार काउंसिल सत्यापित"}
                   </div>
-                  <div className="floating-badge-2" style={{ position: "absolute", top: -14, right: -16, background: "var(--gold-pale)", border: "1px solid var(--gold)", borderRadius: 9, padding: "8px 14px", boxShadow: "0 8px 24px rgba(201,168,76,0.18)", fontFamily: "var(--mono)", fontSize: "10px", fontWeight: 700, color: "var(--gold-dk)", display: "flex", alignItems: "center", gap: 6 }}>
-                    <Star style={{ width: 11, height: 11, fill: "var(--gold)", color: "var(--gold)" }} /> 4.9 / 5.0
+                  <div style={{
+                    position: "absolute", top: -16, right: -16,
+                    background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                    borderRadius: 10, padding: "8px 14px",
+                    boxShadow: "0 8px 24px rgba(201,168,76,0.2)",
+                    fontFamily: "var(--mono)", fontSize: "9.5px", fontWeight: 700,
+                    color: "var(--gold-dk)", display: "flex", alignItems: "center", gap: 7,
+                    animation: "float 8s 0.5s ease-in-out infinite",
+                  }}>
+                    <Star style={{ width: 11, height: 11, fill: "var(--gold)", color: "var(--gold)" }} />
+                    4.9 / 5.0
                   </div>
                 </div>
               </div>
@@ -957,222 +1203,351 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Trust Marquee */}
-        <div style={{ borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)", padding: "12px 0", overflow: "hidden", background: "var(--parchment)" }}>
+        {/* ── Trust Marquee ─────────────────────────────────────────────────────── */}
+        <div style={{
+          borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)",
+          padding: "11px 0", overflow: "hidden",
+          background: "linear-gradient(90deg, var(--ink-9) 0%, var(--white) 50%, var(--ink-9) 100%)",
+        }}>
           <div className="mq-track">
-            {[...t.trustBar, ...t.trustBar, ...t.trustBar].map((item, i) => (
+            {[...Array(3)].flatMap(() => [
+              { val: "₹25,000", en: "recovered via notice", hi: "नोटिस से वसूल" },
+              { val: "60+", en: "verified lawyers", hi: "सत्यापित वकील" },
+              { val: "< 2 min", en: "avg AI response", hi: "औसत एआई प्रतिक्रिया" },
+              { val: "4.9★", en: "client rating", hi: "ग्राहक रेटिंग" },
+              { val: "2 hrs", en: "NDA reviewed", hi: "एनडीए समीक्षित" },
+              { val: "10+", en: "cities served", hi: "शहरों में सेवाएं" },
+            ]).map((item, i) => (
               <span key={i} className="trust-pill">
-                <span style={{ fontFamily: "var(--serif)", fontSize: "14px", fontWeight: 600, color: "var(--gold-dk)" }}>{item.value}</span>
-                <span style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)" }}>{item.label}</span>
-                <span style={{ color: "var(--ink-7)", marginLeft: 4 }}>·</span>
+                <span style={{ fontFamily: "var(--serif)", fontSize: "13.5px", fontWeight: 600, color: "var(--gold-dk)" }}>{item.val}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", fontWeight: 400 }}>
+                  {lang === "en" ? item.en : item.hi}
+                </span>
+                <span style={{ color: "var(--gold-pale)", fontSize: "16px" }}>◆</span>
               </span>
             ))}
           </div>
         </div>
 
-        {/* How It Works */}
+        {/* ═══════════════════════════════════════════════════════════════════════
+            ACTIONS
+        ═══════════════════════════════════════════════════════════════════════ */}
         <section className="section-pad" style={{ background: "var(--white)" }}>
-          <div style={{ maxWidth: 1140, margin: "0 auto" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 64 }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}><span className="eyebrow">{t.howItWorks.eyebrow}</span></div>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px,4vw,46px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.02em" }}>{t.howItWorks.title}</h2>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">{lang === "en" ? "What do you need?" : "आपको क्या चाहिए?"}</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(32px, 4.5vw, 56px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.1,
+                }}>
+                  {lang === "en" ? "Legal help that" : "कानूनी मदद जो"}<br />
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>
+                    {lang === "en" ? "takes action." : "कार्रवाई करती है।"}
+                  </span>
+                </h2>
               </div>
             </Reveal>
 
-            <div className="step-grid" style={{ border: "1px solid var(--ink-7)", borderRadius: 16, overflow: "hidden" }}>
-              {t.howItWorks.steps.map((step, i) => (
-                <Reveal key={step.n} delay={i * 90}>
-                  <div className="step-cell" style={{ padding: "52px 36px 44px", position: "relative", overflow: "hidden", height: "100%", borderRight: i < 2 ? "1px solid var(--ink-7)" : "none", transition: "background 0.22s", cursor: "default", background: "var(--white)" }}
-                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = "var(--parchment)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = "var(--white)"}>
-                    <div className="step-ghost">{step.n}</div>
-                    <div style={{ width: 52, height: 52, borderRadius: 13, background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22, position: "relative", zIndex: 1, color: "var(--gold)" }}>
-                      {stepIcon(step.icon)}
+            <div className="actions-grid">
+              {actions.map((action, i) => (
+                <Reveal key={action.titleEn} delay={i * 65}>
+                  <a
+                    href={action.href}
+                    target={action.href.startsWith("http") ? "_blank" : undefined}
+                    rel={action.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className="action-card"
+                    style={{ height: "100%", textDecoration: "none" }}>
+                    {action.badge && (
+                      <div style={{
+                        position: "absolute", top: 16, right: 16,
+                        padding: "3px 9px", borderRadius: 100,
+                        background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                        fontFamily: "var(--mono)", fontSize: "7.5px",
+                        color: "var(--gold-dk)", fontWeight: 600, letterSpacing: "0.06em",
+                      }}>{action.badge}</div>
+                    )}
+                    <div style={{
+                      width: 50, height: 50, borderRadius: 13,
+                      background: i % 2 === 0 ? "var(--ink)" : "var(--ink-9)",
+                      border: `1px solid ${i % 2 === 0 ? "transparent" : "var(--ink-7)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: i % 2 === 0 ? "var(--gold)" : "var(--gold-dk)",
+                      boxShadow: i % 2 === 0 ? "0 4px 16px rgba(12,11,9,0.15)" : "none",
+                    }}>
+                      {action.icon}
                     </div>
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "3px 10px", background: "var(--gold-pale)", border: "1px solid var(--gold)", borderRadius: 100, marginBottom: 14, position: "relative", zIndex: 1 }}>
-                      <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--gold-dk)", letterSpacing: "0.12em" }}>STEP {i + 1}</span>
+                    <div>
+                      <h3 style={{
+                        fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                        color: "var(--ink)", marginBottom: 8, lineHeight: 1.25,
+                        letterSpacing: "-0.01em",
+                      }}>
+                        {lang === "en" ? action.titleEn : action.titleHi}
+                      </h3>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "var(--ink-5)", lineHeight: 1.7, fontWeight: 300 }}>
+                        {lang === "en" ? action.descEn : action.descHi}
+                      </p>
                     </div>
-                    <h3 style={{ fontFamily: "var(--serif)", fontSize: "21px", fontWeight: 600, color: "var(--ink)", marginBottom: 10, position: "relative", zIndex: 1 }}>{step.title}</h3>
-                    <p style={{ fontFamily: "var(--sans)", fontSize: "13.5px", color: "var(--ink-4)", lineHeight: 1.75, position: "relative", zIndex: 1 }}>{step.desc}</p>
-                  </div>
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 6,
+                      fontFamily: "var(--mono)", fontSize: "9px",
+                      color: "var(--gold-dk)", letterSpacing: "0.1em",
+                      marginTop: "auto", textTransform: "uppercase",
+                    }}>
+                      {lang === "en" ? "Get started" : "शुरू करें"}
+                      <ChevronRight style={{ width: 11, height: 11 }} />
+                    </div>
+                  </a>
                 </Reveal>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Stats Bar */}
-        <div style={{ background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-          <div style={{ maxWidth: 1140, margin: "0 auto" }}>
-            <div className="stat-grid">
-              {[{ value: "60+", label: "Verified Lawyers" }, { value: "25+", label: "Cases Resolved" }, { value: "4.9★", label: "Average Rating" }, { value: "<2min", label: "AI Response Time" }].map((s, i) => (
-                <div key={s.label} className="stat-block" style={{ borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none" }}>
-                  <div className="gold-shimmer stat-value" style={{ fontFamily: "var(--serif)", fontSize: "36px", fontWeight: 600, lineHeight: 1, marginBottom: 6 }}>{s.value}</div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "rgba(255,255,255,0.32)", letterSpacing: "0.15em", textTransform: "uppercase" }}>{s.label}</div>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            STATS BAR
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <div style={{
+          background: "var(--ink)",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          position: "relative", overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px)",
+            backgroundSize: "48px 48px", pointerEvents: "none",
+          }} />
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <div className="stat-bar">
+              {[
+                { value: "60+", en: "Verified Lawyers", hi: "सत्यापित वकील" },
+                { value: "25+", en: "Cases Resolved", hi: "मामले सुलझे" },
+                { value: "4.9★", en: "Average Rating", hi: "औसत रेटिंग" },
+                { value: "<2min", en: "AI Response Time", hi: "एआई प्रतिक्रिया" },
+              ].map((s, i) => (
+                <div key={s.en} style={{
+                  padding: "36px 24px", textAlign: "center",
+                  borderRight: i < 3 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                  position: "relative",
+                }}>
+                  <div style={{ fontFamily: "var(--serif)", fontSize: "38px", fontWeight: 600, lineHeight: 1, marginBottom: 8 }} className="gold-text">
+                    {s.value}
+                  </div>
+                  <div style={{
+                    fontFamily: "var(--mono)", fontSize: "8.5px",
+                    color: "rgba(255,255,255,0.25)", letterSpacing: "0.18em", textTransform: "uppercase",
+                  }}>
+                    {lang === "en" ? s.en : s.hi}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Services Section - IMPROVED RESPONSIVENESS */}
-        <section className="section-pad" style={{ background: "var(--parchment)" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <Reveal>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 52, flexWrap: "wrap", gap: 14 }}>
-                <div>
-                  <div style={{ display: "flex", marginBottom: 14 }}><span className="eyebrow">{t.services.eyebrow}</span></div>
-                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px,4vw,46px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.02em" }}>{t.services.title}</h2>
-                  <p style={{ fontFamily: "var(--sans)", fontSize: "13.5px", color: "var(--ink-5)", marginTop: 7 }}>{t.services.subtitle}</p>
-                </div>
-                <Link href="/services" style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "10px", color: "var(--gold-dk)", textDecoration: "none", letterSpacing: "0.12em", textTransform: "uppercase" }}>
-                  {t.services.allServices} <ArrowRight style={{ width: 12, height: 12 }} />
-                </Link>
-              </div>
-            </Reveal>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            STARTUP SECTION
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          background: "var(--ink-9)",
+          borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Decorative corner ornament */}
+          <div style={{
+            position: "absolute", right: 0, bottom: 0,
+            width: 360, height: 360,
+            background: "radial-gradient(circle, rgba(201,168,76,0.04) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
 
-            <div className="svc-grid">
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <div className="startup-grid">
               <Reveal>
-                <Link href="/affidavit-online-india" style={{ textDecoration: "none", display: "block", height: "100%" }}>
-                  <div className="card card-ink featured-card" style={{ padding: "40px 36px", position: "relative", overflow: "hidden", height: "100%", display: "flex", flexDirection: "column", cursor: "pointer" }}>
-                    <div style={{ position: "absolute", top: -70, right: -70, width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.05)" }} />
-                    <div style={{ position: "absolute", top: 16, left: 16, width: 20, height: 20, borderTop: "1.5px solid var(--gold)", borderLeft: "1.5px solid var(--gold)" }} />
-                    <div style={{ position: "absolute", bottom: 16, right: 16, width: 20, height: 20, borderBottom: "1.5px solid var(--gold)", borderRight: "1.5px solid var(--gold)" }} />
-                    <div style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "4px 12px", border: "1px solid var(--gold)", borderRadius: 100, marginBottom: 26, alignSelf: "flex-start" }}>
-                      <Stamp style={{ width: 10, height: 10, color: "var(--gold)" }} /><span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold)", letterSpacing: "0.14em", textTransform: "uppercase" }}>{t.services.featured.badge}</span>
-                    </div>
-                    <h3 style={{ fontFamily: "var(--serif)", fontSize: "clamp(24px,4vw,30px)", fontWeight: 600, lineHeight: 1.15, marginBottom: 14, color: "white", letterSpacing: "-0.01em" }}>{t.services.featured.title}</h3>
-                    <p style={{ fontFamily: "var(--sans)", fontSize: "13.5px", color: "rgba(255,255,255,0.42)", lineHeight: 1.8, marginBottom: 26, flex: 1 }}>{t.services.featured.desc}</p>
-                    <div className="tags" style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 26 }}>
-                      {t.services.featured.tags.map(tag => (
-                        <span key={tag} style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "rgba(255,255,255,0.38)", border: "1px solid rgba(255,255,255,0.1)", padding: "4px 11px", borderRadius: 100, letterSpacing: "0.08em" }}>{tag}</span>
-                      ))}
-                    </div>
-                    <div className="meta" style={{ display: "flex", flexWrap: "wrap", gap: 16, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
-                      {t.services.featured.meta.map((m, idx) => {
-                        const icons = [<Clock style={{ width: 10, height: 10, color: "var(--gold)" }} />, <CheckCircle style={{ width: 10, height: 10, color: "var(--gold)" }} />, <Zap style={{ width: 10, height: 10, color: "var(--gold)" }} />]
-                        return <span key={m} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.38)" }}>{icons[idx]}{m}</span>
-                      })}
-                    </div>
+                <div>
+                  <div style={{ marginBottom: 20 }}>
+                    <span className="eyebrow">{lang === "en" ? "For Startups" : "स्टार्टअप्स के लिए"}</span>
                   </div>
-                </Link>
-              </Reveal>
+                  <h2 style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(28px, 4vw, 52px)",
+                    fontWeight: 600, lineHeight: 1.08,
+                    letterSpacing: "-0.025em", color: "var(--ink)", marginBottom: 12,
+                  }}>
+                    {lang === "en" ? "Legal support" : "कानूनी सहायता"}<br />
+                    <span style={{ fontWeight: 300, fontStyle: "italic", color: "var(--ink-3)" }}>
+                      {lang === "en" ? "built for founders." : "संस्थापकों के लिए।"}
+                    </span>
+                  </h2>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {t.services.cards.map((card, i) => (
-                  <Reveal key={card.title} delay={(i + 1) * 70}>
-                    <Link href={card.href} style={{ textDecoration: "none" }}>
-                      <div className="card svc-card-content" style={{ padding: "22px 24px", display: "flex", alignItems: "center", gap: 18, cursor: "pointer" }}>
-                        <div className="svc-icon" style={{ width: 44, height: 44, borderRadius: 11, background: "var(--parchment)", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "var(--ink-3)" }}>
-                          {svcIcons[i]}
-                        </div>
-                        <div style={{ flex: 1, minWidth: 0 }}>
-                          <h3 style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "var(--ink)", marginBottom: 4 }}>{card.title}</h3>
-                          <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.6 }}>{card.desc}</p>
-                        </div>
-                        <div className="svc-right" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 5, flexShrink: 0 }}>
-                          <ArrowUpRight style={{ width: 15, height: 15, color: "var(--ink-5)" }} />
-                          <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold-dk)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{card.footer}</span>
-                        </div>
-                      </div>
-                    </Link>
-                  </Reveal>
-                ))}
-                <Reveal delay={280}>
-                  <a href={waUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
-                    <div className="card" style={{ padding: "20px 24px", background: "#f0fdf4", borderColor: "#bbf7d0", display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }}>
-                      <div style={{ width: 40, height: 40, borderRadius: 10, background: "#dcfce7", border: "1px solid #86efac", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#15803d" }}>
-                        <WaSvg size={18} />
-                      </div>
-                      <div>
-                        <div style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "#15803d", marginBottom: 2 }}>Quick help on WhatsApp</div>
-                        {/* <div style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "#16a34a", letterSpacing: "0.07em" }}>+91 96616 44025</div> */}
-                      </div>
-                      <ArrowRight style={{ width: 14, height: 14, color: "#16a34a", marginLeft: "auto" }} />
-                    </div>
-                  </a>
-                </Reveal>
-              </div>
-            </div>
-          </div>
-        </section>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "22px 0 24px" }}>
+                    <div style={{ width: 40, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+                    <Scale style={{ width: 9, height: 9, color: "var(--gold)" }} />
+                    <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+                  </div>
 
-        {/* Why Us Section */}
-        <section className="section-pad" style={{ background: "var(--white)", borderTop: "1px solid var(--ink-7)" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div className="why-grid">
-              <Reveal>
-                <div>
-                  <div style={{ display: "flex", marginBottom: 18 }}><span className="eyebrow">{t.whyUs.eyebrow}</span></div>
-                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, color: "var(--ink)", lineHeight: 1.1, letterSpacing: "-0.022em", marginBottom: 8 }}>{t.whyUs.title}</h2>
-                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 300, fontStyle: "italic", color: "var(--ink-5)", lineHeight: 1.1, letterSpacing: "-0.022em", marginBottom: 26 }}>{t.whyUs.titleLine2}</h2>
-                  <div style={{ width: 52, height: 2, background: "linear-gradient(90deg,var(--gold),var(--gold-lt))", marginBottom: 22 }} />
-                  <p style={{ fontFamily: "var(--sans)", fontSize: "14.5px", color: "var(--ink-4)", lineHeight: 1.85, marginBottom: 34 }}>{t.whyUs.desc}</p>
-                  <Link href="/legal-gpt" className="btn btn-ink" style={{ textDecoration: "none" }}>
-                    {t.whyUs.cta} <ArrowRight style={{ width: 14, height: 14 }} />
+                  <p style={{
+                    fontFamily: "var(--sans)", fontSize: "14.5px",
+                    color: "var(--ink-4)", lineHeight: 1.9, marginBottom: 12, fontWeight: 300,
+                  }}>
+                    {lang === "en"
+                      ? "Running a startup shouldn't mean drowning in legal uncertainty. Get contracts reviewed, NDAs drafted, and compliance handled at a flat monthly rate."
+                      : "स्टार्टअप चलाने का मतलब कानूनी अनिश्चितता नहीं। अनुबंध समीक्षा, एनडीए, और अनुपालन फ्लैट मासिक दर पर।"}
+                  </p>
+
+                  <div style={{
+                    display: "inline-flex", alignItems: "baseline", gap: 6,
+                    padding: "12px 20px",
+                    background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                    borderRadius: "var(--radius)", marginBottom: 32,
+                  }}>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: "30px", fontWeight: 600, color: "var(--gold-dk)" }}>₹999</span>
+                    <span style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--gold-dk)", fontWeight: 500 }}>
+                      {lang === "en" ? "/ month" : "/ माह"}
+                    </span>
+                  </div>
+                  <br />
+                  <Link href="/startup-legal" className="btn btn-ink" style={{ textDecoration: "none" }}>
+                    {lang === "en" ? "View Plans" : "योजनाएं देखें"}
+                    <ArrowRight style={{ width: 14, height: 14 }} />
                   </Link>
-                  <div style={{ marginTop: 48, paddingTop: 32, borderTop: "1px solid var(--ink-7)" }}>
-                    <div style={{ position: "relative", paddingLeft: 20 }}>
-                      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: "linear-gradient(180deg,var(--gold),var(--gold-lt))", borderRadius: 2 }} />
-                      <p style={{ fontFamily: "var(--serif)", fontSize: "18px", fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)", lineHeight: 1.65 }}>{t.whyUs.quote}</p>
-                      <div style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-6)", letterSpacing: "0.1em", marginTop: 10 }}>{t.whyUs.quoteAttr}</div>
-                    </div>
-                  </div>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
-                <div className="feat-grid">
-                  {t.whyUs.features.map((f, i) => {
-                    const icons = [<IndianRupee style={{ width: 17, height: 17 }} />, <Bot style={{ width: 17, height: 17 }} />, <Shield style={{ width: 17, height: 17 }} />, <PenTool style={{ width: 17, height: 17 }} />]
-                    const dark = i % 2 === 1
-                    return (
-                      <div key={f.title} className="card" style={{ padding: "28px 24px", background: dark ? "var(--ink)" : "var(--white)", borderColor: dark ? "transparent" : "var(--ink-7)", position: "relative", overflow: "hidden" }}>
-                        <div style={{ position: "absolute", bottom: -10, right: 6, fontFamily: "var(--serif)", fontSize: "72px", fontWeight: 700, lineHeight: 1, color: "transparent", WebkitTextStroke: dark ? "1px rgba(255,255,255,0.05)" : "1px var(--ink-8)", userSelect: "none", pointerEvents: "none" }}>{f.n}</div>
-                        <div style={{ width: 38, height: 38, borderRadius: 9, background: dark ? "rgba(255,255,255,0.06)" : "var(--parchment)", border: `1px solid ${dark ? "rgba(255,255,255,0.1)" : "var(--ink-7)"}`, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16, color: dark ? "var(--gold)" : "var(--gold-dk)" }}>
-                          {icons[i]}
-                        </div>
-                        <h3 style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: dark ? "white" : "var(--ink)", marginBottom: 8 }}>{f.title}</h3>
-                        <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: dark ? "rgba(255,255,255,0.38)" : "var(--ink-4)", lineHeight: 1.65 }}>{f.desc}</p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
+                  {[
+                    { icon: <FileSignature style={{ width: 15, height: 15 }} />, en: "Contracts & NDAs", hi: "अनुबंध और एनडीए", descEn: "Legally sound agreements drafted and reviewed by verified lawyers.", descHi: "सत्यापित वकीलों द्वारा तैयार कानूनी समझौते।", dark: true },
+                    { icon: <Gavel style={{ width: 15, height: 15 }} />, en: "Legal Consultation", hi: "कानूनी परामर्श", descEn: "30-min expert session plain language, real advice.", descHi: "30 मिनट का विशेषज्ञ सत्र।", dark: false },
+                    { icon: <CheckCircle style={{ width: 15, height: 15 }} />, en: "Compliance Basics", hi: "अनुपालन बेसिक्स", descEn: "Know what you need, when you need it. No surprises.", descHi: "जानें आपको क्या चाहिए, कब चाहिए।", dark: true },
+                    { icon: <IndianRupee style={{ width: 15, height: 15 }} />, en: "Transparent Pricing", hi: "पारदर्शी मूल्य", descEn: "Fixed monthly rate. No billing by the hour.", descHi: "निश्चित मासिक दर। प्रति घंटे बिलिंग नहीं।", dark: false },
+                  ].map((item) => (
+                    <div key={item.en} className="card" style={{
+                      padding: "20px 22px", display: "flex", gap: 15, alignItems: "flex-start",
+                    }}>
+                      <div style={{
+                        width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                        background: item.dark ? "var(--ink)" : "var(--ink-9)",
+                        border: `1px solid ${item.dark ? "transparent" : "var(--ink-7)"}`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        color: item.dark ? "var(--gold)" : "var(--gold-dk)",
+                        boxShadow: item.dark ? "0 3px 12px rgba(12,11,9,0.15)" : "none",
+                      }}>
+                        {item.icon}
                       </div>
-                    )
-                  })}
+                      <div>
+                        <div style={{ fontFamily: "var(--serif)", fontSize: "16px", fontWeight: 600, color: "var(--ink)", marginBottom: 4, letterSpacing: "-0.01em" }}>
+                          {lang === "en" ? item.en : item.hi}
+                        </div>
+                        <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.65, fontWeight: 300 }}>
+                          {lang === "en" ? item.descEn : item.descHi}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </Reveal>
             </div>
           </div>
         </section>
 
-        {/* Problems Section */}
-        <section className="section-pad" style={{ background: "var(--ink)", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(201,168,76,0.024) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.024) 1px,transparent 1px)", backgroundSize: "64px 64px", zIndex: 0 }} />
-          <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            OUTCOMES
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{ background: "var(--white)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 56, flexWrap: "wrap", gap: 14 }}>
-                <div>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--gold)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ display: "inline-block", width: 22, height: 1, background: "var(--gold)" }} />{t.problems.eyebrow}<span style={{ display: "inline-block", width: 22, height: 1, background: "var(--gold)" }} />
-                  </div>
-                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px,4vw,46px)", fontWeight: 600, color: "white", letterSpacing: "-0.02em" }}>{t.problems.title}</h2>
+              <div style={{ textAlign: "center", marginBottom: 60 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">{lang === "en" ? "Real outcomes" : "वास्तविक परिणाम"}</span>
                 </div>
-                <Link href="/legal-gpt" className="btn btn-gw" style={{ textDecoration: "none", fontSize: "12px", padding: "10px 20px" }}>
-                  Get Free Help <ArrowRight style={{ width: 12, height: 12 }} />
-                </Link>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.02em", color: "var(--ink)",
+                }}>
+                  {lang === "en" ? "Not promises." : "वादे नहीं।"}{" "}
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>
+                    {lang === "en" ? "Results." : "परिणाम।"}
+                  </span>
+                </h2>
               </div>
             </Reveal>
 
-            <div className="prob-grid" style={{ border: "1px solid rgba(255,255,255,0.07)", borderRadius: 16, overflow: "hidden" }}>
-              {t.problems.items.map((item, i) => (
-                <Reveal key={item.title} delay={i * 70}>
-                  <div className="prob-cell" style={{ padding: "40px 26px", height: "100%", borderRight: i < 3 ? "1px solid rgba(255,255,255,0.07)" : "none", transition: "background 0.22s", cursor: "default" }}
-                    onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.04)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = ""}>
-                    <div style={{ fontSize: 32, marginBottom: 18, display: "inline-block", padding: "10px", background: "rgba(255,255,255,0.04)", borderRadius: 11, border: "1px solid rgba(255,255,255,0.06)" }}>{item.emoji}</div>
-                    <h3 style={{ fontFamily: "var(--serif)", fontSize: "19px", fontWeight: 600, color: "white", marginBottom: 9, lineHeight: 1.3 }}>{item.title}</h3>
-                    <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "rgba(255,255,255,0.33)", lineHeight: 1.7, marginBottom: 18 }}>{item.desc}</p>
-                    <div style={{ display: "flex", alignItems: "center", gap: 5, color: "var(--gold)", fontFamily: "var(--mono)", fontSize: "8.5px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                      Get help <ArrowRight style={{ width: 10, height: 10 }} />
+            <div className="outcomes-grid">
+              {[
+                {
+                  amount: "₹25,000", avatar: "AK",
+                  en: "Recovered via legal notice", hi: "कानूनी नोटिस से वसूल",
+                  tagEn: "Money dispute", tagHi: "धन विवाद",
+                  descEn: "A Lucknow user recovered unpaid rent with a single legal notice drafted in 2 hours.",
+                  descHi: "लखनऊ में उपयोगकर्ता ने 2 घंटे में एक नोटिस से किराया वसूल किया।",
+                },
+                {
+                  amount: "2 hrs", avatar: "RV",
+                  en: "NDA reviewed & signed", hi: "एनडीए समीक्षा व हस्ताक्षरित",
+                  tagEn: "Startup", tagHi: "स्टार्टअप",
+                  descEn: "A Bengaluru founder got a co-founder NDA reviewed and ready before the meeting ended.",
+                  descHi: "बेंगलुरु संस्थापक को बैठक से पहले एनडीए तैयार मिल गई।",
+                },
+                {
+                  amount: "No court", avatar: "MB",
+                  en: "Property boundary settled", hi: "संपत्ति सीमा तय",
+                  tagEn: "Property", tagHi: "संपत्ति",
+                  descEn: "A Patna family resolved a plot dispute with a guided notice no courtroom required.",
+                  descHi: "पटना परिवार ने नोटिस से विवाद सुलझाया अदालत की जरूरत नहीं।",
+                },
+              ].map((item, i) => (
+                <Reveal key={item.en} delay={i * 75}>
+                  <div className="card" style={{ padding: "34px 30px", position: "relative", overflow: "hidden", height: "100%" }}>
+                    {/* Gold top accent */}
+                    <div style={{
+                      position: "absolute", top: 0, left: 0, right: 0, height: 3,
+                      background: "linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt))",
+                    }} />
+                    {/* Tag */}
+                    <div style={{
+                      display: "inline-flex", alignItems: "center",
+                      padding: "3px 11px",
+                      background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                      borderRadius: 100, marginBottom: 20,
+                    }}>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold-dk)", letterSpacing: "0.12em" }}>
+                        {lang === "en" ? item.tagEn : item.tagHi}
+                      </span>
+                    </div>
+                    <div style={{
+                      fontFamily: "var(--serif)", fontSize: "40px", fontWeight: 600,
+                      color: "var(--ink)", lineHeight: 1, marginBottom: 8, letterSpacing: "-0.02em",
+                    }}>{item.amount}</div>
+                    <div style={{
+                      fontFamily: "var(--sans)", fontSize: "13.5px", fontWeight: 600,
+                      color: "var(--ink-3)", marginBottom: 14,
+                    }}>
+                      {lang === "en" ? item.en : item.hi}
+                    </div>
+                    <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "var(--ink-5)", lineHeight: 1.75, marginBottom: 24, fontWeight: 300 }}>
+                      {lang === "en" ? item.descEn : item.descHi}
+                    </p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, paddingTop: 18, borderTop: "1px solid var(--ink-8)" }}>
+                      <div style={{
+                        width: 32, height: 32, borderRadius: "50%", background: "var(--ink)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold)", fontWeight: 600, flexShrink: 0,
+                      }}>{item.avatar}</div>
+                      <div style={{
+                        display: "flex", alignItems: "center", gap: 5,
+                        fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--green)",
+                        background: "#f0fdf4", padding: "4px 10px", borderRadius: 100,
+                        border: "1px solid #bbf7d0",
+                      }}>
+                        <CheckCircle style={{ width: 8, height: 8 }} />
+                        {lang === "en" ? "Verified outcome" : "सत्यापित परिणाम"}
+                      </div>
                     </div>
                   </div>
                 </Reveal>
@@ -1181,34 +1556,110 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Testimonials Section */}
-        <section className="section-pad" style={{ background: "var(--parchment)", borderBottom: "1px solid var(--ink-7)" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            TESTIMONIALS
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.04)",
+          position: "relative", overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px)",
+            backgroundSize: "60px 60px", pointerEvents: "none",
+          }} />
+
+          <div className="max-w" style={{ padding: "0 28px", position: "relative", zIndex: 1 }}>
             <Reveal>
-              <div style={{ textAlign: "center", marginBottom: 60 }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}><span className="eyebrow">{t.testimonials.eyebrow}</span></div>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px,4vw,46px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.02em" }}>{t.testimonials.title}</h2>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+                  <span className="eyebrow" style={{ color: "var(--gold)", }}>
+                    {lang === "en" ? "Client stories" : "ग्राहक कहानियां"}
+                  </span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(26px, 3.8vw, 48px)",
+                  fontWeight: 600, letterSpacing: "-0.022em", color: "white",
+                }}>
+                  {lang === "en" ? "Trusted across" : "पूरे"}{" "}
+                  <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                    {lang === "en" ? "India." : "भारत में विश्वसनीय।"}
+                  </span>
+                </h2>
               </div>
             </Reveal>
-            <div className="test-grid">
-              {t.testimonials.items.map((item, i) => (
-                <Reveal key={item.name} delay={i * 80}>
-                  <div className="card" style={{ padding: "34px 30px", position: "relative", overflow: "hidden", height: "100%" }}>
-                    <div style={{ position: "absolute", top: 14, left: 20, fontFamily: "var(--serif)", fontSize: "72px", lineHeight: 1, color: "var(--ink-8)", userSelect: "none", pointerEvents: "none" }}>"</div>
-                    <div style={{ display: "flex", gap: 2, marginBottom: 18, position: "relative" }}>
-                      {[...Array(5)].map((_, j) => <Star key={j} style={{ width: 12, height: 12, fill: j < item.rating ? "var(--gold)" : "var(--ink-7)", color: j < item.rating ? "var(--gold)" : "var(--ink-7)" }} />)}
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 18 }}>
+              {testimonials.map((item, i) => (
+                <Reveal key={item.name} delay={i * 75}>
+                  <div style={{
+                    background: "rgba(255,255,255,0.04)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "var(--radius-lg)",
+                    padding: "32px 28px",
+                    height: "100%", position: "relative", overflow: "hidden",
+                    transition: "all 0.28s cubic-bezier(0.16,1,0.3,1)",
+                    cursor: "default",
+                  }}
+                    onMouseEnter={e => {
+                      const d = e.currentTarget as HTMLDivElement
+                      d.style.background = "rgba(255,255,255,0.07)"
+                      d.style.borderColor = "rgba(201,168,76,0.2)"
+                    }}
+                    onMouseLeave={e => {
+                      const d = e.currentTarget as HTMLDivElement
+                      d.style.background = "rgba(255,255,255,0.04)"
+                      d.style.borderColor = "rgba(255,255,255,0.08)"
+                    }}>
+                    {/* Large quote */}
+                    <div style={{
+                      position: "absolute", top: 10, left: 20,
+                      fontFamily: "var(--serif)", fontSize: "72px", lineHeight: 1,
+                      color: "rgba(201,168,76,0.08)", userSelect: "none",
+                      pointerEvents: "none",
+                    }}>"</div>
+                    <div style={{ display: "flex", gap: 2, marginBottom: 18 }}>
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} style={{
+                          width: 12, height: 12,
+                          fill: j < item.rating ? "var(--gold)" : "rgba(255,255,255,0.1)",
+                          color: j < item.rating ? "var(--gold)" : "rgba(255,255,255,0.1)",
+                        }} />
+                      ))}
                     </div>
-                    <p style={{ fontFamily: "var(--serif)", fontSize: "16px", fontStyle: "italic", fontWeight: 400, color: "var(--ink-3)", lineHeight: 1.78, marginBottom: 26 }}>{item.text}</p>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 18, borderTop: "1px solid var(--ink-8)", flexWrap: "wrap", gap: 12 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-                        <div style={{ width: 38, height: 38, borderRadius: "50%", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--mono)", fontSize: "10px", fontWeight: 600, color: "var(--gold)", flexShrink: 0 }}>{item.avatar}</div>
+                    <p style={{
+                      fontFamily: "var(--serif)", fontSize: "16px", fontStyle: "italic",
+                      fontWeight: 300, color: "rgba(255,255,255,0.75)",
+                      lineHeight: 1.8, marginBottom: 24,
+                    }}>
+                      {lang === "en" ? item.textEn : item.textHi}
+                    </p>
+                    <div style={{
+                      display: "flex", alignItems: "center", justifyContent: "space-between",
+                      paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.08)",
+                      flexWrap: "wrap", gap: 10,
+                    }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{
+                          width: 36, height: 36, borderRadius: "50%",
+                          background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: "var(--mono)", fontSize: "9.5px", fontWeight: 600, color: "var(--gold)", flexShrink: 0,
+                        }}>{item.avatar}</div>
                         <div>
-                          <div style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "var(--ink)" }}>{item.name}</div>
-                          <div style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", marginTop: 1 }}>{item.location}</div>
+                          <div style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "white" }}>{item.name}</div>
+                          <div style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: 2 }}>{item.location}</div>
                         </div>
                       </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--mono)", fontSize: "8.5px", color: "#16a34a", letterSpacing: "0.08em", background: "#f0fdf4", padding: "4px 9px", borderRadius: 100, border: "1px solid #bbf7d0", whiteSpace: "nowrap" }}>
-                        <CheckCircle style={{ width: 9, height: 9 }} />{t.testimonials.verified}
+                      <div style={{
+                        display: "flex", alignItems: "center", gap: 5,
+                        fontFamily: "var(--mono)", fontSize: "8px", color: "#4ade80",
+                        background: "rgba(74,222,128,0.08)", padding: "4px 10px",
+                        borderRadius: 100, border: "1px solid rgba(74,222,128,0.2)",
+                      }}>
+                        <CheckCircle style={{ width: 8, height: 8 }} />
+                        {lang === "en" ? "Verified" : "सत्यापित"}
                       </div>
                     </div>
                   </div>
@@ -1218,49 +1669,124 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FAQ Section */}
+        {/* ═══════════════════════════════════════════════════════════════════════
+            FAQ
+        ═══════════════════════════════════════════════════════════════════════ */}
         <section className="section-pad" style={{ background: "var(--white)" }}>
-          <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <div style={{ maxWidth: 780, margin: "0 auto", padding: "0 28px" }}>
             <Reveal>
-              <div style={{ textAlign: "center", marginBottom: 60 }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}><span className="eyebrow">{t.faq.eyebrow}</span></div>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px,4vw,46px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.02em", marginBottom: 10 }}>{t.faq.title}</h2>
-                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)" }}>{t.faq.subtitle}</p>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+                  <span className="eyebrow">FAQ</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(26px, 3.8vw, 46px)",
+                  fontWeight: 600, letterSpacing: "-0.022em", color: "var(--ink)", marginBottom: 10,
+                }}>
+                  {lang === "en" ? "Legal questions," : "कानूनी प्रश्न,"}<br />
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>
+                    {lang === "en" ? "answered simply." : "सरल उत्तर।"}
+                  </span>
+                </h2>
+                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300 }}>
+                  {lang === "en" ? "Everything you need to know before getting legal help." : "कानूनी मदद लेने से पहले आपको जो जानना चाहिए।"}
+                </p>
               </div>
             </Reveal>
-            <Reveal delay={70}>
-              <div>{t.faq.items.map(item => <FaqItem key={item.q} q={item.q} a={item.a} />)}</div>
+            <Reveal delay={60}>
+              <div>
+                {faqs.map(item => (
+                  <FaqItem key={item.qEn} q={item.qEn} a={item.aEn} qHi={item.qHi} aHi={item.aHi} lang={lang} />
+                ))}
+              </div>
             </Reveal>
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="section-pad" style={{ background: "var(--ink)", position: "relative", overflow: "hidden" }}>
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(201,168,76,0.028) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.028) 1px,transparent 1px)", backgroundSize: "56px 56px" }} />
-          <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 660, height: 660, borderRadius: "50%", background: "radial-gradient(ellipse,rgba(201,168,76,0.06),transparent 65%)", pointerEvents: "none" }} />
-          <div style={{ maxWidth: 740, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1 }}>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            CTA SECTION
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          background: "var(--ink-9)",
+          borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)",
+          position: "relative", overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 700, height: 500, borderRadius: "50%",
+            background: "radial-gradient(ellipse, rgba(201,168,76,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          <div style={{ maxWidth: 720, margin: "0 auto", textAlign: "center", position: "relative", zIndex: 1, padding: "0 28px" }}>
             <Reveal>
-              <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", border: "1px solid rgba(201,168,76,0.35)", borderRadius: 100, marginBottom: 28 }}>
-                <Sparkles style={{ width: 11, height: 11, color: "var(--gold)" }} /><span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold)", letterSpacing: "0.16em", textTransform: "uppercase" }}>Start for free</span>
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "6px 16px",
+                border: "1px solid var(--gold)",
+                borderRadius: 100, marginBottom: 32,
+                background: "var(--gold-pale)",
+              }}>
+                <Sparkles style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
+                <span style={{
+                  fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--gold-dk)",
+                  letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500,
+                }}>
+                  {lang === "en" ? "Free to start" : "शुरू करने के लिए मुफ्त"}
+                </span>
               </div>
-              <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px,5vw,54px)", fontWeight: 600, color: "white", letterSpacing: "-0.022em", lineHeight: 1.13, marginBottom: 18 }}>{t.cta.title}</h2>
-              <p style={{ fontFamily: "var(--sans)", fontSize: "14.5px", color: "rgba(255,255,255,0.38)", lineHeight: 1.8, maxWidth: 480, margin: "0 auto 40px" }}>{t.cta.subtitle}</p>
-              <div className="cta-btns">
-                <Link href="/legal-gpt" className="btn btn-gold" style={{ textDecoration: "none" }}>
-                  <Sparkles style={{ width: 13, height: 13 }} />{t.cta.primary}
-                </Link>
-                <Link href="/lawyers" className="btn btn-gw" style={{ textDecoration: "none" }}>
-                  {t.cta.secondary}
+
+              <h2 style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(32px, 5.5vw, 60px)",
+                fontWeight: 600, color: "var(--ink)",
+                letterSpacing: "-0.028em", lineHeight: 1.08, marginBottom: 18,
+              }}>
+                {lang === "en" ? "From confusion" : "भ्रम से"}<br />
+                <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                  {lang === "en" ? "to action." : "कार्रवाई तक।"}
+                </span>
+              </h2>
+
+              <p style={{
+                fontFamily: "var(--sans)", fontSize: "15px",
+                color: "var(--ink-4)", lineHeight: 1.9,
+                maxWidth: 440, margin: "0 auto 40px", fontWeight: 300,
+              }}>
+                {lang === "en"
+                  ? "Join thousands of Indians who took their next legal step with NyayMitra. Free AI consultation, verified lawyers, transparent pricing."
+                  : "हजारों भारतीयों से जुड़ें। मुफ्त एआई परामर्श, सत्यापित वकील, पारदर्शी मूल्य।"}
+              </p>
+
+              <div className="cta-row">
+                <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 10 }}>
+                  <WaSvg size={15} />
+                  {lang === "en" ? "Get Help on WhatsApp" : "व्हाट्सएप पर मदद लें"}
+                </a>
+                <Link href="/startup-legal" className="btn btn-ghost" style={{ textDecoration: "none" }}>
+                  {lang === "en" ? "For Startups →" : "स्टार्टअप्स के लिए →"}
                 </Link>
               </div>
-              <div style={{ marginTop: 36, display: "flex", justifyContent: "center", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+
+              {/* Small trust row */}
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                gap: 24, marginTop: 36, flexWrap: "wrap",
+              }}>
                 {[
-                  { icon: <Shield style={{ width: 11, height: 11 }} />, text: "Bar Council Verified" },
-                  { icon: <CheckCircle style={{ width: 11, height: 11 }} />, text: "No Hidden Charges" },
-                  { icon: <Star style={{ width: 11, height: 11 }} />, text: "4.9★ Rated" },
-                ].map(item => (
-                  <div key={item.text} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.28)", letterSpacing: "0.08em" }}>
-                    <span style={{ color: "var(--gold)" }}>{item.icon}</span>{item.text}
+                  { icon: <Shield style={{ width: 10, height: 10 }} />, en: "Bar Council Verified", hi: "बार काउंसिल सत्यापित" },
+                  { icon: <Star style={{ width: 10, height: 10 }} />, en: "4.9★ Rated", hi: "4.9★ रेटेड" },
+                  { icon: <Zap style={{ width: 10, height: 10 }} />, en: "< 2 min Response", hi: "< 2 मिनट प्रतिक्रिया" },
+                ].map(t => (
+                  <div key={t.en} style={{
+                    display: "flex", alignItems: "center", gap: 6,
+                    fontFamily: "var(--mono)", fontSize: "9px",
+                    color: "var(--ink-5)", letterSpacing: "0.08em",
+                  }}>
+                    <span style={{ color: "var(--gold-dk)" }}>{t.icon}</span>
+                    {lang === "en" ? t.en : t.hi}
                   </div>
                 ))}
               </div>
@@ -1268,58 +1794,96 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Footer - IMPROVED RESPONSIVENESS */}
-        <footer style={{ background: "var(--parchment)", borderTop: "1px solid var(--ink-7)", padding: "68px 24px 40px" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div className="footer-grid" style={{ marginBottom: 48, paddingBottom: 44, borderBottom: "1px solid var(--ink-7)" }}>
-              {/* Brand Column */}
+        {/* ═══════════════════════════════════════════════════════════════════════
+            FOOTER
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <footer style={{
+          background: "var(--ink)",
+          borderTop: "1px solid rgba(255,255,255,0.05)",
+          padding: "72px 28px 40px",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Subtle grid */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.02) 1px, transparent 1px)",
+            backgroundSize: "64px 64px", pointerEvents: "none",
+          }} />
+
+          <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+            <div className="footer-grid" style={{ marginBottom: 48, paddingBottom: 44, borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+              {/* Brand col */}
               <div>
-                <Link href="/" style={{ display: "flex", alignItems: "center", gap: 11, textDecoration: "none", marginBottom: 14, justifyContent: "flex-start" }}>
-                  <div style={{ width: 36, height: 36, background: "var(--ink)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <Scale style={{ color: "white", width: 15, height: 15 }} />
+                <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 11, textDecoration: "none", marginBottom: 16 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: 9, background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(201,168,76,0.2)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    <Scale style={{ color: "var(--gold)", width: 15, height: 15 }} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 700, color: "var(--ink)", lineHeight: 1 }}>{t.footer.company}</div>
-                    <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase", marginTop: 1 }}>Legal Tech · India</div>
+                    <div style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "white", lineHeight: 1, letterSpacing: "-0.02em" }}>NyayMitra</div>
+                    <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "rgba(201,168,76,0.6)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2 }}>
+                      {lang === "en" ? "Legal Tech · India" : "कानूनी तकनीक · भारत"}
+                    </div>
                   </div>
                 </Link>
-                <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-4)", lineHeight: 1.7, maxWidth: 260, marginBottom: 22 }}>{t.footer.tagline}</p>
+                <p style={{
+                  fontFamily: "var(--sans)", fontSize: "12.5px",
+                  color: "rgba(255,255,255,0.35)", lineHeight: 1.75,
+                  maxWidth: 240, marginBottom: 22, fontWeight: 300,
+                }}>
+                  {lang === "en" ? "Making legal help accessible to every Indian. From confusion to action." : "हर भारतीय के लिए कानूनी मदद सुलभ। भ्रम से कार्रवाई तक।"}
+                </p>
                 <address style={{ fontStyle: "normal" }}>
                   {[
-                    { icon: <MapPin style={{ width: 11, height: 11, flexShrink: 0 }} />, text: t.footer.address },
-                    { icon: <Mail style={{ width: 11, height: 11, flexShrink: 0 }} />, text: t.footer.email, href: `mailto:${t.footer.email}` },
-                    { icon: <PhoneCall style={{ width: 11, height: 11, flexShrink: 0 }} />, text: t.footer.phone, href: "tel:+917970596183" },
-                  ].map(row => (
-                    <div key={row.text} style={{ display: "flex", alignItems: "center", justifyContent: "flex-start", gap: 9, marginBottom: 8 }}>
-                      <span style={{ color: "var(--gold-dk)", marginTop: 1 }}>{row.icon}</span>
-                      {row.href
-                        ? <a href={row.href} style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-4)", textDecoration: "none", wordBreak: "break-all" }}>{row.text}</a>
-                        : <span style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-4)" }}>{row.text}</span>}
+                    { icon: <MapPin style={{ width: 10, height: 10 }} />, text: "Koramangala, Bengaluru - 560034, Karnataka" },
+                    { icon: <Mail style={{ width: 10, height: 10 }} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
+                    { icon: <PhoneCall style={{ width: 10, height: 10 }} />, text: "+91 79705 96183", href: "tel:+917970596183" },
+                  ].map((item, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 9, marginBottom: 9 }}>
+                      <span style={{ color: "rgba(201,168,76,0.5)", marginTop: 2, flexShrink: 0 }}>{item.icon}</span>
+                      {item.href ? (
+                        <a href={item.href} style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.35)", textDecoration: "none", fontWeight: 300 }}>{item.text}</a>
+                      ) : (
+                        <span style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.35)", fontWeight: 300 }}>{item.text}</span>
+                      )}
                     </div>
                   ))}
                 </address>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 18, justifyContent: "flex-start" }}>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase" }}>{t.footer.followUs}</span>
-                  <SocialIcon href={t.social.instagram} icon={Instagram} label="Instagram" />
-                  <SocialIcon href={t.social.linkedin} icon={Linkedin} label="LinkedIn" />
+                <div style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 18 }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: "7.5px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+                    {lang === "en" ? "Follow" : "फॉलो"}
+                  </span>
+                  <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                  <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                 </div>
               </div>
 
-              {/* Quick Links */}
+              {/* Quick links */}
               <div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 600, color: "var(--ink-5)", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 18 }}>{t.footer.quickLinks}</div>
+                <div style={{ fontFamily: "var(--mono)", fontSize: "7.5px", fontWeight: 500, color: "rgba(255,255,255,0.25)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 18 }}>
+                  {lang === "en" ? "Quick Links" : "त्वरित लिंक"}
+                </div>
                 <ul style={{ listStyle: "none", padding: 0 }}>
                   {[
-                    { href: "/about", label: t.footer.about },
-                    { href: "/services", label: t.nav.services },
-                    { href: "/lawyers", label: t.nav.lawyers },
-                    { href: "/affidavit-online-india", label: t.footer.affidavit },
-                    { href: "/auth/signup", label: t.footer.signup },
+                    { href: "/about", labelEn: "About NyayMitra", labelHi: "न्यायमित्र के बारे में" },
+                    { href: "/services", labelEn: "Services", labelHi: "सेवाएं" },
+                    { href: "/lawyers", labelEn: "Find Lawyers", labelHi: "वकील खोजें" },
+                    { href: "/affidavit-online-india", labelEn: "Affidavit Online", labelHi: "ऑनलाइन हलफनामा" },
+                    { href: "/auth/signup", labelEn: "Sign Up", labelHi: "साइन अप" },
                   ].map(l => (
                     <li key={l.href} style={{ marginBottom: 10 }}>
-                      <Link href={l.href} style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-5)", textDecoration: "none", transition: "color 0.18s" }}
-                        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink)"}
-                        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink-5)"}>{l.label}</Link>
+                      <Link href={l.href} style={{
+                        fontFamily: "var(--sans)", fontSize: "12.5px",
+                        color: "rgba(255,255,255,0.35)", textDecoration: "none",
+                        transition: "color 0.18s", fontWeight: 300,
+                      }}
+                        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--gold-lt)"}
+                        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.35)"}>
+                        {lang === "en" ? l.labelEn : l.labelHi}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -1327,58 +1891,96 @@ export default function HomePage() {
 
               {/* Legal */}
               <div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 600, color: "var(--ink-5)", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 18 }}>{t.footer.legal}</div>
+                <div style={{ fontFamily: "var(--mono)", fontSize: "7.5px", fontWeight: 500, color: "rgba(255,255,255,0.25)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 18 }}>
+                  {lang === "en" ? "Legal" : "कानूनी"}
+                </div>
                 <ul style={{ listStyle: "none", padding: 0 }}>
                   {[
-                    { href: "/terms", label: t.footer.terms },
-                    { href: "/privacy-policy", label: t.footer.privacy },
-                    { href: "/cancellation", label: t.footer.cancellation },
-                    { href: "/Shipping&DeliveryPolicy", label: t.footer.deliveryPolicy },
-                    { href: "/contact", label: t.footer.contact },
+                    { href: "/terms", labelEn: "Terms of Service", labelHi: "सेवा की शर्तें" },
+                    { href: "/privacy-policy", labelEn: "Privacy Policy", labelHi: "गोपनीयता नीति" },
+                    { href: "/cancellation", labelEn: "Cancellation & Refund", labelHi: "रद्दीकरण और धनवापसी" },
+                    { href: "/Shipping&DeliveryPolicy", labelEn: "Shipping & Delivery", labelHi: "शिपिंग और डिलीवरी" },
+                    { href: "/contact", labelEn: "Contact Us", labelHi: "संपर्क करें" },
                   ].map(l => (
                     <li key={l.href} style={{ marginBottom: 10 }}>
-                      <Link href={l.href} style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-5)", textDecoration: "none", transition: "color 0.18s" }}
-                        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink)"}
-                        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--ink-5)"}>{l.label}</Link>
+                      <Link href={l.href} style={{
+                        fontFamily: "var(--sans)", fontSize: "12.5px",
+                        color: "rgba(255,255,255,0.35)", textDecoration: "none",
+                        transition: "color 0.18s", fontWeight: 300,
+                      }}
+                        onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "var(--gold-lt)"}
+                        onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.35)"}>
+                        {lang === "en" ? l.labelEn : l.labelHi}
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* Get Started Box */}
+              {/* Footer CTA */}
               <div>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 600, color: "var(--ink-5)", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: 18 }}>Get Started</div>
-                <div style={{ background: "var(--ink)", borderRadius: 12, padding: "26px 22px", textAlign: "center" }}>
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 12px" }}>
-                    <Scale style={{ color: "var(--gold)", width: 17, height: 17 }} />
+                <div style={{ fontFamily: "var(--mono)", fontSize: "7.5px", fontWeight: 500, color: "rgba(255,255,255,0.25)", letterSpacing: "0.2em", textTransform: "uppercase", marginBottom: 18 }}>
+                  {lang === "en" ? "Get Started" : "शुरू करें"}
+                </div>
+                <div style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(201,168,76,0.15)",
+                  borderRadius: "var(--radius-lg)", padding: "24px 22px", textAlign: "center",
+                }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 10,
+                    background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 14px",
+                  }}>
+                    <Scale style={{ color: "var(--gold)", width: 16, height: 16 }} />
                   </div>
-                  <p style={{ fontFamily: "var(--serif)", fontSize: "14.5px", fontStyle: "italic", fontWeight: 300, color: "rgba(255,255,255,0.7)", marginBottom: 16, lineHeight: 1.55 }}>Free legal guidance,<br />always available.</p>
-                  <Link href="/legal-gpt" style={{ display: "block", background: "var(--gold)", color: "var(--ink)", padding: "10px", borderRadius: 7, fontFamily: "var(--sans)", fontSize: "12px", fontWeight: 700, textDecoration: "none", letterSpacing: "0.04em", textTransform: "uppercase", transition: "background 0.2s" }}
-                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--gold-lt)"}
-                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.background = "var(--gold)"}>
-                    Try Legal AI →
-                  </Link>
+                  <p style={{
+                    fontFamily: "var(--serif)", fontSize: "14px", fontStyle: "italic",
+                    fontWeight: 300, color: "rgba(255,255,255,0.45)",
+                    marginBottom: 16, lineHeight: 1.6,
+                  }}>
+                    {lang === "en" ? "Free legal guidance," : "मुफ्त कानूनी मार्गदर्शन,"}<br />
+                    {lang === "en" ? "always available." : "हमेशा उपलब्ध।"}
+                  </p>
+                  <a href={waGeneral} target="_blank" rel="noopener noreferrer" style={{
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+                    background: "linear-gradient(135deg, var(--gold-dk), var(--gold))",
+                    color: "var(--ink)", padding: "11px",
+                    borderRadius: 9, fontFamily: "var(--sans)", fontSize: "12px",
+                    fontWeight: 700, textDecoration: "none", transition: "all 0.22s",
+                  }}
+                    onMouseEnter={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = "translateY(-1px)"; a.style.boxShadow = "0 8px 24px rgba(201,168,76,0.3)" }}
+                    onMouseLeave={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = ""; a.style.boxShadow = "" }}>
+                    <WaSvg size={13} />
+                    {lang === "en" ? "WhatsApp Now" : "अभी व्हाट्सएप करें"}
+                  </a>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Bar - Improved for mobile */}
-            <div className="footer-bottom" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 14 }}>
-              <p className="footer-copyright" style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--ink-6)", letterSpacing: "0.06em" }}>© 2026 {t.footer.company}. {t.footer.copyright}</p>
-              <p className="footer-disclaimer" style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-6)", maxWidth: 540, lineHeight: 1.65, textAlign: "right" }}>
-                <span style={{ color: "var(--red)", fontWeight: 600 }}>{t.footer.disclaimerLabel} </span>{t.footer.disclaimer}
+            {/* Bottom row */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+              <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+                © 2026 NyayMitra. {lang === "en" ? "All rights reserved." : "सर्वाधिकार सुरक्षित।"}
+              </p>
+              <p style={{
+                fontFamily: "var(--sans)", fontSize: "10.5px",
+                color: "rgba(255,255,255,0.18)", maxWidth: 520,
+                lineHeight: 1.7, textAlign: "right", fontWeight: 300,
+              }}>
+                <span style={{ color: "rgba(192,57,43,0.8)", fontWeight: 600 }}>{lang === "en" ? "Disclaimer: " : "अस्वीकरण: "}</span>
+                {lang === "en"
+                  ? "NyayMitra is a technology platform. We do not act as a law firm. All consultations and notary services are delivered by licensed third-party professionals."
+                  : "न्यायमित्र एक प्रौद्योगिकी मंच है। हम कानूनी फर्म नहीं हैं।"}
               </p>
             </div>
           </div>
         </footer>
 
-        {/* Floating WhatsApp Button */}
-        <a href={waUrl} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-          className="floating-wa"
-          style={{ position: "fixed", bottom: 26, right: 26, zIndex: 200, width: 52, height: 52, borderRadius: "50%", background: "#128C7E", color: "white", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 28px rgba(18,140,126,0.4)", transition: "all 0.22s cubic-bezier(0.22,1,0.36,1)", textDecoration: "none" }}
-          onMouseEnter={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = "scale(1.12)"; el.style.background = "#20c874" }}
-          onMouseLeave={e => { const el = e.currentTarget as HTMLAnchorElement; el.style.transform = ""; el.style.background = "#128C7E" }}>
-          <WaSvg size={24} />
+        {/* ── Floating WhatsApp ─────────────────────────────────────────────────── */}
+        <a href={waGeneral} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="floating-wa">
+          <WaSvg size={22} />
         </a>
       </div>
     </>
