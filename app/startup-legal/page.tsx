@@ -1,25 +1,248 @@
 "use client"
+
 import { useState, useEffect, useRef } from "react"
 import {
     Check, Zap, Shield, Users, FileText, MessageCircle,
     ArrowRight, Star, Clock, Scale, AlertCircle, TrendingUp,
     Award, ThumbsUp, Sparkles, Menu, X, Instagram, Linkedin,
-    MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle
+    MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle, Languages
 } from "lucide-react"
 
 // ─────────────────────────────────────────────────────────────────
-// DESIGN SYSTEM (PRESERVED)
-// Black + Gold + White — Premium Indian Legal SaaS
-// Fonts: Cormorant Garamond (display) + Syne (UI labels) + DM Sans (body)
+// HINDI TRANSLATIONS (KEY TEXT ONLY)
 // ─────────────────────────────────────────────────────────────────
+const hindiTranslations = {
+    // Nav
+    navServices: "सेवाएं",
+    navFindLawyers: "वकील खोजें",
+    navLegalGPT: "लीगल GPT",
+    navPricing: "कीमतें",
+    navAbout: "हमारे बारे में",
+    // Hero
+    riskAlert: "जोखिम अलर्ट",
+    startupsProtected: "100+ स्टार्टअप सुरक्षित",
+    heroHeadline: "एक बुरा अनुबंध आपके स्टार्टअप को",
+    heroHeadlineGold: "महंगा न पड़ने दें।",
+    heroDesc: "कानूनी स्पष्टता प्राप्त करें और समस्याओं को महंगी गलतियाँ बनने से पहले ठीक करें।",
+    heroPrice: "₹999/माह से शुरू",
+    ctaWhatsapp: "व्हाट्सएप पर मदद लें",
+    ctaPlans: "योजनाएं देखें",
+    noCommitment: "कोई दीर्घकालिक प्रतिबद्धता नहीं",
+    cancelAnytime: "कभी भी रद्द करें",
+    freeTrial: "14-दिन का निःशुल्क परीक्षण",
+    live: "लाइव",
+    fromConfusion: "भ्रम से कार्रवाई तक",
+    aiPowered: "एआई-संचालित · 24/7 · हिंदी और अंग्रेजी",
+    verifiedLawyers: "60+ सत्यापित वकील",
+    avgResponse: "औसत प्रतिक्रिया < 2 घंटे",
+    // Risk Section
+    realCost: "वास्तविक लागत",
+    riskHeading: "यदि आप कानूनी को अनदेखा करते हैं तो क्या होगा?",
+    riskSub: "छोटी चूक महंगी आपदाएँ बन जाती हैं।",
+    riskTitle1: "आपने खराब अनुबंध पर हस्ताक्षर किए",
+    riskConsequence1: "₹2L+ का वित्तीय नुकसान",
+    riskOutcome1: "हम खामियों को ठीक करते हैं इससे पहले कि उनका दुरुपयोग हो",
+    riskTitle2: "कोई सह-संस्थापक समझौता नहीं",
+    riskConsequence2: "विवाद कंपनी को विभाजित करते हैं",
+    riskOutcome2: "स्पष्ट स्वामित्व और निकास शर्तें",
+    riskTitle3: "कानूनी नोटिस को अनदेखा करना",
+    riskConsequence3: "अदालत में वृद्धि",
+    riskOutcome3: "मुकदमेबाजी के बिना समाधान",
+    fixBeforeExpensive: "महंगा होने से पहले ठीक करें →",
+    // Pricing Section
+    pricing: "कीमतें",
+    pricingHeading: "चुनें कि आप कितना जोखिम हटाना चाहते हैं",
+    pricingSub: "सभी योजनाओं में व्हाट्सएप पहुंच शामिल है। कभी भी रद्द करें।",
+    mostPopular: "सबसे लोकप्रिय",
+    outcomeStarter: "एक बुरे अनुबंध को ₹2L+ की लागत से बचाएं",
+    outcomeGrowth: "अपने पूरे पहले वर्ष के लिए कानूनी सुरक्षा",
+    outcomePro: "बिना पूर्णकालिक वकील के पूर्ण कानूनी कवरेज",
+    ctaStarter: "₹999 योजना से शुरू करें →",
+    ctaGrowth: "ग्रोथ योजना प्राप्त करें →",
+    ctaPro: "कानूनी सलाहकार से बात करें →",
+    monthly: "/माह",
+    billedMonthly: "मासिक बिल · कभी भी रद्द करें",
+    featureConsult1: "1 कानूनी परामर्श (30 मिनट)",
+    featureReview1: "1 दस्तावेज़ समीक्षा और सुधार",
+    featureWhatsapp1: "व्हाट्सएप सपोर्ट (48h)",
+    featureTemplates1: "मानक टेम्पलेट",
+    featureEmail1: "ईमेल सपोर्ट",
+    featureConsult2: "3 परामर्श (45 मिनट प्रत्येक)",
+    featureReview2: "3 दस्तावेज़ समीक्षा और सुधार",
+    featureWhatsapp2: "प्राथमिकता व्हाट्सएप (12h)",
+    featureDrafting2: "कस्टम अनुबंध निर्माण",
+    featureChecklist2: "पूर्ण अनुपालन चेकलिस्ट",
+    featureFounder2: "संस्थापक सुरक्षा समीक्षा",
+    featureConsult3: "असीमित परामर्श",
+    featureReview3: "असीमित दस्तावेज़ समीक्षा",
+    featureWhatsapp3: "24/7 प्राथमिकता सपोर्ट",
+    featureAdvisor3: "समर्पित कानूनी सलाहकार",
+    featureAudit3: "कानूनी ऑडिट और अनुपालन",
+    featureTermSheet3: "निवेश टर्म शीट समीक्षा",
+    featureIP3: "आईपी और पेटेंट मार्गदर्शन",
+    pricingDisclaimer: "सभी योजनाओं में शामिल: निःशुल्क एआई परामर्श · सत्यापित वकील · 100% गोपनीय",
+    // How It Works
+    howItWorks: "3 चरणों में कानूनी स्पष्टता प्राप्त करें",
+    step1Title: "अपनी समस्या सादे शब्दों में बताएं",
+    step1Desc: "जो आपको परेशान कर रहा है उसे साझा करें। हिंदी या अंग्रेजी। कानूनी शब्दजाल की आवश्यकता नहीं है।",
+    step1Detail: "30 सेकंड में एआई पूर्व-विश्लेषण",
+    step2Title: "स्पष्टता और अगले कदम प्राप्त करें",
+    step2Desc: "हम आपकी स्थिति का विश्लेषण करते हैं और घंटों के भीतर एक स्पष्ट कार्य योजना देते हैं।",
+    step2Detail: "< 2 घंटे में विशेषज्ञ मिलान",
+    step3Title: "समस्या को लागत बनने से पहले ठीक करें",
+    step3Desc: "दस्तावेज़ ठीक करवाएं, कानूनी नोटिस भेजें, या सत्यापित वकील से जुड़ें।",
+    step3Detail: "24–48 घंटे में समाधान",
+    // Trust Section
+    realResults: "वास्तविक परिणाम",
+    trustHeading: "संस्थापकों ने हमारे साथ क्या ठीक किया",
+    trustSub: "वास्तविक समस्याएं, दिनों में हल। कोई अदालत नहीं, कोई महंगे वकील नहीं।",
+    trustText1: "हस्ताक्षर करने से पहले एक खराब खंड को पकड़कर ₹80,000 बचाए",
+    trustText2: "बिना अदालत के कानूनी नोटिस के माध्यम से ₹25,000 वसूले",
+    trustText3: "सह-संस्थापक समझौते के साथ विवाद से बचा",
+    trustText4: "कानूनी पत्र के साथ भुगतान में देरी रोकी",
+    fixedTime1: "2 घंटे में ठीक हुआ",
+    fixedTime2: "14 दिनों में हल",
+    fixedTime3: "48 घंटे में तैयार",
+    fixedTime4: "ग्राहक ने 7 दिनों में भुगतान किया",
+    testimonialText: "\"NyayMitra ने हमें एक अनुबंध खंड को ठीक करने में मदद की जिसकी हमें ₹2.3 लाख की लागत आनी थी। ग्रोथ योजना ने पहले सप्ताह में ही अपनी लागत वसूल कर ली।\"",
+    testimonialName: "अंकित शर्मा",
+    testimonialTitle: "सह-संस्थापक, टेकस्टार्ट इंडिया",
+    verified: "सत्यापित",
+    // Final CTA
+    finalHeading: "अनुमान लगाना बंद करें।",
+    finalHeadingGold: "कार्रवाई शुरू करें।",
+    finalDesc: "घंटों में स्पष्ट कानूनी मार्गदर्शन प्राप्त करें। 100+ स्टार्टअप से जुड़ें जिन्होंने NyayMitra के साथ अपना कानूनी जोखिम ठीक किया।",
+    ctaFinal: "अभी कानूनी मदद लें",
+    noCard: "कोई क्रेडिट कार्ड आवश्यक नहीं · निःशुल्क एआई परामर्श · कभी भी रद्द करें",
+    // Footer
+    disclaimer: "NyayMitra एक प्रौद्योगिकी मंच है। हम कानूनी फर्म के रूप में कार्य नहीं करते हैं। सभी परामर्श लाइसेंस प्राप्त तृतीय-पक्ष पेशेवरों द्वारा दिए जाते हैं।",
+    quickLinks: "त्वरित लिंक",
+    legal: "कानूनी",
+}
+
+// English original (default)
+const englishTranslations = {
+    // Nav
+    navServices: "Services",
+    navFindLawyers: "Find Lawyers",
+    navLegalGPT: "Legal GPT",
+    navPricing: "Pricing",
+    navAbout: "About",
+    // Hero
+    riskAlert: "RISK ALERT",
+    startupsProtected: "100+ STARTUPS PROTECTED",
+    heroHeadline: "Don't let one bad contract",
+    heroHeadlineGold: "cost your startup.",
+    heroDesc: "Get legal clarity and fix issues before they become expensive mistakes.",
+    heroPrice: "Starting at ₹999/month",
+    ctaWhatsapp: "Get Help on WhatsApp",
+    ctaPlans: "View Plans",
+    noCommitment: "No long-term commitment",
+    cancelAnytime: "Cancel anytime",
+    freeTrial: "14-day free trial",
+    live: "LIVE",
+    fromConfusion: "FROM CONFUSION TO ACTION.",
+    aiPowered: "AI-powered · 24/7 · Hindi & English",
+    verifiedLawyers: "60+ Verified Lawyers",
+    avgResponse: "Avg response < 2 hours",
+    // Risk Section
+    realCost: "THE REAL COST",
+    riskHeading: "What happens if you ignore legal?",
+    riskSub: "Small oversights become expensive disasters.",
+    riskTitle1: "Bad contract you signed",
+    riskConsequence1: "Financial loss of ₹2L+",
+    riskOutcome1: "We fix loopholes before they're exploited",
+    riskTitle2: "No co-founder agreement",
+    riskConsequence2: "Disputes split the company",
+    riskOutcome2: "Clear ownership & exit terms",
+    riskTitle3: "Ignoring legal notice",
+    riskConsequence3: "Escalation to court",
+    riskOutcome3: "Resolution without litigation",
+    fixBeforeExpensive: "Fix it before it becomes expensive →",
+    // Pricing Section
+    pricing: "PRICING",
+    pricingHeading: "Choose how much risk you want to remove",
+    pricingSub: "All plans include WhatsApp access. Cancel anytime.",
+    mostPopular: "MOST POPULAR",
+    outcomeStarter: "Stop one bad contract from costing you ₹2L+",
+    outcomeGrowth: "Legal protection for your entire first year",
+    outcomePro: "Complete legal coverage without a full-time lawyer",
+    ctaStarter: "Start with ₹999 plan →",
+    ctaGrowth: "Get Growth plan →",
+    ctaPro: "Talk to legal advisor →",
+    monthly: "/mo",
+    billedMonthly: "Billed monthly · Cancel anytime",
+    featureConsult1: "1 legal consultation (30 min)",
+    featureReview1: "1 document review & fix",
+    featureWhatsapp1: "WhatsApp support (48h)",
+    featureTemplates1: "Standard templates",
+    featureEmail1: "Email support",
+    featureConsult2: "3 consultations (45 min each)",
+    featureReview2: "3 document reviews & fixes",
+    featureWhatsapp2: "Priority WhatsApp (12h)",
+    featureDrafting2: "Custom contract drafting",
+    featureChecklist2: "Full compliance checklist",
+    featureFounder2: "Founder protection review",
+    featureConsult3: "Unlimited consultations",
+    featureReview3: "Unlimited document reviews",
+    featureWhatsapp3: "24/7 priority support",
+    featureAdvisor3: "Dedicated legal advisor",
+    featureAudit3: "Legal audit & compliance",
+    featureTermSheet3: "Investment term sheet review",
+    featureIP3: "IP & patent guidance",
+    pricingDisclaimer: "All plans include: Free AI consultation · Verified lawyers · 100% confidential",
+    // How It Works
+    howItWorks: "Get legal clarity in 3 steps",
+    step1Title: "Tell your issue in plain words",
+    step1Desc: "Share what's worrying you. Hindi or English. No legal jargon needed.",
+    step1Detail: "AI pre-analysis in 30 seconds",
+    step2Title: "Get clarity & next steps",
+    step2Desc: "We analyze your situation and give you a clear action plan within hours.",
+    step2Detail: "Expert matched in < 2 hours",
+    step3Title: "Fix the problem before it costs you",
+    step3Desc: "Get documents fixed, send legal notices, or connect with a verified lawyer.",
+    step3Detail: "Resolution in 24–48 hours",
+    // Trust Section
+    realResults: "REAL RESULTS",
+    trustHeading: "What founders fixed with us",
+    trustSub: "Real problems, solved in days. No court, no expensive lawyers.",
+    trustText1: "Saved ₹80,000 by catching a bad clause before signing",
+    trustText2: "Recovered ₹25,000 via legal notice without court",
+    trustText3: "Avoided a dispute with co-founder agreement",
+    trustText4: "Stopped payment delay with legal letter",
+    fixedTime1: "Fixed in 2 hours",
+    fixedTime2: "Resolved in 14 days",
+    fixedTime3: "Drafted in 48h",
+    fixedTime4: "Client paid in 7 days",
+    testimonialText: "\"NyayMitra helped us fix a contract clause that would have cost us ₹2.3 lakhs. The Growth plan paid for itself in the first week.\"",
+    testimonialName: "Ankit Sharma",
+    testimonialTitle: "Co-founder, TechStart India",
+    verified: "Verified",
+    // Final CTA
+    finalHeading: "Stop guessing.",
+    finalHeadingGold: "Start acting.",
+    finalDesc: "Get clear legal guidance in hours. Join 100+ startups that fixed their legal risk with NyayMitra.",
+    ctaFinal: "Get Legal Help Now",
+    noCard: "No credit card required · Free AI consultation · Cancel anytime",
+    // Footer
+    disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third-party professionals.",
+    quickLinks: "Quick Links",
+    legal: "Legal",
+}
+
+type Translations = typeof englishTranslations
 
 export default function StartupLegalPage() {
     const [hoveredPlan, setHoveredPlan] = useState<string | null>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [activeStep, setActiveStep] = useState(0)
+    const [isHindi, setIsHindi] = useState(false)
     const heroRef = useRef(null)
     const [windowWidth, setWindowWidth] = useState(0)
+
+    // Get current translations
+    const t: Translations = isHindi ? hindiTranslations : englishTranslations
 
     // Handle resize for responsive adjustments
     useEffect(() => {
@@ -45,6 +268,11 @@ export default function StartupLegalPage() {
         setIsMenuOpen(false)
     }
 
+    // Toggle language
+    const toggleLanguage = () => {
+        setIsHindi(!isHindi)
+    }
+
     // WHATSAPP INTENT LINKS (SINGLE CONVERSION PATH)
     const whatsappNumber = "919661644025"
     const whatsappIntentStartup = `https://wa.me/${whatsappNumber}?text=I%20want%20the%20₹999%20startup%20legal%20plan`
@@ -52,35 +280,36 @@ export default function StartupLegalPage() {
     const whatsappIntentGeneral = `https://wa.me/${whatsappNumber}?text=I%20need%20startup%20legal%20help`
 
     const navLinks = [
-        { label: "Services", href: "/services" },
-        { label: "Find Lawyers", href: "/lawyers" },
-        { label: "Legal GPT", href: "/legal-ai" },
-        { label: "Pricing", href: "#pricing" },
-        { label: "About", href: "/about" },
+        { label: t.navServices, href: "/services" },
+        { label: t.navFindLawyers, href: "/lawyers" },
+        { label: t.navLegalGPT, href: "/legal-ai" },
+        { label: t.navPricing, href: "#pricing" },
+        { label: t.navAbout, href: "/about" },
     ]
 
-    // OUTCOME-BASED PROBLEMS (RISK FOCUSED)
+    // OUTCOME-BASED PROBLEMS (RISK FOCUSED) - using translations
     const risks = [
         {
             icon: <XCircle className="w-5 h-5" />,
-            title: "Bad contract you signed",
-            consequence: "Financial loss of ₹2L+",
-            outcome: "We fix loopholes before they're exploited"
+            title: t.riskTitle1,
+            consequence: t.riskConsequence1,
+            outcome: t.riskOutcome1
         },
         {
             icon: <AlertCircle className="w-5 h-5" />,
-            title: "No co-founder agreement",
-            consequence: "Disputes split the company",
-            outcome: "Clear ownership & exit terms"
+            title: t.riskTitle2,
+            consequence: t.riskConsequence2,
+            outcome: t.riskOutcome2
         },
         {
             icon: <TrendingUp className="w-5 h-5" />,
-            title: "Ignoring legal notice",
-            consequence: "Escalation to court",
-            outcome: "Resolution without litigation"
+            title: t.riskTitle3,
+            consequence: t.riskConsequence3,
+            outcome: t.riskOutcome3
         }
     ]
 
+    // Plan features with translations
     const plans = [
         {
             id: "starter",
@@ -89,14 +318,14 @@ export default function StartupLegalPage() {
             price: 999,
             yearlyPrice: 799,
             features: [
-                "1 legal consultation (30 min)",
-                "1 document review & fix",
-                "WhatsApp support (48h)",
-                "Standard templates",
-                "Email support"
+                t.featureConsult1,
+                t.featureReview1,
+                t.featureWhatsapp1,
+                t.featureTemplates1,
+                t.featureEmail1
             ],
-            outcome: "Stop one bad contract from costing you ₹2L+",
-            cta: "Start with ₹999 plan →",
+            outcome: t.outcomeStarter,
+            cta: t.ctaStarter,
             popular: false,
         },
         {
@@ -106,15 +335,15 @@ export default function StartupLegalPage() {
             price: 2999,
             yearlyPrice: 2399,
             features: [
-                "3 consultations (45 min each)",
-                "3 document reviews & fixes",
-                "Priority WhatsApp (12h)",
-                "Custom contract drafting",
-                "Full compliance checklist",
-                "Founder protection review"
+                t.featureConsult2,
+                t.featureReview2,
+                t.featureWhatsapp2,
+                t.featureDrafting2,
+                t.featureChecklist2,
+                t.featureFounder2
             ],
-            outcome: "Legal protection for your entire first year",
-            cta: "Get Growth plan →",
+            outcome: t.outcomeGrowth,
+            cta: t.ctaGrowth,
             popular: true,
         },
         {
@@ -124,16 +353,16 @@ export default function StartupLegalPage() {
             price: 5999,
             yearlyPrice: 4799,
             features: [
-                "Unlimited consultations",
-                "Unlimited document reviews",
-                "24/7 priority support",
-                "Dedicated legal advisor",
-                "Legal audit & compliance",
-                "Investment term sheet review",
-                "IP & patent guidance"
+                t.featureConsult3,
+                t.featureReview3,
+                t.featureWhatsapp3,
+                t.featureAdvisor3,
+                t.featureAudit3,
+                t.featureTermSheet3,
+                t.featureIP3
             ],
-            outcome: "Complete legal coverage without a full-time lawyer",
-            cta: "Talk to legal advisor →",
+            outcome: t.outcomePro,
+            cta: t.ctaPro,
             popular: false,
         }
     ]
@@ -142,43 +371,43 @@ export default function StartupLegalPage() {
         {
             icon: <MessageCircle className="w-6 h-6" />,
             number: "01",
-            title: "Tell your issue in plain words",
-            description: "Share what's worrying you. Hindi or English. No legal jargon needed.",
-            detail: "AI pre-analysis in 30 seconds"
+            title: t.step1Title,
+            description: t.step1Desc,
+            detail: t.step1Detail
         },
         {
             icon: <Scale className="w-6 h-6" />,
             number: "02",
-            title: "Get clarity & next steps",
-            description: "We analyze your situation and give you a clear action plan within hours.",
-            detail: "Expert matched in < 2 hours"
+            title: t.step2Title,
+            description: t.step2Desc,
+            detail: t.step2Detail
         },
         {
             icon: <Check className="w-6 h-6" />,
             number: "03",
-            title: "Fix the problem before it costs you",
-            description: "Get documents fixed, send legal notices, or connect with a verified lawyer.",
-            detail: "Resolution in 24–48 hours"
+            title: t.step3Title,
+            description: t.step3Desc,
+            detail: t.step3Detail
         }
     ]
 
     // OUTCOME-BASED TRUST PROOFS
     const trustProofs = [
-        { text: "Saved ₹80,000 by catching a bad clause before signing", icon: <FileText className="w-4 h-4" />, time: "Fixed in 2 hours" },
-        { text: "Recovered ₹25,000 via legal notice without court", icon: <ThumbsUp className="w-4 h-4" />, time: "Resolved in 14 days" },
-        { text: "Avoided a dispute with co-founder agreement", icon: <Users className="w-4 h-4" />, time: "Drafted in 48h" },
-        { text: "Stopped payment delay with legal letter", icon: <Clock className="w-4 h-4" />, time: "Client paid in 7 days" }
+        { text: t.trustText1, icon: <FileText className="w-4 h-4" />, time: t.fixedTime1 },
+        { text: t.trustText2, icon: <ThumbsUp className="w-4 h-4" />, time: t.fixedTime2 },
+        { text: t.trustText3, icon: <Users className="w-4 h-4" />, time: t.fixedTime3 },
+        { text: t.trustText4, icon: <Clock className="w-4 h-4" />, time: t.fixedTime4 }
     ]
 
     const footerLinks = {
-        "Quick Links": [
-            { label: "About NyayMitra", href: "/about" },
-            { label: "Services", href: "/services" },
-            { label: "Find Lawyers", href: "/lawyers" },
+        [t.quickLinks]: [
+            { label: "NyayMitra", href: "/about" },
+            { label: t.navServices, href: "/services" },
+            { label: t.navFindLawyers, href: "/lawyers" },
             { label: "Affidavit Online", href: "/affidavit-online-india" },
             { label: "Sign Up", href: "/auth/signup" },
         ],
-        "Legal": [
+        [t.legal]: [
             { label: "Terms of Service", href: "/terms" },
             { label: "Privacy Policy", href: "/privacy-policy" },
             { label: "Cancellation & Refund", href: "/cancellation" },
@@ -390,7 +619,7 @@ export default function StartupLegalPage() {
             <div className="min-h-screen bg-white overflow-x-hidden" style={{ color: '#0a0a0a' }}>
 
                 {/* ══════════════════════════════════════════════════════
-                    NAV — Sticky with blur, non-scrollable mobile menu
+                    NAV — Sticky with blur, scrollable mobile menu
                 ══════════════════════════════════════════════════════ */}
                 <nav
                     style={{
@@ -445,7 +674,7 @@ export default function StartupLegalPage() {
                                 ))}
                             </div>
 
-                            {/* CTA row */}
+                            {/* CTA row with Language Toggle */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <div className="nm-hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                     <a href="https://www.instagram.com/nyaymitra.tech" target="_blank" rel="noopener noreferrer"
@@ -463,6 +692,29 @@ export default function StartupLegalPage() {
                                         <Linkedin style={{ width: 16, height: 16 }} />
                                     </a>
                                 </div>
+
+                                {/* HINDI/ENGLISH TOGGLE BUTTON */}
+                                <button
+                                    onClick={toggleLanguage}
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                        padding: '6px 12px',
+                                        background: isHindi ? '#D97706' : '#000',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: 40,
+                                        fontSize: 12,
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s ease',
+                                    }}
+                                    className="nm-ui"
+                                >
+                                    <Languages style={{ width: 14, height: 14 }} />
+                                    {isHindi ? "English" : "हिंदी"}
+                                </button>
 
                                 <button
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -484,7 +736,7 @@ export default function StartupLegalPage() {
                         </div>
                     </div>
 
-                    {/* Mobile menu — static, non-scrollable (max-height fixed, no overflow auto) */}
+                    {/* Mobile menu — scrollable with max-height */}
                     {isMenuOpen && (
                         <div style={{
                             borderTop: '1px solid rgba(0,0,0,0.07)',
@@ -492,6 +744,8 @@ export default function StartupLegalPage() {
                             background: '#fff',
                             position: 'relative',
                             zIndex: 49,
+                            maxHeight: '80vh',
+                            overflowY: 'auto',
                         }}
                             className="nm-show-mobile"
                         >
@@ -530,6 +784,26 @@ export default function StartupLegalPage() {
                                     style={{ padding: 8, background: '#f4f4f5', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3f3f46' }}>
                                     <Linkedin style={{ width: 18, height: 18 }} />
                                 </a>
+                                {/* Mobile language toggle */}
+                                <button
+                                    onClick={toggleLanguage}
+                                    style={{
+                                        padding: '6px 12px',
+                                        background: isHindi ? '#D97706' : '#000',
+                                        color: '#fff',
+                                        border: 'none',
+                                        borderRadius: 40,
+                                        fontSize: 12,
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: 6,
+                                    }}
+                                >
+                                    <Languages style={{ width: 14, height: 14 }} />
+                                    {isHindi ? "EN" : "हिं"}
+                                </button>
                             </div>
                         </div>
                     )}
@@ -580,7 +854,7 @@ export default function StartupLegalPage() {
                                             width: 6, height: 6, borderRadius: '50%', background: '#D97706', flexShrink: 0,
                                         }} />
                                         <span className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: '#92400E', letterSpacing: '0.12em' }}>
-                                            RISK ALERT
+                                            {t.riskAlert}
                                         </span>
                                     </div>
                                     <div style={{
@@ -589,7 +863,7 @@ export default function StartupLegalPage() {
                                         background: 'rgba(0,0,0,0.04)', border: '1px solid rgba(0,0,0,0.08)',
                                     }}>
                                         <span className="nm-ui" style={{ fontSize: 9, fontWeight: 600, color: '#71717a', letterSpacing: '0.1em' }}>
-                                            100+ STARTUPS PROTECTED
+                                            {t.startupsProtected}
                                         </span>
                                     </div>
                                 </div>
@@ -603,8 +877,8 @@ export default function StartupLegalPage() {
                                     color: '#000',
                                     marginBottom: 20,
                                 }}>
-                                    Don't let one bad contract<br />
-                                    <span className="gold-text">cost your startup.</span>
+                                    {t.heroHeadline}<br />
+                                    <span className="gold-text">{t.heroHeadlineGold}</span>
                                 </h1>
 
                                 <p className="anim-3 nm-body" style={{
@@ -614,8 +888,8 @@ export default function StartupLegalPage() {
                                     maxWidth: 480,
                                     marginBottom: 28,
                                 }}>
-                                    Get legal clarity and fix issues before they become expensive mistakes.
-                                    Starting at <strong style={{ color: '#D97706' }}>₹999/month</strong>.
+                                    {t.heroDesc}
+                                    <strong style={{ color: '#D97706' }}> {t.heroPrice}</strong>
                                 </p>
 
                                 <div className="anim-4" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
@@ -633,7 +907,7 @@ export default function StartupLegalPage() {
                                         }}
                                         className="nm-ui"
                                     >
-                                        <WaSvg size={16} /> Get Help on WhatsApp
+                                        <WaSvg size={16} /> {t.ctaWhatsapp}
                                     </a>
                                     {/* SECONDARY CTA */}
                                     <a
@@ -648,12 +922,12 @@ export default function StartupLegalPage() {
                                         }}
                                         className="nm-ui"
                                     >
-                                        View Plans <ChevronRight style={{ width: 14, height: 14 }} />
+                                        {t.ctaPlans} <ChevronRight style={{ width: 14, height: 14 }} />
                                     </a>
                                 </div>
 
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
-                                    {["No long-term commitment", "Cancel anytime", "14-day free trial"].map(text => (
+                                    {[t.noCommitment, t.cancelAnytime, t.freeTrial].map(text => (
                                         <span key={text} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.75rem', color: '#71717a' }}>
                                             <span style={{ width: 14, height: 14, borderRadius: '50%', background: '#000', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                                                 <Check style={{ width: 8, height: 8, color: '#fff' }} />
@@ -680,10 +954,10 @@ export default function StartupLegalPage() {
                                                 <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#000' }} />
                                             </div>
                                         </div>
-                                        <span className="nm-ui" style={{ fontSize: 9, fontWeight: 600, color: '#D97706', letterSpacing: '0.1em' }}>FROM CONFUSION TO ACTION.</span>
+                                        <span className="nm-ui" style={{ fontSize: 9, fontWeight: 600, color: '#D97706', letterSpacing: '0.1em' }}>{t.fromConfusion}</span>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                                             <div className="amber-pulse" style={{ width: 5, height: 5, borderRadius: '50%', background: '#10b981' }} />
-                                            <span style={{ fontSize: 9, color: '#10b981', fontWeight: 600 }}>LIVE</span>
+                                            <span style={{ fontSize: 9, color: '#10b981', fontWeight: 600 }}>{t.live}</span>
                                         </div>
                                     </div>
 
@@ -724,7 +998,7 @@ export default function StartupLegalPage() {
 
                                     <div style={{ padding: '10px 18px', borderTop: '1px solid rgba(0,0,0,0.06)', background: '#fafafa', display: 'flex', alignItems: 'center', gap: 6 }}>
                                         <Bot style={{ width: 11, height: 11, color: '#D97706' }} />
-                                        <span style={{ fontSize: 10, color: '#71717a' }}>AI-powered · 24/7 · Hindi & English</span>
+                                        <span style={{ fontSize: 10, color: '#71717a' }}>{t.aiPowered}</span>
                                     </div>
                                 </div>
 
@@ -739,8 +1013,8 @@ export default function StartupLegalPage() {
                                         <Gavel style={{ width: 12, height: 12, color: '#D97706' }} />
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: 11, fontWeight: 600, color: '#000' }}>60+ Verified Lawyers</div>
-                                        <div style={{ fontSize: 9, color: '#a1a1aa' }}>Avg response &lt; 2 hours</div>
+                                        <div style={{ fontSize: 11, fontWeight: 600, color: '#000' }}>{t.verifiedLawyers}</div>
+                                        <div style={{ fontSize: 9, color: '#a1a1aa' }}>{t.avgResponse}</div>
                                     </div>
                                 </div>
                             </div>
@@ -770,12 +1044,12 @@ export default function StartupLegalPage() {
                 <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 6vw, 4rem)' }}>
-                            <p className="brand-line">THE REAL COST</p>
+                            <p className="brand-line">{t.realCost}</p>
                             <h2 className="nm-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
-                                What happens if you ignore legal?
+                                {t.riskHeading}
                             </h2>
                             <p className="nm-body" style={{ fontSize: 'clamp(0.875rem, 3vw, 0.9375rem)', color: '#71717a', maxWidth: 480, margin: '0 auto', lineHeight: 1.6 }}>
-                                Small oversights become expensive disasters.
+                                {t.riskSub}
                             </p>
                         </div>
 
@@ -799,7 +1073,7 @@ export default function StartupLegalPage() {
                         <div style={{ textAlign: 'center', marginTop: 'clamp(1.5rem, 4vw, 2.5rem)' }}>
                             <a href={whatsappIntentGeneral} target="_blank" rel="noopener noreferrer"
                                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#000', color: '#fff', padding: '10px 24px', borderRadius: 40, fontWeight: 600, textDecoration: 'none', fontSize: '0.875rem' }}>
-                                Fix it before it becomes expensive → <ArrowRight style={{ width: 12 }} />
+                                {t.fixBeforeExpensive} <ArrowRight style={{ width: 12 }} />
                             </a>
                         </div>
                     </div>
@@ -811,12 +1085,12 @@ export default function StartupLegalPage() {
                 <section id="pricing" className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 6vw, 4rem)' }}>
-                            <p className="brand-line">PRICING</p>
+                            <p className="brand-line">{t.pricing}</p>
                             <h2 className="nm-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
-                                Choose how much risk you want to remove
+                                {t.pricingHeading}
                             </h2>
                             <p className="nm-body" style={{ fontSize: '0.875rem', color: '#71717a', maxWidth: 400, margin: '0 auto' }}>
-                                All plans include WhatsApp access. Cancel anytime.
+                                {t.pricingSub}
                             </p>
                         </div>
 
@@ -841,7 +1115,7 @@ export default function StartupLegalPage() {
                                                 fontSize: 9, fontWeight: 700, borderRadius: 999, letterSpacing: '0.1em',
                                                 boxShadow: '0 2px 8px rgba(217,119,6,0.3)', whiteSpace: 'nowrap',
                                             }}>
-                                                <Zap style={{ width: 9, height: 9 }} /> MOST POPULAR
+                                                <Zap style={{ width: 9, height: 9 }} /> {t.mostPopular}
                                             </span>
                                         </div>
                                     )}
@@ -865,9 +1139,9 @@ export default function StartupLegalPage() {
                                             <span className="nm-display" style={{ fontSize: '2.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
                                                 {plan.price.toLocaleString()}
                                             </span>
-                                            <span style={{ fontSize: '0.7rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 4 }}>/mo</span>
+                                            <span style={{ fontSize: '0.7rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 4 }}>{t.monthly}</span>
                                         </div>
-                                        <p style={{ fontSize: 10, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>Billed monthly · Cancel anytime</p>
+                                        <p style={{ fontSize: 10, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>{t.billedMonthly}</p>
                                     </div>
 
                                     <a
@@ -905,7 +1179,7 @@ export default function StartupLegalPage() {
                         </div>
 
                         <p className="nm-body" style={{ textAlign: 'center', fontSize: '0.7rem', color: '#a1a1aa', marginTop: 32 }}>
-                            All plans include: Free AI consultation · Verified lawyers · 100% confidential
+                            {t.pricingDisclaimer}
                         </p>
                     </div>
                 </section>
@@ -916,9 +1190,9 @@ export default function StartupLegalPage() {
                 <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 6vw, 4rem)' }}>
-                            <p className="brand-line">FROM CONFUSION TO ACTION.</p>
+                            <p className="brand-line">{t.fromConfusion}</p>
                             <h2 className="nm-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
-                                Get legal clarity in 3 steps
+                                {t.howItWorks}
                             </h2>
                         </div>
 
@@ -972,13 +1246,13 @@ export default function StartupLegalPage() {
                             <div>
                                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px 4px 8px', borderRadius: 999, background: '#FEF3C7', border: '1px solid #FCD34D', marginBottom: 20 }}>
                                     <Award style={{ width: 12, height: 12, color: '#D97706' }} />
-                                    <span className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: '#92400E', letterSpacing: '0.12em' }}>REAL RESULTS</span>
+                                    <span className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: '#92400E', letterSpacing: '0.12em' }}>{t.realResults}</span>
                                 </div>
                                 <h2 className="nm-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
-                                    What founders fixed with us
+                                    {t.trustHeading}
                                 </h2>
                                 <p style={{ fontSize: '0.875rem', color: '#71717a', marginBottom: 28, lineHeight: 1.6 }}>
-                                    Real problems, solved in days. No court, no expensive lawyers.
+                                    {t.trustSub}
                                 </p>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                     {trustProofs.map((proof, idx) => (
@@ -1010,19 +1284,19 @@ export default function StartupLegalPage() {
                                     </div>
                                     <div className="nm-display" style={{ fontSize: 'clamp(1.5rem, 5vw, 3rem)', lineHeight: 0.8, color: '#D97706', marginBottom: 6, fontWeight: 400 }}>"</div>
                                     <p className="nm-body" style={{ fontSize: '0.875rem', color: '#27272a', lineHeight: 1.65, fontStyle: 'italic', marginBottom: 24 }}>
-                                        "NyayMitra helped us fix a contract clause that would have cost us ₹2.3 lakhs. The Growth plan paid for itself in the first week."
+                                        {t.testimonialText}
                                     </p>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 20, borderTop: '1px solid rgba(0,0,0,0.08)', flexWrap: 'wrap' }}>
                                         <div style={{ width: 38, height: 38, borderRadius: '50%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <span className="nm-display" style={{ fontSize: 16, fontWeight: 700, color: '#D97706' }}>A</span>
                                         </div>
                                         <div>
-                                            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#0a0a0a' }}>Ankit Sharma</p>
-                                            <p style={{ fontSize: '0.625rem', color: '#a1a1aa' }}>Co-founder, TechStart India</p>
+                                            <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#0a0a0a' }}>{t.testimonialName}</p>
+                                            <p style={{ fontSize: '0.625rem', color: '#a1a1aa' }}>{t.testimonialTitle}</p>
                                         </div>
                                         <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4 }}>
                                             <Check style={{ width: 10, height: 10, color: '#10b981' }} />
-                                            <span style={{ fontSize: 10, color: '#10b981', fontWeight: 600 }}>Verified</span>
+                                            <span style={{ fontSize: 10, color: '#10b981', fontWeight: 600 }}>{t.verified}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1039,22 +1313,22 @@ export default function StartupLegalPage() {
                     <div className="nm-container" style={{ textAlign: 'center', position: 'relative' }}>
                         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', marginBottom: 24 }}>
                             <MessageCircle style={{ width: 10, height: 10, color: '#D97706' }} />
-                            <span className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.14em' }}>FROM CONFUSION TO ACTION.</span>
+                            <span className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.14em' }}>{t.fromConfusion}</span>
                         </div>
                         <h2 className="nm-display" style={{ fontSize: 'clamp(1.75rem, 6vw, 3.5rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: 16 }}>
-                            Stop guessing.<br />
-                            <span style={{ color: '#D97706', fontStyle: 'italic' }}>Start acting.</span>
+                            {t.finalHeading}<br />
+                            <span style={{ color: '#D97706', fontStyle: 'italic' }}>{t.finalHeadingGold}</span>
                         </h2>
                         <p className="nm-body" style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', maxWidth: 420, margin: '0 auto 32px', lineHeight: 1.6 }}>
-                            Get clear legal guidance in hours. Join 100+ startups that fixed their legal risk with NyayMitra.
+                            {t.finalDesc}
                         </p>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 24 }}>
                             <a href={whatsappIntentGeneral} target="_blank" rel="noopener noreferrer" className="nm-ui" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0.7rem 1.75rem', background: '#D97706', color: '#000', borderRadius: 40, fontSize: '0.8125rem', fontWeight: 700, textDecoration: 'none' }}>
-                                <WaSvg size={14} /> Get Legal Help Now
+                                <WaSvg size={14} /> {t.ctaFinal}
                             </a>
                         </div>
                         <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.25)' }}>
-                            No credit card required · Free AI consultation · Cancel anytime
+                            {t.noCard}
                         </p>
                     </div>
                 </section>
@@ -1135,7 +1409,7 @@ export default function StartupLegalPage() {
                             <p style={{ fontSize: 10, color: '#a1a1aa' }}>© 2026 NyayMitra. All rights reserved.</p>
                             <p style={{ fontSize: 10, color: '#a1a1aa', maxWidth: 480, textAlign: 'right', lineHeight: 1.5 }}>
                                 <span style={{ color: '#71717a', fontWeight: 600 }}>Disclaimer: </span>
-                                NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third-party professionals.
+                                {t.disclaimer}
                             </p>
                         </div>
                     </div>
