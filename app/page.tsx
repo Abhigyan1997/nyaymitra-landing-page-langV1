@@ -1,4 +1,5 @@
 "use client"
+
 import { useState, useEffect, useRef, useCallback } from "react"
 import {
   BarChart2, CalendarCheck, PenTool, IndianRupee, LogOut,
@@ -9,7 +10,8 @@ import {
   Instagram, Linkedin, ChevronDown, ChevronRight,
   Building2, Home, Banknote, FileSignature, Briefcase,
   Users, Landmark, AlertCircle, FileQuestion, HeartHandshake,
-  Handshake, TrendingUp,
+  Handshake, TrendingUp, BadgeCheck, Layers, ClipboardList,
+  Store, HardHat, ShieldCheck,
 } from "lucide-react"
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -60,7 +62,6 @@ const GlobalStyles = () => (
       cursor: default;
     }
 
-    /* ── Keyframes ── */
     @keyframes fadeUp   { from { opacity:0; transform:translateY(28px) } to { opacity:1; transform:translateY(0) } }
     @keyframes fadeIn   { from { opacity:0 } to { opacity:1 } }
     @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
@@ -73,7 +74,6 @@ const GlobalStyles = () => (
     @keyframes slideUp  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
     @keyframes glowPulse { 0%,100%{opacity:0.4} 50%{opacity:0.8} }
 
-    /* ── Reveal ── */
     .reveal {
       opacity: 0;
       transform: translateY(22px);
@@ -81,7 +81,6 @@ const GlobalStyles = () => (
     }
     .reveal.is-on { opacity:1 !important; transform:translateY(0) !important; }
 
-    /* ── Gold shimmer text ── */
     .gold-text {
       background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
       background-size: 300% auto;
@@ -91,11 +90,9 @@ const GlobalStyles = () => (
       animation: shimmer 7s linear infinite;
     }
 
-    /* ── Marquee ── */
     .mq-track { display:flex; width:max-content; animation: marquee 40s linear infinite; }
     .mq-track:hover { animation-play-state: paused; }
 
-    /* ── Eyebrow label ── */
     .eyebrow {
       display: inline-flex;
       align-items: center;
@@ -115,7 +112,6 @@ const GlobalStyles = () => (
       flex-shrink: 0;
     }
 
-    /* ── Buttons ── */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -182,7 +178,6 @@ const GlobalStyles = () => (
       transform: translateY(-2px);
     }
 
-    /* ── Cards ── */
     .card {
       background: var(--white);
       border: 1px solid var(--ink-7);
@@ -196,7 +191,6 @@ const GlobalStyles = () => (
       border-color: var(--ink-5);
     }
 
-    /* ── Nav ── */
     .nav-link {
       font-family: var(--sans);
       font-size: 13px;
@@ -210,7 +204,6 @@ const GlobalStyles = () => (
     }
     .nav-link:hover { color: var(--ink); background: var(--ink-8); }
 
-    /* ── Problem pills ── */
     .problem-pill {
       display: inline-flex;
       align-items: center;
@@ -236,7 +229,6 @@ const GlobalStyles = () => (
       box-shadow: 0 8px 24px rgba(12,11,9,0.18);
     }
 
-    /* ── Action cards ── */
     .action-card {
       background: var(--white);
       border: 1px solid var(--ink-7);
@@ -268,7 +260,6 @@ const GlobalStyles = () => (
     }
     .action-card:hover::after { transform: scaleX(1); }
 
-    /* ── FAQ ── */
     .faq-row { border-top: 1px solid var(--ink-7); }
     .faq-row:last-child { border-bottom: 1px solid var(--ink-7); }
     .faq-btn {
@@ -284,7 +275,6 @@ const GlobalStyles = () => (
       text-align: left;
     }
 
-    /* ── Trust pills ── */
     .trust-pill {
       display: inline-flex;
       align-items: center;
@@ -297,7 +287,6 @@ const GlobalStyles = () => (
       background: var(--white);
     }
 
-    /* ── Layout helpers ── */
     .section-pad { padding: 104px 24px; }
     @media (max-width: 768px) { .section-pad { padding: 72px 20px; } }
     @media (max-width: 480px) { .section-pad { padding: 52px 16px; } }
@@ -314,11 +303,35 @@ const GlobalStyles = () => (
 
     .actions-grid {
       display: grid;
-      grid-template-columns: repeat(4,1fr);
+      grid-template-columns: repeat(3,1fr);
       gap: 16px;
     }
     @media (max-width: 920px) { .actions-grid { grid-template-columns: repeat(2,1fr); } }
     @media (max-width: 480px) { .actions-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
+
+    .actions-grid-bottom {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    @media (max-width: 920px) { .actions-grid-bottom { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .actions-grid-bottom { grid-template-columns: 1fr; gap: 10px; } }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 20px;
+    }
+    @media (max-width: 860px) { .audience-grid { grid-template-columns: 1fr; } }
+
+    .compliance-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+    }
+    @media (max-width: 720px) { .compliance-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .compliance-grid { grid-template-columns: 1fr; } }
 
     .startup-grid {
       display: grid;
@@ -363,6 +376,48 @@ const GlobalStyles = () => (
       .cta-row .btn { justify-content:center; }
     }
 
+    /* 3-way hero CTA */
+    .hero-3cta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    @media (max-width: 680px) {
+      .hero-3cta { grid-template-columns: 1fr; }
+    }
+
+    .hero-cta-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px 18px;
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.24s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-cta-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.28s cubic-bezier(0.16,1,0.3,1);
+    }
+    .hero-cta-card:hover {
+      border-color: var(--ink-5);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(12,11,9,0.09);
+    }
+    .hero-cta-card:hover::before { transform: scaleX(1); }
+
     .mob-only { display:none !important; }
     .desk-only { display:flex; }
     @media (max-width: 768px) {
@@ -372,7 +427,6 @@ const GlobalStyles = () => (
 
     .pills-wrap { display:flex; flex-wrap:wrap; gap:10px; }
 
-    /* ── Floating WA ── */
     .floating-wa {
       position: fixed;
       bottom: 28px;
@@ -397,7 +451,6 @@ const GlobalStyles = () => (
     }
     @media (max-width: 480px) { .floating-wa { width:48px; height:48px; bottom:20px; right:18px; } }
 
-    /* ── Decorative elements ── */
     .ornament-line {
       display: flex;
       align-items: center;
@@ -410,16 +463,13 @@ const GlobalStyles = () => (
       background: linear-gradient(90deg, transparent, var(--ink-7), transparent);
     }
 
-    /* ── Custom scrollbar ── */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: var(--ink-9); }
     ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; opacity: 0.4; }
     ::-webkit-scrollbar-thumb:hover { background: var(--gold-dk); }
 
-    /* ── Selection ── */
     ::selection { background: var(--gold-pale); color: var(--gold-dk); }
 
-    /* ── Noise texture overlay ── */
     .noise-overlay {
       position: absolute;
       inset: 0;
@@ -429,7 +479,6 @@ const GlobalStyles = () => (
       mix-blend-mode: multiply;
     }
 
-    /* ── Number counter pill ── */
     .count-badge {
       display: inline-flex;
       align-items: center;
@@ -444,6 +493,54 @@ const GlobalStyles = () => (
       color: var(--gold-dk);
       font-weight: 500;
       flex-shrink: 0;
+    }
+
+    /* Audience card hover */
+    .audience-card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .audience-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.32s cubic-bezier(0.16,1,0.3,1);
+    }
+    .audience-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 24px 64px rgba(12,11,9,0.09);
+      border-color: var(--ink-5);
+    }
+    .audience-card:hover::after { transform: scaleX(1); }
+
+    /* Compliance item */
+    .compliance-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px;
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,0.05);
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+      cursor: default;
+    }
+    .compliance-item:hover {
+      background: rgba(201,168,76,0.06);
+      border-color: rgba(201,168,76,0.3);
+      transform: translateX(3px);
     }
   `}</style>
 )
@@ -544,7 +641,6 @@ export default function HomePage() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [activeHeroTab, setActiveHeroTab] = useState(0)
 
   useEffect(() => {
     setMounted(true)
@@ -578,6 +674,7 @@ export default function HomePage() {
     { key: "services", label: lang === "en" ? "Services" : "सेवाएं", href: "/services" },
     { key: "lawyers", label: lang === "en" ? "Find Lawyers" : "वकील खोजें", href: "/lawyers" },
     { key: "legalGPT", label: lang === "en" ? "Legal AI" : "कानूनी एआई", href: "/legal-ai" },
+    { key: "compliance", label: lang === "en" ? "Compliance" : "अनुपालन", href: "/compliance" },
     { key: "about", label: lang === "en" ? "About" : "हमारे बारे में", href: "/about" },
   ]
 
@@ -590,7 +687,7 @@ export default function HomePage() {
     { key: "employment", labelEn: "Employment issue", labelHi: "रोजगार मुद्दा", icon: <Briefcase style={{ width: 13, height: 13 }} /> },
     { key: "criminal", labelEn: "Criminal matter", labelHi: "आपराधिक मामला", icon: <Gavel style={{ width: 13, height: 13 }} /> },
     { key: "cyber", labelEn: "Cyber crime", labelHi: "साइबर अपराध", icon: <AlertCircle style={{ width: 13, height: 13 }} /> },
-    { key: "contract", labelEn: "Contract / Agreement", labelHi: "अनुबंध / समझौता", icon: <FileSignature style={{ width: 13, height: 13 }} /> },
+    // { key: "contract", labelEn: "Contract / Agreement", labelHi: "अनुबंध / समझौता", icon: <FileSignature style={{ width: 13, height: 13 }} /> },
     { key: "other", labelEn: "Something else", labelHi: "कुछ और", icon: <FileText style={{ width: 13, height: 13 }} /> },
   ]
 
@@ -619,6 +716,9 @@ export default function HomePage() {
       href: "/affidavit-online-india",
       badge: "₹999 onwards",
     },
+  ]
+
+  const actionsBottom = [
     {
       titleEn: "Talk to a lawyer", titleHi: "वकील से बात करें",
       descEn: "Connect with a verified expert in under 30 minutes.",
@@ -626,6 +726,22 @@ export default function HomePage() {
       icon: <Gavel style={{ width: 22, height: 22 }} />,
       href: "/lawyers",
       badge: "From ₹150",
+    },
+    {
+      titleEn: "Startup Legal Support", titleHi: "स्टार्टअप कानूनी सहायता",
+      descEn: "Contracts, NDAs, co-founder agreements monthly flat rate.",
+      descHi: "अनुबंध, एनडीए, सह-संस्थापक समझौते मासिक दर।",
+      icon: <TrendingUp style={{ width: 22, height: 22 }} />,
+      href: "/startup-legal",
+      badge: "₹999/mo",
+    },
+    {
+      titleEn: "Compliance & Licensing", titleHi: "अनुपालन और लाइसेंसिंग",
+      descEn: "POSH, FSSAI, MSME, Shop & Establishment and more.",
+      descHi: "POSH, FSSAI, MSME, शॉप एंड एस्टेब्लिशमेंट और अधिक।",
+      icon: <ClipboardList style={{ width: 22, height: 22 }} />,
+      href: "/compliance",
+      badge: "New",
     },
   ]
 
@@ -694,8 +810,9 @@ export default function HomePage() {
     <>
       <GlobalStyles />
       <Head>
-        <title>NyayMitra {lang === "en" ? "Know your next legal step" : "अपना अगला कानूनी कदम जानें"}</title>
-        <meta name="description" content="India's most accessible legal platform. Free AI guidance, verified lawyers, instant documents." />
+        <title>NyayMitra {lang === "en" ? "Legal Operating System for India" : "भारत का कानूनी ऑपरेटिंग सिस्टम"}</title>
+        <meta name="description" content="India's legal operating system for individuals, startups & businesses. Free AI guidance, verified lawyers, compliance services, startup legal support, instant documents." />
+        <meta name="keywords" content="startup legal services India, compliance services India, POSH compliance, legal consultation online, business legal support, MSME registration, FSSAI registration" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="canonical" href="https://nyaymitra.tech" />
       </Head>
@@ -764,10 +881,10 @@ export default function HomePage() {
                   fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
                   color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em",
                 }}>NyayMitra</div>
-                <div style={{
+                {/* <div style={{
                   fontFamily: "var(--mono)", fontSize: "7px", color: "var(--gold-dk)",
                   letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2,
-                }}>{lang === "en" ? "Legal Tech · India" : "कानूनी तकनीक · भारत"}</div>
+                }}>{lang === "en" ? "Legal OS · India" : "कानूनी ओएस · भारत"}</div> */}
               </div>
             </Link>
 
@@ -936,20 +1053,17 @@ export default function HomePage() {
             HERO
         ═══════════════════════════════════════════════════════════════════════ */}
         <section style={{ padding: "80px 28px 96px", position: "relative", overflow: "hidden" }}>
-          {/* Background layers */}
           <div style={{
             position: "absolute", inset: 0,
             background: "radial-gradient(ellipse 80% 60% at 75% 30%, rgba(201,168,76,0.055) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 10% 70%, rgba(12,11,9,0.025) 0%, transparent 60%)",
             pointerEvents: "none",
           }} />
-          {/* Decorative grid lines */}
           <div style={{
             position: "absolute", inset: 0,
             backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
             backgroundSize: "80px 80px",
             pointerEvents: "none",
           }} />
-          {/* Large decorative scale watermark */}
           <div style={{
             position: "absolute", right: "-4%", top: "6%",
             width: 560, height: 560, opacity: 0.025,
@@ -988,18 +1102,16 @@ export default function HomePage() {
                 </div>
 
                 {/* Headline */}
-                {/* Headline - FIXED FOR HINDI */}
                 <h1 style={{
                   fontFamily: "var(--serif)",
                   fontSize: "clamp(44px, 6.5vw, 78px)",
                   fontWeight: 600,
-                  lineHeight: 1.3,              // Increased significantly
+                  lineHeight: 1.3,
                   letterSpacing: "-0.03em",
                   color: "var(--ink)",
                   marginBottom: 0,
-                  paddingTop: "0.3rem",         // Add top padding
-                  paddingBottom: "0.1rem",      // Maintain balance
-                  overflow: "visible",          // Ensure no clipping
+                  paddingTop: "0.3rem",
+                  overflow: "visible",
                 }}>
                   {lang === "en" ? "Know your next" : "अपना अगला"}<br />
                   <span className="gold-text" style={{
@@ -1020,15 +1132,84 @@ export default function HomePage() {
                   <div style={{ width: 24, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
                 </div>
 
+                {/* Updated subheadline B2B positioning */}
                 <p style={{
                   fontFamily: "var(--sans)", fontSize: "15.5px",
                   color: "var(--ink-4)", lineHeight: 1.85,
-                  maxWidth: 440, marginBottom: 44, fontWeight: 300,
+                  maxWidth: 480, marginBottom: 36, fontWeight: 300,
                 }}>
                   {lang === "en"
-                    ? "From confusion to action get legal clarity and take action instantly. Hindi or English, 24/7."
-                    : "भ्रम से कार्रवाई तक तुरंत कानूनी स्पष्टता पाएं। हिंदी या अंग्रेजी, 24/7।"}
+                    ? "For individuals, startups & businesses get legal clarity, documents, compliance support, and expert help without complexity."
+                    : "व्यक्तियों, स्टार्टअप और व्यवसायों के लिए बिना जटिलता के कानूनी स्पष्टता, दस्तावेज़, अनुपालन सहायता।"}
                 </p>
+
+                {/* ── NEW: 3-way CTA structure ── */}
+                <div className="hero-3cta">
+                  {[
+                    {
+                      icon: <WaSvg size={15} />,
+                      labelEn: "Personal Legal Help",
+                      labelHi: "व्यक्तिगत कानूनी मदद",
+                      subEn: "Immediate WhatsApp guidance",
+                      subHi: "तुरंत व्हाट्सएप मार्गदर्शन",
+                      href: waGeneral,
+                      external: true,
+                      accent: "#128C7E",
+                    },
+                    {
+                      icon: <TrendingUp style={{ width: 15, height: 15 }} />,
+                      labelEn: "Startup Legal",
+                      labelHi: "स्टार्टअप कानूनी",
+                      subEn: "NDAs, contracts, monthly plans",
+                      subHi: "एनडीए, अनुबंध, मासिक योजना",
+                      href: "/startup-legal",
+                      external: false,
+                      accent: "var(--gold-dk)",
+                    },
+                    {
+                      icon: <ClipboardList style={{ width: 15, height: 15 }} />,
+                      labelEn: "Compliance & Licensing",
+                      labelHi: "अनुपालन और लाइसेंस",
+                      subEn: "POSH, FSSAI, MSME & more",
+                      subHi: "POSH, FSSAI, MSME और अधिक",
+                      href: "/compliance",
+                      external: false,
+                      accent: "var(--ink-3)",
+                    },
+                  ].map((cta) => (
+                    cta.external ? (
+                      <a key={cta.labelEn} href={cta.href} target="_blank" rel="noopener noreferrer" className="hero-cta-card">
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ color: cta.accent as string }}>{cta.icon}</span>
+                          <span style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 700, color: "var(--ink)" }}>
+                            {lang === "en" ? cta.labelEn : cta.labelHi}
+                          </span>
+                        </div>
+                        <p style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", fontWeight: 300, lineHeight: 1.5 }}>
+                          {lang === "en" ? cta.subEn : cta.subHi}
+                        </p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--mono)", fontSize: "9px", color: cta.accent as string, letterSpacing: "0.08em" }}>
+                          {lang === "en" ? "Get started" : "शुरू करें"} <ChevronRight style={{ width: 10, height: 10 }} />
+                        </div>
+                      </a>
+                    ) : (
+                      <Link key={cta.labelEn} href={cta.href} className="hero-cta-card" style={{ textDecoration: "none" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <span style={{ color: cta.accent as string }}>{cta.icon}</span>
+                          <span style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 700, color: "var(--ink)" }}>
+                            {lang === "en" ? cta.labelEn : cta.labelHi}
+                          </span>
+                        </div>
+                        <p style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", fontWeight: 300, lineHeight: 1.5 }}>
+                          {lang === "en" ? cta.subEn : cta.subHi}
+                        </p>
+                        <div style={{ display: "flex", alignItems: "center", gap: 4, fontFamily: "var(--mono)", fontSize: "9px", color: cta.accent as string, letterSpacing: "0.08em" }}>
+                          {lang === "en" ? "Get started" : "शुरू करें"} <ChevronRight style={{ width: 10, height: 10 }} />
+                        </div>
+                      </Link>
+                    )
+                  ))}
+                </div>
 
                 {/* Problem selector */}
                 <div style={{
@@ -1062,24 +1243,13 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                {/* CTAs */}
-                <div className="hero-ctas">
-                  <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 10 }}>
-                    <WaSvg size={15} />
-                    {lang === "en" ? "Get Help on WhatsApp" : "व्हाट्सएप पर मदद लें"}
-                  </a>
-                  <Link href="/startup-legal" className="btn btn-ghost" style={{ textDecoration: "none" }}>
-                    {lang === "en" ? "For Startups" : "स्टार्टअप्स के लिए"}
-                    <ArrowRight style={{ width: 14, height: 14 }} />
-                  </Link>
-                </div>
-
                 {/* Trust row */}
-                <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 30, flexWrap: "wrap" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 10, flexWrap: "wrap" }}>
                   {[
-                    { icon: <Shield style={{ width: 10, height: 10 }} />, enText: "Bar Council Verified", hiText: "बार काउंसिल सत्यापित" },
-                    { icon: <CheckCircle style={{ width: 10, height: 10 }} />, enText: "No Hidden Charges", hiText: "कोई छिपा शुल्क नहीं" },
-                    { icon: <Star style={{ width: 10, height: 10 }} />, enText: "4.9★ Rated", hiText: "4.9★ रेटेड" },
+                    { icon: <BadgeCheck style={{ width: 10, height: 10 }} />, enText: "Verified Legal Experts", hiText: "सत्यापित कानूनी विशेषज्ञ" },
+                    { icon: <Shield style={{ width: 10, height: 10 }} />, enText: "Transparent Pricing", hiText: "पारदर्शी मूल्य" },
+                    { icon: <Zap style={{ width: 10, height: 10 }} />, enText: "AI + Human Assisted", hiText: "एआई + मानव सहायता" },
+                    { icon: <TrendingUp style={{ width: 10, height: 10 }} />, enText: "Startup Friendly", hiText: "स्टार्टअप अनुकूल" },
                   ].map(t => (
                     <div key={t.enText} style={{
                       display: "flex", alignItems: "center", gap: 6,
@@ -1093,14 +1263,13 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* ── Right column — floating card ── */}
+              {/* ── Right column floating card ── */}
               <div style={{ animation: "fadeUp 0.82s 0.12s cubic-bezier(0.16,1,0.3,1) both" }}>
                 <div style={{ animation: "floatSlow 9s ease-in-out infinite", position: "relative" }}>
                   <div className="card" style={{
                     overflow: "hidden",
                     boxShadow: "0 40px 80px rgba(12,11,9,0.1), 0 8px 24px rgba(12,11,9,0.06), 0 0 0 1px rgba(12,11,9,0.03)",
                   }}>
-                    {/* Card header */}
                     <div style={{
                       background: "var(--ink)",
                       padding: "16px 22px",
@@ -1127,7 +1296,6 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    {/* Steps */}
                     <div style={{ padding: "4px 0" }}>
                       {flowSteps.map((step, i) => (
                         <div key={step.n}
@@ -1165,7 +1333,6 @@ export default function HomePage() {
                       ))}
                     </div>
 
-                    {/* Card footer */}
                     <div style={{
                       padding: "13px 22px",
                       background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)",
@@ -1230,6 +1397,7 @@ export default function HomePage() {
               { val: "4.9★", en: "client rating", hi: "ग्राहक रेटिंग" },
               { val: "2 hrs", en: "NDA reviewed", hi: "एनडीए समीक्षित" },
               { val: "10+", en: "cities served", hi: "शहरों में सेवाएं" },
+              { val: "POSH", en: "compliance ready", hi: "अनुपालन तैयार" },
             ]).map((item, i) => (
               <span key={i} className="trust-pill">
                 <span style={{ fontFamily: "var(--serif)", fontSize: "13.5px", fontWeight: 600, color: "var(--gold-dk)" }}>{item.val}</span>
@@ -1241,6 +1409,188 @@ export default function HomePage() {
             ))}
           </div>
         </div>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            WHO IS THIS FOR? (NEW SECTION)
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{ background: "var(--ink-9)", borderBottom: "1px solid var(--ink-7)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">{lang === "en" ? "Who is this for?" : "यह किसके लिए है?"}</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  {lang === "en" ? "Legal support for" : "कानूनी सहायता"}<br />
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>
+                    {lang === "en" ? "everyone who needs it." : "हर उस व्यक्ति के लिए।"}
+                  </span>
+                </h2>
+                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, marginTop: 14, maxWidth: 520, margin: "14px auto 0" }}>
+                  {lang === "en"
+                    ? "Trusted by startups, professionals & growing businesses across India."
+                    : "भारत भर में स्टार्टअप, पेशेवरों और बढ़ते व्यवसायों द्वारा विश्वसनीय।"}
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="audience-grid">
+              {[
+                {
+                  icon: <User style={{ width: 20, height: 20 }} />,
+                  tagEn: "Individuals",
+                  tagHi: "व्यक्ति",
+                  titleEn: "Personal legal issues, resolved.",
+                  titleHi: "व्यक्तिगत कानूनी समस्याएं, हल।",
+                  descEn: "From money disputes to family matters, NyayMitra gives you clarity and action steps without needing to know any law.",
+                  descHi: "धन विवाद से पारिवारिक मामलों तक, बिना कानून जाने स्पष्टता और कार्रवाई।",
+                  bullets: [
+                    { en: "Legal notice drafting", hi: "कानूनी नोटिस" },
+                    { en: "Affidavits & documents", hi: "हलफनामे और दस्तावेज़" },
+                    { en: "Lawyer consultation from ₹150", hi: "₹150 से परामर्श" },
+                  ],
+                  cta: { en: "Get Help on WhatsApp", hi: "व्हाट्सएप पर मदद", href: waGeneral, external: true },
+                  dark: false,
+                },
+                {
+                  icon: <TrendingUp style={{ width: 20, height: 20 }} />,
+                  tagEn: "Startups",
+                  tagHi: "स्टार्टअप",
+                  titleEn: "Legal clarity for founders.",
+                  titleHi: "संस्थापकों के लिए स्पष्टता।",
+                  descEn: "Scale confidently with contracts, compliance, and on-call legal support at a flat monthly rate. No hourly billing.",
+                  descHi: "अनुबंध, अनुपालन, और कानूनी सहायता के साथ आत्मविश्वास से आगे बढ़ें।",
+                  bullets: [
+                    { en: "Founder & co-founder agreements", hi: "सह-संस्थापक समझौते" },
+                    { en: "NDAs & contracts reviewed", hi: "एनडीए और अनुबंध समीक्षा" },
+                    { en: "Monthly legal support ₹999", hi: "₹999 मासिक सहायता" },
+                  ],
+                  cta: { en: "View Startup Plans", hi: "स्टार्टअप योजना देखें", href: "/startup-legal", external: false },
+                  dark: true,
+                },
+                {
+                  icon: <Building2 style={{ width: 20, height: 20 }} />,
+                  tagEn: "Businesses & MSMEs",
+                  tagHi: "व्यवसाय और एमएसएमई",
+                  titleEn: "Compliance done right.",
+                  titleHi: "अनुपालन सही तरह से।",
+                  descEn: "Protect your business with POSH compliance, labour law, vendor agreements, and licensing all handled by experts.",
+                  descHi: "POSH अनुपालन, श्रम कानून, विक्रेता समझौते और लाइसेंसिंग विशेषज्ञों द्वारा।",
+                  bullets: [
+                    { en: "POSH compliance & training", hi: "POSH अनुपालन और प्रशिक्षण" },
+                    { en: "Licensing (FSSAI, S&E, MSME)", hi: "लाइसेंसिंग (FSSAI, S&E, MSME)" },
+                    { en: "Vendor & employment contracts", hi: "विक्रेता और रोजगार अनुबंध" },
+                  ],
+                  cta: { en: "Explore Compliance", hi: "अनुपालन देखें", href: "/compliance", external: false },
+                  dark: false,
+                },
+              ].map((card, i) => (
+                <Reveal key={card.tagEn} delay={i * 80}>
+                  <div className="audience-card" style={{
+                    background: card.dark ? "var(--ink)" : "var(--white)",
+                    borderColor: card.dark ? "transparent" : "var(--ink-7)",
+                  }}>
+                    {/* Icon + tag */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{
+                        width: 46, height: 46, borderRadius: 12, flexShrink: 0,
+                        background: card.dark ? "rgba(201,168,76,0.12)" : "var(--ink-9)",
+                        border: `1px solid ${card.dark ? "rgba(201,168,76,0.2)" : "var(--ink-7)"}`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        color: card.dark ? "var(--gold)" : "var(--gold-dk)",
+                      }}>
+                        {card.icon}
+                      </div>
+                      <div style={{
+                        padding: "3px 12px",
+                        borderRadius: 100,
+                        background: card.dark ? "rgba(201,168,76,0.1)" : "var(--gold-pale)",
+                        border: `1px solid ${card.dark ? "rgba(201,168,76,0.25)" : "var(--gold)"}`,
+                      }}>
+                        <span style={{
+                          fontFamily: "var(--mono)", fontSize: "8px", letterSpacing: "0.16em",
+                          textTransform: "uppercase", fontWeight: 600,
+                          color: card.dark ? "var(--gold-lt)" : "var(--gold-dk)",
+                        }}>
+                          {lang === "en" ? card.tagEn : card.tagHi}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 style={{
+                        fontFamily: "var(--serif)", fontSize: "22px", fontWeight: 600,
+                        color: card.dark ? "white" : "var(--ink)",
+                        marginBottom: 10, lineHeight: 1.25, letterSpacing: "-0.015em",
+                      }}>
+                        {lang === "en" ? card.titleEn : card.titleHi}
+                      </h3>
+                      <p style={{
+                        fontFamily: "var(--sans)", fontSize: "13px",
+                        color: card.dark ? "rgba(255,255,255,0.5)" : "var(--ink-5)",
+                        lineHeight: 1.75, fontWeight: 300,
+                      }}>
+                        {lang === "en" ? card.descEn : card.descHi}
+                      </p>
+                    </div>
+
+                    {/* Bullets */}
+                    <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: 8 }}>
+                      {card.bullets.map((b) => (
+                        <li key={b.en} style={{
+                          display: "flex", alignItems: "center", gap: 9,
+                          fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 500,
+                          color: card.dark ? "rgba(255,255,255,0.65)" : "var(--ink-3)",
+                        }}>
+                          <div style={{
+                            width: 16, height: 16, borderRadius: "50%", flexShrink: 0,
+                            background: card.dark ? "rgba(201,168,76,0.12)" : "var(--gold-pale)",
+                            border: `1px solid ${card.dark ? "rgba(201,168,76,0.25)" : "var(--gold)"}`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                          }}>
+                            <CheckCircle style={{ width: 8, height: 8, color: card.dark ? "var(--gold)" : "var(--gold-dk)" }} />
+                          </div>
+                          {lang === "en" ? b.en : b.hi}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA */}
+                    {card.cta.external ? (
+                      <a href={card.cta.href} target="_blank" rel="noopener noreferrer" style={{
+                        display: "inline-flex", alignItems: "center", gap: 7,
+                        fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 700,
+                        color: card.dark ? "var(--gold-lt)" : "var(--gold-dk)",
+                        textDecoration: "none", marginTop: "auto",
+                        borderTop: `1px solid ${card.dark ? "rgba(255,255,255,0.08)" : "var(--ink-8)"}`,
+                        paddingTop: 16,
+                      }}>
+                        {lang === "en" ? card.cta.en : card.cta.hi}
+                        <ArrowRight style={{ width: 13, height: 13 }} />
+                      </a>
+                    ) : (
+                      <Link href={card.cta.href} style={{
+                        display: "inline-flex", alignItems: "center", gap: 7,
+                        fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 700,
+                        color: card.dark ? "var(--gold-lt)" : "var(--gold-dk)",
+                        textDecoration: "none", marginTop: "auto",
+                        borderTop: `1px solid ${card.dark ? "rgba(255,255,255,0.08)" : "var(--ink-8)"}`,
+                        paddingTop: 16,
+                      }}>
+                        {lang === "en" ? card.cta.en : card.cta.hi}
+                        <ArrowRight style={{ width: 13, height: 13 }} />
+                      </Link>
+                    )}
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
             ACTIONS
@@ -1265,7 +1615,8 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <div className="actions-grid">
+            {/* Top row: 3 cards */}
+            {/* <div className="actions-grid">
               {actions.map((action, i) => (
                 <Reveal key={action.titleEn} delay={i * 65}>
                   <a
@@ -1317,6 +1668,61 @@ export default function HomePage() {
                   </a>
                 </Reveal>
               ))}
+            </div> */}
+
+            {/* Bottom row: Talk + Startup + Compliance */}
+            <div className="actions-grid-bottom">
+              {actionsBottom.map((action, i) => (
+                <Reveal key={action.titleEn} delay={200 + i * 65}>
+                  <Link
+                    href={action.href}
+                    className="action-card"
+                    style={{ height: "100%", textDecoration: "none" }}>
+                    {action.badge && (
+                      <div style={{
+                        position: "absolute", top: 16, right: 16,
+                        padding: "3px 9px", borderRadius: 100,
+                        background: i === 2 ? "var(--ink)" : "var(--gold-pale)",
+                        border: `1px solid ${i === 2 ? "transparent" : "var(--gold)"}`,
+                        fontFamily: "var(--mono)", fontSize: "7.5px",
+                        color: i === 2 ? "var(--gold)" : "var(--gold-dk)",
+                        fontWeight: 600, letterSpacing: "0.06em",
+                      }}>{action.badge}</div>
+                    )}
+                    <div style={{
+                      width: 50, height: 50, borderRadius: 13,
+                      background: i === 1 ? "var(--ink)" : "var(--ink-9)",
+                      border: `1px solid ${i === 1 ? "transparent" : "var(--ink-7)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: i === 1 ? "var(--gold)" : "var(--gold-dk)",
+                      boxShadow: i === 1 ? "0 4px 16px rgba(12,11,9,0.15)" : "none",
+                    }}>
+                      {action.icon}
+                    </div>
+                    <div>
+                      <h3 style={{
+                        fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                        color: "var(--ink)", marginBottom: 8, lineHeight: 1.25,
+                        letterSpacing: "-0.01em",
+                      }}>
+                        {lang === "en" ? action.titleEn : action.titleHi}
+                      </h3>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "var(--ink-5)", lineHeight: 1.7, fontWeight: 300 }}>
+                        {lang === "en" ? action.descEn : action.descHi}
+                      </p>
+                    </div>
+                    <div style={{
+                      display: "flex", alignItems: "center", gap: 6,
+                      fontFamily: "var(--mono)", fontSize: "9px",
+                      color: "var(--gold-dk)", letterSpacing: "0.1em",
+                      marginTop: "auto", textTransform: "uppercase",
+                    }}>
+                      {lang === "en" ? "Get started" : "शुरू करें"}
+                      <ChevronRight style={{ width: 11, height: 11 }} />
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
             </div>
           </div>
         </section>
@@ -1363,6 +1769,262 @@ export default function HomePage() {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════════
+            COMPLIANCE PREVIEW SECTION (NEW)
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          background: "var(--ink)",
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Decorative grid */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px)",
+            backgroundSize: "60px 60px", pointerEvents: "none",
+          }} />
+          {/* Radial glow */}
+          <div style={{
+            position: "absolute", right: "-10%", top: "50%", transform: "translateY(-50%)",
+            width: 600, height: 600, borderRadius: "50%",
+            background: "radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%)",
+            pointerEvents: "none",
+          }} />
+
+          <div className="max-w" style={{ padding: "0 28px", position: "relative", zIndex: 1 }}>
+            {/* Responsive grid: stacked on mobile, side-by-side on desktop */}
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, 1fr)",
+              gap: 80,
+              alignItems: "center",
+              // Responsive breakpoint inside style tag is not directly possible,
+              // but we can use a media query via a className or inline style with a wrapper.
+              // For this component, we'll rely on the existing global responsive CSS.
+            }} className="compliance-responsive-grid">
+              {/* Override grid layout for mobile using CSS */}
+              <style>{`
+                @media (max-width: 900px) {
+                  .compliance-responsive-grid {
+                    grid-template-columns: 1fr !important;
+                    gap: 48px !important;
+                  }
+                }
+              `}</style>
+
+              {/* Left: copy - fully responsive text */}
+              <Reveal>
+                <div style={{ width: "100%" }}>
+                  <div style={{ marginBottom: 20 }}>
+                    <span className="eyebrow" style={{ color: "var(--gold)" }}>
+                      {lang === "en" ? "Built for modern businesses" : "आधुनिक व्यवसायों के लिए"}
+                    </span>
+                  </div>
+                  <h2 style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(28px, 4vw, 52px)",
+                    fontWeight: 600, lineHeight: 1.1,
+                    letterSpacing: "-0.025em", color: "white", marginBottom: 12,
+                  }}>
+                    {lang === "en" ? "Compliance," : "अनुपालन,"}<br />
+                    <span className="gold-text" style={{ fontWeight: 300, fontStyle: "italic" }}>
+                      {lang === "en" ? "without the headache." : "बिना सिरदर्द के।"}
+                    </span>
+                  </h2>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "22px 0 24px" }}>
+                    <div style={{ width: 40, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+                    <Scale style={{ width: 9, height: 9, color: "var(--gold)" }} />
+                    <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+                  </div>
+
+                  <p style={{
+                    fontFamily: "var(--sans)", fontSize: "clamp(13px, 3vw, 14.5px)",
+                    color: "rgba(255,255,255,0.5)", lineHeight: 1.9, marginBottom: 32, fontWeight: 300,
+                  }}>
+                    {lang === "en"
+                      ? "From POSH compliance to FSSAI registration, we handle the legal overhead so you can focus on growing your business."
+                      : "POSH अनुपालन से FSSAI पंजीकरण तक, हम कानूनी जटिलता संभालते हैं।"}
+                  </p>
+
+                  {/* Trust badges - fully responsive wrapping */}
+                  <div style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "clamp(8px, 2vw, 10px)",
+                    marginBottom: 36,
+                    justifyContent: "flex-start",
+                  }}>
+                    {[
+                      { en: "Verified Experts", hi: "सत्यापित विशेषज्ञ", icon: <BadgeCheck style={{ width: 10, height: 10 }} /> },
+                      { en: "Business Legal Support", hi: "व्यावसायिक कानूनी", icon: <Briefcase style={{ width: 10, height: 10 }} /> },
+                      { en: "Transparent Pricing", hi: "पारदर्शी मूल्य", icon: <IndianRupee style={{ width: 10, height: 10 }} /> },
+                    ].map(b => (
+                      <div key={b.en} style={{
+                        display: "inline-flex", alignItems: "center", gap: 7,
+                        padding: "7px 14px",
+                        border: "1px solid rgba(201,168,76,0.2)",
+                        borderRadius: 100, background: "rgba(201,168,76,0.06)",
+                        fontFamily: "var(--mono)", fontSize: "clamp(7px, 2vw, 8.5px)",
+                        color: "rgba(255,255,255,0.45)", letterSpacing: "0.1em",
+                        whiteSpace: "nowrap",
+                      }}>
+                        <span style={{ color: "var(--gold)", flexShrink: 0 }}>{b.icon}</span>
+                        {lang === "en" ? b.en : b.hi}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link href="/compliance" className="btn btn-gold" style={{ textDecoration: "none", display: "inline-flex" }}>
+                    {lang === "en" ? "Explore Compliance" : "अनुपालन देखें"}
+                    <ArrowRight style={{ width: 14, height: 14 }} />
+                  </Link>
+                </div>
+              </Reveal>
+
+              {/* Right: compliance dashboard card - fully responsive */}
+              <Reveal delay={100}>
+                <div style={{
+                  background: "rgba(255,255,255,0.04)",
+                  border: "1px solid rgba(201,168,76,0.15)",
+                  borderRadius: "var(--radius-xl)",
+                  overflow: "hidden",
+                  width: "100%",
+                }}>
+                  {/* Card header - responsive padding */}
+                  <div style={{
+                    padding: "clamp(12px, 2vw, 14px) clamp(16px, 3vw, 20px)",
+                    borderBottom: "1px solid rgba(255,255,255,0.06)",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    background: "rgba(201,168,76,0.04)",
+                    flexWrap: "wrap",
+                    gap: 8,
+                  }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                      <ShieldCheck style={{ width: 13, height: 13, color: "var(--gold)", flexShrink: 0 }} />
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "clamp(7px, 2vw, 8.5px)", color: "rgba(255,255,255,0.45)", letterSpacing: "0.16em", textTransform: "uppercase" }}>
+                        {lang === "en" ? "Compliance Services" : "अनुपालन सेवाएं"}
+                      </span>
+                    </div>
+                    <div style={{
+                      padding: "3px 10px", borderRadius: 100,
+                      background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.2)",
+                      fontFamily: "var(--mono)", fontSize: "clamp(6px, 1.8vw, 7.5px)", color: "#4ade80", letterSpacing: "0.1em",
+                      whiteSpace: "nowrap",
+                    }}>
+                      {lang === "en" ? "Active" : "सक्रिय"}
+                    </div>
+                  </div>
+
+                  {/* Compliance items - responsive padding and layout */}
+                  <div style={{
+                    padding: "clamp(12px, 2vw, 16px)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8
+                  }}>
+                    {[
+                      { icon: <Users style={{ width: 13, height: 13 }} />, en: "POSH Compliance", hi: "POSH अनुपालन", tagEn: "Mandatory", tagHi: "अनिवार्य" },
+                      { icon: <Store style={{ width: 13, height: 13 }} />, en: "FSSAI Registration", hi: "FSSAI पंजीकरण", tagEn: "Food business", tagHi: "खाद्य व्यवसाय" },
+                      { icon: <Landmark style={{ width: 13, height: 13 }} />, en: "MSME Registration", hi: "MSME पंजीकरण", tagEn: "Free govt scheme", tagHi: "सरकारी योजना" },
+                      { icon: <Building2 style={{ width: 13, height: 13 }} />, en: "Shop & Establishment", hi: "शॉप एंड एस्टेब्लिशमेंट", tagEn: "Required", tagHi: "आवश्यक" },
+                      { icon: <HardHat style={{ width: 13, height: 13 }} />, en: "Labour Compliance", hi: "श्रम अनुपालन", tagEn: "HR protection", tagHi: "एचआर सुरक्षा" },
+                      { icon: <FileText style={{ width: 13, height: 13 }} />, en: "Legal Documentation", hi: "कानूनी दस्तावेज़ीकरण", tagEn: "Contracts & policies", tagHi: "अनुबंध" },
+                    ].map((item, idx) => (
+                      <div key={item.en} className="compliance-item" style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "clamp(10px, 2vw, 12px)",
+                        padding: "clamp(12px, 2vw, 16px) clamp(12px, 2vw, 18px)",
+                        border: "1px solid rgba(201,168,76,0.15)",
+                        borderRadius: "var(--radius)",
+                        background: "rgba(255,255,255,0.05)",
+                        transition: "all 0.22s cubic-bezier(0.16,1,0.3,1)",
+                        cursor: "default",
+                        flexWrap: "wrap",
+                      }}>
+                        <div style={{
+                          width: "clamp(28px, 5vw, 32px)",
+                          height: "clamp(28px, 5vw, 32px)",
+                          borderRadius: 8, flexShrink: 0,
+                          background: "rgba(201,168,76,0.08)",
+                          border: "1px solid rgba(201,168,76,0.15)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          color: "var(--gold)",
+                        }}>
+                          {item.icon}
+                        </div>
+                        <div style={{ flex: 1, minWidth: "120px" }}>
+                          <div style={{
+                            fontFamily: "var(--sans)",
+                            fontSize: "clamp(11px, 2.5vw, 12.5px)",
+                            fontWeight: 600,
+                            color: "rgba(255,255,255,0.75)",
+                            lineHeight: 1.3,
+                          }}>
+                            {lang === "en" ? item.en : item.hi}
+                          </div>
+                          <div style={{
+                            fontFamily: "var(--mono)",
+                            fontSize: "clamp(7px, 1.8vw, 8px)",
+                            color: "rgba(255,255,255,0.25)",
+                            letterSpacing: "0.08em",
+                            marginTop: 2,
+                            lineHeight: 1.4,
+                          }}>
+                            {lang === "en" ? item.tagEn : item.tagHi}
+                          </div>
+                        </div>
+                        <ChevronRight style={{
+                          width: "clamp(10px, 2vw, 12px)",
+                          height: "clamp(10px, 2vw, 12px)",
+                          color: "rgba(255,255,255,0.2)",
+                          flexShrink: 0
+                        }} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Card footer - responsive */}
+                  <div style={{
+                    padding: "clamp(10px, 2vw, 14px) clamp(16px, 3vw, 20px)",
+                    borderTop: "1px solid rgba(255,255,255,0.06)",
+                    display: "flex", alignItems: "center", justifyContent: "space-between",
+                    background: "rgba(201,168,76,0.03)",
+                    flexWrap: "wrap",
+                    gap: 8,
+                  }}>
+                    <span style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "clamp(7px, 2vw, 8px)",
+                      color: "rgba(255,255,255,0.25)",
+                      letterSpacing: "0.1em",
+                      lineHeight: 1.4,
+                    }}>
+                      {lang === "en" ? "Expert-assisted · Pan India" : "विशेषज्ञ-सहायता · पूरे भारत"}
+                    </span>
+                    <Link href="/compliance" style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "clamp(7px, 2vw, 8.5px)",
+                      fontWeight: 600,
+                      color: "var(--gold-lt)",
+                      textDecoration: "none",
+                      letterSpacing: "0.08em",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 5,
+                      whiteSpace: "nowrap",
+                    }}>
+                      {lang === "en" ? "View all" : "सभी देखें"}
+                      <ArrowRight style={{ width: 10, height: 10 }} />
+                    </Link>
+                  </div>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
             STARTUP SECTION
         ═══════════════════════════════════════════════════════════════════════ */}
         <section className="section-pad" style={{
@@ -1370,7 +2032,6 @@ export default function HomePage() {
           borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)",
           position: "relative", overflow: "hidden",
         }}>
-          {/* Decorative corner ornament */}
           <div style={{
             position: "absolute", right: 0, bottom: 0,
             width: 360, height: 360,
@@ -1517,12 +2178,10 @@ export default function HomePage() {
               ].map((item, i) => (
                 <Reveal key={item.en} delay={i * 75}>
                   <div className="card" style={{ padding: "34px 30px", position: "relative", overflow: "hidden", height: "100%" }}>
-                    {/* Gold top accent */}
                     <div style={{
                       position: "absolute", top: 0, left: 0, right: 0, height: 3,
                       background: "linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt))",
                     }} />
-                    {/* Tag */}
                     <div style={{
                       display: "inline-flex", alignItems: "center",
                       padding: "3px 11px",
@@ -1573,30 +2232,23 @@ export default function HomePage() {
             TESTIMONIALS
         ═══════════════════════════════════════════════════════════════════════ */}
         <section className="section-pad" style={{
-          background: "var(--ink)", borderTop: "1px solid rgba(255,255,255,0.04)",
+          background: "var(--ink-9)",
+          borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)",
           position: "relative", overflow: "hidden",
         }}>
-          <div style={{
-            position: "absolute", inset: 0,
-            backgroundImage: "linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px)",
-            backgroundSize: "60px 60px", pointerEvents: "none",
-          }} />
-
           <div className="max-w" style={{ padding: "0 28px", position: "relative", zIndex: 1 }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 56 }}>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-                  <span className="eyebrow" style={{ color: "var(--gold)", }}>
-                    {lang === "en" ? "Client stories" : "ग्राहक कहानियां"}
-                  </span>
+                  <span className="eyebrow">{lang === "en" ? "Client stories" : "ग्राहक कहानियां"}</span>
                 </div>
                 <h2 style={{
                   fontFamily: "var(--serif)",
                   fontSize: "clamp(26px, 3.8vw, 48px)",
-                  fontWeight: 600, letterSpacing: "-0.022em", color: "white",
+                  fontWeight: 600, letterSpacing: "-0.022em", color: "var(--ink)",
                 }}>
                   {lang === "en" ? "Trusted across" : "पूरे"}{" "}
-                  <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>
                     {lang === "en" ? "India." : "भारत में विश्वसनीय।"}
                   </span>
                 </h2>
@@ -1606,70 +2258,54 @@ export default function HomePage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: 18 }}>
               {testimonials.map((item, i) => (
                 <Reveal key={item.name} delay={i * 75}>
-                  <div style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    borderRadius: "var(--radius-lg)",
-                    padding: "32px 28px",
-                    height: "100%", position: "relative", overflow: "hidden",
-                    transition: "all 0.28s cubic-bezier(0.16,1,0.3,1)",
+                  <div className="card" style={{
+                    padding: "32px 28px", height: "100%", position: "relative", overflow: "hidden",
                     cursor: "default",
-                  }}
-                    onMouseEnter={e => {
-                      const d = e.currentTarget as HTMLDivElement
-                      d.style.background = "rgba(255,255,255,0.07)"
-                      d.style.borderColor = "rgba(201,168,76,0.2)"
-                    }}
-                    onMouseLeave={e => {
-                      const d = e.currentTarget as HTMLDivElement
-                      d.style.background = "rgba(255,255,255,0.04)"
-                      d.style.borderColor = "rgba(255,255,255,0.08)"
-                    }}>
-                    {/* Large quote */}
+                  }}>
                     <div style={{
                       position: "absolute", top: 10, left: 20,
                       fontFamily: "var(--serif)", fontSize: "72px", lineHeight: 1,
-                      color: "rgba(201,168,76,0.08)", userSelect: "none",
+                      color: "rgba(201,168,76,0.07)", userSelect: "none",
                       pointerEvents: "none",
                     }}>"</div>
                     <div style={{ display: "flex", gap: 2, marginBottom: 18 }}>
                       {[...Array(5)].map((_, j) => (
                         <Star key={j} style={{
                           width: 12, height: 12,
-                          fill: j < item.rating ? "var(--gold)" : "rgba(255,255,255,0.1)",
-                          color: j < item.rating ? "var(--gold)" : "rgba(255,255,255,0.1)",
+                          fill: j < item.rating ? "var(--gold)" : "var(--ink-7)",
+                          color: j < item.rating ? "var(--gold)" : "var(--ink-7)",
                         }} />
                       ))}
                     </div>
                     <p style={{
                       fontFamily: "var(--serif)", fontSize: "16px", fontStyle: "italic",
-                      fontWeight: 300, color: "rgba(255,255,255,0.75)",
+                      fontWeight: 300, color: "var(--ink-3)",
                       lineHeight: 1.8, marginBottom: 24,
                     }}>
                       {lang === "en" ? item.textEn : item.textHi}
                     </p>
                     <div style={{
                       display: "flex", alignItems: "center", justifyContent: "space-between",
-                      paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.08)",
+                      paddingTop: 18, borderTop: "1px solid var(--ink-8)",
                       flexWrap: "wrap", gap: 10,
                     }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                         <div style={{
                           width: 36, height: 36, borderRadius: "50%",
-                          background: "rgba(201,168,76,0.12)", border: "1px solid rgba(201,168,76,0.25)",
+                          background: "var(--ink)", border: "1px solid var(--ink-6)",
                           display: "flex", alignItems: "center", justifyContent: "center",
                           fontFamily: "var(--mono)", fontSize: "9.5px", fontWeight: 600, color: "var(--gold)", flexShrink: 0,
                         }}>{item.avatar}</div>
                         <div>
-                          <div style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "white" }}>{item.name}</div>
-                          <div style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "rgba(255,255,255,0.35)", marginTop: 2 }}>{item.location}</div>
+                          <div style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "var(--ink)" }}>{item.name}</div>
+                          <div style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", marginTop: 2 }}>{item.location}</div>
                         </div>
                       </div>
                       <div style={{
                         display: "flex", alignItems: "center", gap: 5,
-                        fontFamily: "var(--mono)", fontSize: "8px", color: "#4ade80",
-                        background: "rgba(74,222,128,0.08)", padding: "4px 10px",
-                        borderRadius: 100, border: "1px solid rgba(74,222,128,0.2)",
+                        fontFamily: "var(--mono)", fontSize: "8px", color: "var(--green)",
+                        background: "#f0fdf4", padding: "4px 10px",
+                        borderRadius: 100, border: "1px solid #bbf7d0",
                       }}>
                         <CheckCircle style={{ width: 8, height: 8 }} />
                         {lang === "en" ? "Verified" : "सत्यापित"}
@@ -1756,7 +2392,7 @@ export default function HomePage() {
                 fontWeight: 600,
                 color: "var(--ink)",
                 letterSpacing: "-0.028em",
-                lineHeight: 1.4,        // Changed from 1.08 to 1.4 for Hindi support
+                lineHeight: 1.4,
                 marginBottom: 18,
               }}>
                 {lang === "en" ? "From confusion" : "भ्रम से"}<br />
@@ -1764,8 +2400,8 @@ export default function HomePage() {
                   fontStyle: "italic",
                   fontWeight: 300,
                   display: "inline-block",
-                  lineHeight: 1.4,      // Match parent line-height
-                  paddingTop: "0.15rem", // Small top padding to prevent cropping
+                  lineHeight: 1.4,
+                  paddingTop: "0.15rem",
                 }}>
                   {lang === "en" ? "to action." : "कार्रवाई तक।"}
                 </span>
@@ -1774,11 +2410,11 @@ export default function HomePage() {
               <p style={{
                 fontFamily: "var(--sans)", fontSize: "15px",
                 color: "var(--ink-4)", lineHeight: 1.9,
-                maxWidth: 440, margin: "0 auto 40px", fontWeight: 300,
+                maxWidth: 480, margin: "0 auto 40px", fontWeight: 300,
               }}>
                 {lang === "en"
-                  ? "Join thousands of Indians who took their next legal step with NyayMitra. Free AI consultation, verified lawyers, transparent pricing."
-                  : "हजारों भारतीयों से जुड़ें। मुफ्त एआई परामर्श, सत्यापित वकील, पारदर्शी मूल्य।"}
+                  ? "Individuals, startups & businesses NyayMitra is your legal operating system. Free AI consultation, verified lawyers, transparent pricing."
+                  : "व्यक्ति, स्टार्टअप और व्यवसाय न्यायमित्र आपका कानूनी ऑपरेटिंग सिस्टम है।"}
               </p>
 
               <div className="cta-row">
@@ -1787,19 +2423,22 @@ export default function HomePage() {
                   {lang === "en" ? "Get Help on WhatsApp" : "व्हाट्सएप पर मदद लें"}
                 </a>
                 <Link href="/startup-legal" className="btn btn-ghost" style={{ textDecoration: "none" }}>
-                  {lang === "en" ? "For Startups →" : "स्टार्टअप्स के लिए →"}
+                  {lang === "en" ? "Startup Legal →" : "स्टार्टअप कानूनी →"}
+                </Link>
+                <Link href="/compliance" className="btn btn-ghost" style={{ textDecoration: "none" }}>
+                  {lang === "en" ? "Compliance →" : "अनुपालन →"}
                 </Link>
               </div>
 
-              {/* Small trust row */}
               <div style={{
                 display: "flex", alignItems: "center", justifyContent: "center",
                 gap: 24, marginTop: 36, flexWrap: "wrap",
               }}>
                 {[
-                  { icon: <Shield style={{ width: 10, height: 10 }} />, en: "Bar Council Verified", hi: "बार काउंसिल सत्यापित" },
+                  { icon: <BadgeCheck style={{ width: 10, height: 10 }} />, en: "Verified Legal Experts", hi: "सत्यापित कानूनी विशेषज्ञ" },
                   { icon: <Star style={{ width: 10, height: 10 }} />, en: "4.9★ Rated", hi: "4.9★ रेटेड" },
                   { icon: <Zap style={{ width: 10, height: 10 }} />, en: "< 2 min Response", hi: "< 2 मिनट प्रतिक्रिया" },
+                  { icon: <TrendingUp style={{ width: 10, height: 10 }} />, en: "Startup Friendly", hi: "स्टार्टअप अनुकूल" },
                 ].map(t => (
                   <div key={t.en} style={{
                     display: "flex", alignItems: "center", gap: 6,
@@ -1824,7 +2463,6 @@ export default function HomePage() {
           padding: "72px 28px 40px",
           position: "relative", overflow: "hidden",
         }}>
-          {/* Subtle grid */}
           <div style={{
             position: "absolute", inset: 0,
             backgroundImage: "linear-gradient(rgba(201,168,76,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.02) 1px, transparent 1px)",
@@ -1846,7 +2484,7 @@ export default function HomePage() {
                   <div>
                     <div style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "white", lineHeight: 1, letterSpacing: "-0.02em" }}>NyayMitra</div>
                     <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "rgba(201,168,76,0.6)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2 }}>
-                      {lang === "en" ? "Legal Tech · India" : "कानूनी तकनीक · भारत"}
+                      {lang === "en" ? "Legal OS · India" : "कानूनी ओएस · भारत"}
                     </div>
                   </div>
                 </Link>
@@ -1855,7 +2493,7 @@ export default function HomePage() {
                   color: "rgba(255,255,255,0.35)", lineHeight: 1.75,
                   maxWidth: 240, marginBottom: 22, fontWeight: 300,
                 }}>
-                  {lang === "en" ? "Making legal help accessible to every Indian. From confusion to action." : "हर भारतीय के लिए कानूनी मदद सुलभ। भ्रम से कार्रवाई तक।"}
+                  {lang === "en" ? "Legal operating system for individuals, startups & businesses. From confusion to action." : "व्यक्तियों, स्टार्टअप और व्यवसायों के लिए कानूनी ओएस।"}
                 </p>
                 <address style={{ fontStyle: "normal" }}>
                   {[
@@ -1892,6 +2530,8 @@ export default function HomePage() {
                     { href: "/about", labelEn: "About NyayMitra", labelHi: "न्यायमित्र के बारे में" },
                     { href: "/services", labelEn: "Services", labelHi: "सेवाएं" },
                     { href: "/lawyers", labelEn: "Find Lawyers", labelHi: "वकील खोजें" },
+                    { href: "/startup-legal", labelEn: "Startup Legal", labelHi: "स्टार्टअप कानूनी" },
+                    { href: "/compliance", labelEn: "Compliance", labelHi: "अनुपालन" },
                     { href: "/affidavit-online-india", labelEn: "Affidavit Online", labelHi: "ऑनलाइन हलफनामा" },
                     { href: "/auth/signup", labelEn: "Sign Up", labelHi: "साइन अप" },
                   ].map(l => (
@@ -1985,12 +2625,52 @@ export default function HomePage() {
               <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
                 © 2026 NyayMitra. {lang === "en" ? "All rights reserved." : "सर्वाधिकार सुरक्षित।"}
               </p>
-              <p style={{
-                fontFamily: "var(--sans)", fontSize: "10.5px",
-                color: "rgba(255,255,255,0.18)", maxWidth: 520,
-                lineHeight: 1.7, textAlign: "right", fontWeight: 300,
-              }}>
-                <span style={{ color: "rgba(192,57,43,0.8)", fontWeight: 600 }}>{lang === "en" ? "Disclaimer: " : "अस्वीकरण: "}</span>
+              <p
+                style={{
+                  fontFamily: "var(--sans)",
+                  fontSize:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? "11.5px"
+                      : "10.5px",
+
+                  color: "rgba(255,255,255,0.28)",
+
+                  maxWidth:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? "100%"
+                      : 520,
+
+                  lineHeight: 1.8,
+
+                  textAlign:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? "left"
+                      : "right",
+
+                  fontWeight: 300,
+
+                  padding:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? "0 6px"
+                      : 0,
+
+                  marginTop:
+                    typeof window !== "undefined" && window.innerWidth < 768
+                      ? 18
+                      : 0,
+                }}
+              >
+                <span
+                  style={{
+                    color: "rgba(192,57,43,0.9)",
+                    fontWeight: 600,
+                  }}
+                >
+                  {lang === "en"
+                    ? "Disclaimer: "
+                    : "अस्वीकरण: "}
+                </span>
+
                 {lang === "en"
                   ? "NyayMitra is a technology platform. We do not act as a law firm. All consultations and notary services are delivered by licensed third-party professionals."
                   : "न्यायमित्र एक प्रौद्योगिकी मंच है। हम कानूनी फर्म नहीं हैं।"}
