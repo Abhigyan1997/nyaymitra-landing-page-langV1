@@ -567,9 +567,9 @@ export default function ServicesPage() {
                     <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontWeight: 700, color: WHITE }}>
                       Nyay<span style={{ color: GOLD }}>Mitra</span>
                     </div>
-                    <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
+                    {/* <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
                       Legal Tech · India
-                    </div>
+                    </div> */}
                   </div>
                 </Link>
                 <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.65, maxWidth: 280 }}>
