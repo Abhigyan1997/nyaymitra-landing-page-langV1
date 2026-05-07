@@ -2483,9 +2483,9 @@ export default function HomePage() {
                   </div>
                   <div>
                     <div style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "white", lineHeight: 1, letterSpacing: "-0.02em" }}>NyayMitra</div>
-                    <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "rgba(201,168,76,0.6)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2 }}>
+                    {/* <div style={{ fontFamily: "var(--mono)", fontSize: "7px", color: "rgba(201,168,76,0.6)", letterSpacing: "0.18em", textTransform: "uppercase", marginTop: 2 }}>
                       {lang === "en" ? "Legal OS · India" : "कानूनी ओएस · भारत"}
-                    </div>
+                    </div> */}
                   </div>
                 </Link>
                 <p style={{
