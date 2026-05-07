@@ -277,7 +277,7 @@ export default function LawyerDetailsPage() {
                                 </div>
                             </div>
                             <div className="lp-hero-right">
-                                <div className="lp-rating-block">
+                                {/* <div className="lp-rating-block">
                                     <div className="lp-stars">
                                         {ratingStars.map((filled, i) => (
                                             <Star key={i} size={14} className={filled ? "star-filled" : "star-empty"} />
@@ -285,7 +285,7 @@ export default function LawyerDetailsPage() {
                                     </div>
                                     <span className="lp-rating-num">{lawyer.averageRating.toFixed(1)}</span>
                                     <span className="lp-rating-count">({lawyer.totalReviews})</span>
-                                </div>
+                                </div> */}
                                 <div className="lp-fee-hero">
                                     <span className="lp-fee-label">Consultation Fee</span>
                                     <span className="lp-fee-amt">₹{lawyer.consultationFee.toLocaleString()}</span>
