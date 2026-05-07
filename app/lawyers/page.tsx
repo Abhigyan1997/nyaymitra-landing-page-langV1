@@ -876,7 +876,7 @@ export default function LawyersPage() {
             </div>
             <div>
               <div style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 700, color: "var(--ink)" }}>NyayMitra</div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: "6.5px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase" }}>Legal Tech · India</div>
+              {/* <div style={{ fontFamily: "var(--mono)", fontSize: "6.5px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase" }}>Legal Tech · India</div> */}
             </div>
           </Link>
 

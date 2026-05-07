@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { Scale } from "lucide-react"
 
 // ─────────────────────────────────────────────
 // ICON COMPONENTS (inline SVGs — no lucide bundle needed)
@@ -217,17 +218,60 @@ const Reveal = ({ children, delay = 0, className = "", style: extraStyle = {} }:
 // LOGO COMPONENT (Scale of Justice + NyayMitra)
 // ─────────────────────────────────────────────
 
-const Logo = ({ onClick, className = "" }: { onClick?: () => void; className?: string }) => (
-    <div onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 8, cursor: "pointer", flexShrink: 0 }} className={className}>
-        <div style={{ width: 34, height: 34, background: "var(--ink)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <Icon d={Icons.scale} size={15} color="#fff" />
+const Logo = ({
+    onClick,
+    className = "",
+}: {
+    onClick?: () => void;
+    className?: string;
+}) => (
+    <div
+        onClick={onClick}
+        style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            cursor: "pointer",
+            flexShrink: 0,
+        }}
+        className={className}
+    >
+        {/* Scale Icon */}
+        <div
+            style={{
+                width: 34,
+                height: 34,
+                background: "var(--ink)",
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <Scale
+                style={{
+                    color: "white",
+                    width: 15,
+                    height: 15,
+                }}
+            />
         </div>
+
+        {/* Logo Text */}
         <div>
-            <div style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 700, color: "var(--ink)" }}>
-                Nyay<span style={{ color: "var(--gold-dk)" }}>Mitra</span>
-            </div>
-            <div style={{ fontFamily: "var(--mono)", fontSize: "6.5px", color: "var(--gold-dk)", letterSpacing: "0.14em", textTransform: "uppercase" }}>
-                Legal Tech · India
+            <div
+                style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "17px",
+                    fontWeight: 700,
+                    color: "var(--ink)",
+                    letterSpacing: "-0.02em",
+                }}
+            >
+                Nyay
+                <span style={{ color: "var(--gold-dk)" }}>
+                    Mitra
+                </span>
             </div>
         </div>
     </div>
