@@ -1,100 +1,292 @@
 // app/shipping-policy/page.tsx
 "use client"
 
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import {
+    Shield, Lock, Truck, Send, Clock, MapPin, FileText, Mail, Phone,
+    Package, CheckCircle, AlertCircle, Info, ArrowLeft, Sparkles,
+    Menu, X, ChevronRight, BookOpen, Globe, Scale, Users
+} from "lucide-react"
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
-const ShieldIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-5 h-5">
-        <path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z" />
-        <path d="M9 12l2 2 4-4" />
-    </svg>
+/* ─── GLOBAL STYLES (same as privacy page) ──────────────────────────────────── */
+const GlobalStyles = () => (
+    <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #0c0b09;
+      --ink-2:      #1a1916;
+      --ink-3:      #2e2c28;
+      --ink-4:      #5c5850;
+      --ink-5:      #8a8680;
+      --ink-6:      #b8b4ae;
+      --ink-7:      #e0ddd8;
+      --ink-8:      #f2f0eb;
+      --ink-9:      #faf8f4;
+      --white:      #fffefb;
+      --gold:       #c9a84c;
+      --gold-lt:    #e2c87a;
+      --gold-dk:    #8b6d22;
+      --gold-pale:  #fdf6e0;
+      --gold-rich:  #d4a843;
+      --red:        #c0392b;
+      --green:      #15803d;
+      --serif:      'Cormorant Garamond', Georgia, serif;
+      --sans:       'Outfit', system-ui, sans-serif;
+      --mono:       'DM Mono', monospace;
+      --radius:     8px;
+      --radius-lg:  14px;
+      --radius-xl:  20px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes shimmer  { 0%{background-position:-300% center} 100%{background-position:300% center} }
+    @keyframes glowPulse { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+    @keyframes mobileMenuFade {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.is-on { opacity:1; transform:translateY(0); }
+
+    .gold-text {
+      background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 7s linear infinite;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold-dk);
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-4);
+      text-decoration: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      transition: all 0.16s;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--ink-8); }
+
+    .mobile-nav-link {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink-3);
+      text-decoration: none;
+      padding: 12px 0;
+      width: 100%;
+      transition: all 0.16s;
+      border-bottom: 1px solid var(--ink-8);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-nav-link:active {
+      background: var(--ink-9);
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--ink-4);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+      cursor: pointer;
+    }
+    .sidebar-link:hover {
+      color: var(--ink);
+      background: var(--ink-9);
+      border-left-color: var(--gold);
+      padding-left: 20px;
+    }
+    .sidebar-link.active {
+      color: var(--gold-dk);
+      background: var(--gold-pale);
+      border-left-color: var(--gold);
+      font-weight: 600;
+    }
+
+    .content-card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      padding: 36px 36px;
+      transition: border-color 0.25s;
+      scroll-margin-top: 100px;
+    }
+    .content-card:hover { border-color: var(--ink-5); }
+    .content-card.gold-accent {
+      background: var(--gold-pale);
+      border-color: rgba(201,168,76,0.3);
+    }
+    .content-card.dark-accent {
+      background: var(--ink);
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .btn-ink {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-ink:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(12,11,9,0.25);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink-3);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--ink-7);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+    .btn-ghost:hover {
+      background: var(--ink-9);
+      border-color: var(--ink-5);
+      color: var(--ink);
+    }
+
+    .desktop-nav-items {
+      display: none !important;
+    }
+    .mobile-menu-button {
+      display: inline-flex !important;
+    }
+    .sidebar-wrap {
+      display: block !important;
+    }
+
+    @media (min-width: 769px) {
+      .desktop-nav-items {
+        display: flex !important;
+        align-items: center;
+        gap: 8px;
+      }
+      .mobile-menu-button {
+        display: none !important;
+      }
+      .sidebar-wrap {
+        display: block !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--ink-9); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dk); }
+    ::selection { background: var(--gold-pale); color: var(--gold-dk); }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: clamp(38px, 10vw, 64px) !important; }
+      .content-card { padding: 24px 20px !important; }
+      .layout-grid { grid-template-columns: 1fr !important; }
+      .sidebar-sticky { position: static !important; }
+      .sidebar-wrap { display: none !important; }
+      .hero-pad { padding: 56px 20px 72px !important; }
+      .main-pad { padding: 32px 20px !important; }
+      .data-grid { grid-template-columns: 1fr !important; }
+      .rights-grid { grid-template-columns: 1fr !important; }
+      .security-badge-wrap { gap: 8px !important; }
+      .footer-container { flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+      .stats-grid { grid-template-columns: 1fr !important; }
+      .service-grid { grid-template-columns: 1fr !important; }
+      .timeline-table { font-size: 11px; }
+      .timeline-table td, .timeline-table th { padding: 12px 8px !important; }
+    }
+  `}</style>
 )
 
-const ArrowRightIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M5 12h14M12 5l7 7-7 7" />
-    </svg>
-)
+/* ─── REVEAL HELPER ──────────────────────────────────────────────────────────── */
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+    const ref = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const el = ref.current; if (!el) return
+        const tid = setTimeout(() => {
+            const obs = new IntersectionObserver(([e]) => {
+                if (e.isIntersecting) { el.classList.add("is-on"); obs.disconnect() }
+            }, { threshold: 0.05, rootMargin: "0px 0px -20px 0px" })
+            obs.observe(el)
+            return () => obs.disconnect()
+        }, 60)
+        return () => clearTimeout(tid)
+    }, [])
+    return <div ref={ref} className="reveal" style={{ transitionDelay: `${delay}ms` }}>{children}</div>
+}
 
-const TruckIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <rect x="1" y="3" width="15" height="13" /><polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
-        <circle cx="5.5" cy="18.5" r="2.5" /><circle cx="18.5" cy="18.5" r="2.5" />
-    </svg>
-)
-
-const SendIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
-    </svg>
-)
-
-const ClockIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
-    </svg>
-)
-
-const MapPinIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
-    </svg>
-)
-
-const FileIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
-    </svg>
-)
-
-const MailIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" />
-    </svg>
-)
-
-const PhoneIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.77 12 19.79 19.79 0 0 1 1.72 3.34 2 2 0 0 1 3.69 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.66a16 16 0 0 0 6.29 6.29l1.02-1.02a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
-    </svg>
-)
-
-const PackageIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <line x1="16.5" y1="9.4" x2="7.5" y2="4.21" /><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" />
-    </svg>
-)
-
-const CheckIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-4 h-4">
-        <path d="M20 6L9 17l-5-5" />
-    </svg>
-)
-
-const AlertIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-5 h-5">
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-)
-
-const InfoIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <circle cx="12" cy="12" r="10" /><path d="M12 8v4m0 4h.01" />
-    </svg>
-)
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const SECTIONS = [
-    { id: "digital", label: "Digital Delivery", icon: SendIcon },
-    { id: "physical", label: "Physical Courier", icon: TruckIcon },
-    { id: "timeline", label: "Delivery Timeline", icon: ClockIcon },
-    { id: "tracking", label: "Order Tracking", icon: MapPinIcon },
-    { id: "faq", label: "FAQ", icon: FileIcon },
-    { id: "contact", label: "Contact Support", icon: MailIcon },
+/* ─── DATA ───────────────────────────────────────────────────────────────────── */
+const NAV_ITEMS = [
+    { href: "#digital", label: "Digital Delivery", icon: Send },
+    { href: "#physical", label: "Physical Courier", icon: Truck },
+    { href: "#timeline", label: "Delivery Timeline", icon: Clock },
+    { href: "#tracking", label: "Order Tracking", icon: MapPin },
+    { href: "#faq", label: "FAQ", icon: FileText },
+    { href: "#contact", label: "Contact Support", icon: Mail },
 ]
 
 const DIGITAL_SERVICES = [
@@ -106,7 +298,7 @@ const DIGITAL_SERVICES = [
             "WhatsApp delivery option available",
             "Downloadable PDF format with digital signatures",
         ],
-        icon: FileIcon,
+        icon: FileText,
     },
     {
         title: "Legal Reviews & Consultations",
@@ -116,7 +308,7 @@ const DIGITAL_SERVICES = [
             "Follow-up consultation available via video/chat",
             "Document version tracking included",
         ],
-        icon: ShieldIcon,
+        icon: Shield,
     },
     {
         title: "Remote Notarization",
@@ -126,7 +318,7 @@ const DIGITAL_SERVICES = [
             "Blockchain-verified certificates",
             "Physical courier option available",
         ],
-        icon: CheckIcon,
+        icon: CheckCircle,
     },
 ]
 
@@ -168,405 +360,940 @@ const FAQS = [
     },
 ]
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+const STATS = [
+    { value: "Instant", label: "Digital Delivery", icon: Send },
+    { value: "24/7", label: "Tracking Available", icon: MapPin },
+    { value: "100%", label: "Secure Delivery", icon: Shield },
+    { value: "50K+", label: "Happy Customers", icon: Users },
+]
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+/* ─── SECTION HEADER ─────────────────────────────────────────────────────────── */
+function SectionHeader({ eyebrow, title, italic, icon: Icon }: {
+    eyebrow?: string; title: string; italic?: string; icon: any
+}) {
     return (
-        <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-3">
-            {children}
-        </span>
-    )
-}
-
-function ContentCard({ id, children, className = "" }: { id?: string; children: React.ReactNode; className?: string }) {
-    return (
-        <section id={id} className={`bg-white border border-black/[0.07] rounded-xl p-7 md:p-9 ${className}`}>
-            {children}
-        </section>
-    )
-}
-
-function CardHeading({ icon: Icon, label }: { icon: React.FC; label: string }) {
-    return (
-        <div className="flex items-center gap-3 mb-5">
-            <div className="w-9 h-9 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b]">
-                <Icon />
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 28 }}>
+            <div style={{
+                width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "var(--gold-dk)",
+            }}>
+                <Icon style={{ width: 18, height: 18 }} />
             </div>
-            <h3 className="font-serif text-2xl text-[#0d1117]" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                {label}
-            </h3>
+            <div>
+                {eyebrow && (
+                    <span style={{
+                        display: "block",
+                        fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                        letterSpacing: "0.22em", textTransform: "uppercase",
+                        color: "var(--gold-dk)", marginBottom: 6,
+                    }}>{eyebrow}</span>
+                )}
+                <h2 style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(20px, 3vw, 26px)",
+                    fontWeight: 600, color: "var(--ink)",
+                    letterSpacing: "-0.015em", lineHeight: 1.2,
+                }}>
+                    {title}{" "}
+                    {italic && <em style={{ fontWeight: 300, color: "var(--ink-3)" }}>{italic}</em>}
+                </h2>
+            </div>
         </div>
     )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/* ─── ORNAMENT LINE ──────────────────────────────────────────────────────────── */
+const OrnamentLine = () => (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+        <div style={{ width: 40, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+        <Truck style={{ width: 9, height: 9, color: "var(--gold)" }} />
+        <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+    </div>
+)
 
+/* ─── STAT CARD ──────────────────────────────────────────────────────────────── */
+function StatCard({ value, label, icon: Icon }: { value: string; label: string; icon: any }) {
+    return (
+        <div style={{
+            padding: "20px 16px",
+            textAlign: "center",
+            border: "1px solid var(--ink-7)",
+            borderRadius: "var(--radius)",
+            background: "var(--white)",
+            transition: "all 0.22s",
+        }}
+            onMouseEnter={e => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.borderColor = "var(--gold)"
+                el.style.transform = "translateY(-3px)"
+                el.style.boxShadow = "0 8px 24px rgba(201,168,76,0.08)"
+            }}
+            onMouseLeave={e => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.borderColor = "var(--ink-7)"
+                el.style.transform = "translateY(0)"
+                el.style.boxShadow = "none"
+            }}
+        >
+            <div style={{
+                width: 40, height: 40, borderRadius: 10,
+                background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "var(--gold-dk)", margin: "0 auto 12px auto",
+            }}>
+                <Icon style={{ width: 16, height: 16 }} />
+            </div>
+            <p style={{
+                fontFamily: "var(--serif)",
+                fontSize: "28px", fontWeight: 600, color: "var(--ink)",
+                lineHeight: 1.2, marginBottom: 4,
+            }}>{value}</p>
+            <p style={{ fontSize: "11px", color: "var(--ink-5)", letterSpacing: "0.03em" }}>{label}</p>
+        </div>
+    )
+}
+
+/* ─── DIGITAL SERVICE CARD ───────────────────────────────────────────────────── */
+function DigitalServiceCard({ title, items, icon: Icon }: { title: string; items: string[]; icon: any }) {
+    return (
+        <div style={{
+            padding: "22px",
+            border: "1px solid var(--ink-7)",
+            borderRadius: "var(--radius)",
+            background: "var(--white)",
+            transition: "all 0.22s",
+        }}
+            onMouseEnter={e => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.borderColor = "var(--gold)"
+                el.style.transform = "translateY(-2px)"
+                el.style.boxShadow = "0 8px 24px rgba(201,168,76,0.08)"
+            }}
+            onMouseLeave={e => {
+                const el = e.currentTarget as HTMLDivElement
+                el.style.borderColor = "var(--ink-7)"
+                el.style.transform = "translateY(0)"
+                el.style.boxShadow = "none"
+            }}
+        >
+            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{
+                    width: 36, height: 36, borderRadius: 9,
+                    background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: "var(--gold-dk)",
+                }}>
+                    <Icon style={{ width: 14, height: 14 }} />
+                </div>
+                <h4 style={{
+                    fontFamily: "var(--serif)", fontSize: "16px",
+                    fontWeight: 600, color: "var(--ink)", margin: 0,
+                }}>{title}</h4>
+            </div>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                {items.map((item, i) => (
+                    <li key={i} style={{
+                        display: "flex", alignItems: "flex-start", gap: 8,
+                        padding: "6px 0", fontSize: "12.5px", color: "var(--ink-4)",
+                        borderBottom: i < items.length - 1 ? "1px solid var(--ink-8)" : "none",
+                    }}>
+                        <span style={{
+                            width: 4, height: 4, borderRadius: "50%",
+                            background: "var(--gold)", flexShrink: 0, marginTop: 6,
+                        }} />
+                        {item}
+                    </li>
+                ))}
+            </ul>
+        </div>
+    )
+}
+
+/* ─── PAGE ───────────────────────────────────────────────────────────────────── */
 export default function ShippingPolicyPage() {
-    const [mounted, setMounted] = useState(false)
-    useEffect(() => setMounted(true), [])
-    if (!mounted) return null
+    const [activeSection, setActiveSection] = useState("digital")
+    const [scrolled, setScrolled] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    useEffect(() => {
+        const onScroll = () => {
+            setScrolled(window.scrollY > 8)
+            const sections = ["digital", "physical", "timeline", "tracking", "faq", "contact"]
+            for (const id of [...sections].reverse()) {
+                const el = document.getElementById(id)
+                if (el && window.scrollY >= el.offsetTop - 120) {
+                    setActiveSection(id); break
+                }
+            }
+        }
+        window.addEventListener("scroll", onScroll, { passive: true })
+        return () => window.removeEventListener("scroll", onScroll)
+    }, [])
+
+    const handleMobileLinkClick = () => {
+        setMobileMenuOpen(false)
+    }
 
     return (
         <>
-            <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
-        .font-serif { font-family: 'DM Serif Display', Georgia, serif !important; }
-        body { font-family: 'DM Sans', system-ui, sans-serif; }
-        html { scroll-behavior: smooth; }
-      `}</style>
+            <GlobalStyles />
+            <div style={{ minHeight: "100vh", background: "var(--white)" }}>
 
-            <div className="min-h-screen bg-white text-[#0d1117]" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+                {/* ── NAVBAR ───────────────────────────────────────────────────────────── */}
+                <nav style={{
+                    position: "sticky", top: 0, zIndex: 100,
+                    background: scrolled ? "rgba(255,254,251,0.96)" : "var(--white)",
+                    backdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
+                    borderBottom: `1px solid ${scrolled ? "var(--ink-7)" : "transparent"}`,
+                    boxShadow: scrolled ? "0 2px 24px rgba(12,11,9,0.06)" : "none",
+                    transition: "all 0.32s cubic-bezier(0.16,1,0.3,1)",
+                }}>
+                    <div style={{
+                        maxWidth: 1200, margin: "0 auto", padding: "0 20px",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        height: 66,
+                    }}>
+                        {/* Logo */}
+                        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 11, textDecoration: "none", flexShrink: 0 }}>
+                            <div style={{
+                                width: 38, height: 38, borderRadius: 10,
+                                background: "var(--ink)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                boxShadow: "0 2px 12px rgba(12,11,9,0.2)",
+                                position: "relative", overflow: "hidden", flexShrink: 0,
+                            }}>
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%)",
+                                }} />
+                                <Scale style={{ color: "var(--gold)", width: 16, height: 16, position: "relative", zIndex: 1 }} />
+                            </div>
+                            <div>
+                                <div style={{
+                                    fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                                    color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em",
+                                }}>NyayMitra</div>
+                            </div>
+                        </Link>
 
-                {/* ── NAV ─────────────────────────────────────────────────────────── */}
-                <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/[0.06] h-16 flex items-center justify-between px-6 lg:px-16">
-                    <Link href="/" className="flex items-center gap-2.5 no-underline group">
-                        <div className="w-8 h-8 bg-[#1a3a6b] rounded flex items-center justify-center text-white flex-shrink-0">
-                            <ShieldIcon />
+                        {/* Desktop Navigation */}
+                        <div className="desktop-nav-items" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <Link href="/" className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                                <ArrowLeft style={{ width: 13, height: 13 }} />
+                                Home
+                            </Link>
+                            <Link href="/lawyers" className="nav-link" style={{ display: "inline-flex", alignItems: "center" }}>
+                                Find Lawyers
+                            </Link>
+                            <Link href="/legal-ai" className="btn-ink" style={{ display: "inline-flex", alignItems: "center" }}>
+                                <Sparkles style={{ width: 13, height: 13 }} />
+                                Legal AI
+                            </Link>
                         </div>
-                        <span className="font-serif text-xl text-[#0d1117]" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
-                            NyayMitra
-                        </span>
-                    </Link>
-                    <div className="flex items-center gap-2">
-                        <Link
-                            href="/lawyers"
-                            className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded border border-black/10 text-[#374151] hover:bg-gray-50 transition-colors"
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="mobile-menu-button"
+                            style={{
+                                background: "transparent",
+                                border: "none",
+                                cursor: "pointer",
+                                padding: "8px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: "8px",
+                                transition: "all 0.2s",
+                            }}
+                            aria-label="Menu"
                         >
-                            Find Lawyers
-                        </Link>
-                        <div className="w-px h-5 bg-black/10" />
-                        <Link
-                            href="/legal-gpt"
-                            className="inline-flex items-center gap-1.5 text-sm font-medium px-4 py-2 rounded bg-[#1a3a6b] text-white hover:bg-[#2952a3] transition-colors"
-                        >
-                            Get AI Advice
-                        </Link>
+                            {mobileMenuOpen ? (
+                                <X style={{ width: 22, height: 22, color: "var(--ink)" }} />
+                            ) : (
+                                <Menu style={{ width: 22, height: 22, color: "var(--ink)" }} />
+                            )}
+                        </button>
                     </div>
+
+                    {/* Mobile Menu Dropdown */}
+                    {mobileMenuOpen && (
+                        <div style={{
+                            position: "absolute",
+                            top: 66,
+                            left: 0,
+                            right: 0,
+                            background: "var(--white)",
+                            borderBottom: "1px solid var(--ink-7)",
+                            boxShadow: "0 4px 24px rgba(12,11,9,0.08)",
+                            padding: "20px",
+                            animation: "mobileMenuFade 0.3s ease-out",
+                            zIndex: 99,
+                        }}>
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 4,
+                            }}>
+                                <Link
+                                    href="/"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                    style={{ borderTop: "none" }}
+                                >
+                                    <ArrowLeft style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Home
+                                </Link>
+                                <Link
+                                    href="/lawyers"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                >
+                                    <Users style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Find Lawyers
+                                </Link>
+                                <Link
+                                    href="/legal-ai"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                    style={{ borderBottom: "none" }}
+                                >
+                                    <Sparkles style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Legal AI
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </nav>
 
-                {/* ── HERO ────────────────────────────────────────────────────────── */}
-                <section className="relative overflow-hidden bg-white px-6 lg:px-16 py-24 lg:py-36">
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            backgroundImage:
-                                "linear-gradient(rgba(13,17,23,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(13,17,23,0.05) 1px, transparent 1px)",
-                            backgroundSize: "64px 64px",
-                        }}
-                    />
-                    <div className="absolute top-0 right-0 w-[560px] h-[560px] -translate-y-1/3 translate-x-1/4 rounded-full bg-[#1a3a6b]/[0.05] blur-3xl pointer-events-none" />
-
-                    <div className="relative z-10 max-w-4xl">
-                        <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm bg-[#e8eef8] text-[#2952a3] mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#2952a3]" />
-                            Last updated{" "}
-                            {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
-                        </span>
-
-                        <h1
-                            className="font-serif text-[clamp(3rem,7vw,5.5rem)] leading-[1.05] tracking-tight text-[#0d1117] mb-6"
-                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                        >
-                            Shipping &amp; delivery,<br />
-                            <em className="not-italic text-[#1a3a6b] italic">done right.</em>
-                        </h1>
-
-                        <div className="w-16 h-0.5 bg-[#c6973f] rounded-full mb-6" />
-
-                        <p className="text-[clamp(1rem,1.8vw,1.2rem)] text-[#6b7280] max-w-xl leading-[1.75] font-light">
-                            Fast, secure, and reliable delivery of your legal documents and services — digital or physical.
-                        </p>
+                {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+                <section className="hero-pad" style={{
+                    padding: "80px 28px 96px",
+                    position: "relative", overflow: "hidden",
+                    background: "var(--white)",
+                }}>
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
+                        backgroundSize: "80px 80px", pointerEvents: "none",
+                    }} />
+                    <div style={{
+                        position: "absolute", right: "-5%", top: "5%",
+                        width: 520, height: 520, opacity: 0.03, pointerEvents: "none",
+                    }}>
+                        <Truck style={{ width: "100%", height: "100%", color: "var(--gold-dk)" }} />
                     </div>
-                </section>
 
-                <hr className="border-none border-t border-black/[0.06]" />
+                    <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+                        <div style={{ animation: "fadeUp 0.72s cubic-bezier(0.16,1,0.3,1) both" }}>
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 9,
+                                padding: "6px 16px 6px 9px",
+                                border: "1px solid var(--ink-7)", borderRadius: 100,
+                                marginBottom: 36, background: "var(--white)",
+                                boxShadow: "0 2px 12px rgba(12,11,9,0.04)",
+                            }}>
+                                <div style={{
+                                    width: 22, height: 22, borderRadius: "50%",
+                                    background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                }}>
+                                    <Truck style={{ width: 10, height: 10, color: "var(--gold-dk)" }} />
+                                </div>
+                                <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
+                                    Shipping & Delivery
+                                </span>
+                            </div>
 
-                {/* ── MAIN CONTENT ────────────────────────────────────────────────── */}
-                <section className="px-6 lg:px-16 py-20 lg:py-28">
-                    <div className="grid lg:grid-cols-[280px_1fr] gap-12 lg:gap-16 items-start">
+                            <h1 className="hero-title" style={{
+                                fontFamily: "var(--serif)",
+                                fontSize: "clamp(44px, 7vw, 80px)",
+                                fontWeight: 600, lineHeight: 1.08,
+                                letterSpacing: "-0.03em",
+                                color: "var(--ink)", marginBottom: 0,
+                            }}>
+                                Shipping & delivery,<br />
+                                <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.3 }}>
+                                    done right.
+                                </span>
+                            </h1>
 
-                        {/* ── SIDEBAR ─────────────────────────────────────────────────── */}
-                        <aside className="lg:sticky lg:top-24">
-                            <SectionLabel>Contents</SectionLabel>
-                            <p
-                                className="font-serif text-2xl text-[#0d1117] mb-6"
-                                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                            >
-                                Quick Navigation
+                            <OrnamentLine />
+
+                            <p style={{
+                                fontFamily: "var(--sans)", fontSize: "15px",
+                                color: "var(--ink-4)", lineHeight: 1.85,
+                                maxWidth: 480, marginBottom: 12, fontWeight: 300,
+                            }}>
+                                Fast, secure, and reliable delivery of your legal documents and services digital or physical.
                             </p>
 
-                            <nav className="space-y-1">
-                                {SECTIONS.map(({ id, label, icon: Icon }) => (
-                                    <a
-                                        key={id}
-                                        href={`#${id}`}
-                                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#374151] hover:text-[#1a3a6b] hover:bg-[#e8eef8] transition-all group text-sm font-medium"
-                                    >
-                                        <span className="text-[#1a3a6b]/40 group-hover:text-[#1a3a6b] transition-colors">
-                                            <Icon />
-                                        </span>
-                                        {label}
-                                        <ArrowRightIcon />
-                                    </a>
-                                ))}
-                            </nav>
-
-                            {/* Info box */}
-                            <div className="mt-8 p-5 border border-black/[0.07] rounded-xl bg-[#f8f7f4]">
-                                <div className="w-9 h-9 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] mb-3">
-                                    <PackageIcon />
-                                </div>
-                                <p className="text-[0.825rem] text-[#6b7280] leading-[1.65]">
-                                    Most NyayMitra services are delivered digitally — instantly to your inbox and dashboard.
-                                </p>
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 7,
+                                fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em",
+                            }}>
+                                <Clock style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
+                                Last updated: {new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
                             </div>
-                        </aside>
-
-                        {/* ── CONTENT AREA ────────────────────────────────────────────── */}
-                        <div className="space-y-6">
-
-                            {/* Digital Delivery */}
-                            <ContentCard id="digital">
-                                <CardHeading icon={SendIcon} label="Digital Service Delivery" />
-                                <p className="text-[0.975rem] text-[#374151] leading-[1.8] mb-6">
-                                    NyayMitra primarily offers digital legal services. Most deliverables are provided electronically for instant access and maximum convenience.
-                                </p>
-                                <div className="grid md:grid-cols-1 gap-4">
-                                    {DIGITAL_SERVICES.map((service, i) => (
-                                        <div
-                                            key={i}
-                                            className="p-5 border border-black/[0.07] rounded-xl bg-[#f8f7f4] hover:border-[#1a3a6b]/20 hover:shadow-[0_4px_16px_rgba(26,58,107,0.06)] transition-all"
-                                        >
-                                            <div className="flex items-center gap-2 mb-3">
-                                                <span className="text-[#1a3a6b]"><service.icon /></span>
-                                                <h4 className="font-semibold text-[#0d1117] text-sm">{service.title}</h4>
-                                            </div>
-                                            <ul className="space-y-2 grid sm:grid-cols-2">
-                                                {service.items.map((item, j) => (
-                                                    <li key={j} className="flex items-start gap-2 text-sm text-[#6b7280]">
-                                                        <span className="w-1 h-1 rounded-full bg-[#c6973f] mt-[7px] flex-shrink-0" />
-                                                        {item}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    ))}
-                                </div>
-                            </ContentCard>
-
-                            {/* Physical Courier */}
-                            <ContentCard id="physical">
-                                <CardHeading icon={TruckIcon} label="Physical Courier Service" />
-                                <p className="text-[0.975rem] text-[#374151] leading-[1.8] mb-6">
-                                    For printed and notarized documents requiring physical delivery, we partner with trusted courier services to ensure safe and timely delivery.
-                                </p>
-
-                                <div className="grid sm:grid-cols-2 gap-4 mb-5">
-                                    {[
-                                        { label: "Processing Time", value: "1–2", unit: "Business days after notarization", icon: PackageIcon },
-                                        { label: "Shipping Time", value: "2–3", unit: "Business days (varies by location)", icon: ClockIcon },
-                                    ].map((t, i) => (
-                                        <div key={i} className="p-6 border border-black/[0.07] rounded-xl bg-[#f8f7f4]">
-                                            <p className="text-[11px] font-semibold tracking-[0.06em] uppercase text-[#9ca3af] mb-2">{t.label}</p>
-                                            <p
-                                                className="font-serif text-[2.5rem] text-[#1a3a6b] leading-none mb-1"
-                                                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                            >
-                                                {t.value}
-                                            </p>
-                                            <p className="text-sm text-[#6b7280]">{t.unit}</p>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="flex items-start gap-3 p-4 border border-black/[0.07] rounded-xl bg-[#f8f7f4]">
-                                    <span className="text-[#1a3a6b] flex-shrink-0 mt-0.5"><MapPinIcon /></span>
-                                    <div>
-                                        <h4 className="font-semibold text-[#0d1117] text-sm mb-1">Shipping Partners</h4>
-                                        <p className="text-sm text-[#6b7280] leading-[1.65]">
-                                            We partner with leading courier services including DTDC, BlueDart, Delhivery, and India Post for pan-India delivery.
-                                        </p>
-                                    </div>
-                                </div>
-                            </ContentCard>
-
-                            {/* Delivery Timeline */}
-                            <ContentCard id="timeline">
-                                <CardHeading icon={ClockIcon} label="Delivery Timeline by Service" />
-                                <div className="overflow-x-auto rounded-xl border border-black/[0.07]">
-                                    <table className="w-full text-left text-sm">
-                                        <thead className="bg-[#f8f7f4] border-b border-black/[0.07]">
-                                            <tr>
-                                                {["Service Type", "Delivery Method", "Timeline"].map((h) => (
-                                                    <th key={h} className="px-5 py-3 text-[11px] font-semibold tracking-[0.07em] uppercase text-[#9ca3af]">
-                                                        {h}
-                                                    </th>
-                                                ))}
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {TIMELINE_ROWS.map((row, i) => (
-                                                <tr
-                                                    key={i}
-                                                    className={`border-b border-black/[0.05] last:border-0 hover:bg-[#f8f7f4] transition-colors ${i % 2 === 0 ? "bg-white" : "bg-[#fafafa]"}`}
-                                                >
-                                                    <td className="px-5 py-3.5 text-[#374151] font-medium">{row[0]}</td>
-                                                    <td className="px-5 py-3.5">
-                                                        <span className={`text-[11px] font-semibold tracking-[0.06em] uppercase px-2.5 py-1 rounded-sm inline-block ${row[1] === "Digital"
-                                                                ? "bg-[#e8eef8] text-[#1a3a6b]"
-                                                                : "bg-[#fdf6e8] text-[#c6973f]"
-                                                            }`}>
-                                                            {row[1]}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-5 py-3.5 text-[#1a3a6b] font-semibold">{row[2]}</td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </ContentCard>
-
-                            {/* Order Tracking */}
-                            <ContentCard id="tracking">
-                                <CardHeading icon={MapPinIcon} label="Order Tracking" />
-                                <p className="text-[0.975rem] text-[#374151] leading-[1.75] mb-5">
-                                    Once your physical order is dispatched, you will receive:
-                                </p>
-                                <div className="space-y-3">
-                                    {TRACKING_ITEMS.map((item, i) => (
-                                        <div key={i} className="flex items-start gap-3 p-4 border border-black/[0.07] rounded-xl bg-[#f8f7f4] hover:border-[#1a3a6b]/20 hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(26,58,107,0.06)] transition-all duration-300">
-                                            <div className="w-5 h-5 rounded-full bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0 mt-0.5">
-                                                <CheckIcon />
-                                            </div>
-                                            <span className="text-[0.925rem] text-[#374151] leading-[1.7]">{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </ContentCard>
-
-                            {/* FAQ */}
-                            <ContentCard id="faq">
-                                <CardHeading icon={FileIcon} label="Frequently Asked Questions" />
-                                <div className="space-y-0 divide-y divide-black/[0.06]">
-                                    {FAQS.map((faq, i) => (
-                                        <div key={i} className="py-5 first:pt-0 last:pb-0">
-                                            <h4
-                                                className="font-serif text-[1.05rem] text-[#0d1117] mb-2"
-                                                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                            >
-                                                {faq.q}
-                                            </h4>
-                                            <p className="text-[0.925rem] text-[#6b7280] leading-[1.7]">{faq.a}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </ContentCard>
-
-                            {/* Disclaimer */}
-                            <div className="border border-black/[0.07] rounded-xl p-7 bg-[#f8f7f4]">
-                                <div className="flex items-start gap-4">
-                                    <div className="w-10 h-10 rounded bg-[#fdf6e8] flex items-center justify-center text-[#c6973f] flex-shrink-0">
-                                        <AlertIcon />
-                                    </div>
-                                    <div>
-                                        <h3
-                                            className="font-serif text-lg text-[#0d1117] mb-2"
-                                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                        >
-                                            Important Note
-                                        </h3>
-                                        <p className="text-[0.925rem] text-[#6b7280] leading-[1.7]">
-                                            Delivery times are estimates and may vary due to courier partner delays, weather conditions, or unforeseen circumstances.
-                                            NyayMitra is not liable for third-party delays beyond our control. For urgent matters, we recommend digital delivery.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Contact */}
-                            <ContentCard id="contact">
-                                <CardHeading icon={MailIcon} label="Need Help With Delivery?" />
-                                <p className="text-[0.975rem] text-[#374151] leading-[1.75] mb-6">
-                                    For any delivery-related concerns, tracking issues, or special requests, our support team is here to help.
-                                </p>
-                                <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                                    <div className="flex items-center gap-3 p-4 border border-black/[0.07] rounded-xl bg-[#f8f7f4] hover:border-[#1a3a6b]/20 transition-colors">
-                                        <div className="w-9 h-9 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0">
-                                            <MailIcon />
-                                        </div>
-                                        <div>
-                                            <p className="text-[11px] font-semibold tracking-[0.06em] uppercase text-[#9ca3af] mb-0.5">Email</p>
-                                            <a href="mailto:support@nyaymitra.tech" className="text-sm text-[#1a3a6b] hover:text-[#2952a3] transition-colors font-medium">
-                                                support@nyaymitra.tech
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-3 p-4 border border-black/[0.07] rounded-xl bg-[#f8f7f4] hover:border-[#1a3a6b]/20 transition-colors">
-                                        <div className="w-9 h-9 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0">
-                                            <PhoneIcon />
-                                        </div>
-                                        <div>
-                                            <p className="text-[11px] font-semibold tracking-[0.06em] uppercase text-[#9ca3af] mb-0.5">Phone</p>
-                                            <a href="tel:+917970596183" className="text-sm text-[#1a3a6b] hover:text-[#2952a3] transition-colors font-medium">
-                                                +91 79705 96183
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <p className="text-center text-sm text-[#9ca3af]">
-                                    Response time: Within 24 hours on business days.
-                                </p>
-                            </ContentCard>
-
                         </div>
                     </div>
                 </section>
 
-                {/* ── CTA ─────────────────────────────────────────────────────────── */}
-                <section className="relative bg-[#0d1117] overflow-hidden px-6 lg:px-16 py-20 lg:py-28">
-                    <div className="absolute top-0 left-0 w-[500px] h-[500px] -translate-x-1/3 -translate-y-1/3 rounded-full bg-[#1a3a6b]/40 blur-[80px] pointer-events-none" />
-                    <div className="relative z-10 max-w-xl">
-                        <SectionLabel>Get started today</SectionLabel>
-                        <h2
-                            className="font-serif text-[clamp(2rem,4vw,3rem)] text-white leading-[1.1] tracking-tight mb-4"
-                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                        >
-                            Ready to get the legal help you deserve?
-                        </h2>
-                        <p className="text-[1rem] text-white/50 leading-[1.7] mb-8">
-                            Join thousands of Indians who trust NyayMitra for clear, accessible, and verified legal guidance.
-                        </p>
-                        <div className="flex flex-wrap gap-3">
-                            <Link
-                                href="/legal-gpt"
-                                className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded bg-white text-[#0d1117] hover:bg-gray-100 transition-colors"
-                            >
-                                <InfoIcon />
-                                Ask Legal GPT
-                            </Link>
-                            <Link
-                                href="/lawyers"
-                                className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded border border-white/20 text-white/80 hover:border-white/40 hover:text-white transition-colors"
-                            >
-                                Find Lawyers
-                                <ArrowRightIcon />
-                            </Link>
-                        </div>
-                    </div>
-                </section>
+                <div style={{ height: 1, background: "var(--ink-7)" }} />
 
-                {/* ── FOOTER ──────────────────────────────────────────────────────── */}
-                <div className="bg-[#0d1117] border-t border-white/[0.06] px-6 lg:px-16 py-5 flex items-center justify-between flex-wrap gap-3">
-                    <span className="text-[0.8rem] text-white/30">© 2025 NyayMitra. All rights reserved.</span>
-                    <div className="flex gap-6">
-                        {["Privacy", "Terms", "Contact"].map((l) => (
-                            <Link key={l} href="#" className="text-[0.8rem] text-white/30 hover:text-white/70 transition-colors no-underline">
-                                {l}
-                            </Link>
+                {/* ── STATS SECTION ────────────────────────────────────────────────────── */}
+                <div style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 28px 0" }}>
+                    <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+                        {STATS.map((stat, i) => (
+                            <Reveal delay={i * 40} key={i}>
+                                <StatCard value={stat.value} label={stat.label} icon={stat.icon} />
+                            </Reveal>
                         ))}
                     </div>
                 </div>
+
+                {/* ── MAIN LAYOUT ──────────────────────────────────────────────────────── */}
+                <div className="main-pad" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 28px 96px" }}>
+                    <div className="layout-grid" style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 48, alignItems: "start" }}>
+
+                        {/* ── SIDEBAR ──────────────────────────────────────────────────────── */}
+                        <aside className="sidebar-wrap sidebar-sticky" style={{ position: "sticky", top: 88 }}>
+                            <div style={{
+                                border: "1px solid var(--ink-7)",
+                                borderRadius: "var(--radius-lg)", overflow: "hidden",
+                                background: "var(--white)",
+                            }}>
+                                <div style={{
+                                    padding: "14px 18px",
+                                    borderBottom: "1px solid var(--ink-7)",
+                                    display: "flex", alignItems: "center", gap: 10,
+                                    background: "var(--ink-9)",
+                                }}>
+                                    <div style={{
+                                        width: 28, height: 28, borderRadius: 7,
+                                        background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center",
+                                    }}>
+                                        <BookOpen style={{ color: "var(--gold)", width: 12, height: 12 }} />
+                                    </div>
+                                    <span style={{ fontFamily: "var(--serif)", fontSize: "15px", fontWeight: 600, color: "var(--ink)" }}>Contents</span>
+                                </div>
+
+                                <nav style={{ padding: "6px 0" }}>
+                                    {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+                                        const id = href.replace("#", "")
+                                        return (
+                                            <a
+                                                key={href}
+                                                href={href}
+                                                className={`sidebar-link${activeSection === id ? " active" : ""}`}
+                                            >
+                                                <Icon style={{ width: 13, height: 13, flexShrink: 0 }} />
+                                                <span>{label}</span>
+                                                <ChevronRight style={{
+                                                    width: 11, height: 11, marginLeft: "auto",
+                                                    opacity: activeSection === id ? 1 : 0,
+                                                    transition: "opacity 0.2s",
+                                                    color: "var(--gold-dk)",
+                                                }} />
+                                            </a>
+                                        )
+                                    })}
+                                </nav>
+
+                                <div style={{
+                                    margin: 12, padding: "12px 14px",
+                                    background: "var(--gold-pale)", border: "1px solid rgba(201,168,76,0.3)",
+                                    borderRadius: "var(--radius)",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
+                                        <div style={{
+                                            width: 6, height: 6, borderRadius: "50%", background: "#22c55e",
+                                            animation: "glowPulse 2.5s ease-in-out infinite",
+                                        }} />
+                                        <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold-dk)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                                            Most deliveries are digital
+                                        </span>
+                                    </div>
+                                    <p style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-4)", lineHeight: 1.6, fontWeight: 300 }}>
+                                        Instant access to your documents via email and dashboard.
+                                    </p>
+                                </div>
+                            </div>
+                        </aside>
+
+                        {/* ── CONTENT ──────────────────────────────────────────────────────── */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0 }}>
+
+                            {/* Digital Delivery */}
+                            <Reveal>
+                                <div id="digital" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Instant Access" title="Digital Service" italic="Delivery" icon={Send} />
+                                    <p style={{
+                                        fontFamily: "var(--sans)", fontSize: "14px",
+                                        color: "var(--ink-4)", lineHeight: 1.85,
+                                        marginBottom: 24, fontWeight: 300,
+                                    }}>
+                                        NyayMitra primarily offers digital legal services. Most deliverables are provided electronically for instant access and maximum convenience.
+                                    </p>
+                                    <div className="service-grid" style={{ display: "grid", gap: 16 }}>
+                                        {DIGITAL_SERVICES.map((service, i) => (
+                                            <DigitalServiceCard
+                                                key={i}
+                                                title={service.title}
+                                                items={service.items}
+                                                icon={service.icon}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Physical Courier */}
+                            <Reveal delay={40}>
+                                <div id="physical" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Tangible Documents" title="Physical Courier" italic="Service" icon={Truck} />
+                                    <p style={{
+                                        fontFamily: "var(--sans)", fontSize: "14px",
+                                        color: "var(--ink-4)", lineHeight: 1.85,
+                                        marginBottom: 24, fontWeight: 300,
+                                    }}>
+                                        For printed and notarized documents requiring physical delivery, we partner with trusted courier services to ensure safe and timely delivery.
+                                    </p>
+
+                                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
+                                        <div style={{
+                                            padding: "20px",
+                                            border: "1px solid var(--ink-7)",
+                                            borderRadius: "var(--radius)",
+                                            background: "var(--ink-9)",
+                                        }}>
+                                            <p style={{ fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500, letterSpacing: "0.12em", color: "var(--gold-dk)", marginBottom: 8 }}>
+                                                Processing Time
+                                            </p>
+                                            <p style={{ fontFamily: "var(--serif)", fontSize: "36px", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
+                                                1–2
+                                            </p>
+                                            <p style={{ fontSize: "11px", color: "var(--ink-4)", marginTop: 4 }}>Business days after notarization</p>
+                                        </div>
+                                        <div style={{
+                                            padding: "20px",
+                                            border: "1px solid var(--ink-7)",
+                                            borderRadius: "var(--radius)",
+                                            background: "var(--ink-9)",
+                                        }}>
+                                            <p style={{ fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500, letterSpacing: "0.12em", color: "var(--gold-dk)", marginBottom: 8 }}>
+                                                Shipping Time
+                                            </p>
+                                            <p style={{ fontFamily: "var(--serif)", fontSize: "36px", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
+                                                2–3
+                                            </p>
+                                            <p style={{ fontSize: "11px", color: "var(--ink-4)", marginTop: 4 }}>Business days (varies by location)</p>
+                                        </div>
+                                    </div>
+
+                                    <div style={{
+                                        display: "flex", alignItems: "flex-start", gap: 14,
+                                        padding: "16px 20px",
+                                        background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                                        borderRadius: "var(--radius)",
+                                        borderLeft: "3px solid var(--gold)",
+                                    }}>
+                                        <MapPin style={{ width: 16, height: 16, color: "var(--gold-dk)", flexShrink: 0, marginTop: 2 }} />
+                                        <div>
+                                            <h4 style={{ fontFamily: "var(--serif)", fontSize: "14px", fontWeight: 600, color: "var(--ink)", marginBottom: 4 }}>
+                                                Shipping Partners
+                                            </h4>
+                                            <p style={{ fontSize: "12px", color: "var(--ink-4)", lineHeight: 1.6 }}>
+                                                We partner with leading courier services including DTDC, BlueDart, Delhivery, and India Post for pan-India delivery.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Delivery Timeline */}
+                            <Reveal delay={60}>
+                                <div id="timeline" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Expected Delivery" title="Delivery Timeline" italic="by Service" icon={Clock} />
+                                    <div style={{ overflowX: "auto" }}>
+                                        <table className="timeline-table" style={{
+                                            width: "100%", borderCollapse: "collapse",
+                                            fontFamily: "var(--sans)", fontSize: "13px",
+                                        }}>
+                                            <thead>
+                                                <tr style={{ borderBottom: "1px solid var(--ink-7)" }}>
+                                                    {["Service Type", "Delivery Method", "Timeline"].map((h) => (
+                                                        <th key={h} style={{
+                                                            textAlign: "left", padding: "14px 12px",
+                                                            fontFamily: "var(--mono)", fontSize: "9px",
+                                                            fontWeight: 600, letterSpacing: "0.1em",
+                                                            textTransform: "uppercase", color: "var(--gold-dk)",
+                                                        }}>
+                                                            {h}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {TIMELINE_ROWS.map((row, i) => (
+                                                    <tr key={i} style={{ borderBottom: i < TIMELINE_ROWS.length - 1 ? "1px solid var(--ink-8)" : "none" }}>
+                                                        <td style={{ padding: "14px 12px", color: "var(--ink-3)", fontWeight: 500 }}>{row[0]}</td>
+                                                        <td style={{ padding: "14px 12px" }}>
+                                                            <span style={{
+                                                                fontSize: "10px", fontWeight: 600,
+                                                                padding: "3px 10px", borderRadius: 20,
+                                                                background: row[1] === "Digital" ? "var(--gold-pale)" : "var(--ink-8)",
+                                                                color: row[1] === "Digital" ? "var(--gold-dk)" : "var(--ink-4)",
+                                                            }}>
+                                                                {row[1]}
+                                                            </span>
+                                                        </td>
+                                                        <td style={{ padding: "14px 12px", color: "var(--gold-dk)", fontWeight: 600 }}>{row[2]}</td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Order Tracking */}
+                            <Reveal delay={60}>
+                                <div id="tracking" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Stay Updated" title="Order" italic="Tracking" icon={MapPin} />
+                                    <p style={{
+                                        fontSize: "14px", color: "var(--ink-4)", marginBottom: 20,
+                                        lineHeight: 1.7,
+                                    }}>
+                                        Once your physical order is dispatched, you will receive:
+                                    </p>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                                        {TRACKING_ITEMS.map((item, i) => (
+                                            <div key={i} style={{
+                                                display: "flex", alignItems: "center", gap: 12,
+                                                padding: "12px 16px",
+                                                border: "1px solid var(--ink-7)", borderRadius: "var(--radius)",
+                                                background: "var(--ink-9)",
+                                            }}>
+                                                <div style={{
+                                                    width: 28, height: 28, borderRadius: "50%",
+                                                    background: "var(--gold-pale)",
+                                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                                }}>
+                                                    <CheckCircle style={{ width: 12, height: 12, color: "var(--gold-dk)" }} />
+                                                </div>
+                                                <span style={{ fontSize: "13px", color: "var(--ink-3)" }}>{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* FAQ */}
+                            <Reveal delay={60}>
+                                <div id="faq" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Common Questions" title="Frequently Asked" italic="Questions" icon={FileText} />
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                                        {FAQS.map((faq, i) => (
+                                            <div key={i} style={{
+                                                padding: "20px 0",
+                                                borderBottom: i < FAQS.length - 1 ? "1px solid var(--ink-8)" : "none",
+                                            }}>
+                                                <h4 style={{
+                                                    fontFamily: "var(--serif)", fontSize: "16px",
+                                                    fontWeight: 600, color: "var(--ink)", marginBottom: 8,
+                                                }}>{faq.q}</h4>
+                                                <p style={{ fontSize: "13px", color: "var(--ink-4)", lineHeight: 1.7 }}>{faq.a}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Disclaimer */}
+                            <Reveal delay={60}>
+                                <div style={{
+                                    borderRadius: "var(--radius-lg)",
+                                    border: "1px solid rgba(201,168,76,0.3)",
+                                    background: "var(--gold-pale)",
+                                    padding: "28px 32px",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                                        <div style={{
+                                            width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                                            background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                        }}>
+                                            <AlertCircle style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                        </div>
+                                        <div>
+                                            <h3 style={{
+                                                fontFamily: "var(--serif)", fontSize: "20px",
+                                                fontWeight: 600, color: "var(--ink)", marginBottom: 10, letterSpacing: "-0.01em",
+                                            }}>
+                                                Important Note
+                                            </h3>
+                                            <p style={{
+                                                fontFamily: "var(--sans)", fontSize: "13.5px",
+                                                color: "var(--ink-3)", lineHeight: 1.8, fontWeight: 300,
+                                            }}>
+                                                Delivery times are estimates and may vary due to courier partner delays, weather conditions, or unforeseen circumstances.
+                                                NyayMitra is not liable for third-party delays beyond our control. For urgent matters, we recommend digital delivery.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Contact */}
+                            <Reveal delay={60}>
+                                <div id="contact" className="content-card dark-accent" style={{ overflow: "hidden", scrollMarginTop: 100, padding: 0 }}>
+                                    <div style={{
+                                        padding: "36px 36px 28px",
+                                        position: "relative", overflow: "hidden",
+                                        background: "var(--ink)",
+                                    }}>
+                                        <div style={{
+                                            position: "absolute", inset: 0,
+                                            background: "linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%)",
+                                            pointerEvents: "none",
+                                        }} />
+                                        <div style={{
+                                            position: "absolute", right: -40, top: -40,
+                                            width: 200, height: 200, borderRadius: "50%",
+                                            background: "rgba(255,255,255,0.02)", pointerEvents: "none",
+                                        }} />
+
+                                        <div style={{ marginBottom: 10 }}>
+                                            <span style={{
+                                                fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                                                letterSpacing: "0.22em", textTransform: "uppercase",
+                                                color: "var(--gold)", display: "block", marginBottom: 10,
+                                            }}>
+                                                Need Help?
+                                            </span>
+                                            <h2 style={{
+                                                fontFamily: "var(--serif)",
+                                                fontSize: "clamp(22px, 3.5vw, 30px)",
+                                                fontWeight: 600, color: "white",
+                                                letterSpacing: "-0.02em", lineHeight: 1.2,
+                                            }}>
+                                                Have questions about your delivery?
+                                            </h2>
+                                            <p style={{
+                                                fontFamily: "var(--sans)", fontSize: "13.5px",
+                                                color: "rgba(255,255,255,0.4)", marginTop: 8, lineHeight: 1.7, fontWeight: 300,
+                                            }}>
+                                                For delivery-related concerns, tracking issues, or special requests, our support team is here to help.
+                                            </p>
+                                        </div>
+
+                                        <div style={{
+                                            display: "flex", alignItems: "center", gap: 12, marginTop: 24,
+                                        }}>
+                                            <div style={{ width: 32, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+                                            <Truck style={{ width: 9, height: 9, color: "var(--gold)" }} />
+                                            <div style={{ width: 16, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+                                        </div>
+                                    </div>
+
+                                    <div style={{
+                                        display: "grid", gridTemplateColumns: "1fr 1fr",
+                                        gap: 12, padding: "24px 28px 28px",
+                                        background: "var(--ink-2)",
+                                    }}>
+                                        <a href="mailto:support@nyaymitra.tech" style={{
+                                            display: "flex", alignItems: "center", gap: 14,
+                                            padding: "16px 20px",
+                                            border: "1px solid rgba(255,255,255,0.08)",
+                                            borderRadius: "var(--radius)",
+                                            textDecoration: "none",
+                                            background: "rgba(255,255,255,0.04)",
+                                            transition: "all 0.22s",
+                                        }}
+                                            onMouseEnter={e => {
+                                                const a = e.currentTarget as HTMLAnchorElement
+                                                a.style.borderColor = "var(--gold)"
+                                                a.style.background = "rgba(201,168,76,0.08)"
+                                            }}
+                                            onMouseLeave={e => {
+                                                const a = e.currentTarget as HTMLAnchorElement
+                                                a.style.borderColor = "rgba(255,255,255,0.08)"
+                                                a.style.background = "rgba(255,255,255,0.04)"
+                                            }}
+                                        >
+                                            <div style={{
+                                                width: 36, height: 36, borderRadius: 9, flexShrink: 0,
+                                                background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                color: "var(--gold)",
+                                            }}>
+                                                <Mail style={{ width: 14, height: 14 }} />
+                                            </div>
+                                            <div>
+                                                <p style={{
+                                                    fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                                                    letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
+                                                    marginBottom: 3,
+                                                }}>Email</p>
+                                                <p style={{
+                                                    fontFamily: "var(--sans)", fontSize: "13px",
+                                                    color: "rgba(255,255,255,0.65)", fontWeight: 400,
+                                                }}>support@nyaymitra.tech</p>
+                                            </div>
+                                        </a>
+                                        <a href="tel:+917970596183" style={{
+                                            display: "flex", alignItems: "center", gap: 14,
+                                            padding: "16px 20px",
+                                            border: "1px solid rgba(255,255,255,0.08)",
+                                            borderRadius: "var(--radius)",
+                                            textDecoration: "none",
+                                            background: "rgba(255,255,255,0.04)",
+                                            transition: "all 0.22s",
+                                        }}
+                                            onMouseEnter={e => {
+                                                const a = e.currentTarget as HTMLAnchorElement
+                                                a.style.borderColor = "var(--gold)"
+                                                a.style.background = "rgba(201,168,76,0.08)"
+                                            }}
+                                            onMouseLeave={e => {
+                                                const a = e.currentTarget as HTMLAnchorElement
+                                                a.style.borderColor = "rgba(255,255,255,0.08)"
+                                                a.style.background = "rgba(255,255,255,0.04)"
+                                            }}
+                                        >
+                                            <div style={{
+                                                width: 36, height: 36, borderRadius: 9, flexShrink: 0,
+                                                background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)",
+                                                display: "flex", alignItems: "center", justifyContent: "center",
+                                                color: "var(--gold)",
+                                            }}>
+                                                <Phone style={{ width: 14, height: 14 }} />
+                                            </div>
+                                            <div>
+                                                <p style={{
+                                                    fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                                                    letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
+                                                    marginBottom: 3,
+                                                }}>Phone</p>
+                                                <p style={{
+                                                    fontFamily: "var(--sans)", fontSize: "13px",
+                                                    color: "rgba(255,255,255,0.65)", fontWeight: 400,
+                                                }}>+91 79705 96183</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div style={{
+                                        padding: "16px 28px 24px",
+                                        background: "var(--ink-2)",
+                                        borderTop: "1px solid rgba(255,255,255,0.05)",
+                                        textAlign: "center",
+                                    }}>
+                                        <p style={{
+                                            fontSize: "11px", color: "rgba(255,255,255,0.25)",
+                                            fontFamily: "var(--mono)", letterSpacing: "0.06em",
+                                        }}>
+                                            Response time: Within 24 hours on business days.
+                                        </p>
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* CTA Section */}
+                            <Reveal delay={60}>
+                                <div style={{
+                                    borderRadius: "var(--radius-lg)",
+                                    background: "linear-gradient(135deg, var(--ink) 0%, var(--ink-2) 100%)",
+                                    padding: "48px 40px",
+                                    textAlign: "center",
+                                    border: "1px solid rgba(201,168,76,0.15)",
+                                }}>
+                                    <h2 style={{
+                                        fontFamily: "var(--serif)",
+                                        fontSize: "clamp(24px, 4vw, 32px)",
+                                        fontWeight: 600, color: "white",
+                                        marginBottom: 16, letterSpacing: "-0.02em",
+                                    }}>
+                                        Ready to get the legal help you deserve?
+                                    </h2>
+                                    <p style={{
+                                        fontSize: "14px", color: "rgba(255,255,255,0.5)",
+                                        marginBottom: 28, maxWidth: 500, marginLeft: "auto", marginRight: "auto",
+                                    }}>
+                                        Join thousands of Indians who trust NyayMitra for clear, accessible, and verified legal guidance.
+                                    </p>
+                                    <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+                                        <Link href="/legal-ai" className="btn-ink" style={{ background: "var(--gold)", color: "var(--ink)" }}>
+                                            <Sparkles style={{ width: 13, height: 13 }} />
+                                            Ask Legal AI
+                                        </Link>
+                                        <Link href="/lawyers" className="btn-ghost" style={{ borderColor: "rgba(255,255,255,0.2)", color: "rgba(255,255,255,0.8)" }}>
+                                            Find Lawyers
+                                            <ChevronRight style={{ width: 12, height: 12 }} />
+                                        </Link>
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                        </div>
+                    </div>
+                </div>
+
+                {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
+                <footer style={{
+                    background: "var(--ink)",
+                    borderTop: "1px solid rgba(255,255,255,0.05)",
+                    padding: "24px 28px",
+                }}>
+                    <div className="footer-container" style={{
+                        maxWidth: 1200, margin: "0 auto",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        flexWrap: "wrap", gap: 12,
+                    }}>
+                        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+                            <div style={{
+                                width: 38, height: 38, borderRadius: 10,
+                                background: "var(--ink)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                boxShadow: "0 2px 12px rgba(12,11,9,0.2)",
+                                position: "relative", overflow: "hidden", flexShrink: 0,
+                            }}>
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%)",
+                                }} />
+                                <Scale style={{ color: "var(--gold)", width: 16, height: 16, position: "relative", zIndex: 1 }} />
+                            </div>
+                            <span style={{
+                                fontFamily: "var(--serif)", fontSize: "16px",
+                                fontWeight: 600, color: "rgba(255,255,255,0.7)", lineHeight: 1,
+                            }}>NyayMitra</span>
+                        </Link>
+
+                        <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+                            © {new Date().getFullYear()} NyayMitra. All rights reserved.
+                        </p>
+
+                        <div style={{ display: "flex", gap: 4 }}>
+                            {[
+                                { label: "Privacy", href: "/privacy-policy" },
+                                { label: "Shipping", href: "/Shipping&DeliveryPolicy" },
+                                { label: "Contact", href: "/contact" },
+                            ].map(({ label, href }) => (
+                                <Link key={label} href={href} style={{
+                                    fontFamily: "var(--sans)", fontSize: "12px",
+                                    color: "rgba(255,255,255,0.3)", textDecoration: "none",
+                                    padding: "4px 10px", borderRadius: 6, transition: "all 0.16s",
+                                }}
+                                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.65)"}
+                                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.3)"}
+                                >{label}</Link>
+                            ))}
+                        </div>
+                    </div>
+                </footer>
 
             </div>
         </>
