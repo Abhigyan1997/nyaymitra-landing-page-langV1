@@ -1,91 +1,249 @@
+// app/services/page.tsx
 "use client"
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import {
   PenTool, Calculator, FileText, Download, ArrowRight, Scale,
-  Mail, Phone, Users, Menu, X, Sparkles, Star, ChevronRight
+  Mail, Phone, Users, Menu, X, Sparkles, Star, ChevronRight,
+  BadgeCheck, Clock, Shield, Zap
 } from "lucide-react"
 import Link from "next/link"
 
-/* ─── design tokens (White Background, Black & Gold) ─────────────────────── */
-const WHITE = "#ffffff"
-const BLACK = "#0a0a0a"
-const BLACK2 = "#1a1a1a"
-const GOLD = "#c9a84c"
-const GOLD_LT = "#e8c96a"
-const GOLD_DK = "#8b6914"
-const GOLD_PALE = "rgba(201,168,76,0.08)"
-const MUTED = "rgba(0,0,0,0.45)"
-const MUTED_LIGHT = "rgba(0,0,0,0.55)"
-const BORDER = "rgba(0,0,0,0.08)"
-const BORDER_GOLD = "rgba(201,168,76,0.25)"
+/* ─── Global Styles & Design Tokens ─────────────────────────────────────── */
+const GlobalStyles = () => (
+  <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
 
-/* ─── floating grid dots (subtle gold) ───────────────────────────────────── */
-const DOTS = Array.from({ length: 24 }, (_, i) => ({
-  id: i,
-  left: (i * 37 + 13) % 100,
-  top: (i * 53 + 7) % 100,
-  delay: (i * 0.4) % 3,
-  size: i % 3 === 0 ? 2 : 1,
-}))
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ─── services data (Affidavit focused) ──────────────────────────────────── */
-const SERVICES = [
-  {
-    id: "name-change",
-    title: "Name Change Affidavit",
-    subtitle: "Marriage / Divorce / Personal",
-    description: "Get a legally valid name change affidavit accepted by passport offices, government bodies, and courts.",
-    icon: PenTool,
-    accentColor: GOLD,
-    glowColor: "rgba(201,168,76,0.08)",
-    popular: true,
-    tags: ["Name Change", "Passport", "Marriage"],
-    features: ["PDF Generation", "Lawyer Reviewed", "Instant Download"],
-    pricing: "₹1,199",
-    pricingNote: "includes notary guidance",
-    href: "/services/name-change",
-    ctaText: "Create affidavit",
-    ctaIcon: FileText,
-  },
-  {
-    id: "address-proof",
-    title: "Address Proof Affidavit",
-    subtitle: "KYC & Bank approved",
-    description: "Legal address verification affidavit for bank KYC, government applications, and property registration.",
-    icon: FileText,
-    accentColor: GOLD,
-    glowColor: "rgba(201,168,76,0.08)",
-    popular: false,
-    tags: ["Address Proof", "Bank KYC", "Rental"],
-    features: ["Pre-fillable PDF", "Expert Review", "2hr Delivery"],
-    pricing: "₹999",
-    pricingNote: "express option available",
-    href: "/services/address-affidavit",
-    ctaText: "Create now",
-    ctaIcon: FileText,
-  },
-  {
-    id: "income-proof",
-    title: "Income Proof Affidavit",
-    subtitle: "Loans & Visa ready",
-    description: "Court-admissible income declaration affidavit for loan applications, visa processing, and government schemes.",
-    icon: Calculator,
-    accentColor: GOLD,
-    glowColor: "rgba(201,168,76,0.08)",
-    popular: false,
-    tags: ["Income Proof", "Visa", "Loans"],
-    features: ["Court Admissible", "Lawyer Drafted", "24hr Support"],
-    pricing: "₹999",
-    pricingNote: "includes free revisions",
-    href: "/services/income-affidavit",
-    ctaText: "Get started",
-    ctaIcon: Calculator,
-  },
-]
+    :root {
+      --ink:        #0c0b09;
+      --ink-2:      #1a1916;
+      --ink-3:      #2e2c28;
+      --ink-4:      #5c5850;
+      --ink-5:      #8a8680;
+      --ink-6:      #b8b4ae;
+      --ink-7:      #e0ddd8;
+      --ink-8:      #f2f0eb;
+      --ink-9:      #faf8f4;
+      --white:      #fffefb;
+      --gold:       #c9a84c;
+      --gold-lt:    #e2c87a;
+      --gold-dk:    #8b6d22;
+      --gold-pale:  #fdf6e0;
+      --serif:      'Cormorant Garamond', Georgia, serif;
+      --sans:       'Outfit', system-ui, sans-serif;
+      --mono:       'DM Mono', monospace;
+      --radius:     8px;
+      --radius-lg:  14px;
+      --radius-xl:  20px;
+    }
 
-/* ─── stat counter ──────────────────────────────────────────────────────── */
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -300% center; }
+      100% { background-position: 300% center; }
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.75); }
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+    @keyframes drawLine {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+    @keyframes mobileMenuFade {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gold-text {
+      background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 7s linear infinite;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.is-on { opacity: 1; transform: translateY(0); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold-dk);
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-4);
+      text-decoration: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      transition: all 0.16s;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--ink-8); }
+
+    .desktop-nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .mobile-menu-dropdown {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .desktop-nav-links {
+        display: none !important;
+      }
+      .mobile-menu-btn {
+        display: flex !important;
+      }
+      .mobile-menu-dropdown.mobile-open {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-menu-btn {
+        display: none !important;
+      }
+      .mobile-menu-dropdown {
+        display: none !important;
+      }
+    }
+
+    .mobile-nav-link {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink-3);
+      text-decoration: none;
+      padding: 12px 0;
+      width: 100%;
+      transition: all 0.16s;
+      border-bottom: 1px solid var(--ink-8);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-nav-link:active {
+      background: var(--ink-9);
+    }
+
+    .btn-ink {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--ink); color: var(--white);
+      font-family: var(--sans); font-size: 12.5px; font-weight: 600;
+      padding: 9px 18px; border-radius: var(--radius); border: none;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-ink:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(12,11,9,0.25); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; color: var(--ink-3);
+      font-family: var(--sans); font-size: 12.5px; font-weight: 500;
+      padding: 9px 16px; border-radius: var(--radius);
+      border: 1.5px solid var(--ink-7);
+      text-decoration: none; cursor: pointer; transition: all 0.22s;
+    }
+    .btn-ghost:hover { background: var(--ink-9); border-color: var(--ink-5); color: var(--ink); }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--gold-dk) 0%, var(--gold) 50%, var(--gold-lt) 100%);
+      color: var(--ink); font-family: var(--sans); font-size: 13px; font-weight: 700;
+      padding: 11px 24px; border-radius: var(--radius); border: none;
+      text-decoration: none; cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(201,168,76,0.4); }
+
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      transition: all 0.28s cubic-bezier(0.16,1,0.3,1);
+    }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 56px rgba(12,11,9,0.08);
+      border-color: var(--gold);
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--ink-9); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+    ::selection { background: var(--gold-pale); color: var(--gold-dk); }
+
+    @media (max-width: 768px) {
+      .services-grid { grid-template-columns: 1fr !important; }
+      .hero-pad { padding: 56px 20px 72px !important; }
+      .stats-row { flex-direction: column !important; gap: 20px !important; }
+      .stats-divider { display: none !important; }
+      .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+      .cta-buttons { flex-direction: column !important; align-items: stretch !important; }
+      .cta-buttons a { justify-content: center !important; }
+    }
+  `}</style>
+)
+
+/* ─── Ornament Line ──────────────────────────────────────────────────────── */
+const OrnamentLine = () => (
+  <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "22px 0" }}>
+    <div style={{ width: 44, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+    <Scale style={{ width: 9, height: 9, color: "var(--gold)" }} />
+    <div style={{ width: 24, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+  </div>
+)
+
+/* ─── Animated Stat Counter ──────────────────────────────────────────────── */
 function AnimatedStat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   const [count, setCount] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
@@ -112,21 +270,72 @@ function AnimatedStat({ value, suffix, label }: { value: number; suffix: string;
 
   return (
     <div ref={ref} className="text-center">
-      <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "clamp(1.6rem, 4vw, 2rem)", color: BLACK, letterSpacing: "-0.02em" }}>
+      <div style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 40px)", fontWeight: 600, color: "var(--gold-dk)", letterSpacing: "-0.02em" }}>
         {count.toLocaleString()}{suffix}
       </div>
-      <div style={{ fontSize: "0.7rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "4px" }}>
+      <div style={{ fontSize: "10px", fontFamily: "var(--mono)", color: "var(--ink-5)", textTransform: "uppercase", letterSpacing: "0.1em", marginTop: "4px" }}>
         {label}
       </div>
     </div>
   )
 }
 
-/* ─── service card (White Background, Black & Gold) ──────────────────────── */
+/* ─── Services Data ───────────────────────────────────────────────────────── */
+const SERVICES = [
+  {
+    id: "notary-service",
+    title: "Remote Notary",
+    subtitle: "Via licensed lawyer",
+    description: "Get documents notarized remotely or via courier. Delivered in 1–4 business days, fully legal.",
+    icon: PenTool,
+    accentColor: "#c9a84c",
+    glowColor: "rgba(201,168,76,0.15)",
+    popular: true,
+    tags: ["Affidavit", "Authorization", "Power of Attorney"],
+    features: ["PDF Generation", "Manual Notarization", "Email / Courier"],
+    pricing: "₹399",
+    pricingNote: "e-copy · ₹799 courier",
+    href: "/services/notary",
+    ctaText: "Notarize now",
+  },
+  {
+    id: "instant-download",
+    title: "Document Downloads",
+    subtitle: "Self-attested, instant",
+    description: "Pre-filled rent agreements, affidavits, and complaint letters pay once, download immediately.",
+    icon: Download,
+    accentColor: "#15803d",
+    glowColor: "rgba(21,128,61,0.13)",
+    popular: true,
+    tags: ["Rent Agreement", "Affidavit", "Police Complaint"],
+    features: ["Pre-fillable PDF", "Instant Download", "Razorpay Checkout"],
+    pricing: "₹49",
+    pricingNote: "per document",
+    href: "/services/downloads",
+    ctaText: "Download now",
+  },
+  {
+    id: "stamp-duty",
+    title: "Stamp Duty Calculator",
+    subtitle: "State-wise, instant",
+    description: "Find the exact stamp paper value for your document and state. Auto-detection included.",
+    icon: Calculator,
+    accentColor: "#d97706",
+    glowColor: "rgba(217,119,6,0.12)",
+    popular: false,
+    tags: ["Affidavit", "Agreements", "Power of Attorney"],
+    features: ["Auto-State Detection", "Value Suggestion", "Legal Tips"],
+    pricing: "Free",
+    pricingNote: "no sign-up needed",
+    href: "/services/stamp-calculator",
+    ctaText: "Calculate duty",
+  },
+]
+
+/* ─── Service Card Component ──────────────────────────────────────────────── */
 function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: number }) {
   const [hovered, setHovered] = useState(false)
   const Icon = service.icon
-  const CtaIcon = service.ctaIcon
 
   return (
     <motion.div
@@ -136,96 +345,89 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
       transition={{ duration: 0.55, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ position: "relative", height: "100%" }}
+      style={{ height: "100%" }}
     >
-      <div style={{
-        position: "relative", zIndex: 1, height: "100%",
-        background: WHITE,
-        border: `1px solid ${hovered ? GOLD : BORDER}`,
-        borderRadius: 20, padding: "1.75rem",
-        transition: "all 0.35s cubic-bezier(0.22,1,0.36,1)",
-        transform: hovered ? "translateY(-4px)" : "translateY(0)",
-        boxShadow: hovered ? "0 20px 35px -12px rgba(0,0,0,0.1)" : "0 1px 3px rgba(0,0,0,0.03)",
-        display: "flex", flexDirection: "column", gap: "1.25rem",
-      }}>
-
-        {/* top row */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between" }}>
+      <div className="service-card" style={{ height: "100%", padding: "28px" }}>
+        {/* Top row */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 20 }}>
           <div style={{
-            width: 48, height: 48, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center",
-            background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
-            transition: "transform 0.3s", transform: hovered ? "rotate(8deg) scale(1.05)" : "none"
+            width: 48, height: 48, borderRadius: 12,
+            background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            transition: "transform 0.3s", transform: hovered ? "rotate(8deg) scale(1.05)" : "none",
+            color: service.accentColor,
           }}>
-            <Icon size={20} color={GOLD} />
+            <Icon size={20} />
           </div>
           {service.popular && (
             <div style={{
               display: "flex", alignItems: "center", gap: 4,
-              background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
-              borderRadius: 100, padding: "3px 10px",
-              fontSize: "10px", color: GOLD_DK, fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase"
+              background: "var(--gold-pale)", border: "1px solid var(--gold)",
+              borderRadius: 100, padding: "4px 10px",
+              fontSize: "9px", color: "var(--gold-dk)", fontWeight: 600,
+              textTransform: "uppercase", letterSpacing: "0.05em",
             }}>
-              <Star size={9} fill={GOLD} color={GOLD} /> Popular
+              <Star size={9} fill="var(--gold-dk)" /> Popular
             </div>
           )}
         </div>
 
-        {/* heading */}
-        <div>
-          <div style={{ fontFamily: "'Cormorant Garamond', Georgia, serif", fontSize: "1.3rem", color: BLACK, lineHeight: 1.2, marginBottom: 4, fontWeight: 600 }}>
+        {/* Heading */}
+        <div style={{ marginBottom: 12 }}>
+          <h3 style={{ fontFamily: "var(--serif)", fontSize: "22px", fontWeight: 600, color: "var(--ink)", lineHeight: 1.2, marginBottom: 4 }}>
             {service.title}
-          </div>
-          <div style={{ fontSize: "0.75rem", color: MUTED, textTransform: "uppercase", letterSpacing: "0.07em" }}>
+          </h3>
+          <p style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "var(--ink-5)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
             {service.subtitle}
-          </div>
+          </p>
         </div>
 
-        {/* price */}
-        <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.6rem", color: GOLD_DK, fontWeight: 700 }}>
+        {/* Pricing */}
+        <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 16 }}>
+          <span style={{ fontFamily: "var(--serif)", fontSize: "28px", fontWeight: 600, color: service.accentColor }}>
             {service.pricing}
           </span>
-          <span style={{ fontSize: "0.72rem", color: MUTED }}>{service.pricingNote}</span>
+          <span style={{ fontSize: "11px", color: "var(--ink-5)" }}>{service.pricingNote}</span>
         </div>
 
-        {/* description */}
-        <p style={{ fontSize: "0.85rem", color: MUTED_LIGHT, lineHeight: 1.65, margin: 0 }}>
+        {/* Description */}
+        <p style={{ fontSize: "13px", color: "var(--ink-4)", lineHeight: 1.65, marginBottom: 16 }}>
           {service.description}
         </p>
 
-        {/* feature pills */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+        {/* Feature pills */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
           {service.features.map(f => (
             <span key={f} style={{
-              fontSize: "11px", padding: "4px 10px", borderRadius: 100,
-              background: GOLD_PALE, color: GOLD_DK,
-              border: `1px solid ${BORDER_GOLD}`, fontWeight: 500
+              fontSize: "10px", padding: "4px 10px", borderRadius: 100,
+              background: "var(--ink-9)", color: service.accentColor,
+              border: "1px solid var(--ink-7)", fontWeight: 500,
             }}>{f}</span>
           ))}
         </div>
 
-        {/* tags */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
+        {/* Tags */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
           {service.tags.map(t => (
             <span key={t} style={{
-              fontSize: "11px", padding: "3px 9px", borderRadius: 100,
-              border: `1px solid ${BORDER}`, color: MUTED
+              fontSize: "10px", padding: "3px 9px", borderRadius: 100,
+              border: "1px solid var(--ink-7)", color: "var(--ink-5)",
             }}>{t}</span>
           ))}
         </div>
 
-        {/* divider */}
-        <div style={{ height: "0.5px", background: BORDER }} />
+        {/* Divider */}
+        <div style={{ height: "1px", background: "var(--ink-7)", marginBottom: 16 }} />
 
-        {/* cta */}
+        {/* CTA */}
         <Link href={service.href} style={{ textDecoration: "none" }}>
           <div style={{
             display: "flex", alignItems: "center", justifyContent: "space-between",
-            color: GOLD_DK, fontSize: "0.85rem", fontWeight: 600,
+            color: service.accentColor, fontSize: "13px", fontWeight: 500,
             cursor: "pointer", transition: "gap 0.2s"
           }}>
             <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <CtaIcon size={14} /> {service.ctaText}
+              {service.ctaText}
             </span>
             <ArrowRight size={14} style={{ transform: hovered ? "translateX(4px)" : "none", transition: "transform 0.25s" }} />
           </div>
@@ -235,14 +437,10 @@ function ServiceCard({ service, index }: { service: typeof SERVICES[0]; index: n
   )
 }
 
-/* ─── main page ─────────────────────────────────────────────────────────── */
+/* ─── Main Page ───────────────────────────────────────────────────────────── */
 export default function ServicesPage() {
-  const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const heroRef = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
-  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"])
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -250,221 +448,200 @@ export default function ServicesPage() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
+  const handleMobileLinkClick = () => setMobileMenuOpen(false)
+
   return (
     <>
-      {/* Google Fonts */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+      <GlobalStyles />
+      <div style={{ minHeight: "100vh", background: "var(--white)" }}>
 
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-          font-family: 'DM Sans', sans-serif;
-          background: ${WHITE};
-          color: ${BLACK};
-          margin: 0;
-          -webkit-font-smoothing: antialiased;
-        }
-
-        .grid-bg {
-          background-image:
-            linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-
-        ::selection { background: rgba(201,168,76,0.25); color: ${BLACK}; }
-
-        .nav-glass {
-          background: ${scrolled ? `rgba(255,255,255,0.98)` : "transparent"};
-          backdrop-filter: ${scrolled ? "blur(20px)" : "none"};
-          border-bottom: 1px solid ${scrolled ? BORDER : "transparent"};
-          transition: all 0.35s ease;
-        }
-
-        .eyebrow {
-          display: inline-flex; align-items: center; gap: 10px;
-          font-family: 'DM Mono', monospace; font-size: 9.5px; font-weight: 500;
-          letter-spacing: 0.2em; text-transform: uppercase; color: ${GOLD_DK};
-        }
-        .eyebrow::before, .eyebrow::after {
-          content:''; width: 22px; height: 1px; background: ${GOLD}; flex-shrink:0;
-        }
-
-        @keyframes pulse {
-          from { opacity: 0.2; }
-          to { opacity: 0.6; }
-        }
-      `}</style>
-
-      <div style={{ minHeight: "100vh", background: WHITE, position: "relative", overflow: "hidden" }}>
-
-        {/* background layers */}
-        <div className="grid-bg" style={{ position: "fixed", inset: 0, zIndex: 0 }} />
-
-        {/* floating dots - gold */}
-        <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-          {DOTS.map(d => (
-            <div key={d.id} style={{
-              position: "absolute", left: `${d.left}%`, top: `${d.top}%`,
-              width: d.size, height: d.size, borderRadius: "50%",
-              background: d.id % 2 === 0 ? `rgba(201,168,76,0.3)` : `rgba(139,107,20,0.2)`,
-              animation: `pulse ${2 + d.delay}s ease-in-out ${d.delay}s infinite alternate`
-            }} />
-          ))}
-        </div>
-
-        {/* ── NAV ──────────────────────────────────────────────────────────── */}
-        <nav className="nav-glass" style={{ position: "sticky", top: 0, zIndex: 100, padding: "0 2rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", height: 72 }}>
-
-            <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+        {/* ── NAVBAR ───────────────────────────────────────────────────────────── */}
+        <nav style={{
+          position: "sticky", top: 0, zIndex: 100,
+          background: scrolled ? "rgba(255,254,251,0.96)" : "var(--white)",
+          backdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
+          borderBottom: `1px solid ${scrolled ? "var(--ink-7)" : "transparent"}`,
+          boxShadow: scrolled ? "0 2px 24px rgba(12,11,9,0.06)" : "none",
+          transition: "all 0.32s cubic-bezier(0.16,1,0.3,1)",
+        }}>
+          <div style={{
+            maxWidth: 1200, margin: "0 auto", padding: "0 20px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            height: 66,
+          }}>
+            <Link href="/" style={{ display: "flex", alignItems: "center", gap: 11, textDecoration: "none", flexShrink: 0 }}>
               <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: `linear-gradient(135deg, ${GOLD_PALE}, rgba(139,107,20,0.1))`,
-                border: `1px solid ${BORDER_GOLD}`,
-                display: "flex", alignItems: "center", justifyContent: "center"
+                width: 38, height: 38, borderRadius: 10,
+                background: "var(--ink)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                boxShadow: "0 2px 12px rgba(12,11,9,0.2)",
+                position: "relative", overflow: "hidden", flexShrink: 0,
               }}>
-                <Scale size={18} color={GOLD_DK} />
+                <div style={{
+                  position: "absolute", inset: 0,
+                  background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%)",
+                }} />
+                <Scale style={{ color: "var(--gold)", width: 16, height: 16, position: "relative", zIndex: 1 }} />
               </div>
-              <div>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem", fontWeight: 700, color: BLACK }}>
-                  Nyay<span style={{ color: GOLD_DK }}>Mitra</span>
-                </div>
-                {/* <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6.5px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
-                  Legal Tech · India
-                </div> */}
-              </div>
+              <div style={{
+                fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em",
+              }}>NyayMitra</div>
             </Link>
 
-            {/* desktop nav */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }} className="hidden md:flex">
-              {["Services", "Find lawyers", "About", "Contact"].map(item => (
-                <Link key={item} href={`/${item.toLowerCase().replace(" ", "-")}`}
-                  style={{ fontSize: "0.85rem", color: MUTED, padding: "6px 14px", borderRadius: 8, textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={e => (e.currentTarget.style.color = BLACK)}
-                  onMouseLeave={e => (e.currentTarget.style.color = MUTED)}
-                >
-                  {item}
-                </Link>
-              ))}
-              <Link href="/legal-gpt" style={{ textDecoration: "none" }}>
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 6,
-                  background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
-                  borderRadius: 8, padding: "8px 18px",
-                  fontSize: "0.85rem", fontWeight: 600, color: WHITE, cursor: "pointer"
-                }}>
-                  <Sparkles size={13} /> AI assistant
-                </div>
+            <div className="desktop-nav-links" style={{ alignItems: "center", gap: 8 }}>
+              <Link href="/" className="btn-ghost">
+                Home
+              </Link>
+              <Link href="/lawyers" className="nav-link">
+                Find Lawyers
+              </Link>
+              <Link href="/legal-ai" className="btn-ink">
+                <Sparkles style={{ width: 13, height: 13 }} />
+                Legal AI
               </Link>
             </div>
 
-            {/* mobile hamburger */}
             <button
-              style={{ background: "none", border: `1px solid ${BORDER}`, borderRadius: 8, color: BLACK, cursor: "pointer", padding: "7px 10px" }}
-              className="md:hidden"
-              onClick={() => setMenuOpen(!menuOpen)}
+              className="mobile-menu-btn"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              style={{
+                background: "transparent", border: "none", cursor: "pointer",
+                padding: "8px", alignItems: "center", justifyContent: "center",
+                borderRadius: "8px", transition: "all 0.2s",
+              }}
+              aria-label="Menu"
             >
-              {menuOpen ? <X size={18} /> : <Menu size={18} />}
+              {mobileMenuOpen ? (
+                <X style={{ width: 22, height: 22, color: "var(--ink)" }} />
+              ) : (
+                <Menu style={{ width: 22, height: 22, color: "var(--ink)" }} />
+              )}
             </button>
           </div>
 
-          {/* mobile menu */}
-          <AnimatePresence>
-            {menuOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-                style={{ overflow: "hidden", borderTop: `1px solid ${BORDER}`, background: "rgba(255,255,255,0.98)", backdropFilter: "blur(20px)" }}
-              >
-                <div style={{ padding: "1rem 0", display: "flex", flexDirection: "column", gap: 4 }}>
-                  {["Services", "Find lawyers", "About", "Contact"].map(item => (
-                    <Link key={item} href={`/${item.toLowerCase().replace(" ", "-")}`}
-                      style={{ color: MUTED, fontSize: "0.9rem", padding: "10px 0", textDecoration: "none" }}
-                      onClick={() => setMenuOpen(false)}
-                    >{item}</Link>
-                  ))}
-                  <Link href="/legal-gpt" style={{ textDecoration: "none" }} onClick={() => setMenuOpen(false)}>
-                    <div style={{
-                      marginTop: 8, background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
-                      borderRadius: 8, padding: "10px 18px", fontSize: "0.9rem", color: WHITE,
-                      display: "flex", alignItems: "center", gap: 6
-                    }}>
-                      <Sparkles size={13} /> AI assistant
-                    </div>
-                  </Link>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <div className={`mobile-menu-dropdown ${mobileMenuOpen ? "mobile-open" : ""}`} style={{
+            position: "absolute", top: 66, left: 0, right: 0,
+            background: "var(--white)", borderBottom: "1px solid var(--ink-7)",
+            boxShadow: "0 4px 24px rgba(12,11,9,0.08)", padding: "20px",
+            animation: mobileMenuOpen ? "mobileMenuFade 0.3s ease-out" : "none", zIndex: 99,
+          }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <Link href="/" className="mobile-nav-link" onClick={handleMobileLinkClick} style={{ borderTop: "none" }}>
+                Home
+              </Link>
+              <Link href="/lawyers" className="mobile-nav-link" onClick={handleMobileLinkClick}>
+                <Users style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                Find Lawyers
+              </Link>
+              <Link href="/legal-ai" className="mobile-nav-link" onClick={handleMobileLinkClick} style={{ borderBottom: "none" }}>
+                <Sparkles style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                Legal AI
+              </Link>
+            </div>
+          </div>
         </nav>
 
-        {/* ── HERO ─────────────────────────────────────────────────────────── */}
-        <motion.section
-          ref={heroRef}
-          style={{ y: heroY, opacity: heroOpacity, position: "relative", zIndex: 10 }}
-        >
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "6rem 2rem 4rem", textAlign: "center" }}>
-
-            {/* eyebrow */}
-            <motion.div
-              initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-              className="eyebrow"
-              style={{ justifyContent: "center", marginBottom: "1.5rem" }}
-            >
-              Instant legal solutions
-            </motion.div>
-
-            {/* headline */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}
-              style={{
-                fontFamily: "'Cormorant Garamond', Georgia, serif",
-                fontSize: "clamp(2.6rem, 6vw, 4.2rem)",
-                lineHeight: 1.1, letterSpacing: "-0.02em",
-                margin: "0 0 1.5rem",
-                color: BLACK,
-              }}
-            >
-              Smart legal services<br />
-              <span style={{ color: GOLD_DK }}>at your fingertips</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}
-              style={{ fontSize: "clamp(0.95rem, 3.5vw, 1.05rem)", color: MUTED, maxWidth: 520, margin: "0 auto 3rem", lineHeight: 1.7 }}
-            >
-              Affidavits, legal documents, and expert consultations — lawyer-drafted and delivered within hours.
-            </motion.p>
-
-            {/* stat strip */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.35 }}
-              style={{
-                display: "inline-flex", gap: "3rem", alignItems: "center",
-                background: GOLD_PALE, border: `1px solid ${BORDER_GOLD}`,
-                borderRadius: 16, padding: "1.25rem 2.5rem",
-              }}
-            >
-              <AnimatedStat value={100} suffix="+" label="Documents processed" />
-              <div style={{ width: "0.5px", height: 40, background: BORDER }} />
-              <AnimatedStat value={98} suffix="%" label="Satisfaction rate" />
-              <div style={{ width: "0.5px", height: 40, background: BORDER }} />
-              <AnimatedStat value={4} suffix=" hrs" label="Max turnaround" />
-            </motion.div>
+        {/* ── HERO SECTION ─────────────────────────────────────────────────────── */}
+        <section className="hero-pad" style={{
+          padding: "80px 28px 100px",
+          position: "relative", overflow: "hidden",
+        }}>
+          {/* Background grid */}
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
+            backgroundSize: "80px 80px", pointerEvents: "none",
+          }} />
+          {/* Radial glow */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: "radial-gradient(ellipse 70% 60% at 80% 20%, rgba(201,168,76,0.055) 0%, transparent 60%)",
+            pointerEvents: "none",
+          }} />
+          {/* Scale watermark */}
+          <div style={{
+            position: "absolute", right: "-4%", top: "5%",
+            width: 520, height: 520, opacity: 0.025, pointerEvents: "none",
+          }}>
+            <Scale style={{ width: "100%", height: "100%", color: "var(--gold-dk)" }} />
           </div>
-        </motion.section>
 
-        {/* ── SERVICES ─────────────────────────────────────────────────────── */}
-        <section style={{ position: "relative", zIndex: 10, padding: "2rem 2rem 5rem" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+            <div style={{ animation: "fadeUp 0.72s cubic-bezier(0.16,1,0.3,1) both" }}>
+
+              {/* Badge */}
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 9,
+                padding: "6px 16px 6px 9px",
+                border: "1px solid var(--ink-7)", borderRadius: 100,
+                marginBottom: 36, background: "var(--white)",
+                boxShadow: "0 2px 12px rgba(12,11,9,0.04)",
+              }}>
+                <div style={{
+                  width: 22, height: 22, borderRadius: "50%",
+                  background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  <Zap style={{ width: 10, height: 10, color: "var(--gold-dk)" }} />
+                </div>
+                <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
+                  Instant legal solutions powered by AI
+                </span>
+              </div>
+
+              {/* Headline */}
+              <h1 style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(44px, 7vw, 80px)",
+                fontWeight: 600, lineHeight: 1.08,
+                letterSpacing: "-0.03em",
+                color: "var(--ink)", marginBottom: 0,
+              }}>
+                Smart legal services<br />
+                <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.3 }}>
+                  at your fingertips.
+                </span>
+              </h1>
+
+              <OrnamentLine />
+
+              <p style={{
+                fontFamily: "var(--sans)", fontSize: "15.5px",
+                color: "var(--ink-4)", lineHeight: 1.85,
+                maxWidth: 500, fontWeight: 300,
+              }}>
+                Notary services, legal documents, and expert consultations AI-powered and delivered within days.
+              </p>
+
+              {/* Stats Row */}
+              <div className="stats-row" style={{
+                display: "flex", gap: "40px", alignItems: "center",
+                marginTop: 40, flexWrap: "wrap",
+              }}>
+                <AnimatedStat value={10} suffix="+" label="Documents processed" />
+                <div className="stats-divider" style={{ width: "1px", height: 40, background: "var(--ink-7)" }} />
+                <AnimatedStat value={98} suffix="%" label="Satisfaction rate" />
+                <div className="stats-divider" style={{ width: "1px", height: 40, background: "var(--ink-7)" }} />
+                <AnimatedStat value={4} suffix=" days" label="Max turnaround" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Divider */}
+        <div style={{ height: 1, background: "var(--ink-7)" }} />
+
+        {/* ── SERVICES SECTION ───────────────────────────────────────────────────── */}
+        <section style={{ padding: "80px 28px", position: "relative", zIndex: 10 }}>
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "2.5rem" }}>
-              <span className="eyebrow" style={{ fontSize: "0.7rem", letterSpacing: "0.12em" }}>Our services</span>
-              <div style={{ flex: 1, height: "0.5px", background: BORDER }} />
+            <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 48 }}>
+              <span className="eyebrow" style={{ margin: 0 }}>Our services</span>
+              <div style={{ flex: 1, height: "1px", background: "var(--ink-7)" }} />
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
+            <div className="services-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "24px" }}>
               {SERVICES.map((service, i) => (
                 <ServiceCard key={service.id} service={service} index={i} />
               ))}
@@ -472,159 +649,159 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* ── CTA ──────────────────────────────────────────────────────────── */}
-        <section style={{ position: "relative", zIndex: 10, padding: "0 2rem 6rem" }}>
+        {/* Divider */}
+        <div style={{ height: 1, background: "var(--ink-7)" }} />
+
+        {/* ── CTA SECTION ───────────────────────────────────────────────────────── */}
+        <section style={{ padding: "80px 28px" }}>
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
             <motion.div
-              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
               style={{
                 position: "relative", overflow: "hidden",
-                background: `linear-gradient(135deg, ${GOLD_PALE} 0%, rgba(201,168,76,0.03) 100%)`,
-                border: `1px solid ${BORDER_GOLD}`,
-                borderRadius: 24, padding: "4rem 3rem", textAlign: "center"
+                background: "var(--ink-9)",
+                border: "1px solid var(--ink-7)",
+                borderRadius: "var(--radius-xl)",
+                padding: "60px 40px",
+                textAlign: "center",
               }}
             >
-              {/* decorative lines */}
+              {/* Decorative lines */}
               <div style={{
                 position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
                 width: "60%", height: "1px",
-                background: `linear-gradient(90deg, transparent, ${GOLD}, transparent)`
+                background: "linear-gradient(90deg, transparent, var(--gold), transparent)",
               }} />
               <div style={{
                 position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)",
                 width: "40%", height: "1px",
-                background: `linear-gradient(90deg, transparent, ${GOLD_DK}, transparent)`
+                background: "linear-gradient(90deg, transparent, var(--gold), transparent)",
               }} />
 
-              <div className="eyebrow" style={{ justifyContent: "center", marginBottom: "1.25rem" }}>
-                Custom documents
+              <div style={{
+                display: "inline-flex", alignItems: "center", gap: 8, marginBottom: 20,
+                background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                borderRadius: 100, padding: "6px 16px",
+                fontSize: "11px", fontFamily: "var(--mono)", color: "var(--gold-dk)",
+                textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 500,
+              }}>
+                <Sparkles size={12} /> Custom documents
               </div>
 
               <h2 style={{
-                fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
-                color: BLACK, marginBottom: "1rem", lineHeight: 1.2, letterSpacing: "-0.02em"
+                fontFamily: "var(--serif)", fontSize: "clamp(28px, 3.5vw, 40px)",
+                color: "var(--ink)", marginBottom: 16, lineHeight: 1.2, letterSpacing: "-0.02em",
               }}>
                 Need a custom legal document?
               </h2>
 
-              <p style={{ color: MUTED, fontSize: "1rem", marginBottom: "2.5rem", maxWidth: 460, margin: "0 auto 2.5rem", lineHeight: 1.65 }}>
+              <p style={{ color: "var(--ink-4)", fontSize: "15px", marginBottom: 32, maxWidth: 520, margin: "0 auto 32px", lineHeight: 1.65 }}>
                 Our AI generates personalized legal documents in minutes, or connects you with expert lawyers for complex cases.
               </p>
 
-              <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+              <div className="cta-buttons" style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
                 <Link href="/lawyers" style={{ textDecoration: "none" }}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      background: `linear-gradient(135deg, ${GOLD}, ${GOLD_DK})`,
-                      borderRadius: 10, padding: "12px 24px",
-                      fontSize: "0.9rem", fontWeight: 600, color: WHITE, cursor: "pointer"
-                    }}
-                  >
+                  <button className="btn-gold" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                     <Users size={15} /> Consult a lawyer <ChevronRight size={14} />
-                  </motion.div>
+                  </button>
                 </Link>
-                <Link href="/legal-gpt" style={{ textDecoration: "none" }}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      background: WHITE, border: `1px solid ${BORDER_GOLD}`,
-                      borderRadius: 10, padding: "12px 24px",
-                      fontSize: "0.9rem", fontWeight: 500, color: BLACK, cursor: "pointer"
-                    }}
-                  >
-                    <Sparkles size={15} color={GOLD_DK} /> Try AI assistant <ChevronRight size={14} />
-                  </motion.div>
+                <Link href="/legal-ai" style={{ textDecoration: "none" }}>
+                  <button className="btn-ghost" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                    <Sparkles size={15} /> Try AI assistant <ChevronRight size={14} />
+                  </button>
                 </Link>
               </div>
             </motion.div>
           </div>
         </section>
 
-        {/* ── FOOTER ───────────────────────────────────────────────────────── */}
+        {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
         <footer style={{
-          position: "relative", zIndex: 10,
-          background: BLACK,
-          borderTop: `1px solid rgba(255,255,255,0.08)`,
-          padding: "3rem 2rem"
+          background: "var(--ink)",
+          borderTop: "1px solid rgba(255,255,255,0.05)",
+          padding: "48px 28px 32px",
         }}>
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "3rem" }} className="footer-grid">
+            <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: "48px" }}>
 
               <div>
-                <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: "1rem" }}>
+                <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: 20 }}>
                   <div style={{
-                    width: 32, height: 32, borderRadius: 9,
-                    background: `linear-gradient(135deg, ${GOLD_PALE}, rgba(139,107,20,0.15))`,
-                    border: `1px solid ${BORDER_GOLD}`,
-                    display: "flex", alignItems: "center", justifyContent: "center"
+                    width: 36, height: 36, borderRadius: 10,
+                    background: "rgba(255,255,255,0.05)", border: "1px solid rgba(201,168,76,0.2)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
                   }}>
-                    <Scale size={15} color={GOLD} />
+                    <Scale style={{ color: "var(--gold)", width: 16, height: 16 }} />
                   </div>
-                  <div>
-                    <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", fontWeight: 700, color: WHITE }}>
-                      Nyay<span style={{ color: GOLD }}>Mitra</span>
-                    </div>
-                    {/* <div style={{ fontFamily: "'DM Mono', monospace", fontSize: "6px", color: GOLD_DK, letterSpacing: "0.14em", textTransform: "uppercase" }}>
-                      Legal Tech · India
-                    </div> */}
-                  </div>
+                  <span style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "rgba(255,255,255,0.8)" }}>
+                    NyayMitra
+                  </span>
                 </Link>
-                <p style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", lineHeight: 1.65, maxWidth: 280 }}>
-                  Legally valid affidavits online in minutes. Expert reviewed, court approved, trusted by Indians.
+                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", lineHeight: 1.65, maxWidth: 280 }}>
+                  Empowering citizens with accessible legal solutions through technology. Trusted by thousands across India.
                 </p>
               </div>
 
               <div>
-                <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
+                <div style={{
+                  fontSize: "11px", fontFamily: "var(--mono)", color: "var(--gold)",
+                  textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 20,
+                }}>
                   Quick links
                 </div>
-                {["Home", "Services", "About us", "Contact"].map(link => (
-                  <div key={link} style={{ marginBottom: "0.6rem" }}>
-                    <Link href={`/${link.toLowerCase().replace(" ", "-")}`}
-                      style={{ fontSize: "0.85rem", color: "rgba(255,255,255,0.45)", textDecoration: "none", transition: "color 0.2s" }}
-                      onMouseEnter={e => (e.currentTarget.style.color = WHITE)}
-                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
+                {["Home", "Services", "About", "Contact"].map(link => (
+                  <div key={link} style={{ marginBottom: 12 }}>
+                    <Link href={`/${link.toLowerCase() === "home" ? "" : link.toLowerCase()}`}
+                      style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", textDecoration: "none", transition: "color 0.2s" }}
+                      onMouseEnter={e => (e.currentTarget.style.color = "rgba(255,255,255,0.7)")}
+                      onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.4)")}
                     >{link}</Link>
                   </div>
                 ))}
               </div>
 
               <div>
-                <div style={{ fontSize: "0.72rem", color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 500, marginBottom: "1rem" }}>
+                <div style={{
+                  fontSize: "11px", fontFamily: "var(--mono)", color: "var(--gold)",
+                  textTransform: "uppercase", letterSpacing: "0.12em", marginBottom: 20,
+                }}>
                   Contact us
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "rgba(255,255,255,0.45)", marginBottom: "0.75rem" }}>
-                  <Mail size={13} color={GOLD} /> contact@nyaymitra.tech
+                <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "12px", color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>
+                  <Mail size={13} color="var(--gold)" /> support@nyaymitra.tech
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: "0.82rem", color: "rgba(255,255,255,0.45)" }}>
-                  <Phone size={13} color={GOLD} /> +91 79705 96183
+                <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
+                  <Phone size={13} color="var(--gold)" /> +91 79705 96183
                 </div>
               </div>
             </div>
 
-            <div style={{ marginTop: "2.5rem", paddingTop: "1.5rem", borderTop: "1px solid rgba(255,255,255,0.08)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-              <span style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>
+            <div style={{
+              marginTop: 48, paddingTop: 24,
+              borderTop: "1px solid rgba(255,255,255,0.05)",
+              display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16,
+            }}>
+              <span style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "rgba(255,255,255,0.25)", letterSpacing: "0.08em" }}>
                 © {new Date().getFullYear()} NyayMitra. All rights reserved.
               </span>
-              <span style={{ fontSize: "0.78rem", color: "rgba(255,255,255,0.3)" }}>
-                Made with care in India 🇮🇳
-              </span>
+              <div style={{ display: "flex", gap: 16 }}>
+                <Link href="/privacy-policy" style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "rgba(255,255,255,0.25)", textDecoration: "none" }}>
+                  Privacy
+                </Link>
+                <Link href="/terms" style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "rgba(255,255,255,0.25)", textDecoration: "none" }}>
+                  Terms
+                </Link>
+                <Link href="/contact" style={{ fontSize: "11px", fontFamily: "var(--mono)", color: "rgba(255,255,255,0.25)", textDecoration: "none" }}>
+                  Contact
+                </Link>
+              </div>
             </div>
           </div>
         </footer>
 
-        <style>{`
-          @media (max-width: 768px) {
-            .footer-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
-            .hidden.md\\:flex { display: none !important; }
-          }
-          @media (max-width: 480px) {
-            .nav-glass { padding: 0 1rem !important; }
-          }
-        `}</style>
       </div>
     </>
   )
