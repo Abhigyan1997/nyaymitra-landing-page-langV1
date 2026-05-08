@@ -1,85 +1,320 @@
 // app/terms/page.tsx
 "use client"
 
-import React from "react"
+import React, { useState, useEffect, useRef } from "react"
 import Link from "next/link"
+import {
+    Scale, Shield, Users, UserCheck, Ban, RefreshCw, Mail,
+    Phone, Clock, AlertCircle, ChevronRight, BookOpen,
+    ArrowLeft, Sparkles, CheckCircle, Gavel, Menu, X,
+} from "lucide-react"
 
-// ─── Icons ────────────────────────────────────────────────────────────────────
-const ShieldIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" className="w-5 h-5">
-        <path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z" />
-        <path d="M9 12l2 2 4-4" />
-    </svg>
-)
-const ScaleIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M12 3v18M3 8l9-5 9 5M5 10l-2 5h4L5 10zM19 10l-2 5h4L19 10z" />
-        <line x1="3" y1="21" x2="21" y2="21" />
-    </svg>
-)
-const UsersIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" />
-    </svg>
-)
-const UserCheckIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="8.5" cy="7" r="4" />
-        <polyline points="17 11 19 13 23 9" />
-    </svg>
-)
-const BanIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <circle cx="12" cy="12" r="10" /><line x1="4.93" y1="4.93" x2="19.07" y2="19.07" />
-    </svg>
-)
-const RefreshIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <polyline points="23 4 23 10 17 10" /><polyline points="1 20 1 14 7 14" />
-        <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
-    </svg>
-)
-const MailIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-        <polyline points="22,6 12,13 2,6" />
-    </svg>
-)
-const PhoneIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" />
-    </svg>
-)
-const ClockIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
-    </svg>
-)
-const AlertIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4 flex-shrink-0">
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-)
-const ChevronRightIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity">
-        <path d="M9 18l6-6-6-6" />
-    </svg>
-)
-const BookIcon = () => (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="w-4 h-4">
-        <path d="M4 19.5A2.5 2.5 0 016.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z" />
-    </svg>
+/* ─── GLOBAL STYLES ─────────────────────────────────────────────────────────── */
+const GlobalStyles = () => (
+    <style>{`
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600&family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #0c0b09;
+      --ink-2:      #1a1916;
+      --ink-3:      #2e2c28;
+      --ink-4:      #5c5850;
+      --ink-5:      #8a8680;
+      --ink-6:      #b8b4ae;
+      --ink-7:      #e0ddd8;
+      --ink-8:      #f2f0eb;
+      --ink-9:      #faf8f4;
+      --white:      #fffefb;
+      --gold:       #c9a84c;
+      --gold-lt:    #e2c87a;
+      --gold-dk:    #8b6d22;
+      --gold-pale:  #fdf6e0;
+      --gold-rich:  #d4a843;
+      --red:        #c0392b;
+      --green:      #15803d;
+      --serif:      'Cormorant Garamond', Georgia, serif;
+      --sans:       'Outfit', system-ui, sans-serif;
+      --mono:       'DM Mono', monospace;
+      --radius:     8px;
+      --radius-lg:  14px;
+      --radius-xl:  20px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes shimmer  { 0%{background-position:-300% center} 100%{background-position:300% center} }
+    @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.75)} }
+    @keyframes glowPulse { 0%,100%{opacity:0.4} 50%{opacity:0.9} }
+    @keyframes slideIn  { from{opacity:0;transform:translateX(-12px)} to{opacity:1;transform:translateX(0)} }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1);
+    }
+    .reveal.is-on { opacity:1; transform:translateY(0); }
+
+    .gold-text {
+      background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 7s linear infinite;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--mono);
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold-dk);
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+      flex-shrink: 0;
+    }
+
+    .nav-link {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink-4);
+      text-decoration: none;
+      padding: 7px 13px;
+      border-radius: 6px;
+      transition: all 0.16s;
+    }
+    .nav-link:hover { color: var(--ink); background: var(--ink-8); }
+
+    .mobile-nav-link {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--ink-3);
+      text-decoration: none;
+      padding: 12px 0;
+      width: 100%;
+      transition: all 0.16s;
+      border-bottom: 1px solid var(--ink-8);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .mobile-nav-link:active {
+      background: var(--ink-9);
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 18px;
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 400;
+      color: var(--ink-4);
+      text-decoration: none;
+      border-left: 2px solid transparent;
+      transition: all 0.2s cubic-bezier(0.16,1,0.3,1);
+      cursor: pointer;
+    }
+    .sidebar-link:hover {
+      color: var(--ink);
+      background: var(--ink-9);
+      border-left-color: var(--gold);
+      padding-left: 20px;
+    }
+    .sidebar-link.active {
+      color: var(--gold-dk);
+      background: var(--gold-pale);
+      border-left-color: var(--gold);
+      font-weight: 600;
+    }
+
+    .content-card {
+      background: var(--white);
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      padding: 36px 36px;
+      transition: border-color 0.25s;
+      scroll-margin-top: 100px;
+    }
+    .content-card:hover { border-color: var(--ink-5); }
+    .content-card.gold-accent {
+      background: var(--gold-pale);
+      border-color: rgba(201,168,76,0.3);
+    }
+    .content-card.dark-accent {
+      background: var(--ink);
+      border-color: rgba(255,255,255,0.06);
+    }
+
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-family: var(--sans);
+      font-size: 13.5px;
+      color: var(--ink-3);
+      line-height: 1.8;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--ink-8);
+    }
+    .bullet-item:last-child { border-bottom: none; }
+
+    .bullet-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius);
+      text-decoration: none;
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .contact-row:hover {
+      border-color: var(--gold);
+      background: var(--gold-pale);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(201,168,76,0.12);
+    }
+
+    .btn-ink {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--ink);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
+    }
+    .btn-ink:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(12,11,9,0.25);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--ink-3);
+      font-family: var(--sans);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 9px 16px;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--ink-7);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.22s;
+    }
+    .btn-ghost:hover {
+      background: var(--ink-9);
+      border-color: var(--ink-5);
+      color: var(--ink);
+    }
+
+    /* Desktop utility classes - properly hidden on mobile */
+    .desktop-only {
+      display: none !important;
+    }
+
+    /* Mobile menu animation */
+    @keyframes mobileMenuFade {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (min-width: 769px) {
+      .desktop-only {
+        display: inline-flex !important;
+      }
+      .mobile-only {
+        display: none !important;
+      }
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--ink-9); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold-dk); }
+    ::selection { background: var(--gold-pale); color: var(--gold-dk); }
+
+    @media (max-width: 768px) {
+      .hero-title { font-size: clamp(38px, 10vw, 64px) !important; }
+      .content-card { padding: 24px 20px !important; }
+      .layout-grid { grid-template-columns: 1fr !important; }
+      .sidebar-sticky { position: static !important; }
+      .sidebar-wrap { display: none !important; }
+      .contact-grid { grid-template-columns: 1fr !important; }
+      .hero-pad { padding: 56px 20px 72px !important; }
+      .main-pad { padding: 32px 20px !important; }
+    }
+  `}</style>
 )
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+/* ─── REVEAL HELPER ──────────────────────────────────────────────────────────── */
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+    const ref = useRef<HTMLDivElement>(null)
+    useEffect(() => {
+        const el = ref.current; if (!el) return
+        const tid = setTimeout(() => {
+            const obs = new IntersectionObserver(([e]) => {
+                if (e.isIntersecting) { el.classList.add("is-on"); obs.disconnect() }
+            }, { threshold: 0.05, rootMargin: "0px 0px -20px 0px" })
+            obs.observe(el)
+            return () => obs.disconnect()
+        }, 60)
+        return () => clearTimeout(tid)
+    }, [])
+    return <div ref={ref} className="reveal" style={{ transitionDelay: `${delay}ms` }}>{children}</div>
+}
+
+/* ─── DATA ───────────────────────────────────────────────────────────────────── */
 const NAV_ITEMS = [
-    { href: "#general", label: "General Terms", icon: <ScaleIcon /> },
-    { href: "#lawyers", label: "Lawyer Terms", icon: <UsersIcon /> },
-    { href: "#privacy", label: "Privacy & Data", icon: <UserCheckIcon /> },
-    { href: "#restrictions", label: "Restrictions", icon: <BanIcon /> },
-    { href: "#changes", label: "Changes to Terms", icon: <RefreshIcon /> },
-    { href: "#contact", label: "Contact Us", icon: <MailIcon /> },
+    { href: "#general", label: "General Terms", icon: Scale },
+    { href: "#lawyers", label: "Lawyer Terms", icon: Users },
+    { href: "#payment", label: "Payment & Refund", icon: Gavel },
+    { href: "#restrictions", label: "Restrictions", icon: Ban },
+    { href: "#changes", label: "Changes to Terms", icon: RefreshCw },
+    { href: "#contact", label: "Contact Us", icon: Mail },
 ]
 
 const GENERAL_TERMS = [
@@ -95,7 +330,7 @@ const LAWYER_TERMS = [
     "Lawyers must provide accurate, updated, and verified information including qualifications, specialization, and license details.",
     "Lawyers agree to uphold professional standards during all consultations booked through NyayMitra.",
     "Lawyers are not employees or agents of NyayMitra. They operate as independent professionals solely responsible for the legal advice provided.",
-    "Any misuse of the platform — including misinformation, abuse, or no-shows — may result in suspension or permanent removal.",
+    "Any misuse of the platform including misinformation, abuse, or no-shows may result in suspension or permanent removal.",
     "Lawyers must ensure availability and timely communication with clients who book through the platform.",
     "NyayMitra reserves the right to remove profiles that receive consistent negative feedback or breach platform terms.",
     "Lawyers must maintain client confidentiality as per legal ethics and applicable laws.",
@@ -119,346 +354,696 @@ const RESTRICTIONS = [
     "Using the platform to solicit business outside NyayMitra's ecosystem.",
 ]
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-function SectionLabel({ children }: { children: React.ReactNode }) {
-    return (
-        <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-3">
-            {children}
-        </span>
-    )
-}
-
-function BulletList({ items, color = "#1a3a6b" }: { items: string[]; color?: string }) {
-    return (
-        <ul className="space-y-3">
-            {items.map((item, i) => (
-                <li key={i} className="flex items-start gap-3 text-[0.9rem] text-[#374151] leading-[1.75]">
-                    <span
-                        className="w-1.5 h-1.5 rounded-full mt-2.5 flex-shrink-0"
-                        style={{ backgroundColor: color }}
-                    />
-                    {item}
-                </li>
-            ))}
-        </ul>
-    )
-}
-
-function ContentCard({
-    id,
-    label,
-    title,
-    icon,
-    children,
-    accent = false,
-}: {
-    id?: string
-    label?: string
-    title: string
-    icon: React.ReactNode
-    children: React.ReactNode
-    accent?: boolean
+/* ─── BULLET LIST ────────────────────────────────────────────────────────────── */
+function BulletList({ items, dotColor = "var(--gold-dk)", dotBg = "var(--gold-pale)", dotBorder = "var(--gold)" }: {
+    items: string[]; dotColor?: string; dotBg?: string; dotBorder?: string
 }) {
     return (
-        <section
-            id={id}
-            className={`rounded-xl border p-8 scroll-mt-24 ${accent
-                    ? "bg-[#fdf6e8] border-[#c6973f]/30"
-                    : "bg-white border-black/[0.07]"
-                }`}
-        >
-            <div className="flex items-center gap-3 mb-5">
-                <div className="w-9 h-9 rounded-lg bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0">
-                    {icon}
+        <div>
+            {items.map((item, i) => (
+                <div key={i} className="bullet-item">
+                    <div className="bullet-dot" style={{ background: dotBg, border: `1px solid ${dotBorder}` }}>
+                        <CheckCircle style={{ width: 9, height: 9, color: dotColor }} />
+                    </div>
+                    <span>{item}</span>
                 </div>
-                <div>
-                    {label && <SectionLabel>{label}</SectionLabel>}
-                    <h2
-                        className="font-serif text-xl text-[#0d1117] leading-snug"
-                        style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                    >
-                        {title}
-                    </h2>
-                </div>
-            </div>
-            {children}
-        </section>
+            ))}
+        </div>
     )
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+/* ─── SECTION HEADER ─────────────────────────────────────────────────────────── */
+function SectionHeader({ eyebrow, title, italic, icon: Icon }: {
+    eyebrow?: string; title: string; italic?: string; icon: any
+}) {
+    return (
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 28 }}>
+            <div style={{
+                width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "var(--gold-dk)",
+            }}>
+                <Icon style={{ width: 18, height: 18 }} />
+            </div>
+            <div>
+                {eyebrow && (
+                    <span style={{
+                        display: "block",
+                        fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                        letterSpacing: "0.22em", textTransform: "uppercase",
+                        color: "var(--gold-dk)", marginBottom: 6,
+                    }}>{eyebrow}</span>
+                )}
+                <h2 style={{
+                    fontFamily: "var(--serif)",
+                    fontSize: "clamp(20px, 3vw, 26px)",
+                    fontWeight: 600, color: "var(--ink)",
+                    letterSpacing: "-0.015em", lineHeight: 1.2,
+                }}>
+                    {title}{" "}
+                    {italic && <em style={{ fontWeight: 300, color: "var(--ink-3)" }}>{italic}</em>}
+                </h2>
+            </div>
+        </div>
+    )
+}
+
+/* ─── ORNAMENT LINE ──────────────────────────────────────────────────────────── */
+const OrnamentLine = () => (
+    <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "20px 0" }}>
+        <div style={{ width: 40, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+        <Scale style={{ width: 9, height: 9, color: "var(--gold)" }} />
+        <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
+    </div>
+)
+
+/* ─── PAGE ───────────────────────────────────────────────────────────────────── */
 export default function TermsPage() {
+    const [activeSection, setActiveSection] = useState("general")
+    const [scrolled, setScrolled] = useState(false)
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+    useEffect(() => {
+        const onScroll = () => {
+            setScrolled(window.scrollY > 8)
+            // Active section tracking
+            const sections = ["general", "lawyers", "payment", "restrictions", "changes", "contact"]
+            for (const id of [...sections].reverse()) {
+                const el = document.getElementById(id)
+                if (el && window.scrollY >= el.offsetTop - 120) {
+                    setActiveSection(id); break
+                }
+            }
+        }
+        window.addEventListener("scroll", onScroll, { passive: true })
+        return () => window.removeEventListener("scroll", onScroll)
+    }, [])
+
+    // Close mobile menu when a link is clicked
+    const handleMobileLinkClick = () => {
+        setMobileMenuOpen(false)
+    }
+
     return (
         <>
-            <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
-        html { scroll-behavior: smooth; }
-      `}</style>
+            <GlobalStyles />
+            <div style={{ minHeight: "100vh", background: "var(--white)" }}>
 
-            <div className="min-h-screen bg-white text-[#0d1117]" style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}>
+                {/* ── NAVBAR (RESPONSIVE) ───────────────────────────────────────────────────────────── */}
+                <nav style={{
+                    position: "sticky", top: 0, zIndex: 100,
+                    background: scrolled ? "rgba(255,254,251,0.96)" : "var(--white)",
+                    backdropFilter: scrolled ? "blur(24px) saturate(1.4)" : "none",
+                    borderBottom: `1px solid ${scrolled ? "var(--ink-7)" : "transparent"}`,
+                    boxShadow: scrolled ? "0 2px 24px rgba(12,11,9,0.06)" : "none",
+                    transition: "all 0.32s cubic-bezier(0.16,1,0.3,1)",
+                }}>
+                    <div style={{
+                        maxWidth: 1200, margin: "0 auto", padding: "0 20px",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        height: 66,
+                    }}>
+                        {/* Logo matches landing page exactly */}
+                        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 11, textDecoration: "none", flexShrink: 0 }}>
+                            <div style={{
+                                width: 38, height: 38, borderRadius: 10,
+                                background: "var(--ink)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                                boxShadow: "0 2px 12px rgba(12,11,9,0.2)",
+                                position: "relative", overflow: "hidden", flexShrink: 0,
+                            }}>
+                                <div style={{
+                                    position: "absolute", inset: 0,
+                                    background: "linear-gradient(135deg, rgba(201,168,76,0.15) 0%, transparent 60%)",
+                                }} />
+                                <Scale style={{ color: "var(--gold)", width: 16, height: 16, position: "relative", zIndex: 1 }} />
+                            </div>
+                            <div>
+                                <div style={{
+                                    fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600,
+                                    color: "var(--ink)", lineHeight: 1, letterSpacing: "-0.02em",
+                                }}>NyayMitra</div>
+                            </div>
+                        </Link>
 
-                {/* ── NAV ───────────────────────────────────────────────────────────── */}
-                <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-black/[0.06] h-16 flex items-center justify-between px-6 lg:px-16">
-                    <Link href="/" className="flex items-center gap-2.5 no-underline">
-                        <div className="w-8 h-8 bg-[#1a3a6b] rounded flex items-center justify-center text-white flex-shrink-0">
-                            <ShieldIcon />
+                        {/* Desktop Navigation Links - visible on large screens */}
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                <Link href="/" className="btn-ghost desktop-only" style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                                    <ArrowLeft style={{ width: 13, height: 13 }} />
+                                    Home
+                                </Link>
+                                <Link href="/lawyers" className="nav-link desktop-only" style={{ display: "inline-flex", alignItems: "center" }}>
+                                    Find Lawyers
+                                </Link>
+                                <Link href="/legal-ai" className="btn-ink desktop-only" style={{ display: "inline-flex", alignItems: "center" }}>
+                                    <Sparkles style={{ width: 13, height: 13 }} />
+                                    Legal AI
+                                </Link>
+                            </div>
+
+                            {/* Mobile Menu Button - visible only on small screens */}
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                style={{
+                                    background: "transparent",
+                                    border: "none",
+                                    cursor: "pointer",
+                                    padding: "8px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    borderRadius: "8px",
+                                    transition: "all 0.2s",
+                                }}
+                                className="mobile-only"
+                                aria-label="Menu"
+                            >
+                                {mobileMenuOpen ? (
+                                    <X style={{ width: 22, height: 22, color: "var(--ink)" }} />
+                                ) : (
+                                    <Menu style={{ width: 22, height: 22, color: "var(--ink)" }} />
+                                )}
+                            </button>
                         </div>
-                        <span
-                            className="text-xl text-[#0d1117]"
-                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                        >
-                            NyayMitra
-                        </span>
-                    </Link>
-                    <div className="flex items-center gap-2">
-                        <Link href="/lawyers" className="inline-flex items-center text-sm font-medium px-4 py-2 rounded border border-black/10 text-[#374151] hover:bg-gray-50 transition-colors">
-                            Find Lawyers
-                        </Link>
-                        <div className="w-px h-5 bg-black/10" />
-                        <Link href="/legal-gpt" className="inline-flex items-center text-sm font-medium px-4 py-2 rounded bg-[#1a3a6b] text-white hover:bg-[#2952a3] transition-colors">
-                            Get AI Advice
-                        </Link>
                     </div>
+
+                    {/* Mobile Menu Dropdown - only visible when menu is open and on mobile */}
+                    {mobileMenuOpen && (
+                        <div style={{
+                            position: "absolute",
+                            top: 66,
+                            left: 0,
+                            right: 0,
+                            background: "var(--white)",
+                            borderBottom: "1px solid var(--ink-7)",
+                            boxShadow: "0 4px 24px rgba(12,11,9,0.08)",
+                            padding: "20px",
+                            animation: "mobileMenuFade 0.3s ease-out",
+                            zIndex: 99,
+                        }}
+                            className="mobile-only"
+                        >
+                            <div style={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 4,
+                            }}>
+                                <Link
+                                    href="/"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                    style={{ borderTop: "none" }}
+                                >
+                                    <ArrowLeft style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Home
+                                </Link>
+                                <Link
+                                    href="/lawyers"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                >
+                                    <Users style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Find Lawyers
+                                </Link>
+                                <Link
+                                    href="/legal-ai"
+                                    className="mobile-nav-link"
+                                    onClick={handleMobileLinkClick}
+                                    style={{ borderBottom: "none" }}
+                                >
+                                    <Sparkles style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                    Legal AI
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </nav>
 
-                {/* ── HERO ──────────────────────────────────────────────────────────── */}
-                <section className="relative overflow-hidden bg-white px-6 lg:px-16 py-20 lg:py-28">
-                    <div
-                        className="absolute inset-0 pointer-events-none"
-                        style={{
-                            backgroundImage:
-                                "linear-gradient(rgba(13,17,23,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(13,17,23,0.05) 1px, transparent 1px)",
-                            backgroundSize: "64px 64px",
-                        }}
-                    />
-                    <div className="absolute top-0 right-0 w-[480px] h-[480px] -translate-y-1/3 translate-x-1/4 rounded-full bg-[#1a3a6b]/[0.05] blur-3xl pointer-events-none" />
+                {/* ── HERO ─────────────────────────────────────────────────────────────── */}
+                <section className="hero-pad" style={{
+                    padding: "80px 28px 96px",
+                    position: "relative", overflow: "hidden",
+                    background: "var(--white)",
+                }}>
+                    {/* Background grid */}
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        backgroundImage: "linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px)",
+                        backgroundSize: "80px 80px", pointerEvents: "none",
+                    }} />
+                    {/* Radial glow */}
+                    <div style={{
+                        position: "absolute", right: "-5%", top: "5%",
+                        width: 520, height: 520, opacity: 0.03, pointerEvents: "none",
+                    }}>
+                        <Scale style={{ width: "100%", height: "100%", color: "var(--gold-dk)" }} />
+                    </div>
+                    <div style={{
+                        position: "absolute", inset: 0,
+                        background: "radial-gradient(ellipse 70% 60% at 80% 20%, rgba(201,168,76,0.05) 0%, transparent 60%)",
+                        pointerEvents: "none",
+                    }} />
 
-                    <div className="relative z-10 max-w-2xl">
-                        <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-[0.08em] uppercase px-3 py-1.5 rounded-sm bg-[#e8eef8] text-[#2952a3] mb-6">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#2952a3]" />
-                            Legal Agreement
-                        </span>
-                        <h1
-                            className="text-[clamp(2.8rem,6vw,5rem)] leading-[1.05] tracking-tight text-[#0d1117] mb-5"
-                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                        >
-                            Terms &amp;<br />
-                            <em className="italic text-[#1a3a6b]">Conditions.</em>
-                        </h1>
-                        <div className="w-16 h-0.5 bg-[#c6973f] rounded-full mb-5" />
-                        <p className="text-[clamp(1rem,1.6vw,1.15rem)] text-[#6b7280] max-w-lg leading-[1.75] font-light">
-                            Please read these terms carefully before using the NyayMitra platform.
-                        </p>
-                        <p className="inline-flex items-center gap-2 text-[0.8rem] text-[#9ca3af] mt-4">
-                            <ClockIcon />
-                            Last updated: March 2026
-                        </p>
+                    <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
+                        <div style={{ animation: "fadeUp 0.72s cubic-bezier(0.16,1,0.3,1) both" }}>
+
+                            {/* Badge */}
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 9,
+                                padding: "6px 16px 6px 9px",
+                                border: "1px solid var(--ink-7)", borderRadius: 100,
+                                marginBottom: 36, background: "var(--white)",
+                                boxShadow: "0 2px 12px rgba(12,11,9,0.04)",
+                            }}>
+                                <div style={{
+                                    width: 22, height: 22, borderRadius: "50%",
+                                    background: "var(--gold-pale)", border: "1px solid var(--gold)",
+                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                }}>
+                                    <Shield style={{ width: 10, height: 10, color: "var(--gold-dk)" }} />
+                                </div>
+                                <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
+                                    Legal Agreement
+                                </span>
+                            </div>
+
+                            {/* Headline */}
+                            <h1 className="hero-title" style={{
+                                fontFamily: "var(--serif)",
+                                fontSize: "clamp(44px, 7vw, 80px)",
+                                fontWeight: 600, lineHeight: 1.08,
+                                letterSpacing: "-0.03em",
+                                color: "var(--ink)", marginBottom: 0,
+                            }}>
+                                Terms &amp;<br />
+                                <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.3 }}>
+                                    Conditions.
+                                </span>
+                            </h1>
+
+                            <OrnamentLine />
+
+                            <p style={{
+                                fontFamily: "var(--sans)", fontSize: "15px",
+                                color: "var(--ink-4)", lineHeight: 1.85,
+                                maxWidth: 480, marginBottom: 12, fontWeight: 300,
+                            }}>
+                                Please read these terms carefully before using the NyayMitra platform.
+                            </p>
+
+                            <div style={{
+                                display: "inline-flex", alignItems: "center", gap: 7,
+                                fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em",
+                            }}>
+                                <Clock style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
+                                Last updated: March 2026
+                            </div>
+                        </div>
                     </div>
                 </section>
 
-                <hr className="border-none border-t border-black/[0.06]" />
+                <div style={{ height: 1, background: "var(--ink-7)" }} />
 
-                {/* ── MAIN LAYOUT ───────────────────────────────────────────────────── */}
-                <div className="px-6 lg:px-16 py-16 lg:py-24">
-                    <div className="grid lg:grid-cols-[240px_1fr] gap-12 lg:gap-16 items-start">
+                {/* ── MAIN LAYOUT ──────────────────────────────────────────────────────── */}
+                <div className="main-pad" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 28px 96px" }}>
+                    <div className="layout-grid" style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 48, alignItems: "start" }}>
 
-                        {/* ── SIDEBAR ─────────────────────────────────────────────────── */}
-                        <aside className="lg:sticky lg:top-24">
-                            <div className="border border-black/[0.08] rounded-xl overflow-hidden">
-                                <div className="px-5 py-4 border-b border-black/[0.06] flex items-center gap-2">
-                                    <div className="w-7 h-7 rounded bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b]">
-                                        <BookIcon />
+                        {/* ── SIDEBAR ──────────────────────────────────────────────────────── */}
+                        <aside className="sidebar-wrap sidebar-sticky" style={{ position: "sticky", top: 88 }}>
+                            <div style={{
+                                border: "1px solid var(--ink-7)",
+                                borderRadius: "var(--radius-lg)", overflow: "hidden",
+                                background: "var(--white)",
+                            }}>
+                                {/* Sidebar header */}
+                                <div style={{
+                                    padding: "14px 18px",
+                                    borderBottom: "1px solid var(--ink-7)",
+                                    display: "flex", alignItems: "center", gap: 10,
+                                    background: "var(--ink-9)",
+                                }}>
+                                    <div style={{
+                                        width: 28, height: 28, borderRadius: 7,
+                                        background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center",
+                                    }}>
+                                        <BookOpen style={{ color: "var(--gold)", width: 12, height: 12 }} />
                                     </div>
-                                    <span
-                                        className="text-[0.95rem] text-[#0d1117]"
-                                        style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                    >
-                                        Contents
-                                    </span>
+                                    <span style={{ fontFamily: "var(--serif)", fontSize: "15px", fontWeight: 600, color: "var(--ink)" }}>Contents</span>
                                 </div>
-                                <nav className="py-2">
-                                    {NAV_ITEMS.map((item) => (
-                                        <a
-                                            key={item.label}
-                                            href={item.href}
-                                            className="group flex items-center gap-2.5 px-5 py-2.5 text-[0.875rem] text-[#6b7280] hover:text-[#0d1117] hover:bg-[#f8f7f4] transition-colors no-underline"
-                                        >
-                                            <span className="text-[#1a3a6b] opacity-60 group-hover:opacity-100 transition-opacity">
-                                                {item.icon}
-                                            </span>
-                                            {item.label}
-                                            <ChevronRightIcon />
-                                        </a>
-                                    ))}
+
+                                {/* Nav items */}
+                                <nav style={{ padding: "6px 0" }}>
+                                    {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+                                        const id = href.replace("#", "")
+                                        return (
+                                            <a
+                                                key={href}
+                                                href={href}
+                                                className={`sidebar-link${activeSection === id ? " active" : ""}`}
+                                            >
+                                                <Icon style={{ width: 13, height: 13, flexShrink: 0 }} />
+                                                <span>{label}</span>
+                                                <ChevronRight style={{
+                                                    width: 11, height: 11, marginLeft: "auto",
+                                                    opacity: activeSection === id ? 1 : 0,
+                                                    transition: "opacity 0.2s",
+                                                    color: "var(--gold-dk)",
+                                                }} />
+                                            </a>
+                                        )
+                                    })}
                                 </nav>
+
+                                {/* Sidebar footer badge */}
+                                <div style={{
+                                    margin: 12, padding: "12px 14px",
+                                    background: "var(--gold-pale)", border: "1px solid rgba(201,168,76,0.3)",
+                                    borderRadius: "var(--radius)",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 6 }}>
+                                        <div style={{
+                                            width: 6, height: 6, borderRadius: "50%", background: "#22c55e",
+                                            animation: "glowPulse 2.5s ease-in-out infinite",
+                                        }} />
+                                        <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold-dk)", letterSpacing: "0.12em", textTransform: "uppercase" }}>
+                                            Need Help?
+                                        </span>
+                                    </div>
+                                    <p style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-4)", lineHeight: 1.6, fontWeight: 300 }}>
+                                        Questions about these terms? Our team is here.
+                                    </p>
+                                    <a href="#contact" style={{
+                                        display: "inline-flex", alignItems: "center", gap: 5, marginTop: 8,
+                                        fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 600,
+                                        color: "var(--gold-dk)", textDecoration: "none", letterSpacing: "0.08em",
+                                    }}>
+                                        Contact us <ChevronRight style={{ width: 10, height: 10 }} />
+                                    </a>
+                                </div>
                             </div>
                         </aside>
 
-                        {/* ── CONTENT ─────────────────────────────────────────────────── */}
-                        <div className="space-y-6 min-w-0">
+                        {/* ── CONTENT ──────────────────────────────────────────────────────── */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 16, minWidth: 0 }}>
 
                             {/* Introduction */}
-                            <ContentCard
-                                id="general"
-                                label="Overview"
-                                title="Introduction"
-                                icon={<ScaleIcon />}
-                            >
-                                <p className="text-[0.9rem] text-[#374151] leading-[1.8] mb-4">
-                                    Welcome to{" "}
-                                    <span className="font-semibold text-[#1a3a6b]">NyayMitra</span>. By accessing or using our platform,
-                                    you agree to comply with the following terms and conditions. NyayMitra is committed to providing a
-                                    secure, transparent, and efficient legal-tech platform that connects users with verified legal professionals.
-                                </p>
-                                <div className="flex items-start gap-3 bg-[#e8eef8] rounded-lg px-4 py-3 border border-[#1a3a6b]/10">
-                                    <span className="text-[#1a3a6b] mt-0.5"><AlertIcon /></span>
-                                    <p className="text-[0.85rem] text-[#374151] leading-[1.7]">
-                                        <span className="font-semibold text-[#1a3a6b]">Important: </span>
-                                        NyayMitra is a technology platform that connects users with verified lawyers. We do not provide
-                                        direct legal advice or representation. All legal advice comes from independent legal professionals.
+                            <Reveal>
+                                <div id="general" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Overview" title="Introduction" icon={Scale} />
+
+                                    <p style={{
+                                        fontFamily: "var(--sans)", fontSize: "14px",
+                                        color: "var(--ink-4)", lineHeight: 1.85,
+                                        marginBottom: 20, fontWeight: 300,
+                                    }}>
+                                        Welcome to{" "}
+                                        <span style={{ fontFamily: "var(--serif)", fontWeight: 600, fontSize: "16px", color: "var(--ink)" }}>NyayMitra</span>
+                                        . By accessing or using our platform, you agree to comply with the following terms and conditions.
+                                        NyayMitra is committed to providing a secure, transparent, and efficient legal-tech platform that
+                                        connects users with verified legal professionals.
                                     </p>
-                                </div>
-                            </ContentCard>
 
-                            {/* General Terms */}
-                            <ContentCard
-                                title="General Terms"
-                                icon={<ShieldIcon />}
-                            >
-                                <BulletList items={GENERAL_TERMS} color="#1a3a6b" />
-                            </ContentCard>
-
-                            {/* Lawyer Terms */}
-                            <ContentCard
-                                id="lawyers"
-                                label="For legal professionals"
-                                title="Additional Terms for Lawyers"
-                                icon={<UsersIcon />}
-                            >
-                                <BulletList items={LAWYER_TERMS} color="#1a6b5e" />
-                            </ContentCard>
-
-                            {/* Payment */}
-                            <ContentCard
-                                title="Payment &amp; Refund Policy"
-                                icon={<ScaleIcon />}
-                            >
-                                <BulletList items={PAYMENT_TERMS} color="#c6973f" />
-                            </ContentCard>
-
-                            {/* Restrictions */}
-                            <ContentCard
-                                id="restrictions"
-                                label="Prohibited activities"
-                                title="What's not allowed"
-                                icon={<BanIcon />}
-                            >
-                                <BulletList items={RESTRICTIONS} color="#a32d2d" />
-                            </ContentCard>
-
-                            {/* Changes */}
-                            <ContentCard
-                                id="changes"
-                                title="Changes to Terms"
-                                icon={<RefreshIcon />}
-                            >
-                                <div className="space-y-3 text-[0.9rem] text-[#374151] leading-[1.8]">
-                                    <p>
-                                        NyayMitra may update these terms at any time to reflect changes in laws, platform features, or
-                                        business operations. We will notify users of significant changes via email or platform notification.
-                                    </p>
-                                    <p>
-                                        Continued use of the platform after changes indicates your acceptance of the revised terms. If you
-                                        do not agree with any part of these terms, please discontinue using our services.
-                                    </p>
-                                </div>
-                            </ContentCard>
-
-                            {/* Disclaimer */}
-                            <section className="rounded-xl border border-[#c6973f]/30 bg-[#fdf6e8] px-8 py-6">
-                                <div className="flex items-start gap-3">
-                                    <div className="w-9 h-9 rounded-lg bg-[#c6973f]/15 flex items-center justify-center text-[#c6973f] flex-shrink-0 mt-0.5">
-                                        <AlertIcon />
-                                    </div>
-                                    <div>
-                                        <h3
-                                            className="text-base text-[#0d1117] mb-2"
-                                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                        >
-                                            Legal Disclaimer
-                                        </h3>
-                                        <p className="text-[0.875rem] text-[#374151] leading-[1.75]">
-                                            The information provided on NyayMitra is for general informational purposes only and does not
-                                            constitute legal advice. No lawyer-client relationship is formed through the use of this platform.
-                                            Always seek the advice of a qualified lawyer for your specific legal situation. NyayMitra shall not
-                                            be liable for any decisions made based on information provided through the platform.
+                                    {/* Alert box */}
+                                    <div style={{
+                                        display: "flex", alignItems: "flex-start", gap: 14,
+                                        padding: "16px 20px",
+                                        background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                                        borderRadius: "var(--radius)",
+                                        borderLeft: "3px solid var(--gold)",
+                                    }}>
+                                        <AlertCircle style={{ width: 16, height: 16, color: "var(--gold-dk)", flexShrink: 0, marginTop: 1 }} />
+                                        <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-3)", lineHeight: 1.75, fontWeight: 400 }}>
+                                            <span style={{ fontWeight: 700, color: "var(--ink)" }}>Important: </span>
+                                            NyayMitra is a technology platform that connects users with verified lawyers. We do not provide
+                                            direct legal advice or representation. All legal advice comes from independent legal professionals.
                                         </p>
                                     </div>
                                 </div>
-                            </section>
+                            </Reveal>
+
+                            {/* General Terms */}
+                            <Reveal delay={40}>
+                                <div id="general" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Platform rules" title="General" italic="Terms" icon={Shield} />
+                                    <BulletList items={GENERAL_TERMS} />
+                                </div>
+                            </Reveal>
+
+                            {/* Lawyer Terms */}
+                            <Reveal delay={60}>
+                                <div id="lawyers" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="For legal professionals" title="Additional Terms for" italic="Lawyers" icon={Users} />
+                                    <BulletList
+                                        items={LAWYER_TERMS}
+                                        dotColor="var(--green)"
+                                        dotBg="#f0fdf4"
+                                        dotBorder="#bbf7d0"
+                                    />
+                                </div>
+                            </Reveal>
+
+                            {/* Payment */}
+                            <Reveal delay={80}>
+                                <div id="payment" className="content-card gold-accent" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Billing & refunds" title="Payment &amp;" italic="Refund Policy" icon={Gavel} />
+                                    <BulletList items={PAYMENT_TERMS} />
+                                </div>
+                            </Reveal>
+
+                            {/* Restrictions */}
+                            <Reveal delay={60}>
+                                <div id="restrictions" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader eyebrow="Prohibited activities" title="What's" italic="not allowed" icon={Ban} />
+                                    <BulletList
+                                        items={RESTRICTIONS}
+                                        dotColor="var(--red)"
+                                        dotBg="#fef2f2"
+                                        dotBorder="#fecaca"
+                                    />
+                                </div>
+                            </Reveal>
+
+                            {/* Changes */}
+                            <Reveal delay={60}>
+                                <div id="changes" className="content-card" style={{ scrollMarginTop: 100 }}>
+                                    <SectionHeader title="Changes to" italic="Terms" icon={RefreshCw} />
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                                        {[
+                                            "NyayMitra may update these terms at any time to reflect changes in laws, platform features, or business operations. We will notify users of significant changes via email or platform notification.",
+                                            "Continued use of the platform after changes indicates your acceptance of the revised terms. If you do not agree with any part of these terms, please discontinue using our services.",
+                                        ].map((para, i) => (
+                                            <p key={i} style={{
+                                                fontFamily: "var(--sans)", fontSize: "14px",
+                                                color: "var(--ink-4)", lineHeight: 1.85, fontWeight: 300,
+                                            }}>{para}</p>
+                                        ))}
+                                    </div>
+                                </div>
+                            </Reveal>
+
+                            {/* Legal Disclaimer */}
+                            <Reveal delay={60}>
+                                <div style={{
+                                    borderRadius: "var(--radius-lg)",
+                                    border: "1px solid rgba(201,168,76,0.3)",
+                                    background: "var(--gold-pale)",
+                                    padding: "28px 32px",
+                                }}>
+                                    <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                                        <div style={{
+                                            width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+                                            background: "rgba(201,168,76,0.15)", border: "1px solid rgba(201,168,76,0.3)",
+                                            display: "flex", alignItems: "center", justifyContent: "center",
+                                        }}>
+                                            <AlertCircle style={{ width: 18, height: 18, color: "var(--gold-dk)" }} />
+                                        </div>
+                                        <div>
+                                            <h3 style={{
+                                                fontFamily: "var(--serif)", fontSize: "20px",
+                                                fontWeight: 600, color: "var(--ink)", marginBottom: 10, letterSpacing: "-0.01em",
+                                            }}>
+                                                Legal Disclaimer
+                                            </h3>
+                                            <p style={{
+                                                fontFamily: "var(--sans)", fontSize: "13.5px",
+                                                color: "var(--ink-3)", lineHeight: 1.8, fontWeight: 300,
+                                            }}>
+                                                The information provided on NyayMitra is for general informational purposes only and does not
+                                                constitute legal advice. No lawyer-client relationship is formed through the use of this platform.
+                                                Always seek the advice of a qualified lawyer for your specific legal situation. NyayMitra shall not
+                                                be liable for any decisions made based on information provided through the platform.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </Reveal>
 
                             {/* Contact */}
-                            <section id="contact" className="rounded-xl border border-black/[0.07] bg-white overflow-hidden scroll-mt-24">
-                                <div className="bg-[#1a3a6b] px-8 py-7 relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 w-48 h-48 translate-x-1/3 -translate-y-1/3 rounded-full bg-white/5 pointer-events-none" />
-                                    <span className="block text-[11px] font-semibold tracking-[0.1em] uppercase text-[#c6973f] mb-2">Get in touch</span>
-                                    <h2
-                                        className="text-2xl text-white relative z-10"
-                                        style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                                    >
-                                        Questions about these terms?
-                                    </h2>
-                                    <p className="text-[0.875rem] text-white/60 mt-1 max-w-md">
-                                        If you have any questions, concerns, or need clarification, please reach out to our support team.
-                                    </p>
-                                </div>
-                                <div className="px-8 py-6 grid sm:grid-cols-2 gap-4">
-                                    <a
-                                        href="mailto:support@nyaymitra.tech"
-                                        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-black/[0.08] hover:border-[#1a3a6b]/30 hover:bg-[#f8f7f4] transition-all no-underline group"
-                                    >
-                                        <div className="w-9 h-9 rounded-lg bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0">
-                                            <MailIcon />
-                                        </div>
-                                        <div>
-                                            <p className="text-[11px] font-semibold tracking-wide uppercase text-[#9ca3af]">Email</p>
-                                            <p className="text-[0.875rem] text-[#374151] group-hover:text-[#1a3a6b] transition-colors">
-                                                support@nyaymitra.tech
+                            <Reveal delay={60}>
+                                <div id="contact" className="content-card dark-accent" style={{ overflow: "hidden", scrollMarginTop: 100, padding: 0 }}>
+                                    {/* Dark header */}
+                                    <div style={{
+                                        padding: "36px 36px 28px",
+                                        position: "relative", overflow: "hidden",
+                                        background: "var(--ink)",
+                                    }}>
+                                        <div style={{
+                                            position: "absolute", inset: 0,
+                                            background: "linear-gradient(135deg, rgba(201,168,76,0.06) 0%, transparent 60%)",
+                                            pointerEvents: "none",
+                                        }} />
+                                        <div style={{
+                                            position: "absolute", right: -40, top: -40,
+                                            width: 200, height: 200, borderRadius: "50%",
+                                            background: "rgba(255,255,255,0.02)", pointerEvents: "none",
+                                        }} />
+
+                                        <div style={{ marginBottom: 10 }}>
+                                            <span style={{
+                                                fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                                                letterSpacing: "0.22em", textTransform: "uppercase",
+                                                color: "var(--gold)", display: "block", marginBottom: 10,
+                                            }}>
+                                                Get in touch
+                                            </span>
+                                            <h2 style={{
+                                                fontFamily: "var(--serif)",
+                                                fontSize: "clamp(22px, 3.5vw, 30px)",
+                                                fontWeight: 600, color: "white",
+                                                letterSpacing: "-0.02em", lineHeight: 1.2,
+                                            }}>
+                                                Questions about these terms?
+                                            </h2>
+                                            <p style={{
+                                                fontFamily: "var(--sans)", fontSize: "13.5px",
+                                                color: "rgba(255,255,255,0.4)", marginTop: 8, lineHeight: 1.7, fontWeight: 300,
+                                            }}>
+                                                If you have questions, concerns, or need clarification, please reach out to our support team.
                                             </p>
                                         </div>
-                                    </a>
-                                    <a
-                                        href="tel:+917970596183"
-                                        className="flex items-center gap-3 px-4 py-3.5 rounded-lg border border-black/[0.08] hover:border-[#1a3a6b]/30 hover:bg-[#f8f7f4] transition-all no-underline group"
-                                    >
-                                        <div className="w-9 h-9 rounded-lg bg-[#e8eef8] flex items-center justify-center text-[#1a3a6b] flex-shrink-0">
-                                            <PhoneIcon />
+
+                                        {/* Divider */}
+                                        <div style={{
+                                            display: "flex", alignItems: "center", gap: 12, marginTop: 24,
+                                        }}>
+                                            <div style={{ width: 32, height: 1, background: "linear-gradient(90deg, var(--gold-dk), var(--gold))" }} />
+                                            <Scale style={{ width: 9, height: 9, color: "var(--gold)" }} />
+                                            <div style={{ width: 16, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
                                         </div>
-                                        <div>
-                                            <p className="text-[11px] font-semibold tracking-wide uppercase text-[#9ca3af]">Phone</p>
-                                            <p className="text-[0.875rem] text-[#374151] group-hover:text-[#1a3a6b] transition-colors">
-                                                +91 79705 96183
-                                            </p>
-                                        </div>
-                                    </a>
+                                    </div>
+
+                                    {/* Contact links */}
+                                    <div className="contact-grid" style={{
+                                        display: "grid", gridTemplateColumns: "1fr 1fr",
+                                        gap: 12, padding: "24px 28px 28px",
+                                        background: "var(--ink-2)",
+                                    }}>
+                                        {[
+                                            {
+                                                href: "mailto:support@nyaymitra.tech",
+                                                icon: Mail, label: "Email",
+                                                value: "support@nyaymitra.tech",
+                                            },
+                                            {
+                                                href: "tel:+917970596183",
+                                                icon: Phone, label: "Phone",
+                                                value: "+91 79705 96183",
+                                            },
+                                        ].map(({ href, icon: Icon, label, value }) => (
+                                            <a key={href} href={href} className="contact-row" style={{
+                                                background: "rgba(255,255,255,0.04)",
+                                                borderColor: "rgba(255,255,255,0.08)",
+                                            }}
+                                                onMouseEnter={e => {
+                                                    const a = e.currentTarget as HTMLAnchorElement
+                                                    a.style.borderColor = "var(--gold)"
+                                                    a.style.background = "rgba(201,168,76,0.08)"
+                                                }}
+                                                onMouseLeave={e => {
+                                                    const a = e.currentTarget as HTMLAnchorElement
+                                                    a.style.borderColor = "rgba(255,255,255,0.08)"
+                                                    a.style.background = "rgba(255,255,255,0.04)"
+                                                }}
+                                            >
+                                                <div style={{
+                                                    width: 36, height: 36, borderRadius: 9, flexShrink: 0,
+                                                    background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)",
+                                                    display: "flex", alignItems: "center", justifyContent: "center",
+                                                    color: "var(--gold)",
+                                                }}>
+                                                    <Icon style={{ width: 14, height: 14 }} />
+                                                </div>
+                                                <div>
+                                                    <p style={{
+                                                        fontFamily: "var(--mono)", fontSize: "8px", fontWeight: 500,
+                                                        letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)",
+                                                        marginBottom: 3,
+                                                    }}>{label}</p>
+                                                    <p style={{
+                                                        fontFamily: "var(--sans)", fontSize: "13px",
+                                                        color: "rgba(255,255,255,0.65)", fontWeight: 400,
+                                                    }}>{value}</p>
+                                                </div>
+                                            </a>
+                                        ))}
+                                    </div>
                                 </div>
-                            </section>
+                            </Reveal>
 
                         </div>
                     </div>
                 </div>
 
-                {/* ── FOOTER ────────────────────────────────────────────────────────── */}
-                <div className="bg-[#0d1117] border-t border-white/[0.06] px-6 lg:px-16 py-5 flex items-center justify-between flex-wrap gap-3">
-                    <span className="text-[0.8rem] text-white/30">© {new Date().getFullYear()} NyayMitra. All rights reserved.</span>
-                    <div className="flex gap-6">
-                        {["Privacy", "Terms", "Contact"].map((l) => (
-                            <Link key={l} href="#" className="text-[0.8rem] text-white/30 hover:text-white/70 transition-colors no-underline">
-                                {l}
-                            </Link>
-                        ))}
+                {/* ── FOOTER ───────────────────────────────────────────────────────────── */}
+                <footer style={{
+                    background: "var(--ink)",
+                    borderTop: "1px solid rgba(255,255,255,0.05)",
+                    padding: "24px 28px",
+                }}>
+                    <div style={{
+                        maxWidth: 1200, margin: "0 auto",
+                        display: "flex", alignItems: "center", justifyContent: "space-between",
+                        flexWrap: "wrap", gap: 12,
+                    }}>
+                        {/* Logo */}
+                        <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+                            <div style={{
+                                width: 30, height: 30, borderRadius: 8, background: "rgba(255,255,255,0.05)",
+                                border: "1px solid rgba(201,168,76,0.2)",
+                                display: "flex", alignItems: "center", justifyContent: "center",
+                            }}>
+                                <Scale style={{ color: "var(--gold)", width: 13, height: 13 }} />
+                            </div>
+                            <span style={{
+                                fontFamily: "var(--serif)", fontSize: "16px",
+                                fontWeight: 600, color: "rgba(255,255,255,0.7)", lineHeight: 1,
+                            }}>NyayMitra</span>
+                        </Link>
+
+                        <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
+                            © {new Date().getFullYear()} NyayMitra. All rights reserved.
+                        </p>
+
+                        <div style={{ display: "flex", gap: 4 }}>
+                            {[
+                                { label: "Privacy", href: "/privacy-policy" },
+                                { label: "Terms", href: "/terms" },
+                                { label: "Contact", href: "/contact" },
+                            ].map(({ label, href }) => (
+                                <Link key={label} href={href} style={{
+                                    fontFamily: "var(--sans)", fontSize: "12px",
+                                    color: "rgba(255,255,255,0.3)", textDecoration: "none",
+                                    padding: "4px 10px", borderRadius: 6, transition: "all 0.16s",
+                                }}
+                                    onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.65)"}
+                                    onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = "rgba(255,255,255,0.3)"}
+                                >{label}</Link>
+                            ))}
+                        </div>
                     </div>
-                </div>
+                </footer>
 
             </div>
         </>
