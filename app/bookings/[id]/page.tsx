@@ -29,25 +29,11 @@ import {
     Clock,
     AlertCircle,
     Mail,
-    Sparkles
+    Sparkles,
+    ExternalLink,
 } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { Progress } from "@/components/ui/progress"
 import { toast, Toaster } from "sonner"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { format } from "date-fns"
-import { cn } from "@/lib/utils"
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface Booking {
     _id: string
@@ -69,121 +55,495 @@ interface Booking {
     createdAt?: string
     updatedAt?: string
     lawyerDetails?: {
-        specialization?: string[];
-        experience?: number;
-        bio?: string;
-        languages?: string[];
-        consultationFee?: number;
-        averageRating?: number;
-        totalReviews?: number;
-    };
+        specialization?: string[]
+        experience?: number
+        bio?: string
+        languages?: string[]
+        consultationFee?: number
+        averageRating?: number
+        totalReviews?: number
+    }
 }
 
-const ContactCard = ({ booking, isLawyer }: { booking: Booking; isLawyer: boolean }) => {
-    if (isLawyer || !booking.lawyerPhone) return null;
+// ─── Theme Styles ──────────────────────────────────────────────────────────
+function ThemeStyles() {
+    useEffect(() => {
+        const id = "booking-theme-styles"
+        if (document.getElementById(id)) return
+        const s = document.createElement("style")
+        s.id = id
+        s.textContent = `
+            @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap');
+            :root {
+                --ink: #0a0a0a;
+                --ink-2: #1a1a1a;
+                --ink-4: #6b6b6b;
+                --ink-5: #9a9a9a;
+                --ink-7: #e8e8e8;
+                --ink-8: #f4f3f0;
+                --parchment: #faf9f6;
+                --white: #ffffff;
+                --gold: #c9a84c;
+                --gold-lt: #e8c96a;
+                --gold-dk: #8b6914;
+                --gold-pale: #fdf6e3;
+                --emerald: #10b981;
+                --red: #c0392b;
+                --serif: 'Cormorant Garamond', Georgia, serif;
+                --sans: 'DM Sans', system-ui, sans-serif;
+                --mono: 'DM Mono', monospace;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                background: var(--white);
+                color: var(--ink);
+                font-family: var(--sans);
+                -webkit-font-smoothing: antialiased;
+            }
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            @keyframes slideInUp {
+                from { opacity: 0; transform: translateY(24px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            @keyframes shimmerGold {
+                0% { background-position: -200% center; }
+                100% { background-position: 200% center; }
+            }
+            @keyframes pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.5; }
+            }
+            .gold-text {
+                background: linear-gradient(100deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 50%, var(--gold) 70%, var(--gold-dk) 100%);
+                background-size: 200% auto;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                animation: shimmerGold 4s linear infinite;
+            }
+            .luxury-card {
+                background: var(--white);
+                border: 1px solid var(--ink-7);
+                border-radius: 12px;
+                transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+            .luxury-card:hover {
+                border-color: var(--gold);
+                box-shadow: 0 8px 24px rgba(201, 168, 76, 0.12);
+            }
+            .luxury-button {
+                font-family: var(--sans);
+                font-weight: 600;
+                font-size: 13px;
+                padding: 10px 18px;
+                border-radius: 8px;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .luxury-button-gold {
+                background: var(--gold);
+                color: var(--ink);
+            }
+            .luxury-button-gold:hover {
+                background: var(--gold-lt);
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px rgba(201, 168, 76, 0.3);
+            }
+            .luxury-button-outline {
+                background: transparent;
+                color: var(--ink);
+                border: 1px solid var(--ink-7);
+            }
+            .luxury-button-outline:hover {
+                border-color: var(--gold);
+                background: var(--gold-pale);
+            }
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 14px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                letter-spacing: 0.05em;
+                text-transform: uppercase;
+            }
+            .status-confirmed {
+                background: var(--emerald);
+                color: var(--white);
+            }
+            .status-pending {
+                background: var(--gold-pale);
+                color: var(--gold-dk);
+            }
+            .status-completed {
+                background: var(--gold-pale);
+                color: var(--gold-dk);
+            }
+            .status-cancelled {
+                background: var(--ink-8);
+                color: var(--ink-4);
+            }
+            .detail-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+                gap: 20px;
+            }
+            @media (max-width: 768px) {
+                .detail-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .tab-button {
+                padding: 10px 16px;
+                border: none;
+                background: transparent;
+                color: var(--ink-4);
+                font-family: var(--sans);
+                font-weight: 500;
+                font-size: 13px;
+                cursor: pointer;
+                border-bottom: 2px solid transparent;
+                transition: all 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+            .tab-button:hover {
+                color: var(--ink);
+            }
+            .tab-button.active {
+                color: var(--gold-dk);
+                border-bottom-color: var(--gold);
+            }
+            @media (max-width: 640px) {
+                .detail-grid {
+                    grid-template-columns: 1fr;
+                }
+                .luxury-button {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+        `
+        document.head.appendChild(s)
+    }, [])
+    return null
+}
+
+// ─── Contact Card Component ────────────────────────────────────────────────
+function ContactCard({ booking, isLawyer }: { booking: Booking; isLawyer: boolean }) {
+    if (isLawyer || !booking.lawyerPhone) return null
 
     return (
-        <div className="space-y-4 mt-8 pt-8 border-t border-gradient-to-r from-transparent via-slate-200 to-transparent">
-            <div className="flex items-center gap-2 mb-6">
-                <div className="h-0.5 flex-1 bg-gradient-to-r from-transparent to-slate-300"></div>
-                <span className="text-xs uppercase tracking-widest text-slate-400 font-semibold">Contact</span>
-                <div className="h-0.5 flex-1 bg-gradient-to-l from-transparent to-slate-300"></div>
-            </div>
+        <div style={{ marginTop: 32, paddingTop: 32, borderTop: `1px solid var(--ink-7)` }}>
+            <h3 style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(18px, 4vw, 22px)",
+                fontWeight: 600,
+                marginBottom: 24,
+            }}>
+                Contact Information
+            </h3>
 
-            <div className="space-y-4">
-                {/* Phone Section */}
-                <div className="group p-4 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 hover:border-slate-300 transition-all duration-300">
-                    <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-3 flex-1">
-                            <div className="p-2.5 rounded-lg bg-white border border-slate-200 group-hover:border-slate-300 transition-all">
-                                <Phone className="w-4 h-4 text-slate-700" />
-                            </div>
-                            <div className="min-w-0">
-                                <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-1">Direct Phone</p>
-                                <p className="text-lg font-semibold text-slate-900 font-mono break-all">{booking.lawyerPhone}</p>
-                            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+                {/* Phone */}
+                <div className="luxury-card" style={{ padding: 20 }}>
+                    <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 10,
+                        marginBottom: 12,
+                    }}>
+                        <div style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 8,
+                            background: "var(--gold-pale)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}>
+                            <Phone size={18} color="var(--gold-dk)" />
                         </div>
-                        <Button
-                            size="sm"
-                            onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
-                            className="shrink-0 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-lg hover:shadow-xl transition-all"
-                        >
-                            <Phone className="w-3.5 h-3.5" />
-                        </Button>
+                        <p style={{
+                            fontSize: 10,
+                            fontFamily: "var(--mono)",
+                            color: "var(--ink-5)",
+                            letterSpacing: ".08em",
+                            textTransform: "uppercase",
+                            fontWeight: 600,
+                        }}>
+                            Direct Phone
+                        </p>
                     </div>
+                    <p style={{
+                        fontFamily: "var(--mono)",
+                        fontSize: 16,
+                        fontWeight: 600,
+                        color: "var(--ink)",
+                        marginBottom: 12,
+                    }}>
+                        {booking.lawyerPhone}
+                    </p>
+                    <button
+                        onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                        className="luxury-button luxury-button-gold"
+                        style={{ width: "100%" }}
+                    >
+                        <Phone size={14} />
+                        Call Now
+                    </button>
                 </div>
 
-                {/* Email Section */}
+                {/* Email */}
                 {booking.lawyerEmail && (
-                    <div className="group p-4 rounded-lg bg-gradient-to-br from-slate-50 to-slate-100/50 border border-slate-200 hover:border-slate-300 transition-all duration-300">
-                        <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-3 flex-1">
-                                <div className="p-2.5 rounded-lg bg-white border border-slate-200 group-hover:border-slate-300 transition-all">
-                                    <Mail className="w-4 h-4 text-slate-700" />
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-1">Email Address</p>
-                                    <p className="text-sm font-medium text-slate-900 break-all">{booking.lawyerEmail}</p>
-                                </div>
+                    <div className="luxury-card" style={{ padding: 20 }}>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            marginBottom: 12,
+                        }}>
+                            <div style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: 8,
+                                background: "var(--gold-pale)",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}>
+                                <Mail size={18} color="var(--gold-dk)" />
                             </div>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => window.open(`mailto:${booking.lawyerEmail}`)}
-                                className="shrink-0 border-slate-300 hover:border-slate-400"
-                            >
-                                <Mail className="w-3.5 h-3.5" />
-                            </Button>
-                        </div>
-                    </div>
-                )}
-
-                {/* Scheduled Time Alert */}
-                <div className="p-4 rounded-lg bg-gradient-to-br from-amber-50 to-amber-100/50 border border-amber-200">
-                    <div className="flex items-start gap-3">
-                        <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
-                        <div>
-                            <p className="text-xs uppercase tracking-wider font-semibold text-amber-900 mb-1">Contact During</p>
-                            <p className="text-sm text-amber-800">
-                                {format(new Date(booking.date), 'MMMM d, yyyy')} at {booking.slot}
+                            <p style={{
+                                fontSize: 10,
+                                fontFamily: "var(--mono)",
+                                color: "var(--ink-5)",
+                                letterSpacing: ".08em",
+                                textTransform: "uppercase",
+                                fontWeight: 600,
+                            }}>
+                                Email Address
                             </p>
                         </div>
+                        <p style={{
+                            fontSize: 14,
+                            fontWeight: 500,
+                            color: "var(--ink)",
+                            marginBottom: 12,
+                            wordBreak: "break-all",
+                        }}>
+                            {booking.lawyerEmail}
+                        </p>
+                        <button
+                            onClick={() => window.open(`mailto:${booking.lawyerEmail}`)}
+                            className="luxury-button luxury-button-outline"
+                            style={{ width: "100%" }}
+                        >
+                            <Mail size={14} />
+                            Send Email
+                        </button>
                     </div>
-                </div>
+                )}
             </div>
         </div>
-    );
-};
-
-const PremiumBadge = ({ children, variant = "default" }: { children: React.ReactNode; variant?: string }) => {
-    const variants = {
-        status: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider",
-        mode: "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider",
-    }
-    return <span className={variants[variant as keyof typeof variants] || variants.status}>{children}</span>
+    )
 }
 
+// ─── Detail Card Component ────────────────────────────────────────────────
+function DetailCard({
+    icon,
+    label,
+    value,
+    subtext,
+}: {
+    icon: React.ReactNode
+    label: string
+    value: string
+    subtext?: string
+}) {
+    return (
+        <div className="luxury-card" style={{ padding: "clamp(16px, 3vw, 20px)" }}>
+            <div style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 8,
+            }}>
+                <span style={{ color: "var(--gold)" }}>{icon}</span>
+                <p style={{
+                    fontSize: 10,
+                    fontFamily: "var(--mono)",
+                    color: "var(--ink-5)",
+                    letterSpacing: ".08em",
+                    textTransform: "uppercase",
+                    fontWeight: 600,
+                }}>
+                    {label}
+                </p>
+            </div>
+            <p style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(18px, 4vw, 22px)",
+                fontWeight: 600,
+                color: "var(--ink)",
+                marginBottom: 4,
+            }}>
+                {value}
+            </p>
+            {subtext && (
+                <p style={{
+                    fontSize: 12,
+                    color: "var(--ink-4)",
+                }}>
+                    {subtext}
+                </p>
+            )}
+        </div>
+    )
+}
+
+// ─── Status Timeline Component ─────────────────────────────────────────────
+function StatusTimeline({ status }: { status: string }) {
+    const steps = [
+        { id: "pending", label: "Pending" },
+        { id: "confirmed", label: "Confirmed" },
+        { id: "completed", label: "Completed" },
+    ]
+
+    const currentIndex = steps.findIndex(s => s.id === status.toLowerCase())
+
+    return (
+        <div style={{ paddingTop: 32, paddingBottom: 32 }}>
+            <h3 style={{
+                fontFamily: "var(--serif)",
+                fontSize: "clamp(16px, 4vw, 18px)",
+                fontWeight: 600,
+                marginBottom: 24,
+            }}>
+                Booking Status
+            </h3>
+
+            <div style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+            }}>
+                {steps.map((step, index) => (
+                    <div
+                        key={step.id}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            flex: 1,
+                            position: "relative",
+                        }}
+                    >
+                        {/* Circle */}
+                        <div
+                            style={{
+                                width: 44,
+                                height: 44,
+                                borderRadius: "50%",
+                                background:
+                                    index <= currentIndex ? "var(--gold)" : "var(--ink-8)",
+                                border: `2px solid ${index <= currentIndex ? "var(--gold)" : "var(--ink-7)"
+                                    }`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                fontFamily: "var(--sans)",
+                                fontWeight: 600,
+                                fontSize: 12,
+                                color: index <= currentIndex ? "var(--ink)" : "var(--ink-5)",
+                                transition: "all 0.3s",
+                            }}
+                        >
+                            {index <= currentIndex ? "✓" : index + 1}
+                        </div>
+
+                        {/* Label */}
+                        <p
+                            style={{
+                                marginTop: 8,
+                                fontSize: 11,
+                                fontFamily: "var(--mono)",
+                                fontWeight: 600,
+                                letterSpacing: ".08em",
+                                textTransform: "uppercase",
+                                color:
+                                    index <= currentIndex ? "var(--ink)" : "var(--ink-5)",
+                            }}
+                        >
+                            {step.label}
+                        </p>
+
+                        {/* Connector Line */}
+                        {index < steps.length - 1 && (
+                            <div
+                                style={{
+                                    position: "absolute",
+                                    top: 22,
+                                    left: "50%",
+                                    width: "100%",
+                                    height: 2,
+                                    background:
+                                        index < currentIndex ? "var(--gold)" : "var(--ink-7)",
+                                    transition: "all 0.3s",
+                                    marginLeft: 22,
+                                }}
+                            />
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
+}
+
+// ─── Main Component ────────────────────────────────────────────────────────
 export default function BookingDetails() {
     const [booking, setBooking] = useState<Booking | null>(null)
     const [loading, setLoading] = useState(true)
     const [cancelling, setCancelling] = useState(false)
     const [completing, setCompleting] = useState(false)
+    const [activeTab, setActiveTab] = useState("overview")
     const params = useParams()
     const router = useRouter()
     const pathname = usePathname()
     const bookingId = (params?.id as string) || ""
 
-    const isLawyer = pathname?.includes('/dashboard/lawyer') ?? false
+    const isLawyer = pathname?.includes("/dashboard/lawyer") ?? false
 
     useEffect(() => {
         const fetchBooking = async () => {
             try {
                 const token = localStorage.getItem("token")
-                const response = await axios.get(`https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
+                const response = await axios.get(
+                    `https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                )
                 setBooking(response.data.booking)
             } catch (error) {
                 console.error("Failed to fetch booking", error)
@@ -200,11 +560,15 @@ export default function BookingDetails() {
         setCancelling(true)
         try {
             const token = localStorage.getItem("token")
-            await axios.patch(`/api/v1/booking/${bookingId}/cancel`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            await axios.patch(
+                `/api/v1/booking/${bookingId}/cancel`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             toast.success("Booking cancelled successfully")
             router.refresh()
         } catch (error) {
@@ -219,11 +583,15 @@ export default function BookingDetails() {
         setCompleting(true)
         try {
             const token = localStorage.getItem("token")
-            await axios.patch(`https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}/complete`, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+            await axios.patch(
+                `https://nyaymitra-backend-production.up.railway.app/api/v1/booking/${bookingId}/complete`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             toast.success("Booking marked as completed")
             router.refresh()
         } catch (error) {
@@ -235,78 +603,124 @@ export default function BookingDetails() {
     }
 
     const downloadPaymentReceipt = () => {
-        if (!booking) return;
+        if (!booking) return
 
         const receiptContent = `
 PAYMENT RECEIPT
 ════════════════════════════════════════
 
-Booking ID: ${booking._id || 'N/A'}
-Date: ${booking.date ? format(new Date(booking.date), 'PPPP') : 'N/A'}
-Time Slot: ${booking.slot || 'N/A'}
-Consultation Mode: ${booking.mode ? booking.mode.toUpperCase() : 'N/A'}
+Booking ID: ${booking._id || "N/A"}
+Date: ${booking.date ? format(new Date(booking.date), "PPPP") : "N/A"}
+Time Slot: ${booking.slot || "N/A"}
+Consultation Mode: ${booking.mode ? booking.mode.toUpperCase() : "N/A"}
 
 CLIENT DETAILS
 ─────────────────────────────────────────
-Name: ${booking.userName || 'N/A'}
+Name: ${booking.userName || "N/A"}
 
 LEGAL PROFESSIONAL DETAILS
 ─────────────────────────────────────────
-Name: ${booking.lawyerName || 'N/A'}
-Contact: ${booking.lawyerPhone || 'N/A'}
+Name: ${booking.lawyerName || "N/A"}
+Contact: ${booking.lawyerPhone || "N/A"}
 
 PAYMENT SUMMARY
 ─────────────────────────────────────────
-Amount: ₹${booking.amount || '0'}
-Payment Method: ${booking.paymentMode ? booking.paymentMode.toUpperCase() : 'N/A'}
-Transaction ID: ${booking.paymentId || 'N/A'}
-Status: ${booking.paymentStatus ? booking.paymentStatus.toUpperCase() : 'N/A'}
+Amount: ₹${booking.amount || "0"}
+Payment Method: ${booking.paymentMode ? booking.paymentMode.toUpperCase() : "N/A"}
+Transaction ID: ${booking.paymentId || "N/A"}
+Status: ${booking.paymentStatus ? booking.paymentStatus.toUpperCase() : "N/A"}
 
 ════════════════════════════════════════
 Thank you for choosing our legal services.
 Contact: nyaymitra.ai@gmail.com
-    `.trim();
+    `.trim()
 
-        const blob = new Blob([receiptContent], { type: 'text/plain' })
+        const blob = new Blob([receiptContent], { type: "text/plain" })
         const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
+        const a = document.createElement("a")
         a.href = url
-        a.download = `Receipt_${booking._id ? booking._id.slice(0, 8) : 'N/A'}_${format(new Date(), 'yyyyMMdd')}.txt`
+        a.download = `Receipt_${booking._id ? booking._id.slice(0, 8) : "N/A"}_${format(
+            new Date(),
+            "yyyyMMdd"
+        )}.txt`
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)
         URL.revokeObjectURL(url)
     }
 
-    const getStatusConfig = () => {
-        const configs = {
-            pending: { label: 'Pending', icon: <Clock className="w-4 h-4" />, color: 'from-amber-500 to-orange-500', bg: 'bg-amber-50', text: 'text-amber-900' },
-            confirmed: { label: 'Confirmed', icon: <CheckCircle2 className="w-4 h-4" />, color: 'from-emerald-500 to-teal-500', bg: 'bg-emerald-50', text: 'text-emerald-900' },
-            completed: { label: 'Completed', icon: <Star className="w-4 h-4" />, color: 'from-blue-500 to-cyan-500', bg: 'bg-blue-50', text: 'text-blue-900' },
-            cancelled: { label: 'Cancelled', icon: <XCircle className="w-4 h-4" />, color: 'from-slate-500 to-slate-600', bg: 'bg-slate-50', text: 'text-slate-900' },
+    const getModeIcon = () => {
+        if (!booking) return <Sparkles size={20} color="var(--gold)" />
+        switch (booking.mode) {
+            case "video":
+                return <Video size={20} color="var(--gold)" />
+            case "phone":
+                return <Phone size={20} color="var(--gold)" />
+            case "chat":
+                return <MessageSquare size={20} color="var(--gold)" />
+            default:
+                return <Sparkles size={20} color="var(--gold)" />
         }
-        return configs[booking?.status?.toLowerCase() as keyof typeof configs] || configs.pending
     }
 
-    const getModeConfig = () => {
-        if (!booking) return null;
-        const modes = {
-            video: { label: 'Video Call', icon: <Video className="w-4 h-4" />, color: 'from-purple-500 to-pink-500' },
-            phone: { label: 'Phone Call', icon: <Phone className="w-4 h-4" />, color: 'from-blue-500 to-cyan-500' },
-            chat: { label: 'Text Chat', icon: <MessageSquare className="w-4 h-4" />, color: 'from-emerald-500 to-teal-500' },
+    const getModeLabel = () => {
+        if (!booking) return "Unknown"
+        switch (booking.mode) {
+            case "video":
+                return "Video Call"
+            case "phone":
+                return "Phone Call"
+            case "chat":
+                return "Chat"
+            default:
+                return booking.mode || "Unknown"
         }
-        return modes[booking.mode as keyof typeof modes] || modes.chat
+    }
+
+    const getStatusBadgeClass = () => {
+        switch (booking?.status) {
+            case "confirmed":
+                return "status-confirmed"
+            case "pending":
+                return "status-pending"
+            case "completed":
+                return "status-completed"
+            case "cancelled":
+                return "status-cancelled"
+            default:
+                return "status-pending"
+        }
     }
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-50">
-                <div className="flex flex-col items-center gap-4">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-xl opacity-20 animate-pulse"></div>
-                        <Loader className="relative animate-spin w-12 h-12 text-slate-700" />
-                    </div>
-                    <p className="text-slate-500 font-medium">Loading your booking details</p>
+            <div
+                style={{
+                    minHeight: "100vh",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "var(--white)",
+                }}
+            >
+                <div style={{ textAlign: "center" }}>
+                    <Loader
+                        size={44}
+                        color="var(--gold)"
+                        style={{
+                            animation: "spin 1s linear infinite",
+                            marginBottom: 16,
+                        }}
+                    />
+                    <p
+                        style={{
+                            color: "var(--ink-4)",
+                            fontFamily: "var(--sans)",
+                            fontSize: 14,
+                        }}
+                    >
+                        Loading booking details...
+                    </p>
                 </div>
             </div>
         )
@@ -314,522 +728,807 @@ Contact: nyaymitra.ai@gmail.com
 
     if (!booking) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center gap-8 bg-gradient-to-br from-slate-50 via-white to-slate-50 px-4">
-                <div className="relative">
-                    <div className="absolute inset-0 bg-red-500 rounded-full blur-2xl opacity-10"></div>
-                    <FileWarning className="relative w-20 h-20 text-slate-400" />
-                </div>
-                <div className="text-center space-y-3 max-w-md">
-                    <h2 className="text-3xl font-bold text-slate-900">Booking Not Found</h2>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                        The booking you're looking for doesn't exist or may have been removed.
-                    </p>
-                </div>
-                <Button onClick={() => router.push("/all-bookings")} className="bg-slate-900 hover:bg-slate-800 text-white shadow-lg">
-                    View All Bookings
-                </Button>
+            <div
+                style={{
+                    minHeight: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "var(--white)",
+                    padding: 24,
+                }}
+            >
+                <FileWarning size={56} color="var(--ink-5)" style={{ marginBottom: 24 }} />
+                <h2
+                    style={{
+                        fontFamily: "var(--serif)",
+                        fontSize: "clamp(24px, 5vw, 32px)",
+                        fontWeight: 600,
+                        marginBottom: 8,
+                        color: "var(--ink)",
+                    }}
+                >
+                    Booking Not Found
+                </h2>
+                <p
+                    style={{
+                        color: "var(--ink-4)",
+                        fontSize: 14,
+                        marginBottom: 24,
+                        maxWidth: 400,
+                        textAlign: "center",
+                    }}
+                >
+                    The booking you're looking for doesn't exist or may have been removed.
+                </p>
+                <button
+                    onClick={() => router.push("/all-bookings")}
+                    className="luxury-button luxury-button-gold"
+                >
+                    ← Back to Bookings
+                </button>
             </div>
         )
     }
 
-    const statusConfig = getStatusConfig()
-    const modeConfig = getModeConfig()
-    const statusSteps = [
-        { id: 'pending', label: 'Pending' },
-        { id: 'confirmed', label: 'Confirmed' },
-        { id: 'completed', label: 'Completed' },
-    ]
-    const currentStatusIndex = statusSteps.findIndex(step => step.id === booking.status.toLowerCase())
-
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+        <>
+            <ThemeStyles />
             <Toaster position="top-center" richColors />
 
-            {/* Header Navigation */}
-            <div className="sticky top-0 z-40 border-b border-slate-200/50 backdrop-blur-xl bg-white/80">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-                    <Button
+            {/* Header */}
+            <div
+                style={{
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 40,
+                    borderBottom: `1px solid var(--ink-7)`,
+                    background: "var(--white)",
+                    backdropFilter: "blur(8px)",
+                }}
+            >
+                <div
+                    style={{
+                        maxWidth: 1200,
+                        margin: "0 auto",
+                        padding: "clamp(12px, 3vw, 16px) clamp(16px, 5vw, 24px)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        gap: 16,
+                    }}
+                >
+                    <button
                         onClick={() => router.back()}
-                        variant="ghost"
-                        className="text-slate-600 hover:text-slate-900 gap-2 -ml-2"
+                        className="luxury-button luxury-button-outline"
                     >
-                        <ArrowLeft className="w-4 h-4" />
-                        <span className="hidden sm:inline">Back</span>
-                    </Button>
-                    <Button
+                        <ArrowLeft size={14} />
+                        <span style={{ display: "none" }} className="hidden-sm">
+                            Back
+                        </span>
+                    </button>
+                    <div style={{ flex: 1 }} />
+                    <button
                         onClick={() => router.push("/all-bookings")}
-                        className="bg-slate-900 hover:bg-slate-800 text-white"
+                        className="luxury-button luxury-button-gold"
                     >
                         All Bookings
-                    </Button>
+                    </button>
                 </div>
             </div>
 
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-
+            <div
+                style={{
+                    maxWidth: 1200,
+                    margin: "0 auto",
+                    padding: "clamp(24px, 5vw, 48px) clamp(16px, 5vw, 24px)",
+                }}
+            >
                 {/* Hero Section */}
-                <div className="space-y-6">
-                    <div className="space-y-4">
-                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                            <div className="space-y-3 flex-1">
-                                <div className="flex items-center gap-2">
-                                    <div className="h-1 w-12 bg-gradient-to-r from-blue-600 to-purple-600"></div>
-                                    <span className="text-xs uppercase tracking-widest font-bold text-slate-500">Booking ID</span>
-                                </div>
-                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">
-                                    {booking.status === 'cancelled' ? 'Booking Cancelled' : 'Consultation Scheduled'}
-                                </h1>
-                                <p className="text-lg text-slate-600 max-w-xl leading-relaxed">
-                                    {booking.status === 'cancelled'
-                                        ? 'This booking is no longer active.'
-                                        : `Your ${booking.mode} consultation with ${isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`} is scheduled for ${format(new Date(booking.date), 'MMMM d, yyyy')} at ${booking.slot}`}
-                                </p>
-                            </div>
-                            <div className="flex flex-col gap-3 items-start md:items-end">
-                                <div className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r ${statusConfig.color} text-white font-semibold text-sm shadow-lg`}>
-                                    {statusConfig.icon}
-                                    {statusConfig.label}
-                                </div>
-                                {modeConfig && (
-                                    <div className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r ${modeConfig.color} text-white font-semibold text-sm shadow-lg`}>
-                                        {modeConfig.icon}
-                                        {modeConfig.label}
-                                    </div>
-                                )}
-                            </div>
+                <div style={{ marginBottom: 48 }}>
+                    <div style={{ marginBottom: 32 }}>
+                        <div style={{ marginBottom: 16 }}>
+                            <p
+                                style={{
+                                    fontSize: 10,
+                                    fontFamily: "var(--mono)",
+                                    color: "var(--ink-5)",
+                                    letterSpacing: ".1em",
+                                    textTransform: "uppercase",
+                                    fontWeight: 600,
+                                    marginBottom: 8,
+                                }}
+                            >
+                                Booking Reference
+                            </p>
+                            <h1
+                                style={{
+                                    fontFamily: "var(--serif)",
+                                    fontSize: "clamp(32px, 6vw, 48px)",
+                                    fontWeight: 600,
+                                    color: "var(--ink)",
+                                    lineHeight: 1.1,
+                                    marginBottom: 12,
+                                }}
+                            >
+                                {booking.status === "cancelled"
+                                    ? "Booking Cancelled"
+                                    : "Consultation Scheduled"}
+                            </h1>
+                            <p
+                                style={{
+                                    fontSize: "clamp(14px, 2vw, 16px)",
+                                    color: "var(--ink-4)",
+                                    lineHeight: 1.6,
+                                    maxWidth: 600,
+                                }}
+                            >
+                                {booking.status === "cancelled"
+                                    ? "This booking is no longer active."
+                                    : `Your ${getModeLabel()} consultation with ${isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`
+                                    } is scheduled for ${format(new Date(booking.date), "MMMM d, yyyy")} at ${booking.slot
+                                    }`}
+                            </p>
                         </div>
 
-                        {/* Status Progress */}
-                        <div className="pt-6 space-y-4">
-                            <p className="text-xs uppercase tracking-widest font-bold text-slate-500">Timeline</p>
-                            <div className="flex items-center justify-between">
-                                {statusSteps.map((step, index) => (
-                                    <div key={step.id} className="flex flex-col items-center flex-1">
-                                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm transition-all ${index <= currentStatusIndex
-                                                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                                                : 'bg-slate-200 text-slate-400'
-                                            }`}>
-                                            {index + 1}
-                                        </div>
-                                        <p className={`text-xs mt-2 font-semibold tracking-wider uppercase ${index <= currentStatusIndex ? 'text-slate-900' : 'text-slate-400'
-                                            }`}>
-                                            {step.label}
-                                        </p>
-                                        {index < statusSteps.length - 1 && (
-                                            <div className={`h-1 w-12 mt-4 rounded-full ${index < currentStatusIndex ? 'bg-gradient-to-r from-blue-600 to-purple-600' : 'bg-slate-200'
-                                                }`}></div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
+                        {/* Status Badges */}
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: 12,
+                                flexWrap: "wrap",
+                                alignItems: "center",
+                            }}
+                        >
+                            <span
+                                className={`status-badge ${getStatusBadgeClass()}`}
+                            >
+                                {booking.status.charAt(0).toUpperCase() +
+                                    booking.status.slice(1)}
+                            </span>
+                            <span
+                                className="status-badge"
+                                style={{
+                                    background: "var(--gold-pale)",
+                                    color: "var(--gold-dk)",
+                                }}
+                            >
+                                {getModeIcon()}
+                                {getModeLabel()}
+                            </span>
                         </div>
                     </div>
+
+                    {/* Status Timeline */}
+                    <StatusTimeline status={booking.status} />
                 </div>
 
                 {/* Alert Sections */}
-                {booking.status === 'pending' && (
-                    <div className="p-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50">
-                        <div className="flex gap-4 items-start">
-                            <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                {booking.status === "pending" && (
+                    <div
+                        className="luxury-card"
+                        style={{
+                            padding: 20,
+                            background: "var(--gold-pale)",
+                            border: `1px solid var(--gold)`,
+                            marginBottom: 32,
+                        }}
+                    >
+                        <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                            <AlertCircle size={20} color="var(--gold-dk)" style={{ flexShrink: 0 }} />
                             <div>
-                                <h3 className="font-bold text-amber-900 mb-1">Awaiting Confirmation</h3>
-                                <p className="text-sm text-amber-800">
-                                    This booking is pending confirmation from the {isLawyer ? 'client' : 'legal professional'}. You'll receive a notification once confirmed.
+                                <h3
+                                    style={{
+                                        fontWeight: 600,
+                                        color: "var(--gold-dk)",
+                                        marginBottom: 4,
+                                    }}
+                                >
+                                    Awaiting Confirmation
+                                </h3>
+                                <p style={{ fontSize: 13, color: "var(--gold-dk)" }}>
+                                    This booking is pending confirmation from the{" "}
+                                    {isLawyer ? "client" : "legal professional"}. You'll receive a
+                                    notification once confirmed.
                                 </p>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {booking.status === 'cancelled' && (
-                    <div className="p-6 rounded-xl border border-slate-300 bg-gradient-to-br from-slate-50 to-slate-100">
-                        <div className="flex gap-4 items-start">
-                            <XCircle className="w-5 h-5 text-slate-600 flex-shrink-0 mt-0.5" />
+                {booking.status === "cancelled" && (
+                    <div
+                        className="luxury-card"
+                        style={{
+                            padding: 20,
+                            background: "var(--ink-8)",
+                            border: `1px solid var(--ink-7)`,
+                            marginBottom: 32,
+                        }}
+                    >
+                        <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+                            <XCircle size={20} color="var(--ink-4)" style={{ flexShrink: 0 }} />
                             <div>
-                                <h3 className="font-bold text-slate-900 mb-1">Booking Cancelled</h3>
-                                <p className="text-sm text-slate-700">
-                                    Cancelled on {format(new Date(booking.updatedAt || booking.createdAt || new Date()), 'MMMM d, yyyy')}
+                                <h3
+                                    style={{
+                                        fontWeight: 600,
+                                        color: "var(--ink)",
+                                        marginBottom: 4,
+                                    }}
+                                >
+                                    Booking Cancelled
+                                </h3>
+                                <p style={{ fontSize: 13, color: "var(--ink-4)" }}>
+                                    Cancelled on{" "}
+                                    {format(
+                                        new Date(booking.updatedAt || booking.createdAt || new Date()),
+                                        "MMMM d, yyyy"
+                                    )}
                                 </p>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Content Tabs */}
-                <Tabs defaultValue="overview" className="space-y-6">
-                    <TabsList className="bg-white border border-slate-200 rounded-xl p-1.5 h-auto inline-flex shadow-sm">
-                        <TabsTrigger value="overview" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
-                            <Briefcase className="w-4 h-4 mr-2" />
-                            Overview
-                        </TabsTrigger>
-                        <TabsTrigger value={isLawyer ? "client" : "lawyer"} className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
-                            <User className="w-4 h-4 mr-2" />
-                            {isLawyer ? 'Client' : 'Lawyer'}
-                        </TabsTrigger>
-                        <TabsTrigger value="actions" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-purple-600 data-[state=active]:text-white rounded-lg px-4 py-2.5 font-semibold transition-all">
-                            <Zap className="w-4 h-4 mr-2" />
-                            Actions
-                        </TabsTrigger>
-                    </TabsList>
+                {/* Tabs */}
+                <div style={{ marginBottom: 32 }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            gap: 8,
+                            borderBottom: `1px solid var(--ink-7)`,
+                            marginBottom: 32,
+                            overflowX: "auto",
+                            paddingBottom: 0,
+                        }}
+                    >
+                        {["overview", "details", "actions"].map(tab => (
+                            <button
+                                key={tab}
+                                onClick={() => setActiveTab(tab)}
+                                className="tab-button"
+                                style={{
+                                    borderBottomColor:
+                                        activeTab === tab ? "var(--gold)" : "transparent",
+                                    color:
+                                        activeTab === tab ? "var(--gold-dk)" : "var(--ink-4)",
+                                }}
+                            >
+                                {tab === "overview" && <Briefcase size={14} />}
+                                {tab === "details" && <User size={14} />}
+                                {tab === "actions" && <Zap size={14} />}
+                                <span style={{ textTransform: "capitalize" }}>{tab}</span>
+                            </button>
+                        ))}
+                    </div>
 
                     {/* Overview Tab */}
-                    <TabsContent value="overview" className="space-y-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Key Details Grid */}
-                            <div className="lg:col-span-2 space-y-6">
-                                <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-8">
-                                    <div className="space-y-6">
-                                        <h2 className="text-xl font-bold text-slate-900 flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center">
-                                                <Sparkles className="w-4 h-4 text-white" />
-                                            </div>
-                                            Booking Details
-                                        </h2>
+                    {activeTab === "overview" && (
+                        <div>
+                            <h2
+                                style={{
+                                    fontFamily: "var(--serif)",
+                                    fontSize: "clamp(20px, 4vw, 24px)",
+                                    fontWeight: 600,
+                                    marginBottom: 20,
+                                    color: "var(--ink)",
+                                }}
+                            >
+                                Booking Details
+                            </h2>
 
-                                        {/* Details Grid */}
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                            <DetailCard
-                                                icon={<CalendarDays className="w-5 h-5 text-blue-600" />}
-                                                label="Date"
-                                                value={format(new Date(booking.date), 'MMMM d, yyyy')}
-                                                subtext={format(new Date(booking.date), 'EEEE')}
-                                            />
-                                            <DetailCard
-                                                icon={<Clock3 className="w-5 h-5 text-blue-600" />}
-                                                label="Time Slot"
-                                                value={booking.slot}
-                                            />
-                                            <DetailCard
-                                                icon={modeConfig?.icon}
-                                                label="Consultation Mode"
-                                                value={modeConfig?.label || booking.mode}
-                                            />
-                                            <DetailCard
-                                                icon={<Wallet className="w-5 h-5 text-blue-600" />}
-                                                label="Amount"
-                                                value={`₹${booking.amount}`}
-                                                subtext={booking.paymentStatus}
-                                            />
-                                        </div>
-                                    </div>
-
-                                    <div className="border-t border-slate-200"></div>
-
-                                    {/* Payment Section */}
-                                    <div className="space-y-4">
-                                        <h3 className="font-bold text-slate-900 flex items-center gap-2">
-                                            <CreditCard className="w-4 h-4 text-blue-600" />
-                                            Payment Information
-                                        </h3>
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                                                <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Method</p>
-                                                <p className="font-semibold text-slate-900 capitalize">{booking.paymentMode}</p>
-                                            </div>
-                                            <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                                                <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Status</p>
-                                                <Badge variant={booking.paymentStatus === 'paid' ? 'default' : 'destructive'} className="rounded-lg">
-                                                    {booking.paymentStatus}
-                                                </Badge>
-                                            </div>
-                                        </div>
-                                        <Button
-                                            onClick={downloadPaymentReceipt}
-                                            variant="outline"
-                                            className="w-full gap-2 border-slate-300 hover:border-slate-400 text-slate-900 hover:bg-slate-50"
-                                        >
-                                            <Download className="w-4 h-4" />
-                                            Download Payment Receipt
-                                        </Button>
-                                    </div>
-
-                                    {/* Contact Info */}
-                                    <ContactCard booking={booking} isLawyer={isLawyer} />
-                                </div>
+                            <div className="detail-grid">
+                                <DetailCard
+                                    icon={<CalendarDays size={18} />}
+                                    label="Date"
+                                    value={format(new Date(booking.date), "MMM d, yyyy")}
+                                    subtext={format(new Date(booking.date), "EEEE")}
+                                />
+                                <DetailCard
+                                    icon={<Clock3 size={18} />}
+                                    label="Time Slot"
+                                    value={booking.slot}
+                                />
+                                <DetailCard
+                                    icon={getModeIcon()}
+                                    label="Consultation Mode"
+                                    value={getModeLabel()}
+                                />
+                                <DetailCard
+                                    icon={<Wallet size={18} />}
+                                    label="Amount"
+                                    value={`₹${booking.amount}`}
+                                    subtext={booking.paymentStatus}
+                                />
                             </div>
 
-                            {/* Sidebar */}
-                            <div className="space-y-6">
-                                {/* Parties Card */}
-                                <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
-                                    <h3 className="font-bold text-slate-900">Parties</h3>
-                                    <div className="space-y-3">
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-1">Client</p>
-                                            <p className="font-semibold text-slate-900">{booking.userName}</p>
-                                        </div>
-                                        <div className="border-t border-slate-200"></div>
-                                        <div>
-                                            <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-1">Legal Professional</p>
-                                            <p className="font-semibold text-slate-900">{booking.lawyerName}</p>
-                                        </div>
+                            {/* Payment Information */}
+                            <div style={{ marginTop: 40 }}>
+                                <h3
+                                    style={{
+                                        fontFamily: "var(--serif)",
+                                        fontSize: "clamp(18px, 4vw, 22px)",
+                                        fontWeight: 600,
+                                        marginBottom: 20,
+                                        color: "var(--ink)",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 10,
+                                    }}
+                                >
+                                    <CreditCard size={20} color="var(--gold)" />
+                                    Payment Information
+                                </h3>
+
+                                <div className="detail-grid">
+                                    <div className="luxury-card" style={{ padding: 20 }}>
+                                        <p
+                                            style={{
+                                                fontSize: 10,
+                                                fontFamily: "var(--mono)",
+                                                color: "var(--ink-5)",
+                                                letterSpacing: ".08em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                marginBottom: 8,
+                                            }}
+                                        >
+                                            Payment Method
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontSize: 18,
+                                                fontWeight: 600,
+                                                color: "var(--ink)",
+                                                textTransform: "capitalize",
+                                            }}
+                                        >
+                                            {booking.paymentMode}
+                                        </p>
+                                    </div>
+                                    <div className="luxury-card" style={{ padding: 20 }}>
+                                        <p
+                                            style={{
+                                                fontSize: 10,
+                                                fontFamily: "var(--mono)",
+                                                color: "var(--ink-5)",
+                                                letterSpacing: ".08em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                marginBottom: 8,
+                                            }}
+                                        >
+                                            Payment Status
+                                        </p>
+                                        <span
+                                            className={`status-badge ${booking.paymentStatus === "paid"
+                                                ? "status-confirmed"
+                                                : "status-pending"
+                                                }`}
+                                        >
+                                            {booking.paymentStatus}
+                                        </span>
                                     </div>
                                 </div>
 
-                                {/* Quick Actions */}
-                                <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl border border-blue-200 p-6 space-y-3">
-                                    <h3 className="font-bold text-slate-900">Quick Actions</h3>
-                                    <Button
-                                        onClick={downloadPaymentReceipt}
-                                        variant="outline"
-                                        className="w-full justify-start gap-2 border-blue-300 text-slate-900 hover:bg-white"
-                                    >
-                                        <Download className="w-4 h-4" />
-                                        <span className="text-sm font-medium">Receipt</span>
-                                    </Button>
+                                <button
+                                    onClick={downloadPaymentReceipt}
+                                    className="luxury-button luxury-button-outline"
+                                    style={{ width: "100%", marginTop: 20 }}
+                                >
+                                    <Download size={14} />
+                                    Download Payment Receipt
+                                </button>
+                            </div>
+
+                            {/* Contact Information */}
+                            <ContactCard booking={booking} isLawyer={isLawyer} />
+
+                            {/* Parties Card */}
+                            <div style={{ marginTop: 40 }}>
+                                <h3
+                                    style={{
+                                        fontFamily: "var(--serif)",
+                                        fontSize: "clamp(18px, 4vw, 22px)",
+                                        fontWeight: 600,
+                                        marginBottom: 20,
+                                        color: "var(--ink)",
+                                    }}
+                                >
+                                    Parties Involved
+                                </h3>
+                                <div className="detail-grid">
+                                    <div className="luxury-card" style={{ padding: 24 }}>
+                                        <p
+                                            style={{
+                                                fontSize: 10,
+                                                fontFamily: "var(--mono)",
+                                                color: "var(--ink-5)",
+                                                letterSpacing: ".08em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                marginBottom: 12,
+                                            }}
+                                        >
+                                            Client
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontFamily: "var(--serif)",
+                                                fontSize: "clamp(16px, 3vw, 20px)",
+                                                fontWeight: 600,
+                                                color: "var(--ink)",
+                                            }}
+                                        >
+                                            {booking.userName}
+                                        </p>
+                                    </div>
+                                    <div className="luxury-card" style={{ padding: 24 }}>
+                                        <p
+                                            style={{
+                                                fontSize: 10,
+                                                fontFamily: "var(--mono)",
+                                                color: "var(--ink-5)",
+                                                letterSpacing: ".08em",
+                                                textTransform: "uppercase",
+                                                fontWeight: 600,
+                                                marginBottom: 12,
+                                            }}
+                                        >
+                                            Legal Professional
+                                        </p>
+                                        <p
+                                            style={{
+                                                fontFamily: "var(--serif)",
+                                                fontSize: "clamp(16px, 3vw, 20px)",
+                                                fontWeight: 600,
+                                                color: "var(--ink)",
+                                            }}
+                                        >
+                                            {booking.lawyerName}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </TabsContent>
+                    )}
 
-                    {/* Lawyer/Client Info Tab */}
-                    <TabsContent value={isLawyer ? "client" : "lawyer"} className="space-y-6">
-                        <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-                            <div className="bg-gradient-to-r from-blue-600 to-purple-600 h-32"></div>
-                            <div className="px-8 pb-8">
-                                <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-end -mt-16 mb-8">
-                                    <Avatar className="h-32 w-32 border-4 border-white shadow-lg">
-                                        <AvatarFallback className="bg-gradient-to-br from-blue-600 to-purple-600 text-white font-bold text-3xl">
-                                            {isLawyer ? booking.userName.charAt(0).toUpperCase() : booking.lawyerName.charAt(0).toUpperCase()}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div className="flex-1">
-                                        <h2 className="text-3xl font-bold text-slate-900">
-                                            {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
-                                        </h2>
-                                        <p className="text-slate-600 mt-1">{isLawyer ? 'Client' : 'Legal Expert'}</p>
-                                        {!isLawyer && booking.lawyerDetails?.experience && (
-                                            <div className="flex flex-wrap gap-2 mt-3">
-                                                <Badge variant="secondary" className="rounded-full px-3 py-1">
-                                                    <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
-                                                    {booking.lawyerDetails.averageRating} ({booking.lawyerDetails.totalReviews})
-                                                </Badge>
-                                                <Badge variant="secondary" className="rounded-full px-3 py-1">
-                                                    {booking.lawyerDetails.experience}+ years
-                                                </Badge>
-                                                {booking.lawyerCity && (
-                                                    <Badge variant="secondary" className="rounded-full px-3 py-1">
-                                                        <MapPin className="w-3 h-3 mr-1" />
-                                                        {booking.lawyerCity}
-                                                    </Badge>
-                                                )}
+                    {/* Details Tab */}
+                    {activeTab === "details" && (
+                        <div>
+                            <h2
+                                style={{
+                                    fontFamily: "var(--serif)",
+                                    fontSize: "clamp(20px, 4vw, 24px)",
+                                    fontWeight: 600,
+                                    marginBottom: 20,
+                                    color: "var(--ink)",
+                                }}
+                            >
+                                {isLawyer ? "Client" : "Legal Professional"} Details
+                            </h2>
+
+                            <div className="luxury-card" style={{ padding: "clamp(24px, 5vw, 32px)" }}>
+                                {/* Header */}
+                                <div style={{ marginBottom: 32 }}>
+                                    <div
+                                        style={{
+                                            width: 80,
+                                            height: 80,
+                                            borderRadius: 12,
+                                            background: "var(--gold)",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            marginBottom: 16,
+                                            fontFamily: "var(--serif)",
+                                            fontSize: 32,
+                                            fontWeight: 700,
+                                            color: "var(--ink)",
+                                        }}
+                                    >
+                                        {isLawyer
+                                            ? booking.userName.charAt(0).toUpperCase()
+                                            : booking.lawyerName.charAt(0).toUpperCase()}
+                                    </div>
+                                    <h3
+                                        style={{
+                                            fontFamily: "var(--serif)",
+                                            fontSize: "clamp(22px, 4vw, 28px)",
+                                            fontWeight: 600,
+                                            color: "var(--ink)",
+                                            marginBottom: 8,
+                                        }}
+                                    >
+                                        {isLawyer ? booking.userName : `Advocate ${booking.lawyerName}`}
+                                    </h3>
+                                    <p style={{ color: "var(--ink-4)", fontSize: 14 }}>
+                                        {isLawyer ? "Client" : "Legal Expert"}
+                                    </p>
+                                </div>
+
+                                {/* Lawyer Details */}
+                                {!isLawyer && booking.lawyerDetails && (
+                                    <div style={{ borderTop: `1px solid var(--ink-7)`, paddingTop: 24 }}>
+                                        {booking.lawyerDetails.specialization && (
+                                            <div style={{ marginBottom: 24 }}>
+                                                <h4
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "var(--ink)",
+                                                        marginBottom: 12,
+                                                    }}
+                                                >
+                                                    Specializations
+                                                </h4>
+                                                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                                                    {booking.lawyerDetails.specialization.map(spec => (
+                                                        <span
+                                                            key={spec}
+                                                            style={{
+                                                                display: "inline-flex",
+                                                                alignItems: "center",
+                                                                padding: "6px 12px",
+                                                                borderRadius: 20,
+                                                                border: `1px solid var(--ink-7)`,
+                                                                fontSize: 12,
+                                                                color: "var(--ink-4)",
+                                                            }}
+                                                        >
+                                                            {spec}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {booking.lawyerDetails.experience && (
+                                            <div style={{ marginBottom: 24 }}>
+                                                <h4
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "var(--ink)",
+                                                        marginBottom: 8,
+                                                    }}
+                                                >
+                                                    Experience
+                                                </h4>
+                                                <p style={{ color: "var(--ink)", fontSize: 14 }}>
+                                                    {booking.lawyerDetails.experience}+ years in practice
+                                                </p>
+                                            </div>
+                                        )}
+
+                                        {booking.lawyerDetails.languages && (
+                                            <div style={{ marginBottom: 24 }}>
+                                                <h4
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "var(--ink)",
+                                                        marginBottom: 12,
+                                                    }}
+                                                >
+                                                    Languages
+                                                </h4>
+                                                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                                                    {booking.lawyerDetails.languages.map(lang => (
+                                                        <span
+                                                            key={lang}
+                                                            style={{
+                                                                display: "inline-flex",
+                                                                alignItems: "center",
+                                                                padding: "6px 12px",
+                                                                borderRadius: 20,
+                                                                border: `1px solid var(--ink-7)`,
+                                                                fontSize: 12,
+                                                                color: "var(--ink-4)",
+                                                            }}
+                                                        >
+                                                            {lang}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {booking.lawyerDetails.bio && (
+                                            <div>
+                                                <h4
+                                                    style={{
+                                                        fontWeight: 600,
+                                                        color: "var(--ink)",
+                                                        marginBottom: 8,
+                                                    }}
+                                                >
+                                                    About
+                                                </h4>
+                                                <p
+                                                    style={{
+                                                        color: "var(--ink-4)",
+                                                        fontSize: 14,
+                                                        lineHeight: 1.6,
+                                                    }}
+                                                >
+                                                    {booking.lawyerDetails.bio}
+                                                </p>
                                             </div>
                                         )}
                                     </div>
-                                </div>
+                                )}
 
-                                <div className="space-y-6">
-                                    {!isLawyer && booking.lawyerDetails?.specialization && (
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 mb-3">Specializations</h3>
-                                            <div className="flex flex-wrap gap-2">
-                                                {booking.lawyerDetails.specialization.map(spec => (
-                                                    <Badge key={spec} variant="outline" className="rounded-full px-3 py-1.5">
-                                                        {spec}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {booking.lawyerDetails?.languages && (
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 mb-3">Languages</h3>
-                                            <div className="flex flex-wrap gap-2">
-                                                {booking.lawyerDetails.languages.map(lang => (
-                                                    <Badge key={lang} variant="outline" className="rounded-full px-3 py-1.5">
-                                                        {lang}
-                                                    </Badge>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {booking.lawyerDetails?.bio && (
-                                        <div>
-                                            <h3 className="font-bold text-slate-900 mb-3">About</h3>
-                                            <p className="text-slate-600 leading-relaxed">{booking.lawyerDetails.bio}</p>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className="border-t border-slate-200 mt-8 pt-8">
+                                {/* Contact Section */}
+                                <div style={{ borderTop: `1px solid var(--ink-7)`, paddingTop: 24, marginTop: 24 }}>
                                     <ContactCard booking={booking} isLawyer={isLawyer} />
                                 </div>
                             </div>
                         </div>
-                    </TabsContent>
+                    )}
 
                     {/* Actions Tab */}
-                    <TabsContent value="actions" className="space-y-6">
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            <div className="lg:col-span-2 space-y-4">
-                                {/* Action Buttons */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <ActionButton
-                                        icon={<Download className="w-5 h-5" />}
-                                        title="Download Receipt"
-                                        description="Payment confirmation"
-                                        onClick={downloadPaymentReceipt}
-                                        variant="outline"
-                                    />
+                    {activeTab === "actions" && (
+                        <div>
+                            <h2
+                                style={{
+                                    fontFamily: "var(--serif)",
+                                    fontSize: "clamp(20px, 4vw, 24px)",
+                                    fontWeight: 600,
+                                    marginBottom: 20,
+                                    color: "var(--ink)",
+                                }}
+                            >
+                                Actions & Options
+                            </h2>
 
-                                    {!isLawyer && booking.status !== 'cancelled' && booking.status !== 'completed' && (
+                            <div className="detail-grid">
+                                <button
+                                    onClick={downloadPaymentReceipt}
+                                    className="luxury-button luxury-button-outline"
+                                    style={{
+                                        padding: "clamp(14px, 3vw, 18px)",
+                                        width: "100%",
+                                        justifyContent: "flex-start",
+                                    }}
+                                >
+                                    <Download size={16} />
+                                    <div style={{ textAlign: "left" }}>
+                                        <div style={{ fontWeight: 600, fontSize: 13 }}>
+                                            Download Receipt
+                                        </div>
+                                        <div style={{ fontSize: 11, color: "var(--ink-5)" }}>
+                                            Payment confirmation
+                                        </div>
+                                    </div>
+                                </button>
+
+                                {!isLawyer &&
+                                    booking.status !== "cancelled" &&
+                                    booking.status !== "completed" && (
                                         <>
-                                            <ActionButton
-                                                icon={<CalendarDays className="w-5 h-5" />}
-                                                title="Reschedule"
-                                                description="Change appointment"
-                                                variant="outline"
-                                            />
-                                            <ActionButton
-                                                icon={<FileWarning className="w-5 h-5" />}
-                                                title="Cancel Booking"
-                                                description="Cancel this appointment"
+                                            <button
                                                 onClick={handleCancelBooking}
-                                                isLoading={cancelling}
-                                                variant="destructive"
-                                            />
+                                                disabled={cancelling}
+                                                className="luxury-button luxury-button-outline"
+                                                style={{
+                                                    padding: "clamp(14px, 3vw, 18px)",
+                                                    width: "100%",
+                                                    justifyContent: "flex-start",
+                                                    borderColor: "var(--red)",
+                                                    color: "var(--red)",
+                                                }}
+                                            >
+                                                {cancelling ? (
+                                                    <Loader size={16} style={{ animation: "spin 1s linear infinite" }} />
+                                                ) : (
+                                                    <FileWarning size={16} />
+                                                )}
+                                                <div style={{ textAlign: "left" }}>
+                                                    <div style={{ fontWeight: 600, fontSize: 13 }}>
+                                                        Cancel Booking
+                                                    </div>
+                                                    <div style={{ fontSize: 11, color: "var(--ink-5)" }}>
+                                                        Cancel this appointment
+                                                    </div>
+                                                </div>
+                                            </button>
                                         </>
                                     )}
 
-                                    {isLawyer && booking.status === 'confirmed' && (
-                                        <ActionButton
-                                            icon={<CheckCircle2 className="w-5 h-5" />}
-                                            title="Mark Complete"
-                                            description="Finish consultation"
-                                            onClick={handleCompleteBooking}
-                                            isLoading={completing}
-                                            variant="default"
-                                        />
-                                    )}
-
-                                    {booking.status === 'completed' && (
-                                        <ActionButton
-                                            icon={<FileText className="w-5 h-5" />}
-                                            title="Download Summary"
-                                            description="Consultation notes"
-                                            variant="outline"
-                                        />
-                                    )}
-                                </div>
-
-                                {/* Meeting Details */}
-                                <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-6 mt-8">
-                                    <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                        {modeConfig?.icon}
-                                        <span>{modeConfig?.label} Details</span>
-                                    </h3>
-
-                                    {booking.mode === 'video' && (
-                                        <div className="space-y-4">
-                                            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-200 p-6">
-                                                <p className="text-sm text-slate-600 mb-2">
-                                                    Your video consultation will be conducted via our secure platform. Ensure you have a stable internet connection and a device with camera and microphone.
-                                                </p>
+                                {isLawyer && booking.status === "confirmed" && (
+                                    <button
+                                        onClick={handleCompleteBooking}
+                                        disabled={completing}
+                                        className="luxury-button luxury-button-gold"
+                                        style={{
+                                            padding: "clamp(14px, 3vw, 18px)",
+                                            width: "100%",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        {completing ? (
+                                            <Loader size={16} style={{ animation: "spin 1s linear infinite" }} />
+                                        ) : (
+                                            <CheckCircle2 size={16} />
+                                        )}
+                                        <div style={{ textAlign: "left" }}>
+                                            <div style={{ fontWeight: 600, fontSize: 13 }}>Mark Complete</div>
+                                            <div style={{ fontSize: 11, color: "var(--ink)" }}>
+                                                Finish consultation
                                             </div>
-                                            <Button className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold rounded-xl">
-                                                <Video className="w-4 h-4 mr-2" />
-                                                Join Video Call
-                                            </Button>
-                                            <p className="text-xs text-center text-slate-500">
-                                                Link available 10 minutes before your scheduled time
-                                            </p>
                                         </div>
-                                    )}
+                                    </button>
+                                )}
 
-                                    {booking.mode === 'phone' && (
-                                        <div className="space-y-4">
-                                            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border border-blue-200 p-6">
-                                                <p className="text-sm text-slate-600 mb-3">
-                                                    {isLawyer ? 'You will call the client at their registered number.' : 'Call the lawyer at the number below at your scheduled time.'}
-                                                </p>
-                                                {!isLawyer && booking.lawyerPhone && (
-                                                    <div className="bg-white rounded-lg p-4 border border-blue-200 mb-4">
-                                                        <p className="text-xs uppercase tracking-wider font-bold text-slate-500 mb-2">Direct Number</p>
-                                                        <p className="text-2xl font-bold text-slate-900 font-mono">{booking.lawyerPhone}</p>
-                                                    </div>
-                                                )}
+                                {booking.mode === "phone" && !isLawyer && (
+                                    <button
+                                        onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
+                                        className="luxury-button luxury-button-gold"
+                                        style={{
+                                            padding: "clamp(14px, 3vw, 18px)",
+                                            width: "100%",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <Phone size={16} />
+                                        <div style={{ textAlign: "left" }}>
+                                            <div style={{ fontWeight: 600, fontSize: 13 }}>Call Now</div>
+                                            <div style={{ fontSize: 11, color: "var(--ink)" }}>
+                                                Direct consultation
                                             </div>
-                                            {!isLawyer && (
-                                                <Button
-                                                    onClick={() => window.open(`tel:${booking.lawyerPhone}`)}
-                                                    className="w-full h-12 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold rounded-xl"
-                                                >
-                                                    <Phone className="w-4 h-4 mr-2" />
-                                                    Call Now
-                                                </Button>
-                                            )}
                                         </div>
-                                    )}
-
-                                    {booking.mode === 'chat' && (
-                                        <div className="space-y-4">
-                                            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl border border-emerald-200 p-6">
-                                                <p className="text-sm text-slate-600">
-                                                    Your chat consultation is available in your messages. Start the conversation during your scheduled time.
-                                                </p>
-                                            </div>
-                                            <Button className="w-full h-12 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-semibold rounded-xl">
-                                                <MessageSquare className="w-4 h-4 mr-2" />
-                                                Open Chat
-                                            </Button>
-                                        </div>
-                                    )}
-                                </div>
+                                    </button>
+                                )}
                             </div>
 
-                            {/* Support Card */}
-                            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-8 text-white h-fit space-y-4">
-                                <h3 className="text-lg font-bold">Need Help?</h3>
-                                <p className="text-slate-300 text-sm">
-                                    Our support team is available to assist with any questions about your booking.
+                            {/* Support Section */}
+                            <div className="luxury-card" style={{
+                                padding: "clamp(24px, 5vw, 32px)",
+                                marginTop: 32,
+                                background: "var(--ink-8)",
+                            }}>
+                                <h3
+                                    style={{
+                                        fontFamily: "var(--serif)",
+                                        fontSize: "clamp(18px, 4vw, 22px)",
+                                        fontWeight: 600,
+                                        color: "var(--ink)",
+                                        marginBottom: 12,
+                                    }}
+                                >
+                                    Need Assistance?
+                                </h3>
+                                <p style={{
+                                    color: "var(--ink-4)",
+                                    fontSize: 14,
+                                    marginBottom: 16,
+                                    lineHeight: 1.6,
+                                }}>
+                                    Our support team is available to help with any questions about
+                                    your booking or consultation.
                                 </p>
-                                <Button className="w-full bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-xl">
-                                    <MessageSquare className="w-4 h-4 mr-2" />
-                                    Contact Support
-                                </Button>
-                                <div className="pt-4 border-t border-slate-700 space-y-2 text-sm">
-                                    <p className="text-slate-400">nyaymitra.ai@gmail.com</p>
+                                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                                    <button
+                                        className="luxury-button luxury-button-gold"
+                                    >
+                                        <MessageSquare size={14} />
+                                        Contact Support
+                                    </button>
+                                    <a
+                                        href="mailto:nyaymitra.ai@gmail.com"
+                                        style={{ textDecoration: "none" }}
+                                    >
+                                        <button className="luxury-button luxury-button-outline">
+                                            <Mail size={14} />
+                                            Email Us
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    </TabsContent>
-                </Tabs>
+                    )}
+                </div>
             </div>
-        </div>
-    )
-}
-
-// Helper Components
-function DetailCard({ icon, label, value, subtext }: { icon?: React.ReactNode; label: string; value: string; subtext?: string }) {
-    return (
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-lg p-4 border border-slate-200">
-            <div className="flex items-center gap-2 mb-2">
-                {icon && <span className="text-slate-600">{icon}</span>}
-                <p className="text-xs uppercase tracking-wider font-bold text-slate-500">{label}</p>
-            </div>
-            <p className="font-bold text-slate-900 text-lg">{value}</p>
-            {subtext && <p className="text-xs text-slate-500 mt-1">{subtext}</p>}
-        </div>
-    )
-}
-
-function ActionButton({ icon, title, description, onClick, isLoading = false, variant = "outline" }: { icon: React.ReactNode; title: string; description: string; onClick?: () => void; isLoading?: boolean; variant?: string }) {
-    return (
-        <Button
-            onClick={onClick}
-            disabled={isLoading}
-            variant={variant as any}
-            className={`h-24 rounded-xl flex flex-col items-start justify-center gap-1 p-4 transition-all ${variant === 'destructive' ? 'border-red-300 hover:border-red-400' : variant === 'default' ? 'border-none shadow-md' : 'border-slate-300 hover:border-slate-400'
-                }`}
-        >
-            <div className="flex items-center gap-2 w-full">
-                {isLoading ? <Loader className="w-4 h-4 animate-spin" /> : icon}
-                <span className="font-semibold text-sm">{title}</span>
-            </div>
-            <p className="text-xs text-slate-600 dark:text-slate-400">{description}</p>
-        </Button>
+        </>
     )
 }
