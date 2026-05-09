@@ -334,6 +334,7 @@ function BookingModal({
 }) {
   const { toast } = useToast()
   const [step, setStep] = useState(0)
+  const [isClosing, setIsClosing] = useState(false)
   const [mode, setMode] = useState(() => {
     const m = lawyer.consultationModes
     return m.video ? "video" : m.call ? "call" : m.chat ? "chat" : "inPerson"
@@ -343,6 +344,14 @@ function BookingModal({
   const [slots, setSlots] = useState<AvailableSlot[]>([])
   const [calMonth, setCalMonth] = useState(new Date())
   const [loading, setLoading] = useState(false)
+
+  const handleClose = () => {
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+      setIsClosing(false)
+    }, 200)
+  }
 
   const fetchSlots = async (d: Date) => {
     try {
@@ -372,16 +381,17 @@ function BookingModal({
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0,0,0,.7)",
-        backdropFilter: "blur(8px)",
+        background: isClosing ? "rgba(0,0,0,0)" : "rgba(0,0,0,.7)",
+        backdropFilter: isClosing ? "blur(0px)" : "blur(8px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         zIndex: 1000,
         padding: 16,
+        transition: "all 0.2s ease",
       }}
       onClick={e => {
-        if (e.target === e.currentTarget) onClose()
+        if (e.target === e.currentTarget) handleClose()
       }}
     >
       <div style={{
@@ -393,6 +403,9 @@ function BookingModal({
         overflowY: "auto",
         border: "1px solid var(--ink-7)",
         boxShadow: "0 24px 48px rgba(0,0,0,.2)",
+        opacity: isClosing ? 0 : 1,
+        transform: isClosing ? "scale(0.95)" : "scale(1)",
+        transition: "all 0.2s ease",
       }}>
         <div style={{ padding: "clamp(16px,5vw,24px)" }}>
 
@@ -417,13 +430,20 @@ function BookingModal({
               </p>
             </div>
             <button
-              onClick={onClose}
+              onClick={handleClose}
               style={{
                 background: "none",
                 border: "none",
                 cursor: "pointer",
                 padding: 4,
                 flexShrink: 0,
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = "rotate(90deg)"
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = "rotate(0deg)"
               }}
             >
               <X size={18} color="var(--ink-5)" />
@@ -1014,18 +1034,7 @@ export default function LawyersPage() {
                 bookingRes.data?.data?._id ||
                 bookingRes.data?._id
 
-              // ✅ FAST: Show success modal immediately
-              setLastBooking({
-                id: bookingId,
-                lawyer: lawyer.fullName,
-                date,
-                slot,
-                mode,
-                fee: lawyer.consultationFee,
-              })
-              setShowSuccessModal(true)
-
-              // Close booking modal
+              // ✅ CLOSE booking modal FIRST
               setBookingLawyer(null)
 
               // Store booking data locally
@@ -1041,6 +1050,19 @@ export default function LawyersPage() {
                 }
                 localStorage.setItem(`booking_${bookingId}`, JSON.stringify(bookingData))
               }
+
+              // ✅ THEN Show success modal (after a brief delay to ensure modal closes)
+              setTimeout(() => {
+                setLastBooking({
+                  id: bookingId,
+                  lawyer: lawyer.fullName,
+                  date,
+                  slot,
+                  mode,
+                  fee: lawyer.consultationFee,
+                })
+                setShowSuccessModal(true)
+              }, 100)
             }
           } catch {
             toast({
