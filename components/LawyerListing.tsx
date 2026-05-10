@@ -371,12 +371,12 @@ function GridCard({ lawyer, delay, onBook }: { lawyer: Lawyer; delay: number; on
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
+                    {/* <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
                         <RatingStars rating={lawyer.rating} />
                         <span style={{ fontSize: "10px", color: "var(--ink-4)", fontFamily: "var(--mono)" }}>{lawyer.rating.toFixed(1)}</span>
-                    </div>
+                    </div> */}
                     <span style={{ width: 3, height: 3, borderRadius: "50%", background: "var(--ink-7)", display: "inline-block" }} />
-                    <span className="stat-chip"><MapPin size={9} /> {lawyer.city || lawyer.state}</span>
+                    <span className="stat-chip"><MapPin size={9} /> {[lawyer.city, lawyer.state].filter(Boolean).join(", ")}</span>
                     {lawyer.availableNow && <span className="avail-badge"><span style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--emerald)", display: "inline-block" }} />Now</span>}
                 </div>
             </div>
@@ -427,8 +427,8 @@ function ListRow({ lawyer, delay, onBook }: { lawyer: Lawyer; delay: number; onB
                 </div>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
                     <span className="stat-chip"><Clock size={9} />{lawyer.experience}y exp</span>
-                    <span className="stat-chip"><MapPin size={9} />{lawyer.city || lawyer.state}</span>
-                    <span className="stat-chip"><Star size={9} style={{ fill: "var(--gold)", color: "var(--gold)" }} />{lawyer.rating.toFixed(1)} ({lawyer.reviews})</span>
+                    <span className="stat-chip"><MapPin size={9} />{[lawyer.city, lawyer.state].filter(Boolean).join(", ")}</span>
+                    {/* <span className="stat-chip"><Star size={9} style={{ fill: "var(--gold)", color: "var(--gold)" }} />{lawyer.rating.toFixed(1)} ({lawyer.reviews})</span> */}
                     <ModeIcons modes={lawyer.consultationModes} />
                 </div>
             </div>
@@ -491,13 +491,13 @@ function EditorialCard({ lawyer, delay, featured, onBook }: { lawyer: Lawyer; de
             <div style={{ padding: featured ? "14px 18px 16px" : "12px 14px 14px" }}>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 8 }}>
                     <span className="stat-chip"><Clock size={9} />{lawyer.experience}y exp</span>
-                    <span className="stat-chip"><MapPin size={9} />{lawyer.city || lawyer.state}</span>
+                    <span className="stat-chip"><MapPin size={9} />{[lawyer.city, lawyer.state].filter(Boolean).join(", ")}</span>
                     <span className="stat-chip"><Globe size={9} />{lawyer.languages.slice(0, 2).join(", ")}</span>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: featured ? 8 : 6 }}>
                     <RatingStars rating={lawyer.rating} />
-                    <span style={{ fontSize: "10px", fontFamily: "var(--mono)", color: "var(--ink-4)" }}>{lawyer.rating.toFixed(1)} · {lawyer.reviews} reviews</span>
+                    {/* <span style={{ fontSize: "10px", fontFamily: "var(--mono)", color: "var(--ink-4)" }}>{lawyer.rating.toFixed(1)} · {lawyer.reviews} reviews</span> */}
                 </div>
 
                 {featured && (
@@ -588,9 +588,9 @@ export default function LawyerListing({ lawyers, loading, error, onBook }: Lawye
         .filter(l => {
             const t = search.toLowerCase()
             return (
-                (!t || l.fullName.toLowerCase().includes(t) || l.specialization.some(s => s.toLowerCase().includes(t)) || l.city.toLowerCase().includes(t)) &&
+                (!t || l.fullName.toLowerCase().includes(t) || l.specialization.some(s => s.toLowerCase().includes(t)) || l.city?.toLowerCase().includes(t) || l.state?.toLowerCase().includes(t)) &&
                 (spec === "All" || l.specialization.some(s => s.toLowerCase().includes(spec.toLowerCase()))) &&
-                (state === "All States" || l.state === state) &&
+                (state === "All States" || l.state?.toLowerCase() === state.toLowerCase()) &&
                 (lang === "All Languages" || l.languages.includes(lang)) &&
                 (!onlyAvailable || l.availableNow)
             )
