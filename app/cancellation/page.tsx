@@ -67,6 +67,7 @@ const GlobalStyles = () => (
       transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1);
     }
     .reveal.is-on { opacity:1; transform:translateY(0); }
+    
 
     .gold-text {
       background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
@@ -293,10 +294,13 @@ const GlobalStyles = () => (
       .process-steps { grid-template-columns: 1fr !important; }
       .timeline-grid { grid-template-columns: 1fr !important; }
       .contact-grid { grid-template-columns: 1fr !important; }
+      .cta-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
     }
     @media (max-width: 480px) {
       .hero-title { font-size: clamp(38px, 10vw, 64px) !important; }
     }
+       
+      
   `}</style>
 )
 
@@ -1080,7 +1084,7 @@ export default function CancellationPage() {
 
                     <div style={{ maxWidth: 1200, margin: "0 auto", position: "relative", zIndex: 1 }}>
                         <Reveal>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
+                            <div className="cta-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
                                 <div>
                                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
                                         <Sparkles style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
