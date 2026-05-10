@@ -700,7 +700,7 @@ export default function ContactPage() {
 
         {/* ── MAIN CONTENT ──────────────────────────────────────────────────────── */}
         <div className="main-pad" style={{ maxWidth: 1200, margin: "0 auto", padding: "56px 28px 96px" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 48, alignItems: "start" }}>
+          <div className="contact-grid" style={{ display: "grid", gridTemplateColumns: "1fr 380px", gap: 48, alignItems: "start" }}>
 
             {/* ── FORM ──────────────────────────────────────────────────────── */}
             <Reveal>
@@ -898,12 +898,8 @@ export default function ContactPage() {
             flexWrap: "wrap", gap: 12,
           }}>
             <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-              <div style={{
-                width: 30, height: 30, borderRadius: 8, background: "rgba(255,255,255,0.05)",
-                border: "1px solid rgba(201,168,76,0.2)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <Shield style={{ color: "var(--gold)", width: 13, height: 13 }} />
+              <div style={{ width: 30, height: 30, background: "#0A0A0A", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <Scale size={13} style={{ color: "#B89440" }} />
               </div>
               <span style={{
                 fontFamily: "var(--serif)", fontSize: "16px",
