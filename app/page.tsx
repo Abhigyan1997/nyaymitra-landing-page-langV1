@@ -2562,6 +2562,7 @@ export default function HomePage() {
                     { href: "/cancellation", labelEn: "Cancellation & Refund", labelHi: "रद्दीकरण और धनवापसी" },
                     { href: "/Shipping&DeliveryPolicy", labelEn: "Shipping & Delivery", labelHi: "शिपिंग और डिलीवरी" },
                     { href: "/contact", labelEn: "Contact Us", labelHi: "संपर्क करें" },
+                    { href: "/blog", labelEn: "Blog", labelHi: "ब्लॉग" }
                   ].map(l => (
                     <li key={l.href} style={{ marginBottom: 10 }}>
                       <Link href={l.href} style={{
