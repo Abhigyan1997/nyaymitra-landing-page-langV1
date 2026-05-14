@@ -380,6 +380,7 @@ interface ChatResponse {
   nextSteps: string | null
   disclaimer: string
   messages: Message[]
+  shouldSuggestLawyers: boolean
 }
 
 interface UserType {
@@ -682,7 +683,17 @@ export default function LegalAIPage() {
       }
       setSeverity(data.severity ?? null)
       setNextSteps(data.nextSteps ?? null)
-      if (allLawyers.length > 0) setSuggestedLawyers(filterLawyersByIssue(allLawyers, userText))
+      // Show the lawyer panel only when backend says to
+      if (data.shouldSuggestLawyers) {
+        setShowLawyerSuggestions(true)
+      } else {
+        setShowLawyerSuggestions(false)
+      }
+      if (data.shouldSuggestLawyers && allLawyers.length > 0) {
+        setSuggestedLawyers(filterLawyersByIssue(allLawyers, userText))
+      } else {
+        setSuggestedLawyers([]) // clear any previous suggestions
+      }
       if (userId) fetchUserChatSessions(userId, token, true)
     } catch (error) {
       console.error("Send error:", error)
