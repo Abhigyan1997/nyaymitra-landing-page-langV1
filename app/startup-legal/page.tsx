@@ -5,122 +5,11 @@ import {
     Check, Zap, Shield, Users, FileText, MessageCircle,
     ArrowRight, Star, Clock, Scale, AlertCircle, TrendingUp,
     Award, ThumbsUp, Sparkles, Menu, X, Instagram, Linkedin,
-    MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle, Languages
+    MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle,
+    Briefcase, FileCheck, Users2, Lock, Zap as ZapIcon, Target
 } from "lucide-react"
 
-// ─────────────────────────────────────────────────────────────────
-// HINDI TRANSLATIONS (KEY TEXT ONLY)
-// ─────────────────────────────────────────────────────────────────
-const hindiTranslations = {
-    // Nav
-    navServices: "सेवाएं",
-    navFindLawyers: "वकील खोजें",
-    navLegalGPT: "लीगल GPT",
-    navPricing: "कीमतें",
-    navAbout: "हमारे बारे में",
-    // Hero
-    riskAlert: "जोखिम अलर्ट",
-    startupsProtected: "100+ स्टार्टअप सुरक्षित",
-    heroHeadline: "एक बुरा अनुबंध आपके स्टार्टअप को",
-    heroHeadlineGold: "महंगा न पड़ने दें।",
-    heroDesc: "कानूनी स्पष्टता प्राप्त करें और समस्याओं को महंगी गलतियाँ बनने से पहले ठीक करें।",
-    heroPrice: "₹999/माह से शुरू",
-    ctaWhatsapp: "व्हाट्सएप पर मदद लें",
-    ctaPlans: "योजनाएं देखें",
-    noCommitment: "कोई दीर्घकालिक प्रतिबद्धता नहीं",
-    cancelAnytime: "कभी भी रद्द करें",
-    freeTrial: "14-दिन का निःशुल्क परीक्षण",
-    live: "लाइव",
-    fromConfusion: "भ्रम से कार्रवाई तक",
-    aiPowered: "एआई-संचालित · 24/7 · हिंदी और अंग्रेजी",
-    verifiedLawyers: "60+ सत्यापित वकील",
-    avgResponse: "औसत प्रतिक्रिया < 2 घंटे",
-    // Risk Section
-    realCost: "वास्तविक लागत",
-    riskHeading: "यदि आप कानूनी को अनदेखा करते हैं तो क्या होगा?",
-    riskSub: "छोटी चूक महंगी आपदाएँ बन जाती हैं।",
-    riskTitle1: "आपने खराब अनुबंध पर हस्ताक्षर किए",
-    riskConsequence1: "₹2L+ का वित्तीय नुकसान",
-    riskOutcome1: "हम खामियों को ठीक करते हैं इससे पहले कि उनका दुरुपयोग हो",
-    riskTitle2: "कोई सह-संस्थापक समझौता नहीं",
-    riskConsequence2: "विवाद कंपनी को विभाजित करते हैं",
-    riskOutcome2: "स्पष्ट स्वामित्व और निकास शर्तें",
-    riskTitle3: "कानूनी नोटिस को अनदेखा करना",
-    riskConsequence3: "अदालत में वृद्धि",
-    riskOutcome3: "मुकदमेबाजी के बिना समाधान",
-    fixBeforeExpensive: "महंगा होने से पहले ठीक करें →",
-    // Pricing Section
-    pricing: "कीमतें",
-    pricingHeading: "चुनें कि आप कितना जोखिम हटाना चाहते हैं",
-    pricingSub: "सभी योजनाओं में व्हाट्सएप पहुंच शामिल है। कभी भी रद्द करें।",
-    mostPopular: "सबसे लोकप्रिय",
-    outcomeStarter: "एक बुरे अनुबंध को ₹2L+ की लागत से बचाएं",
-    outcomeGrowth: "अपने पूरे पहले वर्ष के लिए कानूनी सुरक्षा",
-    outcomePro: "बिना पूर्णकालिक वकील के पूर्ण कानूनी कवरेज",
-    ctaStarter: "₹999 योजना से शुरू करें →",
-    ctaGrowth: "ग्रोथ योजना प्राप्त करें →",
-    ctaPro: "कानूनी सलाहकार से बात करें →",
-    monthly: "/माह",
-    billedMonthly: "मासिक बिल · कभी भी रद्द करें",
-    featureConsult1: "1 कानूनी परामर्श (30 मिनट)",
-    featureReview1: "1 दस्तावेज़ समीक्षा और सुधार",
-    featureWhatsapp1: "व्हाट्सएप सपोर्ट (48h)",
-    featureTemplates1: "मानक टेम्पलेट",
-    featureEmail1: "ईमेल सपोर्ट",
-    featureConsult2: "3 परामर्श (45 मिनट प्रत्येक)",
-    featureReview2: "3 दस्तावेज़ समीक्षा और सुधार",
-    featureWhatsapp2: "प्राथमिकता व्हाट्सएप (12h)",
-    featureDrafting2: "कस्टम अनुबंध निर्माण",
-    featureChecklist2: "पूर्ण अनुपालन चेकलिस्ट",
-    featureFounder2: "संस्थापक सुरक्षा समीक्षा",
-    featureConsult3: "असीमित परामर्श",
-    featureReview3: "असीमित दस्तावेज़ समीक्षा",
-    featureWhatsapp3: "24/7 प्राथमिकता सपोर्ट",
-    featureAdvisor3: "समर्पित कानूनी सलाहकार",
-    featureAudit3: "कानूनी ऑडिट और अनुपालन",
-    featureTermSheet3: "निवेश टर्म शीट समीक्षा",
-    featureIP3: "आईपी और पेटेंट मार्गदर्शन",
-    pricingDisclaimer: "सभी योजनाओं में शामिल: निःशुल्क एआई परामर्श · सत्यापित वकील · 100% गोपनीय",
-    // How It Works
-    howItWorks: "3 चरणों में कानूनी स्पष्टता प्राप्त करें",
-    step1Title: "अपनी समस्या सादे शब्दों में बताएं",
-    step1Desc: "जो आपको परेशान कर रहा है उसे साझा करें। हिंदी या अंग्रेजी। कानूनी शब्दजाल की आवश्यकता नहीं है।",
-    step1Detail: "30 सेकंड में एआई पूर्व-विश्लेषण",
-    step2Title: "स्पष्टता और अगले कदम प्राप्त करें",
-    step2Desc: "हम आपकी स्थिति का विश्लेषण करते हैं और घंटों के भीतर एक स्पष्ट कार्य योजना देते हैं।",
-    step2Detail: "< 2 घंटे में विशेषज्ञ मिलान",
-    step3Title: "समस्या को लागत बनने से पहले ठीक करें",
-    step3Desc: "दस्तावेज़ ठीक करवाएं, कानूनी नोटिस भेजें, या सत्यापित वकील से जुड़ें।",
-    step3Detail: "24–48 घंटे में समाधान",
-    // Trust Section
-    realResults: "वास्तविक परिणाम",
-    trustHeading: "संस्थापकों ने हमारे साथ क्या ठीक किया",
-    trustSub: "वास्तविक समस्याएं, दिनों में हल। कोई अदालत नहीं, कोई महंगे वकील नहीं।",
-    trustText1: "हस्ताक्षर करने से पहले एक खराब खंड को पकड़कर ₹80,000 बचाए",
-    trustText2: "बिना अदालत के कानूनी नोटिस के माध्यम से ₹25,000 वसूले",
-    trustText3: "सह-संस्थापक समझौते के साथ विवाद से बचा",
-    trustText4: "कानूनी पत्र के साथ भुगतान में देरी रोकी",
-    fixedTime1: "2 घंटे में ठीक हुआ",
-    fixedTime2: "14 दिनों में हल",
-    fixedTime3: "48 घंटे में तैयार",
-    fixedTime4: "ग्राहक ने 7 दिनों में भुगतान किया",
-    testimonialText: "\"NyayMitra ने हमें एक अनुबंध खंड को ठीक करने में मदद की जिसकी हमें ₹2.3 लाख की लागत आनी थी। ग्रोथ योजना ने पहले सप्ताह में ही अपनी लागत वसूल कर ली।\"",
-    testimonialName: "अंकित शर्मा",
-    testimonialTitle: "सह-संस्थापक, टेकस्टार्ट इंडिया",
-    verified: "सत्यापित",
-    // Final CTA
-    finalHeading: "अनुमान लगाना बंद करें।",
-    finalHeadingGold: "कार्रवाई शुरू करें।",
-    finalDesc: "घंटों में स्पष्ट कानूनी मार्गदर्शन प्राप्त करें। 100+ स्टार्टअप से जुड़ें जिन्होंने NyayMitra के साथ अपना कानूनी जोखिम ठीक किया।",
-    ctaFinal: "अभी कानूनी मदद लें",
-    noCard: "कोई क्रेडिट कार्ड आवश्यक नहीं · निःशुल्क एआई परामर्श · कभी भी रद्द करें",
-    // Footer
-    disclaimer: "NyayMitra एक प्रौद्योगिकी मंच है। हम कानूनी फर्म के रूप में कार्य नहीं करते हैं। सभी परामर्श लाइसेंस प्राप्त तृतीय-पक्ष पेशेवरों द्वारा दिए जाते हैं।",
-    quickLinks: "त्वरित लिंक",
-    legal: "कानूनी",
-}
-
-// English original (default)
+// English translations (ONLY VERSION)
 const englishTranslations = {
     // Nav
     navServices: "Services",
@@ -159,38 +48,83 @@ const englishTranslations = {
     riskConsequence3: "Escalation to court",
     riskOutcome3: "Resolution without litigation",
     fixBeforeExpensive: "Fix it before it becomes expensive →",
-    // Pricing Section
+    // Pricing Section - NEW POSITIONING
     pricing: "PRICING",
-    pricingHeading: "Choose how much risk you want to remove",
-    pricingSub: "All plans include WhatsApp access. Cancel anytime.",
+    pricingHeading: "Startup Legal Operations Infrastructure",
+    pricingSub: "Protect your founders. Run your compliance. Control your legal risk.",
     mostPopular: "MOST POPULAR",
-    outcomeStarter: "Stop one bad contract from costing you ₹2L+",
-    outcomeGrowth: "Legal protection for your entire first year",
-    outcomePro: "Complete legal coverage without a full-time lawyer",
-    ctaStarter: "Start with ₹999 plan →",
-    ctaGrowth: "Get Growth plan →",
-    ctaPro: "Talk to legal advisor →",
-    monthly: "/mo",
-    billedMonthly: "Billed monthly · Cancel anytime",
-    featureConsult1: "1 legal consultation (30 min)",
-    featureReview1: "1 document review & fix",
-    featureWhatsapp1: "WhatsApp support (48h)",
-    featureTemplates1: "Standard templates",
-    featureEmail1: "Email support",
-    featureConsult2: "3 consultations (45 min each)",
-    featureReview2: "3 document reviews & fixes",
-    featureWhatsapp2: "Priority WhatsApp (12h)",
-    featureDrafting2: "Custom contract drafting",
-    featureChecklist2: "Full compliance checklist",
-    featureFounder2: "Founder protection review",
-    featureConsult3: "Unlimited consultations",
-    featureReview3: "Unlimited document reviews",
-    featureWhatsapp3: "24/7 priority support",
-    featureAdvisor3: "Dedicated legal advisor",
-    featureAudit3: "Legal audit & compliance",
-    featureTermSheet3: "Investment term sheet review",
-    featureIP3: "IP & patent guidance",
-    pricingDisclaimer: "All plans include: Free AI consultation · Verified lawyers · 100% confidential",
+    positioningLabel1: "Founder Protection Layer",
+    positioningLabel2: "Legal Clarity Infrastructure",
+    positioningLabel3: "Operational Legal Support",
+
+    // Plan 1 - STARTER
+    starterTagline: "For solo founders & early stage builders",
+    starterHeadline: "Avoid early legal mistakes before they become expensive",
+    starterOutcome: "Stop one bad contract from costing you ₹2L+",
+    starterCTA: "Start protecting your startup →",
+
+    // Plan 2 - GROWTH
+    growthTagline: "For growing startups & small teams",
+    growthHeadline: "Structured legal support for scaling operations",
+    growthOutcome: "Legal protection for your entire first year",
+    growthCTA: "Get Growth Plan →",
+
+    // Plan 3 - PRO
+    proTagline: "For scaling startups & SMBs",
+    proHeadline: "An external legal operations layer for your business",
+    proOutcome: "Complete legal coverage without a full-time lawyer",
+    proCTA: "Talk to legal team →",
+
+    // Features - Starter
+    f_consult1: "1 legal consultation",
+    f_review1: "1 agreement/document review",
+    f_whatsapp1: "WhatsApp support",
+    f_templates: "Startup legal templates",
+    f_founder: "Founder/freelancer agreement guidance",
+    f_compliance_basic: "Basic compliance guidance",
+    f_email: "Email support",
+
+    // Features - Growth
+    f_consult3: "3 legal consultations",
+    f_review3: "3 document reviews/redlines",
+    f_whatsapp_priority: "Priority WhatsApp support",
+    f_contracts: "Custom contract drafting",
+    f_vendor: "Vendor/freelancer agreements",
+    f_employment: "Hiring & employment documentation",
+    f_checklist: "Startup compliance checklist",
+    f_founder_review: "Founder risk review",
+
+    // Features - Pro
+    f_consult_unlimited: "Unlimited consultations",
+    f_review_unlimited: "Unlimited document reviews",
+    f_coordinator: "Dedicated legal coordinator",
+    f_support_24: "24/7 priority support",
+    f_operational: "Operational compliance support",
+    f_workflow: "Legal workflow management",
+    f_investment: "Investment & term sheet review",
+    f_ip: "IP & trademark guidance",
+    f_contract_lifecycle: "Contract lifecycle support",
+    f_business_risk: "Business risk review",
+
+    // Services Section
+    servicesHeading: "Additional Legal Services",
+    servicesSub: "Execution-focused legal support for startups & businesses",
+
+    shopService: "Shop & Establishment Registration",
+    shopPrice: "Starting ₹4,999",
+    founderService: "Founder Agreement",
+    founderPrice: "Starting ₹9,999",
+    employmentService: "Employment Contracts",
+    employmentPrice: "Starting ₹3,999",
+    vendorService: "Vendor Agreements",
+    vendorPrice: "Starting ₹2,999",
+    trademarkService: "Trademark Filing",
+    trademarkPrice: "Starting ₹6,999",
+    incorporationService: "Startup Incorporation",
+    incorporationPrice: "Starting ₹9,999",
+    auditService: "Compliance Audit",
+    auditPrice: "Starting ₹14,999",
+
     // How It Works
     howItWorks: "Get legal clarity in 3 steps",
     step1Title: "Tell your issue in plain words",
@@ -202,6 +136,7 @@ const englishTranslations = {
     step3Title: "Fix the problem before it costs you",
     step3Desc: "Get documents fixed, send legal notices, or connect with a verified lawyer.",
     step3Detail: "Resolution in 24–48 hours",
+
     // Trust Section
     realResults: "REAL RESULTS",
     trustHeading: "What founders fixed with us",
@@ -218,12 +153,14 @@ const englishTranslations = {
     testimonialName: "Ankit Sharma",
     testimonialTitle: "Co-founder, TechStart India",
     verified: "Verified",
+
     // Final CTA
     finalHeading: "Stop guessing.",
     finalHeadingGold: "Start acting.",
     finalDesc: "Get clear legal guidance in hours. Join 100+ startups that fixed their legal risk with NyayMitra.",
     ctaFinal: "Get Legal Help Now",
     noCard: "No credit card required · Free AI consultation · Cancel anytime",
+
     // Footer
     disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third-party professionals.",
     quickLinks: "Quick Links",
@@ -234,15 +171,16 @@ type Translations = typeof englishTranslations
 
 export default function StartupLegalPage() {
     const [hoveredPlan, setHoveredPlan] = useState<string | null>(null)
+    const [hoveredService, setHoveredService] = useState<string | null>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
     const [activeStep, setActiveStep] = useState(0)
-    const [isHindi, setIsHindi] = useState(false)
     const heroRef = useRef(null)
     const [windowWidth, setWindowWidth] = useState(0)
+    const [isYearly, setIsYearly] = useState(false)
 
-    // Get current translations
-    const t: Translations = isHindi ? hindiTranslations : englishTranslations
+    // Get current translations (English only)
+    const t: Translations = englishTranslations
 
     // Handle resize for responsive adjustments
     useEffect(() => {
@@ -263,17 +201,11 @@ export default function StartupLegalPage() {
         return () => clearInterval(timer)
     }, [])
 
-    // Close mobile menu on link click
     const handleNavClick = () => {
         setIsMenuOpen(false)
     }
 
-    // Toggle language
-    const toggleLanguage = () => {
-        setIsHindi(!isHindi)
-    }
-
-    // WHATSAPP INTENT LINKS (SINGLE CONVERSION PATH)
+    // WHATSAPP INTENT LINKS
     const whatsappNumber = "919661644025"
     const whatsappIntentStartup = `https://wa.me/${whatsappNumber}?text=I%20want%20the%20₹999%20startup%20legal%20plan`
     const whatsappIntentContract = `https://wa.me/${whatsappNumber}?text=I%20need%20help%20with%20contracts`
@@ -287,7 +219,7 @@ export default function StartupLegalPage() {
         { label: t.navAbout, href: "/about" },
     ]
 
-    // OUTCOME-BASED PROBLEMS (RISK FOCUSED) - using translations
+    // RISK SECTION
     const risks = [
         {
             icon: <XCircle className="w-5 h-5" />,
@@ -309,62 +241,108 @@ export default function StartupLegalPage() {
         }
     ]
 
-    // Plan features with translations
+    // ENHANCED PLANS WITH NEW POSITIONING
     const plans = [
         {
             id: "starter",
             name: "Starter",
-            tagline: "Pre-seed & solo founders",
+            tagline: t.starterTagline,
+            headline: t.starterHeadline,
             price: 999,
             yearlyPrice: 799,
             features: [
-                t.featureConsult1,
-                t.featureReview1,
-                t.featureWhatsapp1,
-                t.featureTemplates1,
-                t.featureEmail1
+                t.f_consult1,
+                t.f_review1,
+                t.f_whatsapp1,
+                t.f_templates,
+                t.f_founder,
+                t.f_compliance_basic,
+                t.f_email
             ],
-            outcome: t.outcomeStarter,
-            cta: t.ctaStarter,
+            outcome: t.starterOutcome,
+            cta: t.starterCTA,
             popular: false,
+            positioningLabel: t.positioningLabel1,
         },
         {
             id: "growth",
             name: "Growth",
-            tagline: "For funded startups",
+            tagline: t.growthTagline,
+            headline: t.growthHeadline,
             price: 2999,
             yearlyPrice: 2399,
             features: [
-                t.featureConsult2,
-                t.featureReview2,
-                t.featureWhatsapp2,
-                t.featureDrafting2,
-                t.featureChecklist2,
-                t.featureFounder2
+                t.f_consult3,
+                t.f_review3,
+                t.f_whatsapp_priority,
+                t.f_contracts,
+                t.f_vendor,
+                t.f_employment,
+                t.f_checklist,
+                t.f_founder_review
             ],
-            outcome: t.outcomeGrowth,
-            cta: t.ctaGrowth,
+            outcome: t.growthOutcome,
+            cta: t.growthCTA,
             popular: true,
+            positioningLabel: t.positioningLabel2,
         },
         {
             id: "pro",
             name: "Pro",
-            tagline: "For scaling companies",
+            tagline: t.proTagline,
+            headline: t.proHeadline,
             price: 5999,
             yearlyPrice: 4799,
             features: [
-                t.featureConsult3,
-                t.featureReview3,
-                t.featureWhatsapp3,
-                t.featureAdvisor3,
-                t.featureAudit3,
-                t.featureTermSheet3,
-                t.featureIP3
+                t.f_consult_unlimited,
+                t.f_review_unlimited,
+                t.f_coordinator,
+                t.f_support_24,
+                t.f_operational,
+                t.f_workflow,
+                t.f_investment,
+                t.f_ip,
+                t.f_contract_lifecycle,
+                t.f_business_risk
             ],
-            outcome: t.outcomePro,
-            cta: t.ctaPro,
+            outcome: t.proOutcome,
+            cta: t.proCTA,
             popular: false,
+            positioningLabel: t.positioningLabel3,
         }
+    ]
+
+    // PREMIUM HIGH-VALUE SERVICES ONLY - WHAT FOUNDERS ACTUALLY NEED
+    const services = [
+        {
+            id: "contracts",
+            title: "Contract Review & Drafting",
+            desc: "Fix bad clauses. Draft clean agreements. No surprises.",
+            price: "Starting ₹5,999",
+            icon: <FileCheck className="w-5 h-5" />,
+            highlight: true
+        },
+        {
+            id: "disputes",
+            title: "Dispute Resolution",
+            desc: "Recover money. Settle without court. Keep moving.",
+            price: "Starting ₹8,999",
+            icon: <Scale className="w-5 h-5" />
+        },
+        {
+            id: "notices",
+            title: "Legal Notices & Letters",
+            desc: "Send official notices. Collect payments. Protect rights.",
+            price: "Starting ₹3,999",
+            icon: <MessageCircle className="w-5 h-5" />
+        },
+        {
+            id: "agreements",
+            title: "Team & Investor Agreements",
+            desc: "Founder equity. Employee contracts. Clear terms.",
+            price: "Starting ₹7,999",
+            icon: <Users2 className="w-5 h-5" />
+        },
     ]
 
     const steps = [
@@ -391,7 +369,6 @@ export default function StartupLegalPage() {
         }
     ]
 
-    // OUTCOME-BASED TRUST PROOFS
     const trustProofs = [
         { text: t.trustText1, icon: <FileText className="w-4 h-4" />, time: t.fixedTime1 },
         { text: t.trustText2, icon: <ThumbsUp className="w-4 h-4" />, time: t.fixedTime2 },
@@ -422,12 +399,11 @@ export default function StartupLegalPage() {
         </svg>
     )
 
-    // Responsive helper
     const isMobile = windowWidth < 768
 
     return (
         <>
-            {/* ─── FONT INJECTION & RESPONSIVE STYLES ─── */}
+            {/* ─── GLOBAL STYLES ─── */}
             <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
 
@@ -551,18 +527,26 @@ export default function StartupLegalPage() {
                 .amber-pulse { animation: glow-pulse 2s infinite; }
 
                 .plan-card { 
-                    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease; 
+                    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
                 }
                 .plan-card:hover { 
-                    transform: translateY(-4px); 
-                    box-shadow: 0 24px 64px rgba(0,0,0,0.1); 
+                    transform: translateY(-6px); 
+                    box-shadow: 0 24px 64px rgba(0,0,0,0.12); 
                 }
                 .plan-card.popular { 
                     transform: translateY(-8px); 
-                    box-shadow: 0 32px 80px rgba(0,0,0,0.12); 
+                    box-shadow: 0 32px 80px rgba(0,0,0,0.15); 
                 }
                 .plan-card.popular:hover { 
-                    transform: translateY(-12px); 
+                    transform: translateY(-14px); 
+                }
+
+                .service-card {
+                    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+                }
+                .service-card:hover {
+                    transform: translateY(-4px);
+                    box-shadow: 0 16px 48px rgba(0,0,0,0.1);
                 }
 
                 .step-bar { transition: width 2.8s linear; }
@@ -604,7 +588,6 @@ export default function StartupLegalPage() {
                     border-left-color: #D97706;
                 }
 
-                /* Hero gold text style */
                 .gold-text {
                     color: #D97706;
                     font-style: italic;
@@ -614,12 +597,141 @@ export default function StartupLegalPage() {
                     font-weight: 700;
                     letter-spacing: -0.02em;
                 }
+
+                /* PREMIUM PRICING ENHANCEMENTS */
+                .pricing-positioning {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    padding: 4px 10px 4px 8px;
+                    border-radius: 999px;
+                    background: rgba(217, 119, 6, 0.08);
+                    border: 1px solid rgba(217, 119, 6, 0.2);
+                    font-size: 9px;
+                    font-weight: 600;
+                    color: #D97706;
+                    letter-spacing: 0.08em;
+                }
+
+                .plan-grid-responsive {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1.5rem;
+                    align-items: start;
+                }
+
+                @media (max-width: 1024px) {
+                    .plan-grid-responsive {
+                        grid-template-columns: 1fr;
+                        gap: 2rem;
+                    }
+                }
+
+                .plan-header-enhanced {
+                    margin-bottom: 24px;
+                    padding-bottom: 24px;
+                    border-bottom: 1px solid rgba(0,0,0,0.08);
+                }
+
+                .plan-headline {
+                    font-size: clamp(0.9rem, 2vw, 1.1rem);
+                    font-weight: 600;
+                    color: inherit;
+                    line-height: 1.4;
+                    margin-bottom: 12px;
+                }
+
+                /* PREMIUM SERVICES SECTION */
+                .services-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+                    gap: 1.75rem;
+                }
+
+                @media (max-width: 1024px) {
+                    .services-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 1.5rem;
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    .services-grid {
+                        grid-template-columns: 1fr;
+                        gap: 1.25rem;
+                    }
+                }
+
+                .service-tile {
+                    padding: 2rem;
+                    border-radius: 20px;
+                    border: 1px solid rgba(0,0,0,0.08);
+                    background: #fff;
+                    text-decoration: none;
+                    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+                    cursor: pointer;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 16px;
+                }
+
+                .service-tile:hover {
+                    border-color: #D97706;
+                    box-shadow: 0 20px 60px rgba(217, 119, 6, 0.18);
+                    transform: translateY(-8px);
+                }
+
+                .service-tile.highlight {
+                    border: 2px solid #D97706;
+                    background: linear-gradient(135deg, rgba(254, 243, 199, 0.3) 0%, rgba(255, 255, 255, 1) 100%);
+                    box-shadow: 0 8px 32px rgba(217, 119, 6, 0.1);
+                }
+
+                .service-tile.highlight:hover {
+                    box-shadow: 0 24px 80px rgba(217, 119, 6, 0.25);
+                    transform: translateY(-10px);
+                }
+
+                .service-icon-wrapper {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 12px;
+                    background: #000;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #D97706;
+                    flex-shrink: 0;
+                }
+
+                .service-title {
+                    font-size: 1.05rem;
+                    font-weight: 700;
+                    color: #0a0a0a;
+                    line-height: 1.3;
+                }
+
+                .service-desc {
+                    font-size: 0.85rem;
+                    color: #71717a;
+                    line-height: 1.5;
+                    flex-grow: 1;
+                }
+
+                .service-price {
+                    font-size: 0.85rem;
+                    color: #D97706;
+                    font-weight: 700;
+                    letter-spacing: 0.02em;
+                    margin-top: auto;
+                }
             `}</style>
 
             <div className="min-h-screen bg-white overflow-x-hidden" style={{ color: '#0a0a0a' }}>
 
                 {/* ══════════════════════════════════════════════════════
-                    NAV — Sticky with blur, scrollable mobile menu
+                    NAV
                 ══════════════════════════════════════════════════════ */}
                 <nav
                     style={{
@@ -674,7 +786,7 @@ export default function StartupLegalPage() {
                                 ))}
                             </div>
 
-                            {/* CTA row with Language Toggle */}
+                            {/* CTA row */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <div className="nm-hide-mobile" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                                     <a href="https://www.instagram.com/nyaymitra.tech" target="_blank" rel="noopener noreferrer"
@@ -692,29 +804,6 @@ export default function StartupLegalPage() {
                                         <Linkedin style={{ width: 16, height: 16 }} />
                                     </a>
                                 </div>
-
-                                {/* HINDI/ENGLISH TOGGLE BUTTON */}
-                                <button
-                                    onClick={toggleLanguage}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 6,
-                                        padding: '6px 12px',
-                                        background: isHindi ? '#D97706' : '#000',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: 40,
-                                        fontSize: 12,
-                                        fontWeight: 600,
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s ease',
-                                    }}
-                                    className="nm-ui"
-                                >
-                                    <Languages style={{ width: 14, height: 14 }} />
-                                    {isHindi ? "English" : "हिंदी"}
-                                </button>
 
                                 <button
                                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -736,7 +825,7 @@ export default function StartupLegalPage() {
                         </div>
                     </div>
 
-                    {/* Mobile menu — scrollable with max-height */}
+                    {/* Mobile menu */}
                     {isMenuOpen && (
                         <div style={{
                             borderTop: '1px solid rgba(0,0,0,0.07)',
@@ -784,33 +873,13 @@ export default function StartupLegalPage() {
                                     style={{ padding: 8, background: '#f4f4f5', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3f3f46' }}>
                                     <Linkedin style={{ width: 18, height: 18 }} />
                                 </a>
-                                {/* Mobile language toggle */}
-                                <button
-                                    onClick={toggleLanguage}
-                                    style={{
-                                        padding: '6px 12px',
-                                        background: isHindi ? '#D97706' : '#000',
-                                        color: '#fff',
-                                        border: 'none',
-                                        borderRadius: 40,
-                                        fontSize: 12,
-                                        fontWeight: 600,
-                                        cursor: 'pointer',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: 6,
-                                    }}
-                                >
-                                    <Languages style={{ width: 14, height: 14 }} />
-                                    {isHindi ? "EN" : "हिं"}
-                                </button>
                             </div>
                         </div>
                     )}
                 </nav>
 
                 {/* ══════════════════════════════════════════════════════
-                    HERO — Refined, stylish, black & gold, compact size
+                    HERO
                 ══════════════════════════════════════════════════════ */}
                 <section ref={heroRef} style={{ position: 'relative', overflow: 'hidden', padding: '3rem 1.5rem', background: '#fff' }}>
                     <div style={{
@@ -842,7 +911,7 @@ export default function StartupLegalPage() {
                                 }
                             `}</style>
 
-                            {/* Left — stylish black & gold copy */}
+                            {/* Left — Hero copy */}
                             <div>
                                 <div className="anim-1" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 24 }}>
                                     <div style={{
@@ -868,7 +937,6 @@ export default function StartupLegalPage() {
                                     </div>
                                 </div>
 
-                                {/* STYLISH GOLD HEADLINE — Cormorant Garamond, smaller, impactful */}
                                 <h1 className="hero-headline anim-2" style={{
                                     fontSize: 'clamp(2rem, 5vw, 3.5rem)',
                                     fontWeight: 700,
@@ -893,7 +961,6 @@ export default function StartupLegalPage() {
                                 </p>
 
                                 <div className="anim-4" style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
-                                    {/* PRIMARY CTA: WHATSAPP - GOLD ACCENT */}
                                     <a
                                         href={whatsappIntentGeneral}
                                         target="_blank" rel="noopener noreferrer"
@@ -909,7 +976,6 @@ export default function StartupLegalPage() {
                                     >
                                         <WaSvg size={16} /> {t.ctaWhatsapp}
                                     </a>
-                                    {/* SECONDARY CTA */}
                                     <a
                                         href="#pricing"
                                         style={{
@@ -938,7 +1004,7 @@ export default function StartupLegalPage() {
                                 </div>
                             </div>
 
-                            {/* Right — Live card UI (preserved) */}
+                            {/* Right — Live card UI */}
                             <div className="nm-hide-mobile" style={{ position: 'relative' }}>
                                 <div style={{
                                     position: 'absolute', inset: -12, borderRadius: 28,
@@ -1022,7 +1088,7 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ── MARQUEE STRIP (PRESERVED) ── */}
+                {/* ── MARQUEE STRIP ── */}
                 <div style={{ background: '#000', padding: '0.6rem 0', overflow: 'hidden' }}>
                     <div className="marquee-track" style={{ display: 'flex', width: 'max-content' }}>
                         {[...Array(2)].map((_, j) => (
@@ -1039,7 +1105,7 @@ export default function StartupLegalPage() {
                 </div>
 
                 {/* ══════════════════════════════════════════════════════
-                    RISK SECTION (PRESERVED)
+                    RISK SECTION
                 ══════════════════════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
@@ -1080,97 +1146,169 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══════════════════════════════════════════════════════
-                    PRICING SECTION (PRESERVED)
+                    ENHANCED PRICING SECTION — PREMIUM POSITIONING
                 ══════════════════════════════════════════════════════ */}
                 <section id="pricing" className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
+                        {/* Pricing Header */}
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 6vw, 4rem)' }}>
                             <p className="brand-line">{t.pricing}</p>
-                            <h2 className="nm-display" style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
-                                {t.pricingHeading}
-                            </h2>
-                            <p className="nm-body" style={{ fontSize: '0.875rem', color: '#71717a', maxWidth: 400, margin: '0 auto' }}>
+                            {/* Billing Toggle */}
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 24 }}>
+                                <span style={{ fontSize: '0.875rem', fontWeight: isYearly ? 400 : 600, color: isYearly ? '#71717a' : '#0a0a0a' }}>Monthly</span>
+                                <button
+                                    onClick={() => setIsYearly(v => !v)}
+                                    style={{
+                                        width: 48, height: 26, borderRadius: 999, border: 'none', cursor: 'pointer',
+                                        background: isYearly ? '#D97706' : 'rgba(0,0,0,0.12)',
+                                        position: 'relative', transition: 'background 0.25s ease',
+                                    }}
+                                >
+                                    <span style={{
+                                        position: 'absolute', top: 3, left: isYearly ? 25 : 3, width: 20, height: 20,
+                                        borderRadius: '50%', background: '#fff',
+                                        boxShadow: '0 1px 4px rgba(0,0,0,0.2)',
+                                        transition: 'left 0.25s cubic-bezier(0.4,0,0.2,1)',
+                                    }} />
+                                </button>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <span style={{ fontSize: '0.875rem', fontWeight: isYearly ? 600 : 400, color: isYearly ? '#0a0a0a' : '#71717a' }}>Yearly</span>
+                                    <span style={{
+                                        fontSize: 10, fontWeight: 700, color: '#fff', background: '#D97706',
+                                        padding: '2px 8px', borderRadius: 999, letterSpacing: '0.06em'
+                                    }}>SAVE 20%</span>
+                                </span>
+                            </div>
+                            <p className="nm-body" style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 500, margin: '0 auto', lineHeight: 1.6 }}>
                                 {t.pricingSub}
                             </p>
                         </div>
 
-                        <div className="nm-grid nm-grid-3" style={{ gap: '1.25rem', alignItems: 'start' }}>
+                        {/* Plan Cards */}
+                        <div className="plan-grid-responsive">
                             {plans.map((plan) => (
                                 <div key={plan.id}
                                     className={`plan-card ${plan.popular ? 'popular' : ''}`}
                                     style={{
-                                        position: 'relative', borderRadius: 20, overflow: 'visible',
+                                        position: 'relative', borderRadius: 24, overflow: 'visible',
                                         border: plan.popular ? '2px solid #000' : '1px solid rgba(0,0,0,0.1)',
                                         background: plan.popular ? '#000' : '#fff',
-                                        padding: plan.popular ? '1.75rem 1.5rem' : '1.5rem'
+                                        padding: plan.popular ? '2rem 1.75rem' : '1.75rem'
                                     }}
                                     onMouseEnter={() => setHoveredPlan(plan.id)}
                                     onMouseLeave={() => setHoveredPlan(null)}
                                 >
                                     {plan.popular && (
-                                        <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)' }}>
+                                        <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)' }}>
                                             <span className="nm-ui" style={{
-                                                display: 'inline-flex', alignItems: 'center', gap: 4,
-                                                padding: '4px 12px', background: '#D97706', color: '#fff',
-                                                fontSize: 9, fontWeight: 700, borderRadius: 999, letterSpacing: '0.1em',
-                                                boxShadow: '0 2px 8px rgba(217,119,6,0.3)', whiteSpace: 'nowrap',
+                                                display: 'inline-flex', alignItems: 'center', gap: 5,
+                                                padding: '5px 14px', background: '#D97706', color: '#fff',
+                                                fontSize: 10, fontWeight: 700, borderRadius: 999, letterSpacing: '0.1em',
+                                                boxShadow: '0 4px 12px rgba(217,119,6,0.35)', whiteSpace: 'nowrap',
                                             }}>
-                                                <Zap style={{ width: 9, height: 9 }} /> {t.mostPopular}
+                                                <Zap style={{ width: 10, height: 10 }} /> {t.mostPopular}
                                             </span>
                                         </div>
                                     )}
 
-                                    <div style={{ marginBottom: 20 }}>
-                                        <p className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.14em', marginBottom: 4 }}>
-                                            {plan.tagline.toUpperCase()}
-                                        </p>
-                                        <h3 className="nm-display" style={{ fontSize: '1.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.02em' }}>
-                                            {plan.name}
-                                        </h3>
-                                    </div>
-
-                                    <p style={{ fontSize: '0.7rem', color: plan.popular ? '#FCD34D' : '#D97706', fontWeight: 500, marginBottom: 10 }}>
-                                        {plan.outcome}
-                                    </p>
-
-                                    <div style={{ marginBottom: 24, paddingBottom: 24, borderBottom: `1px solid ${plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}` }}>
-                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4, flexWrap: 'wrap' }}>
-                                            <span className="nm-display" style={{ fontSize: '1rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.6)' : '#71717a' }}>₹</span>
-                                            <span className="nm-display" style={{ fontSize: '2.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                                                {plan.price.toLocaleString()}
+                                    {/* Plan Header with Enhanced Info */}
+                                    <div className="plan-header-enhanced">
+                                        {/* Positioning Label */}
+                                        <div style={{ marginBottom: 12 }}>
+                                            <span className="pricing-positioning" style={{
+                                                background: plan.popular ? 'rgba(217, 119, 6, 0.15)' : 'rgba(217, 119, 6, 0.08)',
+                                                color: plan.popular ? '#FCD34D' : '#D97706',
+                                                border: plan.popular ? '1px solid rgba(252, 211, 77, 0.2)' : '1px solid rgba(217, 119, 6, 0.2)',
+                                            }}>
+                                                {plan.positioningLabel}
                                             </span>
-                                            <span style={{ fontSize: '0.7rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 4 }}>{t.monthly}</span>
                                         </div>
-                                        <p style={{ fontSize: 10, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>{t.billedMonthly}</p>
+
+                                        {/* Plan Name and Tagline */}
+                                        <div style={{ marginBottom: 12 }}>
+                                            <p className="nm-ui" style={{
+                                                fontSize: 10, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa',
+                                                letterSpacing: '0.14em', marginBottom: 6, textTransform: 'uppercase'
+                                            }}>
+                                                {plan.tagline}
+                                            </p>
+                                            <h3 className="nm-display" style={{
+                                                fontSize: '1.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a',
+                                                letterSpacing: '-0.02em'
+                                            }}>
+                                                {plan.name}
+                                            </h3>
+                                        </div>
+
+                                        {/* Headline */}
+                                        <p className="plan-headline" style={{ color: plan.popular ? 'rgba(255,255,255,0.85)' : '#27272a' }}>
+                                            {plan.headline}
+                                        </p>
+
+                                        {/* Outcome */}
+                                        <p style={{
+                                            fontSize: '0.75rem', color: plan.popular ? '#FCD34D' : '#D97706',
+                                            fontWeight: 500, marginTop: 12
+                                        }}>
+                                            {plan.outcome}
+                                        </p>
                                     </div>
 
+                                    {/* Pricing */}
+                                    {/* Pricing */}
+                                    <div style={{ marginBottom: 24 }}>
+                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4, flexWrap: 'wrap' }}>
+                                            <span style={{ fontSize: '0.9rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.6)' : '#71717a' }}>₹</span>
+                                            <span className="nm-display" style={{
+                                                fontSize: '2.75rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a',
+                                                letterSpacing: '-0.03em', lineHeight: 1
+                                            }}>
+                                                {(isYearly ? plan.yearlyPrice : plan.price).toLocaleString()}
+                                            </span>
+                                            <span style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 6 }}>per month</span>
+                                        </div>
+                                        {isYearly ? (
+                                            <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.5)' : '#71717a' }}>
+                                                Billed ₹{(plan.yearlyPrice * 12).toLocaleString()}/year · Cancel anytime
+                                            </p>
+                                        ) : (
+                                            <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>
+                                                Billed monthly · Cancel anytime
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    {/* CTA Button */}
                                     <a
                                         href={plan.id === 'starter' ? whatsappIntentStartup : whatsappIntentGeneral}
                                         target="_blank" rel="noopener noreferrer"
                                         className="nm-ui"
                                         style={{
-                                            display: 'block', width: '100%', padding: '11px 0',
-                                            textAlign: 'center', fontSize: '0.8125rem',
+                                            display: 'block', width: '100%', padding: '12px 0',
+                                            textAlign: 'center', fontSize: '0.875rem',
                                             fontWeight: 600, borderRadius: 40, textDecoration: 'none',
                                             marginBottom: 24, transition: 'all 0.2s ease',
-                                            background: plan.popular ? '#fff' : '#000',
+                                            background: plan.popular ? '#D97706' : '#000',
                                             color: plan.popular ? '#000' : '#fff',
+                                            border: 'none',
+                                            cursor: 'pointer',
                                         }}
                                     >
                                         {plan.cta}
                                     </a>
 
-                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                    {/* Features List */}
+                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 11 }}>
                                         {plan.features.map((feature, i) => (
-                                            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                                            <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
                                                 <div style={{
-                                                    width: 16, height: 16, borderRadius: '50%', flexShrink: 0, marginTop: 1,
+                                                    width: 18, height: 18, borderRadius: '50%', flexShrink: 0, marginTop: 0,
                                                     background: plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
                                                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                                                 }}>
-                                                    <Check style={{ width: 8, height: 8, color: plan.popular ? '#FCD34D' : '#D97706' }} />
+                                                    <Check style={{ width: 9, height: 9, color: plan.popular ? '#FCD34D' : '#D97706' }} />
                                                 </div>
-                                                <span style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.75)' : '#52525b', lineHeight: 1.5 }}>{feature}</span>
+                                                <span style={{ fontSize: '0.8rem', color: plan.popular ? 'rgba(255,255,255,0.8)' : '#52525b', lineHeight: 1.5 }}>{feature}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -1178,16 +1316,85 @@ export default function StartupLegalPage() {
                             ))}
                         </div>
 
-                        <p className="nm-body" style={{ textAlign: 'center', fontSize: '0.7rem', color: '#a1a1aa', marginTop: 32 }}>
-                            {t.pricingDisclaimer}
-                        </p>
+                        {/* Pricing Footer */}
+                        <div style={{ marginTop: 48, textAlign: 'center', paddingTop: 32, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
+                            <p style={{ fontSize: '0.75rem', color: '#a1a1aa', maxWidth: 600, margin: '0 auto' }}>
+                                <strong style={{ color: '#0a0a0a' }}>All plans include:</strong> Free AI consultation · Verified lawyers · 100% confidential · 14-day free trial
+                            </p>
+                        </div>
                     </div>
                 </section>
 
                 {/* ══════════════════════════════════════════════════════
-                    HOW IT WORKS (PRESERVED)
+                    PREMIUM SERVICES SECTION — WHAT FOUNDERS NEED
                 ══════════════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fafafa' }}>
+                <section className="nm-section" style={{ background: '#fff' }}>
+                    <div className="nm-container">
+                        {/* Services Header */}
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem, 8vw, 4rem)' }}>
+                            <p className="brand-line">LEGAL SUPPORT</p>
+                            <h2 className="nm-display" style={{
+                                fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', fontWeight: 700, color: '#0a0a0a',
+                                letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 16
+                            }}>
+                                Beyond subscriptions
+                            </h2>
+                            <p style={{
+                                fontSize: '0.95rem', color: '#71717a', maxWidth: 520, margin: '0 auto', lineHeight: 1.6
+                            }}>
+                                One-time projects when you need them. Fix problems. Recover money. Protect your team.
+                            </p>
+                        </div>
+
+                        {/* Services Grid */}
+                        <div className="services-grid">
+                            {services.map((service) => (
+                                <a
+                                    key={service.id}
+                                    href={whatsappIntentGeneral}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={`service-tile ${service.highlight ? 'highlight' : ''}`}
+                                    onMouseEnter={() => setHoveredService(service.id)}
+                                    onMouseLeave={() => setHoveredService(null)}
+                                >
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+                                        <div className="service-icon-wrapper">
+                                            {service.icon}
+                                        </div>
+                                        {service.highlight && (
+                                            <span style={{
+                                                fontSize: '9px', fontWeight: 700, color: '#D97706',
+                                                background: '#FEF3C7', padding: '4px 8px', borderRadius: '999px',
+                                                whiteSpace: 'nowrap', letterSpacing: '0.08em'
+                                            }}>
+                                                POPULAR
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <h3 className="service-title">
+                                            {service.title}
+                                        </h3>
+                                        <p className="service-desc">
+                                            {service.desc}
+                                        </p>
+                                    </div>
+
+                                    <p className="service-price">
+                                        {service.price}
+                                    </p>
+                                </a>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══════════════════════════════════════════════════════
+                    HOW IT WORKS
+                ══════════════════════════════════════════════════════ */}
+                <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 6vw, 4rem)' }}>
                             <p className="brand-line">{t.fromConfusion}</p>
@@ -1198,7 +1405,7 @@ export default function StartupLegalPage() {
 
                         <div className="nm-grid nm-grid-3" style={{ gap: '0.5rem', position: 'relative' }}>
                             {steps.map((step, idx) => (
-                                <div key={idx} style={{ position: 'relative', padding: 'clamp(1.25rem, 4vw, 2rem)', borderRadius: 20, background: '#fff', border: '1px solid rgba(0,0,0,0.07)' }}>
+                                <div key={idx} style={{ position: 'relative', padding: 'clamp(1.25rem, 4vw, 2rem)', borderRadius: 20, background: '#fafafa', border: '1px solid rgba(0,0,0,0.07)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
                                         <span className="nm-display" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', fontWeight: 700, color: 'rgba(0,0,0,0.05)', lineHeight: 1 }}>{step.number}</span>
                                         <div style={{ width: 40, height: 40, borderRadius: 12, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>
@@ -1222,9 +1429,9 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══════════════════════════════════════════════════════
-                    TRUST SECTION (PRESERVED)
+                    TRUST SECTION
                 ══════════════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fff' }}>
+                <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
                         <div style={{
                             display: 'grid',
@@ -1258,15 +1465,15 @@ export default function StartupLegalPage() {
                                     {trustProofs.map((proof, idx) => (
                                         <div key={idx} style={{
                                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                                            padding: '0.7rem 1rem',
+                                            padding: '0.8rem 1rem',
                                             borderRadius: 12, border: '1px solid rgba(0,0,0,0.07)',
-                                            background: '#fafafa', flexWrap: 'wrap', gap: 8,
+                                            background: '#fff', flexWrap: 'wrap', gap: 8,
                                         }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                                <div style={{ width: 30, height: 30, borderRadius: 9, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706', flexShrink: 0 }}>
+                                                <div style={{ width: 32, height: 32, borderRadius: 9, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706', flexShrink: 0 }}>
                                                     {proof.icon}
                                                 </div>
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#0a0a0a' }}>{proof.text}</span>
+                                                <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#0a0a0a' }}>{proof.text}</span>
                                             </div>
                                             <span className="nm-ui" style={{ fontSize: 10, fontWeight: 600, color: '#D97706', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>{proof.time}</span>
                                         </div>
@@ -1306,7 +1513,7 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══════════════════════════════════════════════════════
-                    FINAL CTA — STRONG CLOSE, WHATSAPP ONLY
+                    FINAL CTA
                 ══════════════════════════════════════════════════════ */}
                 <section style={{ background: '#000', padding: 'clamp(2rem, 6vw, 4rem) 1.5rem', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px)', backgroundSize: '48px 48px' }} />
@@ -1334,7 +1541,7 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══════════════════════════════════════════════════════
-                    FOOTER (PRESERVED)
+                    FOOTER
                 ══════════════════════════════════════════════════════ */}
                 <footer style={{ background: '#fafafa', borderTop: '1px solid rgba(0,0,0,0.07)', padding: 'clamp(1.5rem, 5vw, 3rem) 1.5rem 1.5rem' }}>
                     <div className="nm-container">
@@ -1359,7 +1566,7 @@ export default function StartupLegalPage() {
                                     <span className="nm-display" style={{ fontSize: 16, fontWeight: 700, color: '#0a0a0a' }}>NyayMitra</span>
                                 </div>
                                 <p style={{ fontSize: 12, color: '#71717a', maxWidth: 240, lineHeight: 1.6, marginBottom: 20 }}>
-                                    Making legal help accessible to every Indian plain language, verified lawyers, transparent pricing.
+                                    Making legal help accessible to every Indian founder. Plain language, verified lawyers, transparent pricing.
                                 </p>
                                 <address style={{ fontStyle: 'normal' }}>
                                     {[
