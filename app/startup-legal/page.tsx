@@ -244,71 +244,73 @@ export default function StartupLegalPage() {
     // ENHANCED PLANS WITH NEW POSITIONING
     const plans = [
         {
-            id: "starter",
-            name: "Starter",
-            tagline: t.starterTagline,
-            headline: t.starterHeadline,
-            price: 999,
-            yearlyPrice: 799,
+            id: "essential",
+            name: "Founder Essential",
+            tagline: "For early stage founders setting up operations properly",
+            // headline: "Start legally strong without expensive retainers",
+            price: 1499,
+            yearlyPrice: 1199,
             features: [
-                t.f_consult1,
-                t.f_review1,
-                t.f_whatsapp1,
-                t.f_templates,
-                t.f_founder,
-                t.f_compliance_basic,
-                t.f_email
+                "1 legal guidance call/month",
+                "Founder agreement templates",
+                "Freelancer/vendor agreement templates",
+                "Basic HR documents",
+                "Startup legal checklist",
+                "WhatsApp support",
+                "Monthly compliance reminders"
             ],
-            outcome: t.starterOutcome,
-            cta: t.starterCTA,
+            outcome: "Avoid early legal mistakes and build startup operations with clarity.",
+            cta: "Get Started →",
             popular: false,
-            positioningLabel: t.positioningLabel1,
+            positioningLabel: "Best for Early Founders",
         },
+
         {
-            id: "growth",
-            name: "Growth",
-            tagline: t.growthTagline,
-            headline: t.growthHeadline,
-            price: 2999,
-            yearlyPrice: 2399,
+            id: "ops",
+            name: "Startup Ops",
+            tagline: "For growing startups handling clients & operations",
+            // headline: "Your ongoing startup legal operations support layer",
+            price: 4999,
+            yearlyPrice: 3999,
             features: [
-                t.f_consult3,
-                t.f_review3,
-                t.f_whatsapp_priority,
-                t.f_contracts,
-                t.f_vendor,
-                t.f_employment,
-                t.f_checklist,
-                t.f_founder_review
+                "2-3 legal consultations/month",
+                "Contract drafting & review",
+                "Employment agreements",
+                "Vendor/client agreements",
+                "Startup compliance coordination",
+                "Notice drafting support",
+                "Priority WhatsApp coordination",
+                "Monthly legal ops review"
             ],
-            outcome: t.growthOutcome,
-            cta: t.growthCTA,
+            outcome: "Reduce operational legal chaos while scaling confidently.",
+            cta: "Talk to Us →",
             popular: true,
-            positioningLabel: t.positioningLabel2,
+            positioningLabel: "Most Popular",
         },
+
         {
-            id: "pro",
-            name: "Pro",
-            tagline: t.proTagline,
-            headline: t.proHeadline,
-            price: 5999,
-            yearlyPrice: 4799,
+            id: "fractional",
+            name: "Fractional Legal Desk",
+            tagline: "For scaling startups & MSMEs",
+            // headline: "Outsource legal operations without hiring a full legal team",
+            price: 14999,
+            yearlyPrice: 11999,
             features: [
-                t.f_consult_unlimited,
-                t.f_review_unlimited,
-                t.f_coordinator,
-                t.f_support_24,
-                t.f_operational,
-                t.f_workflow,
-                t.f_investment,
-                t.f_ip,
-                t.f_contract_lifecycle,
-                t.f_business_risk
+                "Dedicated legal coordinator",
+                "Ongoing legal workflow management",
+                "Priority lawyer coordination",
+                "Unlimited operational guidance",
+                "Compliance tracking support",
+                "Strategic legal assistance",
+                "Custom documentation support",
+                "Business risk coordination",
+                // "Investment/legal workflow assistance",
+                "Priority escalation support"
             ],
-            outcome: t.proOutcome,
-            cta: t.proCTA,
+            outcome: "Operate with structured legal support as your business scales.",
+            cta: "Book Consultation →",
             popular: false,
-            positioningLabel: t.positioningLabel3,
+            positioningLabel: "For Scaling Businesses",
         }
     ]
 
@@ -1241,9 +1243,9 @@ export default function StartupLegalPage() {
                                         </div>
 
                                         {/* Headline */}
-                                        <p className="plan-headline" style={{ color: plan.popular ? 'rgba(255,255,255,0.85)' : '#27272a' }}>
+                                        {/* <p className="plan-headline" style={{ color: plan.popular ? 'rgba(255,255,255,0.85)' : '#27272a' }}>
                                             {plan.headline}
-                                        </p>
+                                        </p> */}
 
                                         {/* Outcome */}
                                         <p style={{
@@ -1319,7 +1321,7 @@ export default function StartupLegalPage() {
                         {/* Pricing Footer */}
                         <div style={{ marginTop: 48, textAlign: 'center', paddingTop: 32, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
                             <p style={{ fontSize: '0.75rem', color: '#a1a1aa', maxWidth: 600, margin: '0 auto' }}>
-                                <strong style={{ color: '#0a0a0a' }}>All plans include:</strong> Free AI consultation · Verified lawyers · 100% confidential · 14-day free trial
+                                <strong style={{ color: '#0a0a0a' }}>All plans include:</strong> Free AI consultation · Verified lawyers · 100% confidential
                             </p>
                         </div>
                     </div>
@@ -1544,7 +1546,7 @@ export default function StartupLegalPage() {
                     FOOTER
                 ══════════════════════════════════════════════════════ */}
                 <footer style={{ background: '#fafafa', borderTop: '1px solid rgba(0,0,0,0.07)', padding: 'clamp(1.5rem, 5vw, 3rem) 1.5rem 1.5rem' }}>
-                    <div className="nm-container">
+                    <div className="nm-container" style={{ maxWidth: 1280, margin: '0 auto' }}>
                         <div style={{
                             display: 'grid',
                             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))',
@@ -1553,12 +1555,21 @@ export default function StartupLegalPage() {
                         }}>
                             <div style={{ gridColumn: 'span 2' }} className="responsive-footer-brand">
                                 <style>{`
-                                    @media (max-width: 640px) {
-                                        .responsive-footer-brand {
-                                            grid-column: span 1 !important;
-                                        }
-                                    }
-                                `}</style>
+                    @media (max-width: 640px) {
+                        .responsive-footer-brand {
+                            grid-column: span 1 !important;
+                        }
+                        .footer-bottom {
+                            flex-direction: column !important;
+                            align-items: flex-start !important;
+                            text-align: left !important;
+                        }
+                        .footer-disclaimer {
+                            text-align: left !important;
+                            max-width: 100% !important;
+                        }
+                    }
+                `}</style>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
                                     <div style={{ width: 28, height: 28, background: '#000', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                         <Scale style={{ width: 13, height: 13, color: '#D97706' }} />
@@ -1599,7 +1610,7 @@ export default function StartupLegalPage() {
                                     <h4 className="nm-ui" style={{ fontSize: 9, fontWeight: 700, color: '#a1a1aa', letterSpacing: '0.15em', marginBottom: 14 }}>
                                         {heading.toUpperCase()}
                                     </h4>
-                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10, padding: 0, margin: 0 }}>
                                         {links.map(link => (
                                             <li key={link.label}>
                                                 <a href={link.href} className="hover-underline" style={{ fontSize: 12, color: '#71717a', textDecoration: 'none' }}>
@@ -1612,16 +1623,34 @@ export default function StartupLegalPage() {
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px solid rgba(0,0,0,0.07)', paddingTop: 20, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-                            <p style={{ fontSize: 10, color: '#a1a1aa' }}>© 2026 NyayMitra. All rights reserved.</p>
-                            <p style={{ fontSize: 10, color: '#a1a1aa', maxWidth: 480, textAlign: 'right', lineHeight: 1.5 }}>
+                        {/* Fixed Bottom Section */}
+                        <div className="footer-bottom" style={{
+                            borderTop: '1px solid rgba(0,0,0,0.07)',
+                            paddingTop: 20,
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            gap: 16
+                        }}>
+                            <p style={{ fontSize: 10, color: '#a1a1aa', margin: 0, flexShrink: 0 }}>
+                                © 2026 NyayMitra. All rights reserved.
+                            </p>
+                            <p className="footer-disclaimer" style={{
+                                fontSize: 10,
+                                color: '#a1a1aa',
+                                maxWidth: 480,
+                                textAlign: 'right',
+                                lineHeight: 1.5,
+                                margin: 0,
+                                flex: '1 1 auto'
+                            }}>
                                 <span style={{ color: '#71717a', fontWeight: 600 }}>Disclaimer: </span>
                                 {t.disclaimer}
                             </p>
                         </div>
                     </div>
                 </footer>
-
                 {/* Floating WhatsApp */}
                 <a href={whatsappIntentGeneral} target="_blank" rel="noopener noreferrer"
                     style={{ position: 'fixed', bottom: 20, right: 20, zIndex: 50, width: 48, height: 48, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none', color: '#fff', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }}>
