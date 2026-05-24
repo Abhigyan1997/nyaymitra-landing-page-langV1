@@ -6,7 +6,7 @@ import Link from "next/link"
 import {
   Scale, Shield, Eye, Target, ArrowRight, AlertCircle,
   Sparkles, CheckCircle, Users, Zap, BadgeCheck,
-  TrendingUp, Star, ArrowLeft, ChevronRight, Menu, X,
+  TrendingUp, Star, ArrowLeft, ChevronRight, Menu, X, Crown,
 } from "lucide-react"
 
 /* ─── GLOBAL STYLES ─────────────────────────────────────────────────────────── */
@@ -356,8 +356,10 @@ const TEAM = [
     initials: "AA",
     name: "Alok Abhigyan",
     role: "Founder & CEO",
+    image: "/images/alok.jpg",   // ← added
+    roleIcon: Crown,
     tags: ["Full Stack", "Product Strategy"],
-    bio: "Visionary leader driving the convergence of legal expertise and technology to democratise legal access across India.",
+    bio: "Building technology that makes legal help simple and accessible for every Indian.",
     accentColor: "var(--ink)",
     avatarBg: "var(--ink-9)",
     avatarColor: "var(--gold)",
@@ -366,22 +368,15 @@ const TEAM = [
     initials: "BR",
     name: "Bharat Rajak",
     role: "Director of Legal Affairs",
+    image: null,
+    roleIcon: Scale,         // ← no image, uses initials
     tags: ["Civil Law", "Criminal Law"],
-    bio: "Senior advocate with 25+ years of experience ensuring legal integrity and compliance across the platform.",
+    bio: "25+ years in law, ensuring every lawyer meets the highest standards.",
     accentColor: "var(--green)",
     avatarBg: "#f0fdf4",
     avatarColor: "var(--green)",
   },
-  {
-    initials: "TW",
-    name: "Twinkle",
-    role: "Co-Founder",
-    tags: ["Growth Strategy", "Marketing"],
-    bio: "Drives brand positioning and user acquisition strategy to strengthen NyayMitra's trust-driven growth.",
-    accentColor: "var(--gold-dk)",
-    avatarBg: "var(--gold-pale)",
-    avatarColor: "var(--gold-dk)",
-  },
+  // Twinkle removed ✓
 ]
 
 /* ─── PAGE ───────────────────────────────────────────────────────────────────── */
@@ -663,12 +658,12 @@ export default function AboutPage() {
                   {
                     num: "01", icon: Target,
                     title: "Our Mission",
-                    body: "To bridge the gap between ordinary citizens and legal help  offering a platform that simplifies legal access using AI, real lawyers, and regional language support. Starting minimal, driven by a big purpose.",
+                    body: "To bridge the gap between ordinary citizens and legal help offering a platform that simplifies legal access using AI, real lawyers, and regional language support. Starting minimal, driven by a big purpose.",
                   },
                   {
                     num: "02", icon: Eye,
                     title: "Our Vision",
-                    body: "To become the go-to legal companion for every Indian  especially those in Tier 2 and 3 cities  making legal awareness a basic right, not a privilege. One click at a time.",
+                    body: "To become the go to legal companion for every Indian especially those in Tier 2 and 3 cities making legal awareness a basic right, not a privilege. One click at a time.",
                     right: true,
                   },
                 ].map(({ num, icon: Icon, title, body, right }) => (
@@ -799,11 +794,11 @@ export default function AboutPage() {
               <Reveal delay={80}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                   {[
-                    "NyayMitra was launched in June 2025, built on a simple yet critical insight: even today, millions of people in India struggle to access basic legal support. From tenant disputes and consumer complaints to family-related matters, legal assistance is often perceived as complex, expensive, and difficult to navigate.",
+                    "NyayMitra was launched in August 2025 with a simple belief legal help should not feel confusing, intimidating, or out of reach for ordinary people and growing businesses.",
                     null, // blockquote
-                    "Observing this gap firsthand  especially how individuals are often misled or disadvantaged due to a lack of legal awareness  led to the creation of NyayMitra. The goal: build a platform that bridges the gap between everyday users and reliable legal guidance.",
-                    "NyayMitra started as a focused MVP with a clear mission. By combining technology with a network of verified legal professionals, the platform enables users to gain initial clarity through AI-powered guidance and seamlessly connect with lawyers when needed.",
-                    "While still in its early stages, NyayMitra is steadily evolving into a trust-first legal ecosystem. Each improvement, user interaction, and lawyer onboarding contributes to the larger vision.",
+                    "The idea came from repeatedly seeing how individuals and startups struggle to navigate legal processes, compliance requirements, documentation, and access to trustworthy guidance at the right time.",
+                    "What started as an early legal assistance platform is now gradually evolving into a legal operations and compliance ecosystem connecting users, startups, and businesses with verified legal professionals across multiple cities.",
+                    "Today, NyayMitra is building toward a future where legal support feels more accessible, transparent, operationally efficient, and truly human.",
                   ].map((para, i) => (
                     para === null ? (
                       /* Blockquote */
@@ -837,10 +832,11 @@ export default function AboutPage() {
                     }}>Key milestones</div>
                     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                       {[
-                        { year: "Jun 2025", event: "Platform launched with core legal AI features" },
-                        { year: "Aug 2025", event: "60+ lawyers onboarded across 10+ cities" },
-                        { year: "Dec 2025", event: "Compliance & startup legal plans introduced" },
-                        { year: "2026 →", event: "Scaling to Tier 2 & 3 cities across India" },
+                        { year: "Aug 2025", event: "NyayMitra platform officially launched" },
+                        { year: "Oct 2025", event: "Verified lawyers onboarded across multiple cities" },
+                        { year: "Feb 2026", event: "Compliance & startup legal plans introduced" },
+                        { year: "May 2026", event: "Started handling multi city business compliance workflows" },
+                        { year: "2026 →", event: "Scaling legal operations support across India" },
                       ].map(({ year, event }, i, arr) => (
                         <div key={year} style={{
                           display: "flex", gap: 20, alignItems: "flex-start",
@@ -973,7 +969,7 @@ export default function AboutPage() {
               </div>
             </Reveal>
 
-            <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 20 }}>
+            <div className="team-grid" style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 20 }}>
               {TEAM.map((member, i) => (
                 <Reveal key={member.name} delay={i * 80}>
                   <div className="team-card">
@@ -982,16 +978,31 @@ export default function AboutPage() {
 
                     <div style={{ padding: "32px 28px" }}>
                       {/* Avatar */}
-                      <div style={{
-                        width: 56, height: 56, borderRadius: "50%",
-                        background: member.avatarBg,
-                        border: "2px solid var(--ink-7)",
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600,
-                        color: member.avatarColor, marginBottom: 20, flexShrink: 0,
-                      }}>
-                        {member.initials}
-                      </div>
+                      {/* Avatar — shows photo if available, else initials */}
+                      {member.image ? (
+                        <img
+                          src={member.image}
+                          alt={member.name}
+                          style={{
+                            width: 56, height: 56, borderRadius: "50%",
+                            objectFit: "cover",
+                            border: "2px solid var(--ink-7)",
+                            marginBottom: 20, flexShrink: 0,
+                            display: "block",
+                          }}
+                        />
+                      ) : (
+                        <div style={{
+                          width: 56, height: 56, borderRadius: "50%",
+                          background: member.avatarBg,
+                          border: "2px solid var(--ink-7)",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600,
+                          color: member.avatarColor, marginBottom: 20, flexShrink: 0,
+                        }}>
+                          {member.initials}
+                        </div>
+                      )}
 
                       <h3 style={{
                         fontFamily: "var(--serif)", fontSize: "22px",
@@ -1000,10 +1011,18 @@ export default function AboutPage() {
                       }}>{member.name}</h3>
 
                       <div style={{
-                        fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 500,
-                        letterSpacing: "0.14em", textTransform: "uppercase",
-                        color: "var(--ink-5)", marginBottom: 16,
-                      }}>{member.role}</div>
+                        display: "flex", alignItems: "center", gap: 7,
+                        borderBottom: "1.5px solid var(--gold)",
+                        paddingBottom: 6, width: "fit-content", marginBottom: 16,
+                      }}>
+                        <member.roleIcon style={{ width: 13, height: 13, color: "var(--gold-dk)", flexShrink: 0 }} />
+                        <span style={{
+                          fontFamily: "var(--mono)", fontSize: "11px", fontWeight: 500,
+                          letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--ink-4)",
+                        }}>
+                          {member.role}
+                        </span>
+                      </div>
 
                       {/* Tags */}
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 18 }}>
