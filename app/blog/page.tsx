@@ -1499,7 +1499,7 @@ export default function BlogPage() {
                                     <span style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "white" }}>NyayMitra</span>
                                 </div>
                                 <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.3)", lineHeight: 1.7, maxWidth: 240 }}>
-                                    Empowering citizens with accessible legal knowledge and technology driven solutions since 2024.
+                                    Empowering citizens with accessible legal knowledge and technology driven solutions since 2025.
                                 </p>
                                 <div style={{ display: "flex", gap: 10, marginTop: 16, flexWrap: "wrap" }}>
                                     {[Twitter, Linkedin, Facebook].map((Icon, i) => (
