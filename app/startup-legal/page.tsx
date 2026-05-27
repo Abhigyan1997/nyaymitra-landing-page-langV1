@@ -23,7 +23,7 @@ const englishTranslations = {
     heroHeadline: "Don't let one bad contract",
     heroHeadlineGold: "cost your startup.",
     heroDesc: "Get legal clarity and fix issues before they become expensive mistakes.",
-    heroPrice: "Starting at ₹999/month",
+    heroPrice: "Starting at ₹1499/month",
     ctaWhatsapp: "Get Help on WhatsApp",
     ctaPlans: "View Plans",
     noCommitment: "No long-term commitment",
