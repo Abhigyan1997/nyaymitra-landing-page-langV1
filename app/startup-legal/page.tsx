@@ -184,8 +184,8 @@ export default function StartupLegalPage() {
             id: "launchpad",
             name: "Founder Launchpad",
             tagline: "For early-stage founders setting up startup operations properly",
-            price: 2999,
-            yearlyPrice: 2399,
+            price: 3999,
+            yearlyPrice: 3199,
             features: [
                 "AI legal assistant access",
                 "1 founder guidance session/month",
@@ -206,8 +206,8 @@ export default function StartupLegalPage() {
             id: "ops",
             name: "Startup Legal Ops",
             tagline: "Managed legal operations support for growing startups",
-            price: 14999,
-            yearlyPrice: 11999,
+            price: 19999,
+            yearlyPrice: 15999,
             features: [
                 "Monthly legal coordination support",
                 "Contract drafting & review",
