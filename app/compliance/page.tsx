@@ -158,7 +158,7 @@ const STATS = [
     { value: "12+", label: "Compliance Categories Covered" },
     { value: "3", label: "Multicity Workflows Executed" },
     { value: "50+", label: "Businesses Supported" },
-    { value: "15+", label: "Verified Professionals Network" },
+    // { value: "15+", label: "Verified Professionals Network" },
 ];
 
 function useInView(threshold = 0.1) {
