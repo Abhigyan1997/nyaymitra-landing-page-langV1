@@ -37,8 +37,93 @@ type UserType = "user" | "lawyer"
 
 // --- Constants ---
 const BASE_API_URL = "https://nyaymitra-backend-production.up.railway.app/api/v1/auth"
-const SPECIALIZATIONS = ["Criminal Law", "Family Law", "Property Law", "Corporate Law", "Consumer Rights", "Cyber Law", "Labor Law", "Tax Law", "Immigration Law", "Intellectual Property", "Environmental Law", "Constitutional Law"]
-const INDIAN_STATES = ["Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Jammu and Kashmir", "Ladakh"]
+const SPECIALIZATIONS = [
+  // Personal Legal Services (B2C)
+  "Criminal Law",
+  "Civil Law",
+  "Family Law",
+  "Divorce Law",
+  "Property Law",
+  "Tenant & Landlord",
+  "Consumer Rights",
+  "Cyber Crime",
+  "Cheque Bounce",
+  "Motor Accident Claims",
+  "Medical Negligence",
+  "Bail Matters",
+  "Documentation & Affidavits",
+  "Insurance Claims",
+  "Employment & Service Matters",
+  "Immigration Law",
+  "Constitutional Law",
+  "Environmental Law",
+
+  // Business Legal Services (B2B)
+  "Corporate Law",
+  "Startup & Compliance",
+  "Contract Drafting",
+  "Business Agreements",
+  "Company Registration",
+  "Labour & Employment Law",
+  "Tax Law",
+  "GST",
+  "Intellectual Property",
+  "Trademark",
+  "Copyright",
+  "Patent",
+  "Banking & Finance",
+  "Debt Recovery",
+  "Arbitration & Dispute Resolution",
+  "NCLT & Insolvency",
+  "Real Estate & RERA",
+
+  // Court Practice
+  "High Court Matters",
+  "Supreme Court Matters"
+];
+
+const INDIAN_STATES = [
+
+  // States
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+
+  // Union Territories
+  "Andaman & Nicobar Islands",
+  "Chandigarh",
+  "Dadra & Nagar Haveli and Daman & Diu",
+  "Delhi",
+  "Jammu & Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry"
+];
 
 // --- Reusable field components ---
 function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
