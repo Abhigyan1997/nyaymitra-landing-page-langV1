@@ -800,7 +800,7 @@ export default function LawyerListing({ lawyers, loading, error, onBook }: Lawye
 
                     {/* Row 3: quick spec pills */}
                     <div style={{ display: "flex", gap: 6, marginTop: 8, overflowX: "auto", paddingBottom: 2 }}>
-                        {SPECIALIZATIONS.slice(0, 7).map(s => (
+                        {SPECIALIZATIONS.slice(0, 12).map(s => (
                             <button
                                 key={s}
                                 className={`quick-filter ${(s === "All" ? spec === "All" : spec === s) ? "active" : ""}`}
