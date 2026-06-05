@@ -683,6 +683,11 @@ const GlobalStyles = () => (
       display: grid;
       grid-template-columns: repeat(3,1fr);
       gap: 16px;
+      align-items: stretch;
+    }
+    .pain-grid > .reveal {
+      display: flex !important;
+      flex-direction: column;
     }
     @media (max-width: 860px) { .pain-grid { grid-template-columns: repeat(2,1fr); } }
     @media (max-width: 520px) { .pain-grid { grid-template-columns: 1fr; } }
@@ -843,7 +848,7 @@ export default function HomePage() {
       icon: <Gavel style={{ width: 22, height: 22 }} />, href: "/lawyers",
     },
     {
-      titleEn: "Startup Legal Operations", descEn: "Contracts, NDAs, co-founder agreements one dedicated coordinator.",
+      titleEn: "Startup Legal Operations", descEn: "Contracts, NDAs, co-founder agreements — one dedicated coordinator.",
       icon: <TrendingUp style={{ width: 22, height: 22 }} />, href: "/startup-legal",
     },
     {
@@ -873,17 +878,17 @@ export default function HomePage() {
   const testimonials = [
     { name: "Swapnil Anand", location: "Bhagalpur, Bihar", avatar: "SA", rating: 5, text: "Notarized affidavit home delivered in 2 days. Every detail handled without hassle." },
     { name: "Anand Upadhyay", location: "Indore, MP", avatar: "AU", rating: 4, text: "Connected with a lawyer instantly. My delayed salary issue was resolved effectively." },
-    { name: "Dinesh Chand", location: "Gurgaon, Haryana", avatar: "DC", rating: 5, text: "Delhi traffic challan NyayMitra told me exactly what to do. Clear, fast, no confusion." },
+    { name: "Dinesh Chand", location: "Gurgaon, Haryana", avatar: "DC", rating: 5, text: "Delhi traffic challan — NyayMitra told me exactly what to do. Clear, fast, no confusion." },
   ]
 
   const faqs = [
     {
       q: "What is NyayMitra's Legal Operations service?",
-      a: "NyayMitra's Legal Operations service is a managed legal support layer for startups and businesses. We handle contract drafting, compliance coordination, documentation, and registrations through a single operational support structure so you never need to manage multiple lawyers or agencies.",
+      a: "NyayMitra's Legal Operations service is a managed legal support layer for startups and businesses. We handle contract drafting, compliance coordination, documentation, and registrations through a single operational support structure — so you never need to manage multiple lawyers or agencies.",
     },
     {
       q: "How does startup legal operations work at NyayMitra?",
-      a: "Once you subscribe to a Startup Legal Ops plan, you get access to a dedicated legal coordinator, document review and drafting, compliance tracking, and expert consultation all at a fixed monthly rate. No hourly billing.",
+      a: "Once you subscribe to a Startup Legal Ops plan, you get access to a dedicated legal coordinator, document review and drafting, compliance tracking, and expert consultation — all at a fixed monthly rate. No hourly billing.",
     },
     {
       q: "What compliance services do you offer for businesses?",
@@ -899,31 +904,31 @@ export default function HomePage() {
     },
     {
       q: "Is NyayMitra a law firm?",
-      a: "No. NyayMitra is a technology first legal operations platform connecting individuals, startups, and businesses with verified legal professionals. We coordinate legal workflows and documentation; licensed advocates handle legal representation.",
+      a: "No. NyayMitra is a technology-first legal operations platform connecting individuals, startups, and businesses with verified legal professionals. We coordinate legal workflows and documentation; licensed advocates handle legal representation.",
     },
     {
       q: "What is the difference between a legal operations partner and a law firm?",
-      a: "A law firm provides legal advice and representation on a matter by matter basis, typically billed by the hour. A legal operations partner like NyayMitra manages your entire legal function contracts, compliance, documentation, registrations on an ongoing, coordinated basis at a predictable cost. Think of it as your outsourced in house legal team.",
+      a: "A law firm provides legal advice and representation on a matter-by-matter basis, typically billed by the hour. A legal operations partner like NyayMitra manages your entire legal function — contracts, compliance, documentation, registrations — on an ongoing, coordinated basis at a predictable cost. Think of it as your outsourced in-house legal team.",
     },
     {
       q: "What does an outsourced legal team for startups include?",
-      a: "NyayMitra's outsourced legal team service for startups includes contract drafting and review, NDA management, co-founder and employee agreements, compliance tracking, legal documentation, and on call expert consultations. All coordinated through one point of contact.",
+      a: "NyayMitra's outsourced legal team service for startups includes contract drafting and review, NDA management, co-founder and employee agreements, compliance tracking, legal documentation, and on-call expert consultations. All coordinated through one point of contact.",
     },
     {
       q: "How much does legal operations support cost for a startup?",
-      a: "NyayMitra operates on transparent, fixed price plans no hourly billing. Startup plans are designed to be accessible for early stage companies. Contact us for a free legal operations assessment to find the right plan for your stage.",
+      a: "NyayMitra operates on transparent, fixed-price plans — no hourly billing. Startup plans are designed to be accessible for early-stage companies. Contact us for a free legal operations assessment to find the right plan for your stage.",
     },
     {
       q: "What is POSH compliance and does my company need it?",
-      a: "The Prevention of Sexual Harassment (POSH) Act 2013 mandates that every organisation with 10 or more employees constitutes an Internal Complaints Committee (ICC) and implements a workplace sexual harassment policy. Non compliance can result in penalties. NyayMitra handles full POSH implementation including ICC setup, policy drafting, and annual training.",
+      a: "The Prevention of Sexual Harassment (POSH) Act 2013 mandates that every organisation with 10 or more employees constitutes an Internal Complaints Committee (ICC) and implements a workplace sexual harassment policy. Non-compliance can result in penalties. NyayMitra handles full POSH implementation including ICC setup, policy drafting, and annual training.",
     },
     {
       q: "What is MSME registration and how does NyayMitra help?",
       a: "MSME (Micro, Small & Medium Enterprise) registration under the Udyam portal provides access to government schemes, priority lending, and tax benefits. NyayMitra coordinates the complete registration process with no documentation hassles.",
     },
     {
-      q: "Can NyayMitra handle multi city compliance for my business?",
-      a: "Yes. NyayMitra provides pan India compliance coordination across multiple cities. Whether you need Shop & Establishment licenses, FSSAI registrations, or labour compliance across states we manage the entire execution through one operational layer.",
+      q: "Can NyayMitra handle multi-city compliance for my business?",
+      a: "Yes. NyayMitra provides pan India compliance coordination across multiple cities. Whether you need Shop & Establishment licenses, FSSAI registrations, or labour compliance across states — we manage the entire execution through one operational layer.",
     },
     {
       q: "How quickly can NyayMitra draft a contract or NDA?",
@@ -939,7 +944,7 @@ export default function HomePage() {
     },
     {
       q: "Can NyayMitra help with trademark filing for my startup?",
-      a: "Yes. NyayMitra coordinates trademark search and filing through verified IP professionals. We handle the paperwork and follow up, keeping you informed at every stage.",
+      a: "Yes. NyayMitra coordinates trademark search and filing through verified IP professionals. We handle the paperwork and follow-up, keeping you informed at every stage.",
     },
     {
       q: "What happens if I receive a legal notice as a business?",
@@ -959,8 +964,8 @@ export default function HomePage() {
     "alternateName": "NyayMitra Tech Pvt Ltd",
     "url": "https://nyaymitra.tech",
     "logo": "https://nyaymitra.tech/logo.png",
-    "description": "NyayMitra is India's legal operations and compliance infrastructure platform for individuals, startups and businesses. Contracts, compliance, registrations, and legal documentation managed through one operational partner.",
-    "foundingDate": "2026",
+    "description": "NyayMitra is India's legal operations and compliance infrastructure platform for individuals, startups and businesses. Contracts, compliance, registrations, and legal documentation — managed through one operational partner.",
+    "foundingDate": "2023",
     "areaServed": "IN",
     "address": {
       "@type": "PostalAddress",
@@ -1080,8 +1085,8 @@ export default function HomePage() {
     <>
       <GlobalStyles />
       <Head>
-        <title>NyayMitra Legal Operations & Compliance Partner for Startups & Businesses in India</title>
-        <meta name="description" content="NyayMitra is India's legal operations and compliance infrastructure platform for startups, MSMEs, and growing businesses. Contracts, compliance, registrations, and documentation managed through one operational partner. POSH, FSSAI, MSME, startup legal ops." />
+        <title>NyayMitra — Legal Operations & Compliance Partner for Startups & Businesses in India</title>
+        <meta name="description" content="NyayMitra is India's legal operations and compliance infrastructure platform for startups, MSMEs, and growing businesses. Contracts, compliance, registrations, and documentation — managed through one operational partner. POSH, FSSAI, MSME, startup legal ops." />
         <meta name="keywords" content="startup legal operations India, legal operations platform India, compliance management startup, POSH compliance India, FSSAI registration, MSME registration, outsourced legal team India, contract management startup, startup compliance India, legal documentation business, compliance coordination, business legal support India, startup legal partner" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow" />
@@ -1090,8 +1095,8 @@ export default function HomePage() {
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nyaymitra.tech" />
-        <meta property="og:title" content="NyayMitra Legal Operations & Compliance Partner for Startups & Businesses in India" />
-        <meta property="og:description" content="India's legal operations and compliance infrastructure for startups, MSMEs, and growing businesses. Contracts, compliance, registrations one partner." />
+        <meta property="og:title" content="NyayMitra — Legal Operations & Compliance Partner for Startups & Businesses in India" />
+        <meta property="og:description" content="India's legal operations and compliance infrastructure for startups, MSMEs, and growing businesses. Contracts, compliance, registrations — one partner." />
         <meta property="og:image" content="https://nyaymitra.tech/og-image.png" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="NyayMitra" />
@@ -1099,7 +1104,7 @@ export default function HomePage() {
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@nyaymitra" />
-        <meta name="twitter:title" content="NyayMitra Legal Operations & Compliance Partner for Startups & Businesses in India" />
+        <meta name="twitter:title" content="NyayMitra — Legal Operations & Compliance Partner for Startups & Businesses in India" />
         <meta name="twitter:description" content="India's legal operations and compliance infrastructure for startups, MSMEs, and growing businesses." />
         <meta name="twitter:image" content="https://nyaymitra.tech/og-image.png" />
 
@@ -1302,7 +1307,7 @@ export default function HomePage() {
         </nav>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            HERO B2B-first, investor-grade messaging
+            HERO — B2B-first, investor-grade messaging
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Hero" style={{ padding: "80px 28px 96px", position: "relative", overflow: "hidden" }}>
           <div style={{
@@ -1377,7 +1382,7 @@ export default function HomePage() {
                   color: "var(--ink-4)", lineHeight: 1.85,
                   maxWidth: 520, marginBottom: 36, fontWeight: 300,
                 }}>
-                  NyayMitra is a managed legal operations and compliance platform for startups, MSMEs, and growing businesses. One partner handles your contracts, compliance, registrations, and documentation so your team can focus on building.
+                  NyayMitra is a managed legal operations and compliance platform for startups, MSMEs, and growing businesses. One partner handles your contracts, compliance, registrations, and documentation — so your team can focus on building.
                 </p>
 
                 {/* ── 3-way B2B-first CTA ── */}
@@ -1386,7 +1391,7 @@ export default function HomePage() {
                     {
                       icon: <TrendingUp style={{ width: 15, height: 15 }} />,
                       label: "Startup Legal Ops",
-                      sub: "NDAs, contracts, compliance one partner",
+                      sub: "NDAs, contracts, compliance — one partner",
                       href: "/startup-legal", external: false, accent: "var(--gold-dk)",
                     },
                     {
@@ -1422,15 +1427,15 @@ export default function HomePage() {
                   })}
                 </div>
 
-                {/* Primary CTAs Assessment first */}
+                {/* Primary CTAs — Assessment first */}
                 <div className="hero-ctas" style={{ marginBottom: 40 }}>
                   <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                     <Sparkles style={{ width: 14, height: 14 }} />
                     Get Free Legal Operations Assessment
                   </a>
-                  {/* <a href={waStrategyCall} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
+                  <a href={waStrategyCall} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                     Book Strategy Call
-                  </a> */}
+                  </a>
                   <Link href="/startup-legal" className="btn btn-ghost" style={{ textDecoration: "none" }}>
                     Explore Business Solutions →
                   </Link>
@@ -1566,7 +1571,7 @@ export default function HomePage() {
               {[
                 { icon: <ShieldCheck style={{ width: 13, height: 13 }} />, label: "Compliance Coordination", sub: "POSH, FSSAI, MSME & more" },
                 { icon: <FileSignature style={{ width: 13, height: 13 }} />, label: "Business Documentation", sub: "Contracts, NDAs, agreements" },
-                { icon: <Globe style={{ width: 13, height: 13 }} />, label: "Multi City Registrations", sub: "Pan India coverage" },
+                { icon: <Globe style={{ width: 13, height: 13 }} />, label: "Multi-City Registrations", sub: "Pan India coverage" },
                 { icon: <Network style={{ width: 13, height: 13 }} />, label: "Legal Workflow Support", sub: "Single operational layer" },
               ].map((item, i) => (
                 <div key={item.label} className="trust-strip-item" style={{
@@ -1612,7 +1617,7 @@ export default function HomePage() {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            WHAT LEGAL CHAOS COSTS FOUNDER PAIN SECTION
+            WHAT LEGAL CHAOS COSTS — FOUNDER PAIN SECTION
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Business legal challenges" className="section-pad" style={{ background: "var(--ink)", position: "relative", overflow: "hidden" }}>
           <div style={{
@@ -1684,11 +1689,12 @@ export default function HomePage() {
                   solution: "One legal operations partner handles the entire legal function",
                 },
               ].map((item, i) => (
-                <Reveal key={item.title} delay={i * 55}>
+                <Reveal key={item.title} delay={i * 55} style={{ display: "flex", flexDirection: "column" }}>
                   <div style={{
                     background: "rgba(255,255,255,0.03)", border: "1px solid rgba(201,168,76,0.12)",
                     borderRadius: "var(--radius-lg)", padding: "28px 24px",
                     display: "flex", flexDirection: "column", gap: 14,
+                    flex: 1,
                     transition: "all 0.28s cubic-bezier(0.16,1,0.3,1)",
                   }}
                     onMouseEnter={e => {
@@ -1714,7 +1720,7 @@ export default function HomePage() {
                     <div style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "white", letterSpacing: "-0.01em" }}>
                       {item.title}
                     </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8, flex: 1 }}>
                       <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
                         <XCircle style={{ width: 11, height: 11, color: "#f87171", flexShrink: 0, marginTop: 2 }} />
                         <span style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontWeight: 300 }}>{item.problem}</span>
@@ -1724,7 +1730,7 @@ export default function HomePage() {
                         <span style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontWeight: 300 }}>{item.cost}</span>
                       </div>
                     </div>
-                    <div style={{ display: "flex", gap: 8, alignItems: "flex-start", paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div style={{ display: "flex", gap: 8, alignItems: "flex-start", paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: "auto" }}>
                       <CheckCircle style={{ width: 11, height: 11, color: "var(--gold)", flexShrink: 0, marginTop: 2 }} />
                       <span style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(201,168,76,0.8)", lineHeight: 1.6, fontWeight: 400 }}>{item.solution}</span>
                     </div>
@@ -1745,7 +1751,7 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            BUILT FOR MODERN BUSINESSES Use Cases
+            BUILT FOR MODERN BUSINESSES — Use Cases
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Business use cases" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
@@ -1762,7 +1768,7 @@ export default function HomePage() {
                   <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>at every stage.</span>
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, marginTop: 14, maxWidth: 500, margin: "14px auto 0" }}>
-                  Whether you're launching, scaling, or operating NyayMitra is your dedicated legal operations and compliance layer.
+                  Whether you're launching, scaling, or operating — NyayMitra is your dedicated legal operations and compliance layer.
                 </p>
               </div>
             </Reveal>
@@ -1802,7 +1808,7 @@ export default function HomePage() {
                   tag: "Growing Businesses",
                   title: "Scale without legal friction.",
                   items: [
-                    "Multi City Business Registrations",
+                    "Multi-City Business Registrations",
                     "Contract Management & Review",
                     "POSH Compliance & Training",
                     "Compliance Workflow Execution",
@@ -1914,20 +1920,20 @@ export default function HomePage() {
                 },
                 {
                   icon: <Zap style={{ width: 20, height: 20 }} />,
-                  title: "Execution Focused",
+                  title: "Execution-Focused",
                   desc: "We go beyond consultation. NyayMitra coordinates and executes legal workflows so nothing falls through the cracks.",
                   dark: true,
                 },
                 {
                   icon: <TrendingUp style={{ width: 20, height: 20 }} />,
-                  title: "Startup Friendly Pricing",
-                  desc: "Built specifically for founders and growing businesses. Flat rate plans, no hourly billing, no fine print surprises.",
+                  title: "Startup-Friendly Pricing",
+                  desc: "Built specifically for founders and growing businesses. Flat-rate plans, no hourly billing, no fine print surprises.",
                   dark: false,
                 },
                 {
                   icon: <Globe style={{ width: 20, height: 20 }} />,
                   title: "Pan India Coverage",
-                  desc: "Multi city registration and compliance coordination across all Indian states. One team, everywhere you need to operate.",
+                  desc: "Multi-city registration and compliance coordination across all Indian states. One team, everywhere you need to operate.",
                   dark: false,
                 },
                 {
@@ -1939,7 +1945,7 @@ export default function HomePage() {
                 {
                   icon: <Layers style={{ width: 20, height: 20 }} />,
                   title: "Legal + Operations",
-                  desc: "We combine verified legal expertise with operational execution giving you a full stack legal operations partner.",
+                  desc: "We combine verified legal expertise with operational execution — giving you a full-stack legal operations partner.",
                   dark: false,
                 },
               ].map((item, i) => (
@@ -1973,7 +1979,7 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            COMPARISON NyayMitra vs In-House Legal vs Ad-hoc Lawyers
+            COMPARISON — NyayMitra vs In-House Legal vs Ad-hoc Lawyers
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Comparison with in-house legal" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
@@ -1990,7 +1996,7 @@ export default function HomePage() {
                   <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>the alternatives.</span>
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, marginTop: 14, maxWidth: 500, margin: "14px auto 0" }}>
-                  Most growing businesses face a choice between expensive in house counsel, ad-hoc legal spend, or nothing at all. There's a better option.
+                  Most growing businesses face a choice between expensive in-house counsel, ad-hoc legal spend, or nothing at all. There's a better option.
                 </p>
               </div>
             </Reveal>
@@ -2005,7 +2011,7 @@ export default function HomePage() {
                       </th>
                       {[
                         { label: "NyayMitra", highlight: true },
-                        { label: "In House Legal", highlight: false },
+                        { label: "In-House Legal", highlight: false },
                         { label: "Ad-hoc Lawyers", highlight: false },
                       ].map((col) => (
                         <th key={col.label} style={{
@@ -2028,11 +2034,11 @@ export default function HomePage() {
                     {[
                       { label: "Monthly Cost", vals: ["Fixed, transparent", "₹8–25L salary+", "Unpredictable, per-matter"] },
                       { label: "Speed of Execution", vals: ["Hours to days", "Slow (hiring/onboarding)", "Variable, often slow"] },
-                      { label: "Multi City Coverage", vals: ["Pan India", "Limited", "Depends on lawyer"] },
+                      { label: "Multi-City Coverage", vals: ["Pan India", "Limited", "Depends on lawyer"] },
                       { label: "Compliance Tracking", vals: ["Proactive", "Variable", "Not included"] },
                       { label: "Contract Drafting", vals: ["Included", "Included", "Extra billing"] },
                       { label: "POSH Compliance", vals: ["Coordinated end-to-end", "Variable", "Not typical"] },
-                      { label: "Startup Friendly Plans", vals: ["Yes", "No", "No"] },
+                      { label: "Startup-Friendly Plans", vals: ["Yes", "No", "No"] },
                       { label: "Single Point of Contact", vals: ["Always", "Sometimes", "Never"] },
                     ].map((row, i) => (
                       <tr key={row.label} style={{ background: i % 2 === 0 ? "var(--white)" : "var(--ink-9)" }}>
@@ -2096,7 +2102,7 @@ export default function HomePage() {
               {[
                 { icon: <ShieldCheck style={{ width: 18, height: 18 }} />, title: "Avoid Compliance Penalties", desc: "Stay ahead of registration deadlines and statutory obligations with proactive compliance coordination." },
                 { icon: <Zap style={{ width: 18, height: 18 }} />, title: "Close Deals Faster", desc: "Reduce contract bottlenecks with rapid drafting, review, and negotiation support from verified experts." },
-                { icon: <TrendingUp style={{ width: 18, height: 18 }} />, title: "Scale Without In House Legal", desc: "Access on demand legal operations support that grows with your business no full time overhead." },
+                { icon: <TrendingUp style={{ width: 18, height: 18 }} />, title: "Scale Without In-House Legal", desc: "Access on-demand legal operations support that grows with your business — no full-time overhead." },
                 { icon: <FileCheck style={{ width: 18, height: 18 }} />, title: "Stay Documentation Ready", desc: "Keep contracts, policies, and corporate records organized and investor-ready at all times." },
                 { icon: <Network style={{ width: 18, height: 18 }} />, title: "Reduce Coordination Effort", desc: "One partner instead of multiple lawyers, agencies, and vendors. Fewer emails, faster results." },
                 { icon: <BadgeCheck style={{ width: 18, height: 18 }} />, title: "Operate With Confidence", desc: "Access ongoing legal and compliance guidance so your team can focus on building, not firefighting." },
@@ -2230,7 +2236,7 @@ export default function HomePage() {
                     <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
                   </div>
                   <p style={{ fontFamily: "var(--sans)", fontSize: "clamp(13px, 3vw, 14.5px)", color: "rgba(255,255,255,0.5)", lineHeight: 1.9, marginBottom: 32, fontWeight: 300 }}>
-                    From POSH compliance to FSSAI registration, NyayMitra coordinates and executes the full legal compliance layer so you can focus on growing your business.
+                    From POSH compliance to FSSAI registration, NyayMitra coordinates and executes the full legal compliance layer — so you can focus on growing your business.
                   </p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "clamp(8px, 2vw, 10px)", marginBottom: 36 }}>
                     {[
@@ -2316,7 +2322,7 @@ export default function HomePage() {
                     <div style={{ width: 20, height: 1, background: "linear-gradient(90deg, var(--gold), transparent)" }} />
                   </div>
                   <p style={{ fontFamily: "var(--sans)", fontSize: "14.5px", color: "var(--ink-4)", lineHeight: 1.9, marginBottom: 32, fontWeight: 300 }}>
-                    Running a startup shouldn't mean drowning in legal uncertainty. Get contracts reviewed, NDAs drafted, and compliance handled all through one dedicated legal operations partner at a predictable monthly rate.
+                    Running a startup shouldn't mean drowning in legal uncertainty. Get contracts reviewed, NDAs drafted, and compliance handled — all through one dedicated legal operations partner at a predictable monthly rate.
                   </p>
                   <Link href="/startup-legal" className="btn btn-ink" style={{ textDecoration: "none" }}>
                     Explore Startup Legal Solutions <ArrowRight style={{ width: 14, height: 14 }} />
@@ -2328,7 +2334,7 @@ export default function HomePage() {
                 <div style={{ display: "flex", flexDirection: "column", gap: 13 }}>
                   {[
                     { icon: <FileSignature style={{ width: 15, height: 15 }} />, title: "Contracts & NDAs", desc: "Legally sound agreements drafted and reviewed by verified lawyers.", dark: true },
-                    { icon: <Gavel style={{ width: 15, height: 15 }} />, title: "Legal Consultation", desc: "30-min expert session plain language, actionable advice.", dark: false },
+                    { icon: <Gavel style={{ width: 15, height: 15 }} />, title: "Legal Consultation", desc: "30-min expert session — plain language, actionable advice.", dark: false },
                     { icon: <CheckCircle style={{ width: 15, height: 15 }} />, title: "Compliance Coordination", desc: "Know what you need, when you need it. Executed without surprises.", dark: true },
                     { icon: <IndianRupee style={{ width: 15, height: 15 }} />, title: "Transparent Pricing", desc: "Fixed plans. No billing by the hour. No hidden charges.", dark: false },
                   ].map((item) => (
@@ -2385,8 +2391,8 @@ export default function HomePage() {
                 },
                 {
                   amount: "Same Day", tag: "Startup Documentation",
-                  title: "Multi city compliance coordinated",
-                  desc: "Successfully coordinated compliance workflows across multiple Indian cities for a growing business POSH, S&E, and labour documentation all handled.",
+                  title: "Multi-city compliance coordinated",
+                  desc: "Successfully coordinated compliance workflows across multiple Indian cities for a growing business — POSH, S&E, and labour documentation all handled.",
                   metric: "3 cities", metricLabel: "compliance executed",
                 },
                 {
@@ -2488,7 +2494,7 @@ export default function HomePage() {
                     <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>resolved simply.</span>
                   </h2>
                   <p style={{ fontFamily: "var(--sans)", fontSize: "13.5px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 340, lineHeight: 1.75 }}>
-                    From money disputes to family matters NyayMitra gives individuals clarity and action steps on WhatsApp, instantly.
+                    From money disputes to family matters — NyayMitra gives individuals clarity and action steps on WhatsApp, instantly.
                   </p>
                 </div>
               </div>
@@ -2518,7 +2524,7 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            FAQ Expanded for SEO
+            FAQ — Expanded for SEO
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Frequently asked questions" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)" }}>
           <div style={{ maxWidth: 780, margin: "0 auto", padding: "0 28px" }}>
@@ -2566,7 +2572,7 @@ export default function HomePage() {
                 </span>
               </h2>
               <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.9, maxWidth: 520, margin: "0 auto 40px", fontWeight: 300 }}>
-                Startups, MSMEs &amp; businesses NyayMitra is your outsourced legal operations and compliance infrastructure partner. Start with a free assessment. No commitment required.
+                Startups, MSMEs &amp; businesses — NyayMitra is your outsourced legal operations and compliance infrastructure partner. Start with a free assessment. No commitment required.
               </p>
               <div className="cta-row">
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 10 }}>
@@ -2619,7 +2625,7 @@ export default function HomePage() {
                 </p>
                 <address style={{ fontStyle: "normal" }}>
                   {[
-                    { icon: <MapPin style={{ width: 10, height: 10 }} />, text: "Koramangala, Bengaluru 560034, Karnataka" },
+                    { icon: <MapPin style={{ width: 10, height: 10 }} />, text: "Koramangala, Bengaluru — 560034, Karnataka" },
                     { icon: <Mail style={{ width: 10, height: 10 }} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
                     { icon: <PhoneCall style={{ width: 10, height: 10 }} />, text: "+91 79705 96183", href: "tel:+917970596183" },
                   ].map((item, i) => (
