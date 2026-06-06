@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
+// @ts-ignore: side-effect import for global CSS
 import "./globals.css";
 import Providers from "@/components/providers";
 
@@ -10,24 +11,28 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
 });
 
-// ✅ SEO + METADATA FIXED
+// ✅ SEO + METADATA UPDATED
 export const metadata: Metadata = {
   title:
-    "NyayMitra – Online Legal Help in India | Affidavit, Legal Notice & Lawyer Consultation",
+    "NyayMitra – Legal Operations & Compliance Support for Startups, MSMEs & Businesses",
 
   description:
-    "Get legal help online in India. Create affidavits, send legal notices, and consult verified lawyers. Fast, affordable, and simple legal assistance with NyayMitra.",
+    "NyayMitra helps startups, MSMEs, and growing businesses manage legal operations, compliance, registrations, documentation, contracts, trademarks, legal notices, and business execution through a single point of coordination.",
 
   keywords: [
-    "online legal help India",
-    "affidavit online India",
-    "legal notice online India",
-    "consult lawyer online India",
-    "legal documents India",
-    "legal help Patna",
-    "legal help Lucknow",
-    "legal help Indore",
-    "legal help Jaipur",
+    "startup legal services India",
+    "startup compliance India",
+    "legal operations India",
+    "MSME compliance support",
+    "business compliance services",
+    "shop establishment registration",
+    "trademark registration India",
+    "startup documentation",
+    "employment documentation",
+    "vendor agreements",
+    "compliance audit",
+    "legal operations partner",
+    "legal compliance India",
   ],
 
   // ✅ FIXED (removed www)
@@ -39,9 +44,9 @@ export const metadata: Metadata = {
 
   openGraph: {
     title:
-      "NyayMitra – Online Legal Help | Legal Notice, Affidavit & Lawyers",
+      "NyayMitra – Legal Operations & Compliance Support for Growing Businesses",
     description:
-      "From confusion to clarity. Know what to do in your legal problem and take action instantly.",
+      "Helping startups, MSMEs, and businesses manage compliance, contracts, registrations, documentation, trademarks, legal notices, and business execution.",
     url: "https://nyaymitra.tech",
     siteName: "NyayMitra",
     images: [
@@ -58,9 +63,9 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title:
-      "NyayMitra – Legal Help Made Simple",
+      "NyayMitra – Legal Operations & Compliance Support",
     description:
-      "Know your next legal step instantly. Create documents & consult lawyers online.",
+      "Helping startups and businesses manage legal operations, compliance, documentation, registrations, and execution.",
     images: ["/og-image.png"],
   },
 
@@ -90,7 +95,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={playfair.variable}>
       <head>
-        {/* ✅ JSON-LD FIXED */}
+        {/* ✅ JSON-LD UPDATED */}
         <Script
           id="ld-json"
           type="application/ld+json"
@@ -102,14 +107,19 @@ export default function RootLayout({
             name: "NyayMitra",
             url: "https://nyaymitra.tech",
             description:
-              "Online legal help platform in India for affidavits, legal notices, and lawyer consultation.",
+              "Legal Operations & Compliance Support Platform for Startups, MSMEs and Growing Businesses.",
             areaServed: "India",
             serviceType: [
-              "Legal Consultation",
-              "Legal Document Services",
-              "Online Lawyer",
-              "Legal Notice",
-              "Affidavit Creation",
+              "Legal Operations",
+              "Business Compliance",
+              "Startup Documentation",
+              "Employment Documentation",
+              "Vendor Agreements",
+              "Legal Notice Coordination",
+              "Trademark Coordination",
+              "Shop Establishment Registration",
+              "Compliance Audit",
+              "Multi-City Registration Support",
             ],
           })}
         </Script>
