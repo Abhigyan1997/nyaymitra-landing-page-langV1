@@ -2681,7 +2681,7 @@ export default function HomePage() {
                     { href: "/Shipping&DeliveryPolicy", label: "Shipping & Delivery" },
                     { href: "/contact", label: "Contact Us" },
                     { href: "/blog", label: "Blog" },
-                    { href: "/partners", label: "Partner Program" },
+                    // { href: "/partners", label: "Partner Program" },
                   ].map(l => (
                     <li key={l.href} style={{ marginBottom: 10 }}>
                       <Link href={l.href} style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "rgba(255,255,255,0.35)", textDecoration: "none", transition: "color 0.18s", fontWeight: 300 }}
