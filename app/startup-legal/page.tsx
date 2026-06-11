@@ -288,7 +288,7 @@ const plans = [
             { title: "Legal Infrastructure Development", desc: "Build systems that scale with the business." },
         ],
         upgradeWhen: "This is our highest tier built for businesses that need ongoing legal department support.",
-        bonus: "₹30,000 execution credits annually.",
+        bonus: "₹25,000 execution credits annually.",
     },
 ]
 
@@ -303,7 +303,7 @@ const matrixRows = [
     { label: "Multi-state coordination", lite: false, ops: false, frac: true },
     { label: "Priority turnaround", lite: false, ops: true, frac: true },
     { label: "Legal operations manager", lite: false, ops: false, frac: true },
-    { label: "Execution credits (annual)", lite: "₹5,000", ops: "₹15,000", frac: "₹30,000" },
+    { label: "Execution credits (annual)", lite: "₹5,000", ops: "₹15,000", frac: "₹25,000" },
 ]
 
 const services = [
@@ -1268,7 +1268,7 @@ export default function StartupLegalPage() {
                                             {plans.map(p => (
                                                 <td key={p.id} style={{ background: p.popular ? 'rgba(217,119,6,0.1)' : undefined }}>
                                                     <a href={p.whatsapp} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', padding: '6px 14px', borderRadius: 20, background: p.popular ? '#D97706' : 'rgba(255,255,255,0.1)', color: p.popular ? '#000' : '#fff', fontSize: 11, fontWeight: 700, textDecoration: 'none' }}>
-                                                        {p.id === 'fractional' ? '₹39,999+' : `₹${(isYearly ? p.yearlyPrice : p.price).toLocaleString()}`}
+                                                        {p.id === 'fractional' ? '₹29,999+' : `₹${(isYearly ? p.yearlyPrice : p.price).toLocaleString()}`}
                                                     </a>
                                                 </td>
                                             ))}
