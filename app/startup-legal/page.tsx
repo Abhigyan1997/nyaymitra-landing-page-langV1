@@ -6,7 +6,8 @@ import {
     ArrowRight, Star, Clock, Scale, AlertCircle, TrendingUp,
     Award, ThumbsUp, Sparkles, Menu, X, Instagram, Linkedin,
     MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle,
-    Briefcase, FileCheck, Users2, Lock, Target, ChevronDown, Building, Users as UsersIcon, IndianRupee
+    Briefcase, FileCheck, Users2, Lock, Target, ChevronDown, Building, Users as UsersIcon, IndianRupee,
+    Handshake
 } from "lucide-react"
 
 // ─── TRANSLATIONS ────────────────────────────────────────────────────────────
@@ -22,8 +23,8 @@ const t = {
     startupsProtected: "Helping startups across India simplify legal operations.",
     heroHeadline: "Stop Managing Lawyers,",
     heroHeadlineGold: "CAs & Compliance Yourself.",
-    heroDesc: "NyayMitra acts as your startup's outsourced legal operations team coordinating filings, contracts, compliance, and follow-ups so you can focus on building.",
-    heroPrice: "Legal Operations Support Starting at ₹7,500/month",
+    heroDesc: "NyayMitra acts as your startup's outsourced legal operations team coordinating filings, contracts, compliance, and follow ups so you can focus on building.",
+    heroPrice: "Legal Operations Support Starting at ₹6,999/month",
     heroTrust: "Already working with a CA or lawyer? Great. We coordinate with them too.",
     bullet1: "Save time on legal coordination",
     bullet2: "Stay compliant without the stress",
@@ -35,17 +36,17 @@ const t = {
     aiPowered: "AI powered · 24/7 · Hindi & English",
     verifiedLawyers: "65+ Verified Lawyers",
     avgResponse: "Avg response < 2 hours",
-    heroNewDesc: "Trusted by founders to coordinate lawyers, CAs, compliance and documentation without hiring an in-house legal team.",
+    heroNewDesc: "Trusted by founders to coordinate lawyers, CAs, compliance and documentation without hiring an in house legal team.",
 
     // Who Is This For
     whoHeading: "Is this for you?",
     whoSub: "NyayMitra is built for founders who don't want to become legal project managers.",
-    earlyStage: "Early-Stage Founders",
+    earlyStage: "Early Stage Founders",
     earlyStageItems: ["Doing compliance themselves", "Unsure what matters", "No legal structure"],
     growingStartups: "Growing Startups",
     growingItems: ["Vendor contracts", "HR documentation", "Investor readiness"],
-    msme: "MSMEs & Multi-City Businesses",
-    msmeItems: ["Multi-state execution", "Compliance coordination", "One accountable team"],
+    msme: "MSMEs & Multi City Businesses",
+    msmeItems: ["Multi state execution", "Compliance coordination", "One accountable team"],
 
     // Pain Section
     painBadge: "THE REAL PROBLEM",
@@ -96,27 +97,27 @@ const t = {
     testimonialSub: "Real problems. Solved in days. No court. No expensive surprises.",
 
     // Transparency
-    transparencyHeading: "What NyayMitra does NOT do",
-    transparencySub: "We focus on legal operations, coordination and execution. Specialized services are arranged through our partner network whenever required.",
-    noCourt: "Court Representation",
-    noLitigation: "Litigation Retainers",
-    noGovtFees: "Government Fees",
-    noTax: "Tax Filing",
+    transparencyHeading: "What's Not Included",
+    transparencySub: "Clear expectations build better partnerships.",
+    noCourt: "Court representation excluded",
+    noLitigation: "Specialist litigation available separately",
+    noGovtFees: "Government fees billed separately",
+    noTax: "Tax filing excluded",
 
     // FAQ
     faqBadge: "FAQ",
     faqHeadline: "Common questions answered.",
 
     // Final CTA
-    finalHeading: "Stop being your startup's legal project manager.",
-    finalHeadingGold: "",
-    finalDesc: "Focus on building while NyayMitra coordinates the legal chaos behind the scenes.",
+    finalHeading: "Focus on building your business.",
+    finalHeadingGold: "We'll handle the legal coordination behind the scenes.",
+    finalDesc: "Get the support of a startup-focused legal arm without hiring an in house legal team.",
     ctaFinal: "Talk to Legal Ops",
     noCard: "No lock-ins. Works with your existing CA and lawyers.",
 
     // Services
     servicesHeading: "Execution & Compliance Services",
-    servicesSub: "Execution-focused legal support for startups & businesses",
+    servicesSub: "Execution focused legal support for startups & businesses",
 
     // How it works
     howItWorks: "How NyayMitra Works",
@@ -144,6 +145,10 @@ const t = {
     disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third-party professionals.",
     quickLinks: "Quick Links",
     legal: "Legal",
+
+    // Existing advisors trust strip
+    existingAdvisorsTitle: "Already have a CA or lawyer?",
+    existingAdvisorsDesc: "Perfect. NyayMitra works alongside your existing advisors so you don't have to coordinate everything yourself.",
 }
 
 // ─── WHATSAPP ────────────────────────────────────────────────────────────────
@@ -161,94 +166,128 @@ const risks = [
     { icon: <TrendingUp className="w-5 h-5" />, title: "Ignoring legal notice", consequence: "Escalation to court", outcome: "Resolution without litigation" },
 ]
 
+// ─── PLAN DATA (RESTRUCTURED) ─────────────────────────────────────────────────
+// Each plan now has:
+// - Visible-by-default fields: positioningLabel, name, tagline, bestFor, outcomes, price, billingNote, cta, trustBadge, premiumNote, badge
+// - Hidden-by-default (in "View Details"): problems, benefits, upgradeWhen
 const plans = [
     {
         id: "lite",
         name: "Founder Essentials",
-        tagline: "Your founder legal safety net.",
-        price: 7500, yearlyPrice: 6375,
-        bestFor: "Solopreneurs and early-stage startups.",
-        useCases: ["Founder agreements", "Basic vendor contracts", "Compliance reminders", "Legal health check"],
-        outcomes: ["Know what's pending before it becomes a problem", "Save 3–5 hours/month", "Avoid costly legal surprises"],
-        upgradeWhen: "When your team grows beyond 3 people or compliance needs increase.",
-        features: [
-            "Dedicated Legal Coordinator",
-            "WhatsApp Support",
-            "Monthly Legal Health Check",
-            "Compliance Reminder Calendar",
-            "Legal Task Tracking",
-            "2 Document Reviews Per Month",
-            "Startup Compliance Roadmap",
-            "Access To NyayMitra Lawyer Network",
-            "Priority Email Support",
+        tagline: "Stay protected while you focus on building.",
+        price: 6999,
+        yearlyPrice: 5599,
+        priceDisplay: null as string | null, // null => use numeric price
+        bestFor: "Solopreneurs and early stage startups.",
+        billingNote: "Billed monthly.",
+        outcomes: [
+            "Know exactly what's pending.",
+            "Avoid costly legal surprises.",
+            "Save 3–5 founder hours every month.",
+            "Build with confidence from day one.",
         ],
-        outcome: "Know what needs to be done before legal problems become expensive.",
         cta: "Get Started",
         whatsapp: waLite,
         popular: false,
         positioningLabel: "Founder Safety Net",
-        disclaimer: null,
+        trustBadge: "WhatsApp response within 24 hours.",
+        premiumNote: null as string | null,
+        problems: [
+            "Not sure what legal work actually matters.",
+            "Signing contracts without understanding the risks.",
+            "Missing important deadlines.",
+            "Realizing too late that paperwork was incomplete.",
+            "Spending hours figuring things out yourself.",
+        ],
+        benefits: [
+            { title: "Founder Legal Hotline (WhatsApp)", desc: "Get answers before making important decisions." },
+            { title: "Contract Safety Review", desc: "Avoid signing agreements that expose your business." },
+            { title: "Compliance Early Warning System", desc: "Know about deadlines before they become penalties." },
+            { title: "Founder Documentation Vault", desc: "Keep all critical documents organized and accessible." },
+            { title: "Startup Legal Roadmap", desc: "Know what legal milestones matter as you grow." },
+        ],
+        upgradeWhen: "When hiring starts, client contracts increase, or legal complexity grows.",
         bonus: "₹5,000 execution credits annually.",
     },
     {
         id: "ops",
         name: "Startup Legal Ops",
-        tagline: "The legal operations partner every growing startup needs.",
-        price: 19999, yearlyPrice: 15999,
+        tagline: "Your startup's legal arm without hiring a legal team.",
+        price: 17999,
+        yearlyPrice: 14399,
+        priceDisplay: null as string | null,
         bestFor: "Growing startups and MSMEs.",
-        useCases: ["Employment agreements", "Vendor & client contracts", "Compliance monitoring", "Investor documentation", "Policy reviews"],
-        outcomes: ["Save 5–10 hours/month", "Never wonder what's pending", "Operate with confidence"],
-        upgradeWhen: "When you're preparing to raise capital or need multi-city compliance support.",
-        features: [
-            "Everything in Founder Essentials",
-            "Unlimited Legal Queries",
-            "Monthly Founder Strategy Call",
-            "Contract Tracking",
-            "Vendor Agreement Review",
-            "Employment Agreement Review",
-            "Compliance Monitoring",
-            "Legal Risk Assessment",
-            "Dedicated Legal Coordinator",
-            "Priority Support",
-            "Legal Notice Coordination",
-            "Trademark Guidance",
-            "Basic HR Documentation Support",
+        billingNote: "Billed monthly.",
+        outcomes: [
+            "Save 5–10 founder hours every month.",
+            "Never wonder what's happening.",
+            "Close contracts faster.",
+            "Reduce legal risk as you scale.",
         ],
-        outcome: "Operate like a mature company without hiring an internal legal team.",
         cta: "Talk to Legal Ops",
         whatsapp: waOps,
         popular: true,
         positioningLabel: "Most Popular",
-        disclaimer: null,
+        badge: "MOST POPULAR",
+        trustBadge: "WhatsApp response within 4 business hours.",
+        premiumNote: "We onboard a limited number of retainer clients each month to maintain service quality.",
+        problems: [
+            "Chasing multiple advisors for updates.",
+            "Not knowing what's pending.",
+            "Losing deals because contracts take too long.",
+            "Missing compliance obligations.",
+            "Founder distraction from growth activities.",
+        ],
+        benefits: [
+            { title: "One WhatsApp Number For Everything Legal", desc: "No more coordinating multiple professionals." },
+            { title: "Contract Turnaround Support", desc: "Reduce delays in client and vendor agreements." },
+            { title: "Founder Decision Support", desc: "Discuss important business decisions before acting." },
+            { title: "Legal Risk Radar", desc: "Identify issues before they become expensive problems." },
+            { title: "Compliance Ownership", desc: "We follow up so you don't have to." },
+            { title: "Notice Response Coordination", desc: "Avoid panic when notices arrive." },
+            { title: "Hiring Documentation Support", desc: "Onboard employees the right way." },
+        ],
+        upgradeWhen: "When fundraising begins, operations expand across states, or multiple stakeholders are involved.",
         bonus: "₹15,000 execution credits annually.",
     },
     {
         id: "fractional",
         name: "Fractional Legal Department",
-        tagline: "An in-house legal team experience without full-time hiring.",
-        price: 39999, yearlyPrice: 31999,
-        bestFor: "Scaling startups and multi-state businesses.",
-        useCases: ["Multi-state registrations", "Contract lifecycle management", "Investor documentation", "Internal legal SOPs", "Quarterly risk reviews"],
-        outcomes: ["In-house legal structure at a fraction of the cost", "Full compliance visibility", "Peace of mind for founders and board"],
-        upgradeWhen: "This is our highest tier built for teams that need ongoing legal department support.",
-        features: [
-            "Everything in Startup Legal Ops",
-            "Assigned Legal Operations Manager",
-            "Multi-State Compliance Tracking",
-            "Contract Lifecycle Management",
-            "Compliance Dashboard",
-            "Internal Legal SOP Support",
-            "Quarterly Risk Review",
-            "Founder & Board Documentation",
-            "Multi-City Coordination",
-            "Priority Escalation Support",
+        tagline: "Operate with the confidence of an in-house legal team.",
+        price: 29999,
+        yearlyPrice: 26999,
+        priceDisplay: "Starting at ₹29,999",
+        bestFor: "Scaling startups and multi state businesses.",
+        billingNote: "Custom pricing available.",
+        outcomes: [
+            "Board-level peace of mind.",
+            "Full visibility into legal obligations.",
+            "Faster execution across teams.",
+            "Stronger investor readiness.",
         ],
-        outcome: "Get the structure of an in-house legal department at a fraction of the cost.",
         cta: "Book Strategy Call",
         whatsapp: waFractional,
         popular: false,
         positioningLabel: "Fractional Legal Team",
-        disclaimer: "Custom pricing available based on your specific needs.",
+        trustBadge: "Priority response within 2 business hours.",
+        premiumNote: null as string | null,
+        problems: [
+            "Founders becoming the bottleneck.",
+            "Investor due diligence stress.",
+            "Multi-state compliance chaos.",
+            "No visibility into legal risks.",
+            "Growing teams without legal structure.",
+        ],
+        benefits: [
+            { title: "Investor & Due Diligence Readiness", desc: "Never scramble for documents during fundraising." },
+            { title: "Multi-State Execution Management", desc: "One team coordinates everything." },
+            { title: "Board & Leadership Documentation Support", desc: "Maintain governance as you grow." },
+            { title: "Legal Operations Manager", desc: "A single accountable owner." },
+            { title: "Quarterly Risk Reviews", desc: "Identify vulnerabilities before they escalate." },
+            { title: "Escalation & Crisis Coordination", desc: "Get structured support when urgent issues arise." },
+            { title: "Legal Infrastructure Development", desc: "Build systems that scale with the business." },
+        ],
+        upgradeWhen: "This is our highest tier built for businesses that need ongoing legal department support.",
         bonus: "₹30,000 execution credits annually.",
     },
 ]
@@ -328,10 +367,6 @@ const faqs = [
     {
         q: "How is NyayMitra different from IndiaFilings?",
         a: "IndiaFilings is a compliance filing platform. NyayMitra is a legal operations partner. We don't just file documents we coordinate end-to-end legal execution, work with your existing CA and lawyer, provide a dedicated coordinator, WhatsApp support, and ongoing compliance tracking. We're accountable for outcomes, not just transactions.",
-    },
-    {
-        q: "Do I need NyayMitra if I already have a CA?",
-        a: "Yes and your CA will thank you. NyayMitra works with your existing CA. We handle coordination, reminders, document management and follow-ups so your CA can focus on their core work and you don't have to project-manage the entire relationship.",
     },
     {
         q: "What happens during fundraising?",
@@ -425,12 +460,12 @@ export default function StartupLegalPage() {
         }
     ]
 
-    // Transparency cards
+    // Transparency cards (compact, includes all 4 items per spec)
     const transparencyItems = [
-        { icon: <XCircle className="w-5 h-5" />, title: t.noCourt },
-        { icon: <XCircle className="w-5 h-5" />, title: t.noLitigation },
-        { icon: <XCircle className="w-5 h-5" />, title: t.noGovtFees },
-        { icon: <XCircle className="w-5 h-5" />, title: t.noTax },
+        { icon: <IndianRupee className="w-5 h-5" />, title: "Government fees billed separately" },
+        { icon: <Gavel className="w-5 h-5" />, title: "Court representation excluded" },
+        { icon: <FileText className="w-5 h-5" />, title: "Tax filing excluded" },
+        { icon: <Scale className="w-5 h-5" />, title: "Specialist litigation available separately" },
     ]
 
     // ROI cards
@@ -438,7 +473,7 @@ export default function StartupLegalPage() {
         { label: "In-House Legal Hire", price: "₹80,000–₹1,25,000/month", sub: "Salary + benefits + overheads", highlight: false },
         { label: "Traditional Retainers", price: "₹25,000–₹60,000/month", sub: "Monthly retainer with limited scope", highlight: false },
         { label: "Compliance Mistakes", price: "₹25,000–₹5,00,000+", sub: "Per notice or filing missed", highlight: false },
-        { label: "NyayMitra", price: "Starting at ₹7,500/month", sub: "Full legal operations coordination", highlight: true },
+        { label: "NyayMitra", price: "Starting at ₹6,999/month", sub: "Full legal operations coordination", highlight: true },
     ]
 
     return (
@@ -560,7 +595,11 @@ export default function StartupLegalPage() {
                 .matrix-table thead th { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding-bottom: 16px; }
                 .matrix-table tbody tr:hover { background: rgba(0,0,0,0.015); }
                 @media (max-width: 640px) {
-                    .matrix-table th, .matrix-table td { padding: 10px 8px; font-size: 12px; }
+                    .matrix-table th, .matrix-table td { padding: 10px 6px; font-size: 11px; }
+                    .matrix-table th:first-child, .matrix-table td:first-child { font-size: 11.5px; }
+                }
+                @media (max-width: 400px) {
+                    .matrix-table th, .matrix-table td { padding: 8px 4px; font-size: 10px; }
                 }
 
                 /* ROI */
@@ -598,7 +637,7 @@ export default function StartupLegalPage() {
                 @media (max-width: 900px) { .responsive-hero { grid-template-columns: 1fr; } }
 
                 /* Plan expand */
-                .plan-expand { overflow: hidden; transition: max-height 0.35s ease; }
+                .plan-expand { overflow: hidden; transition: max-height 0.4s ease; }
 
                 /* Risk card */
                 .risk-card { transition: transform 0.2s, border-left-color 0.2s; }
@@ -615,6 +654,14 @@ export default function StartupLegalPage() {
                 .btn-secondary:hover { background: #f4f4f5; }
                 .btn-amber { display: inline-flex; align-items: center; gap: 8px; padding: 0.75rem 1.75rem; background: #D97706; color: #000; border-radius: 40px; font-size: 0.8125rem; font-weight: 700; text-decoration: none; transition: opacity 0.2s; }
                 .btn-amber:hover { opacity: 0.9; }
+
+                /* View Details toggle */
+                .view-details-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px 0; background: transparent; border: 1px dashed; border-radius: 12px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+                .view-details-btn:hover { background: rgba(217,119,6,0.06); }
+
+                /* Existing advisors strip */
+                .advisors-strip { display: flex; align-items: center; gap: 14px; padding: 1rem 1.5rem; border-radius: 16px; background: #fafafa; border: 1px solid rgba(0,0,0,0.07); margin-bottom: 2rem; flex-wrap: wrap; }
+                @media (max-width: 600px) { .advisors-strip { flex-direction: column; text-align: center; align-items: center; } }
 
                 @media (prefers-reduced-motion: reduce) {
                     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -899,7 +946,6 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══ WHY NYAYMITRA ════════════════════════════════════════════ */}
-                {/* ══ WHY NYAYMITRA ════════════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
@@ -909,7 +955,6 @@ export default function StartupLegalPage() {
                         </div>
 
                         {/* 3-column comparison - FULLY RESPONSIVE */}
-                        {/* REMOVED inline style overrides - letting CSS class handle responsiveness */}
                         <div className="nm-grid-3" style={{ gap: '1.25rem' }}>
                             {[
                                 {
@@ -1004,7 +1049,7 @@ export default function StartupLegalPage() {
                 {/* ══ PRICING ══════════════════════════════════════════════════ */}
                 <section id="pricing" className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
-                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3rem)' }}>
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(1.5rem,5vw,2.5rem)' }}>
                             <span className="brand-line">{t.pricing}</span>
                             <h2 style={{ fontSize: 'clamp(1.75rem,5vw,2.5rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>{t.pricingHeading}</h2>
                             <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 500, margin: '0 auto 24px', lineHeight: 1.6 }}>{t.pricingSub}</p>
@@ -1021,139 +1066,141 @@ export default function StartupLegalPage() {
                             </div>
                         </div>
 
-                        {/* Instead-of strip */}
-                        <div className="instead-strip">
-                            <div className="instead-grid">
-                                <div className="instead-col">
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.14em', marginBottom: 4 }}>INSTEAD OF HIRING:</p>
-                                    {["Full-time legal employee", "Multiple lawyers", "Separate compliance consultants"].map((item, i) => (
-                                        <div key={i} className="instead-item">
-                                            <XCircle style={{ width: 13, height: 13, color: '#ef4444', flexShrink: 0 }} />
-                                            <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem' }}>{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="instead-divider">
-                                    <div style={{ width: 1, flex: 1, background: 'rgba(255,255,255,0.08)', minHeight: 20 }} />
-                                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#D97706', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        <ArrowRight style={{ width: 16, height: 16, color: '#000' }} />
-                                    </div>
-                                    <div style={{ width: 1, flex: 1, background: 'rgba(255,255,255,0.08)', minHeight: 20 }} />
-                                </div>
-                                <div className="instead-col">
-                                    <p style={{ fontSize: 10, fontWeight: 700, color: '#D97706', letterSpacing: '0.14em', marginBottom: 4 }}>GET:</p>
-                                    {["One legal coordinator", "One legal operations workflow", "Access to experts when needed"].map((item, i) => (
-                                        <div key={i} className="instead-item">
-                                            <Check style={{ width: 13, height: 13, color: '#D97706', flexShrink: 0 }} />
-                                            <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.82rem' }}>{item}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                        {/* Existing Advisors Trust Strip */}
+                        <div className="advisors-strip">
+                            <div style={{ width: 40, height: 40, borderRadius: 12, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#D97706' }}>
+                                <Handshake style={{ width: 18, height: 18 }} />
+                            </div>
+                            <div>
+                                <p style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0a0a0a', marginBottom: 2 }}>{t.existingAdvisorsTitle}</p>
+                                <p style={{ fontSize: '0.8rem', color: '#71717a', lineHeight: 1.5 }}>{t.existingAdvisorsDesc}</p>
                             </div>
                         </div>
 
                         {/* Plan cards */}
-                        <div className="plan-grid">
+                        <div className="plan-grid" style={{ alignItems: 'stretch' }}>
                             {plans.map(plan => (
-                                <div key={plan.id}
+                                <div
+                                    key={plan.id}
                                     className={`plan-card ${plan.popular ? 'popular' : ''}`}
-                                    style={{ position: 'relative', border: plan.popular ? '2px solid #000' : '1px solid rgba(0,0,0,0.1)', background: plan.popular ? '#000' : '#fff', padding: plan.popular ? '2rem 1.75rem' : '1.75rem', overflow: 'visible' }}
-                                    onMouseEnter={() => setHoveredPlan(plan.id)} onMouseLeave={() => setHoveredPlan(null)}
+                                    style={{
+                                        position: 'relative',
+                                        border: plan.popular ? '2px solid #000' : '1px solid rgba(0,0,0,0.1)',
+                                        background: plan.popular ? '#000' : '#fff',
+                                        padding: plan.popular ? '2rem 1.75rem' : '1.75rem',
+                                        overflow: 'visible',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '100%',
+                                    }}
+                                    onMouseEnter={() => setHoveredPlan(plan.id)}
+                                    onMouseLeave={() => setHoveredPlan(null)}
                                 >
-                                    {plan.popular && (
+                                    {plan.badge && (
                                         <div style={{ position: 'absolute', top: -14, left: '50%', transform: 'translateX(-50%)' }}>
                                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 14px', background: '#D97706', color: '#fff', fontSize: 10, fontWeight: 700, borderRadius: 999, letterSpacing: '0.1em', boxShadow: '0 4px 12px rgba(217,119,6,0.35)', whiteSpace: 'nowrap' }}>
-                                                <Zap style={{ width: 10, height: 10 }} /> {t.mostPopular}
+                                                <Zap style={{ width: 10, height: 10 }} /> {plan.badge}
                                             </span>
                                         </div>
                                     )}
 
-                                    {/* Header */}
-                                    <div style={{ marginBottom: 20, paddingBottom: 20, borderBottom: `1px solid ${plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}` }}>
-                                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px 4px 8px', borderRadius: 999, background: plan.popular ? 'rgba(217,119,6,0.15)' : 'rgba(217,119,6,0.08)', border: `1px solid ${plan.popular ? 'rgba(252,211,77,0.2)' : 'rgba(217,119,6,0.2)'}`, marginBottom: 12 }}>
-                                            <span style={{ fontSize: 9, fontWeight: 600, color: plan.popular ? '#FCD34D' : '#D97706', letterSpacing: '0.08em' }}>{plan.positioningLabel}</span>
-                                        </div>
-                                        <h3 style={{ fontSize: '1.375rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.02em', marginBottom: 6 }}>{plan.name}</h3>
-                                        <p style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.5)' : '#71717a', lineHeight: 1.5 }}>{plan.tagline}</p>
-                                    </div>
-
-                                    {/* Best For */}
-                                    <div style={{ marginBottom: 16, padding: '10px 12px', borderRadius: 10, background: plan.popular ? 'rgba(255,255,255,0.05)' : '#fafafa', border: `1px solid ${plan.popular ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>
-                                        <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 4 }}>BEST FOR</p>
-                                        <p style={{ fontSize: '0.78rem', color: plan.popular ? 'rgba(255,255,255,0.7)' : '#52525b', lineHeight: 1.5 }}>{plan.bestFor}</p>
-                                    </div>
-
-                                    {/* Outcomes */}
-                                    <div style={{ marginBottom: 20 }}>
-                                        <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 8 }}>EXPECTED OUTCOMES</p>
-                                        {plan.outcomes.map((o, oi) => (
-                                            <div key={oi} style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
-                                                <div style={{ width: 16, height: 16, borderRadius: '50%', flexShrink: 0, background: plan.popular ? 'rgba(217,119,6,0.2)' : '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Check style={{ width: 8, height: 8, color: '#D97706' }} />
-                                                </div>
-                                                <span style={{ fontSize: '0.78rem', color: plan.popular ? 'rgba(255,255,255,0.75)' : '#52525b' }}>{o}</span>
+                                    {/* Wrapper for content above CTA */}
+                                    <div style={{ flex: 1 }}>
+                                        {/* Header */}
+                                        <div style={{ marginBottom: 16, paddingBottom: 16, borderBottom: `1px solid ${plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}` }}>
+                                            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 10px 4px 8px', borderRadius: 999, background: plan.popular ? 'rgba(217,119,6,0.15)' : 'rgba(217,119,6,0.08)', border: `1px solid ${plan.popular ? 'rgba(252,211,77,0.2)' : 'rgba(217,119,6,0.2)'}`, marginBottom: 12 }}>
+                                                <span style={{ fontSize: 9, fontWeight: 600, color: plan.popular ? '#FCD34D' : '#D97706', letterSpacing: '0.08em' }}>{plan.positioningLabel}</span>
                                             </div>
-                                        ))}
+                                            <h3 style={{ fontSize: '1.375rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.02em', marginBottom: 6 }}>{plan.name}</h3>
+                                            <p style={{ fontSize: '0.78rem', color: plan.popular ? 'rgba(255,255,255,0.55)' : '#71717a', lineHeight: 1.5 }}>{plan.tagline}</p>
+                                        </div>
+
+                                        {/* Best For */}
+                                        <div style={{ marginBottom: 14, padding: '10px 12px', borderRadius: 10, background: plan.popular ? 'rgba(255,255,255,0.05)' : '#fafafa', border: `1px solid ${plan.popular ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)'}` }}>
+                                            <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 4 }}>BEST FOR</p>
+                                            <p style={{ fontSize: '0.78rem', color: plan.popular ? 'rgba(255,255,255,0.7)' : '#52525b', lineHeight: 1.5 }}>{plan.bestFor}</p>
+                                        </div>
+
+                                        {/* What's Included (replaces Expected Outcomes + Benefits desc) */}
+                                        <div style={{ marginBottom: 18 }}>
+                                            <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 8 }}>WHAT'S INCLUDED</p>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                                {plan.benefits.map((benefit, idx) => (
+                                                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+                                                        <div style={{ width: 17, height: 17, borderRadius: '50%', flexShrink: 0, background: plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                            <Check style={{ width: 8, height: 8, color: plan.popular ? '#FCD34D' : '#D97706' }} />
+                                                        </div>
+                                                        <span style={{ fontSize: '0.78rem', fontWeight: 500, color: plan.popular ? 'rgba(255,255,255,0.9)' : '#27272a', lineHeight: 1.4 }}>{benefit.title}</span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* Price */}
+                                        <div style={{ marginBottom: 16 }}>
+                                            {plan.priceDisplay ? (
+                                                <div style={{ marginBottom: 4 }}>
+                                                    <span style={{ fontSize: 'clamp(1.4rem,4vw,1.9rem)', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                                                        {plan.priceDisplay}
+                                                    </span>
+                                                    <span style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 6 }}>/ month</span>
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
+                                                    <span style={{ fontSize: '0.9rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.6)' : '#71717a' }}>₹</span>
+                                                    <span style={{ fontSize: '2.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
+                                                        {(isYearly ? plan.yearlyPrice : plan.price).toLocaleString()}
+                                                    </span>
+                                                    <span style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 6 }}>/ month</span>
+                                                </div>
+                                            )}
+                                            {plan.id === "fractional" && (
+                                                <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.45)' : '#71717a' }}>{plan.billingNote}</p>
+                                            )}
+                                            {plan.id !== "fractional" && isYearly && (
+                                                <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.45)' : '#71717a' }}>Billed ₹{(plan.yearlyPrice * 12).toLocaleString()}/year · Cancel anytime</p>
+                                            )}
+                                            {plan.id !== "fractional" && !isYearly && (
+                                                <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>{plan.billingNote} Cancel anytime</p>
+                                            )}
+                                        </div>
+
+                                        {/* Trust badge */}
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+                                            <Clock style={{ width: 12, height: 12, color: '#D97706', flexShrink: 0 }} />
+                                            <span style={{ fontSize: '0.72rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.65)' : '#52525b' }}>{plan.trustBadge}</span>
+                                        </div>
+
+                                        {/* Premium Note */}
+                                        {plan.premiumNote && (
+                                            <p style={{ fontSize: '0.72rem', color: plan.popular ? '#FCD34D' : '#92400E', fontStyle: 'italic', marginBottom: 12, lineHeight: 1.5 }}>
+                                                {plan.premiumNote}
+                                            </p>
+                                        )}
                                     </div>
 
-                                    {/* Price */}
-                                    <div style={{ marginBottom: 20 }}>
-                                        <div style={{ display: 'flex', alignItems: 'baseline', gap: 2, marginBottom: 4 }}>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.6)' : '#71717a' }}>₹</span>
-                                            <span style={{ fontSize: '2.5rem', fontWeight: 700, color: plan.popular ? '#fff' : '#0a0a0a', letterSpacing: '-0.03em', lineHeight: 1 }}>
-                                                {(isYearly ? plan.yearlyPrice : plan.price).toLocaleString()}
-                                            </span>
-                                            <span style={{ fontSize: '0.75rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', marginLeft: 6 }}>/ month</span>
-                                        </div>
-                                        {plan.id === "fractional" && (
-                                            <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.45)' : '#71717a' }}>Custom pricing available</p>
-                                        )}
-                                        {plan.id !== "fractional" && isYearly && (
-                                            <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.45)' : '#71717a' }}>Billed ₹{(plan.yearlyPrice * 12).toLocaleString()}/year · Cancel anytime</p>
-                                        )}
-                                        {plan.id !== "fractional" && !isYearly && (
-                                            <p style={{ fontSize: 11, color: plan.popular ? 'rgba(255,255,255,0.35)' : '#a1a1aa' }}>Billed monthly · Cancel anytime</p>
-                                        )}
-                                    </div>
-
-                                    {plan.bonus && (
-                                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 10px', borderRadius: 8, background: plan.popular ? 'rgba(217,119,6,0.15)' : '#FEF3C7', border: `1px solid ${plan.popular ? 'rgba(217,119,6,0.25)' : '#FCD34D'}`, marginBottom: 16 }}>
-                                            <Sparkles style={{ width: 11, height: 11, color: '#D97706' }} />
-                                            <span style={{ fontSize: 11, fontWeight: 600, color: plan.popular ? '#FCD34D' : '#92400E' }}>{plan.bonus}</span>
-                                        </div>
-                                    )}
-
-                                    {/* CTA */}
-                                    <a href={plan.whatsapp} target="_blank" rel="noopener noreferrer"
-                                        style={{ display: 'block', width: '100%', padding: '12px 0', textAlign: 'center', fontSize: '0.875rem', fontWeight: 600, borderRadius: 40, textDecoration: 'none', marginBottom: 20, background: plan.popular ? '#D97706' : '#000', color: plan.popular ? '#000' : '#fff', transition: 'opacity 0.2s' }}>
+                                    {/* CTA - always at bottom */}
+                                    <a
+                                        href={plan.whatsapp}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        style={{
+                                            display: 'block',
+                                            width: '100%',
+                                            padding: '12px 0',
+                                            textAlign: 'center',
+                                            fontSize: '0.875rem',
+                                            fontWeight: 600,
+                                            borderRadius: 40,
+                                            textDecoration: 'none',
+                                            marginTop: 'auto',
+                                            background: plan.popular ? '#D97706' : '#000',
+                                            color: plan.popular ? '#000' : '#fff',
+                                            transition: 'opacity 0.2s',
+                                        }}
+                                    >
                                         {plan.cta}
                                     </a>
-
-                                    {/* Features */}
-                                    <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 9, flex: 1 }}>
-                                        {plan.features.map((f, fi) => (
-                                            <li key={fi} style={{ display: 'flex', alignItems: 'flex-start', gap: 9 }}>
-                                                <div style={{ width: 17, height: 17, borderRadius: '50%', flexShrink: 0, background: plan.popular ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Check style={{ width: 8, height: 8, color: plan.popular ? '#FCD34D' : '#D97706' }} />
-                                                </div>
-                                                <span style={{ fontSize: '0.78rem', color: plan.popular ? 'rgba(255,255,255,0.75)' : '#52525b', lineHeight: 1.5 }}>{f}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    {/* Upgrade indicator */}
-                                    <div style={{ marginTop: 16, padding: '10px 12px', borderRadius: 10, background: plan.popular ? 'rgba(255,255,255,0.04)' : '#fafafa', border: `1px solid ${plan.popular ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}` }}>
-                                        <p style={{ fontSize: '0.72rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', lineHeight: 1.5, fontStyle: 'italic' }}>
-                                            <span style={{ color: plan.popular ? '#D97706' : '#D97706', fontStyle: 'normal', fontWeight: 600 }}>Upgrade when: </span>
-                                            {plan.upgradeWhen}
-                                        </p>
-                                    </div>
-
-                                    {plan.disclaimer && (
-                                        <p style={{ fontSize: '0.7rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', fontStyle: 'italic', paddingTop: 12, marginTop: 12, borderTop: `1px solid ${plan.popular ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'}` }}>
-                                            {plan.disclaimer}
-                                        </p>
-                                    )}
                                 </div>
                             ))}
                         </div>
@@ -1166,14 +1213,35 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
+                {/* ══ TRANSPARENCY SECTION (moved directly below pricing) ═══════ */}
+                <section className="nm-section" style={{ background: '#fafafa', paddingTop: 'clamp(2.5rem,6vw,3.5rem)' }}>
+                    <div className="nm-container">
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(1.5rem,5vw,2.5rem)' }}>
+                            <span className="brand-line" style={{ color: '#D97706' }}>TRANSPARENCY</span>
+                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 8 }}>{t.transparencyHeading}</h2>
+                            <p style={{ fontSize: '0.85rem', color: '#71717a', maxWidth: 480, margin: '0 auto', lineHeight: 1.6 }}>{t.transparencySub}</p>
+                        </div>
+                        <div className="nm-grid-2" style={{ maxWidth: 720, margin: '0 auto' }}>
+                            {transparencyItems.map((item, idx) => (
+                                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '1rem 1.25rem', background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)' }}>
+                                    <div style={{ width: 32, height: 32, borderRadius: 10, background: 'rgba(217,119,6,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#D97706' }}>
+                                        {item.icon}
+                                    </div>
+                                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#3f3f46', lineHeight: 1.4 }}>{item.title}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
                 {/* ══ COMPARISON MATRIX ════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fafafa' }}>
+                <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3rem)' }}>
                             <span className="brand-line">{t.matrixBadge}</span>
                             <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2 }}>{t.matrixHeadline}</h2>
                         </div>
-                        <div style={{ background: '#fff', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
+                        <div style={{ background: '#fafafa', borderRadius: 20, border: '1px solid rgba(0,0,0,0.08)', overflow: 'hidden' }}>
                             <div style={{ overflowX: 'auto' }}>
                                 <table className="matrix-table">
                                     <thead style={{ background: '#000' }}>
@@ -1181,7 +1249,7 @@ export default function StartupLegalPage() {
                                             <th style={{ color: 'rgba(255,255,255,0.6)', fontWeight: 600, textAlign: 'left', width: '38%' }}>Feature</th>
                                             {plans.map(p => (
                                                 <th key={p.id} style={{ color: p.popular ? '#D97706' : 'rgba(255,255,255,0.7)' }}>
-                                                    {p.id === 'fractional' ? 'Fractional' : p.name}
+                                                    {p.id === 'fractional' ? 'Fractional' : p.id === 'lite' ? 'Essentials' : 'Legal Ops'}
                                                 </th>
                                             ))}
                                         </tr>
@@ -1200,7 +1268,7 @@ export default function StartupLegalPage() {
                                             {plans.map(p => (
                                                 <td key={p.id} style={{ background: p.popular ? 'rgba(217,119,6,0.1)' : undefined }}>
                                                     <a href={p.whatsapp} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', padding: '6px 14px', borderRadius: 20, background: p.popular ? '#D97706' : 'rgba(255,255,255,0.1)', color: p.popular ? '#000' : '#fff', fontSize: 11, fontWeight: 700, textDecoration: 'none' }}>
-                                                        ₹{p.id === 'fractional' ? '49,999' : (isYearly ? p.yearlyPrice : p.price).toLocaleString()}
+                                                        {p.id === 'fractional' ? '₹39,999+' : `₹${(isYearly ? p.yearlyPrice : p.price).toLocaleString()}`}
                                                     </a>
                                                 </td>
                                             ))}
@@ -1213,7 +1281,7 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══ SERVICES ═════════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fff' }}>
+                <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem,8vw,4rem)' }}>
                             <span className="brand-line">ADD-ON SERVICES</span>
@@ -1241,7 +1309,7 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══ HOW IT WORKS ═════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fafafa' }}>
+                <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,4rem)' }}>
                             <span className="brand-line">{t.fromConfusion}</span>
@@ -1250,7 +1318,7 @@ export default function StartupLegalPage() {
                         </div>
                         <div className="nm-grid-3" style={{ gap: '0.75rem' }}>
                             {steps.map((step, idx) => (
-                                <div key={idx} style={{ position: 'relative', padding: 'clamp(1.25rem,4vw,2rem)', borderRadius: 20, background: '#fff', border: '1px solid rgba(0,0,0,0.07)' }}>
+                                <div key={idx} style={{ position: 'relative', padding: 'clamp(1.25rem,4vw,2rem)', borderRadius: 20, background: '#fafafa', border: '1px solid rgba(0,0,0,0.07)' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
                                         <span style={{ fontSize: 'clamp(1.5rem,5vw,2.5rem)', fontWeight: 700, color: 'rgba(0,0,0,0.05)', lineHeight: 1 }}>{step.number}</span>
                                         <div style={{ width: 40, height: 40, borderRadius: 12, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706' }}>{step.icon}</div>
@@ -1268,7 +1336,7 @@ export default function StartupLegalPage() {
                 </section>
 
                 {/* ══ TESTIMONIALS ═════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fff' }}>
+                <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
                             <span className="brand-line">{t.testimonialBadge}</span>
@@ -1303,7 +1371,7 @@ export default function StartupLegalPage() {
                         {/* Trust proof strip */}
                         <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column', gap: 8 }}>
                             {trustProofs.map((proof, idx) => (
-                                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem 1rem', borderRadius: 12, border: '1px solid rgba(0,0,0,0.07)', background: '#fafafa', flexWrap: 'wrap', gap: 8 }}>
+                                <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.8rem 1rem', borderRadius: 12, border: '1px solid rgba(0,0,0,0.07)', background: '#fff', flexWrap: 'wrap', gap: 8 }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                         <div style={{ width: 32, height: 32, borderRadius: 9, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706', flexShrink: 0 }}>{proof.icon}</div>
                                         <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#0a0a0a' }}>{proof.text}</span>
@@ -1315,29 +1383,8 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ TRANSPARENCY SECTION ══════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fafafa' }}>
-                    <div className="nm-container">
-                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3rem)' }}>
-                            <span className="brand-line" style={{ color: '#D97706' }}>TRANSPARENCY</span>
-                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>{t.transparencyHeading}</h2>
-                            <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>{t.transparencySub}</p>
-                        </div>
-                        <div className="nm-grid-3" style={{ gap: '1rem' }}>
-                            {transparencyItems.map((item, idx) => (
-                                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '1rem 1.25rem', background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.08)' }}>
-                                    <div style={{ width: 32, height: 32, borderRadius: 10, background: 'rgba(239,68,68,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                                        {item.icon}
-                                    </div>
-                                    <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#3f3f46' }}>{item.title}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-
                 {/* ══ FAQ ══════════════════════════════════════════════════════ */}
-                <section className="nm-section" style={{ background: '#fafafa' }}>
+                <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
                             <span className="brand-line">{t.faqBadge}</span>
@@ -1366,16 +1413,19 @@ export default function StartupLegalPage() {
                             <MessageCircle style={{ width: 10, height: 10, color: '#D97706' }} />
                             <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.14em' }}>ONE ACCOUNTABLE TEAM</span>
                         </div>
-                        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,6vw,3.5rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em', lineHeight: 1.1, marginBottom: 20 }}>
+                        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,6vw,3.5rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 8 }}>
                             {t.finalHeading}
                         </h2>
+                        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.25rem,4vw,2rem)', fontWeight: 600, fontStyle: 'italic', color: '#D97706', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: 20 }}>
+                            {t.finalHeadingGold}
+                        </h3>
                         <p style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.5)', maxWidth: 460, margin: '0 auto 36px', lineHeight: 1.65 }}>{t.finalDesc}</p>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 20 }}>
-                            <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn-amber">
-                                <WaSvg size={14} /> {t.ctaFinal}
+                            <a href={waOps} target="_blank" rel="noopener noreferrer" className="btn-amber">
+                                {t.ctaFinal} <ArrowRight style={{ width: 13, height: 13 }} />
                             </a>
-                            <a href={waStrategy} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ background: 'rgba(255,255,255,0.06)', color: '#fff', borderColor: 'rgba(255,255,255,0.12)' }}>
-                                Book a Strategy Call <ArrowRight style={{ width: 13, height: 13 }} />
+                            <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ background: 'rgba(255,255,255,0.06)', color: '#fff', borderColor: 'rgba(255,255,255,0.12)' }}>
+                                <WaSvg size={14} /> WhatsApp Us
                             </a>
                         </div>
                         <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.2)' }}>{t.noCard}</p>
