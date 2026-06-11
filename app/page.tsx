@@ -1695,9 +1695,27 @@ export default function HomePage() {
 
             <Reveal delay={100}>
               <div style={{ textAlign: "center", marginTop: 56 }}>
-                <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
-                  <Sparkles style={{ width: 14, height: 14 }} />
-                  Get Free Assessment We'll show you what's missing
+                <a
+                  href={waAssessment}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-gold"
+                  style={{
+                    gap: 9,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    textAlign: 'center',
+                    padding: '12px 20px',
+                    whiteSpace: 'normal',
+                    wordBreak: 'break-word',
+                    maxWidth: '100%'
+                  }}
+                >
+                  <Sparkles style={{ width: 14, height: 14, flexShrink: 0 }} />
+                  <span style={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                    Get Free Assessment — We'll show you what's missing
+                  </span>
                 </a>
               </div>
             </Reveal>
