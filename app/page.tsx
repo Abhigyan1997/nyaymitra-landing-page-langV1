@@ -1589,66 +1589,180 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            {/* Comparison NyayMitra side more prominent per spec */}
+            {/* Comparison: Why NyayMitra */}
             <Reveal delay={80}>
-              <div style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 20,
-                maxWidth: 860,
-                margin: "0 auto 56px",
-              }}>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+                  gap: 20,
+                  maxWidth: 860,
+                  margin: "0 auto 56px",
+                  alignItems: "stretch",
+                }}
+              >
                 {/* OTHERS */}
-                <div style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: "var(--radius-lg)",
-                  padding: "32px 28px",
-                }}>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "9px", letterSpacing: "0.22em", color: "rgba(255,255,255,0.3)", textTransform: "uppercase", marginBottom: 24 }}>
+                <div
+                  style={{
+                    background: "rgba(255,255,255,0.03)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: "var(--radius-lg)",
+                    padding: "32px 28px",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "9px",
+                      letterSpacing: "0.22em",
+                      color: "rgba(255,255,255,0.3)",
+                      textTransform: "uppercase",
+                      marginBottom: 24,
+                    }}
+                  >
                     Others
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 14,
+                      flex: 1,
+                    }}
+                  >
                     {[
                       "Advice only",
                       "Multiple contacts",
                       "Founder follows up",
                       "Reactive support",
                       "Task completion unclear",
-                    ].map(item => (
-                      <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <XCircle style={{ width: 13, height: 13, color: "#f87171", flexShrink: 0 }} />
-                        <span style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "rgba(255,255,255,0.4)", fontWeight: 300 }}>{item}</span>
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 10,
+                        }}
+                      >
+                        <XCircle
+                          style={{
+                            width: 14,
+                            height: 14,
+                            color: "#f87171",
+                            flexShrink: 0,
+                            marginTop: 2,
+                          }}
+                        />
+
+                        <span
+                          style={{
+                            fontFamily: "var(--sans)",
+                            fontSize: "13px",
+                            lineHeight: 1.6,
+                            color: "rgba(255,255,255,0.45)",
+                            fontWeight: 300,
+                          }}
+                        >
+                          {item}
+                        </span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* NYAYMITRA more prominent */}
-                <div style={{
-                  background: "rgba(201,168,76,0.07)",
-                  border: "1.5px solid rgba(201,168,76,0.4)",
-                  borderRadius: "var(--radius-lg)",
-                  padding: "32px 28px",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow: "0 0 40px rgba(201,168,76,0.08)",
-                }}>
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt))" }} />
-                  <div style={{ fontFamily: "var(--mono)", fontSize: "9px", letterSpacing: "0.22em", color: "var(--gold)", textTransform: "uppercase", marginBottom: 24 }}>
+                {/* NYAYMITRA */}
+                <div
+                  style={{
+                    background: "rgba(201,168,76,0.07)",
+                    border: "1.5px solid rgba(201,168,76,0.4)",
+                    borderRadius: "var(--radius-lg)",
+                    padding: "34px 28px 32px",
+                    position: "relative",
+                    boxShadow: "0 0 40px rgba(201,168,76,0.08)",
+
+                    /* FIXES */
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* Gold accent line */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: 2,
+                      background:
+                        "linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt))",
+                      borderTopLeftRadius: "var(--radius-lg)",
+                      borderTopRightRadius: "var(--radius-lg)",
+                    }}
+                  />
+
+                  <div
+                    style={{
+                      fontFamily: "var(--mono)",
+                      fontSize: "9px",
+                      letterSpacing: "0.22em",
+                      color: "var(--gold)",
+                      textTransform: "uppercase",
+                      marginBottom: 24,
+                    }}
+                  >
                     NyayMitra
                   </div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 14,
+                      flex: 1,
+                    }}
+                  >
                     {[
                       "Ownership of execution",
-                      "One coordinator",
-                      "We follow up",
-                      "Proactive execution",
+                      "One dedicated coordinator",
+                      "We follow up proactively",
+                      "Execution, not just advice",
                       "Accountability until closure",
-                    ].map(item => (
-                      <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <CheckCircle style={{ width: 13, height: 13, color: "var(--gold)", flexShrink: 0 }} />
-                        <span style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "rgba(255,255,255,0.85)", fontWeight: 500 }}>{item}</span>
+                    ].map((item) => (
+                      <div
+                        key={item}
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 10,
+                        }}
+                      >
+                        <CheckCircle
+                          style={{
+                            width: 14,
+                            height: 14,
+                            color: "var(--gold)",
+                            flexShrink: 0,
+                            marginTop: 2,
+                          }}
+                        />
+
+                        <span
+                          style={{
+                            fontFamily: "var(--sans)",
+                            fontSize: "13px",
+                            lineHeight: 1.6,
+                            color: "rgba(255,255,255,0.88)",
+                            fontWeight: 500,
+                          }}
+                        >
+                          {item}
+                        </span>
                       </div>
                     ))}
                   </div>
