@@ -703,6 +703,84 @@ const GlobalStyles = () => (
     .b2c-section {
       background: var(--white);
     }
+      /* B2C section lighter treatment */
+    .b2c-section {
+      background: var(--white);
+    }
+
+    /* ── Problem comparison grid (Others vs NyayMitra) ── */
+    .problem-compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      max-width: 860px;
+      margin: 0 auto 56px;
+      align-items: stretch;
+    }
+    @media (max-width: 680px) {
+      .problem-compare-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        margin: 0 auto 40px;
+      }
+    }
+    .problem-card {
+      border-radius: var(--radius-lg);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 32px 28px;
+    }
+    @media (max-width: 480px) {
+      .problem-card { padding: 22px 20px; }
+    }
+    .problem-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    @media (max-width: 480px) {
+      .problem-card-list { gap: 11px; }
+    }
+    .problem-card-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .problem-card-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 480px) {
+      .problem-card-label { margin-bottom: 18px; font-size: 8.5px; letter-spacing: 0.18em; }
+    }
+
+    /* ── Footer bottom bar ── */
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-disclaimer {
+      max-width: 520px;
+      text-align: right;
+    }
+    @media (max-width: 700px) {
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .footer-disclaimer {
+        max-width: 100%;
+        text-align: left;
+      }
+    }
   `}</style>
 )
 
@@ -1591,49 +1669,20 @@ export default function HomePage() {
 
             {/* Comparison: Why NyayMitra */}
             <Reveal delay={80}>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-                  gap: 20,
-                  maxWidth: 860,
-                  margin: "0 auto 56px",
-                  alignItems: "stretch",
-                }}
-              >
+              <div className="problem-compare-grid">
                 {/* OTHERS */}
                 <div
+                  className="problem-card"
                   style={{
                     background: "rgba(255,255,255,0.03)",
                     border: "1px solid rgba(255,255,255,0.08)",
-                    borderRadius: "var(--radius-lg)",
-                    padding: "32px 28px",
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
                   }}
                 >
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "9px",
-                      letterSpacing: "0.22em",
-                      color: "rgba(255,255,255,0.3)",
-                      textTransform: "uppercase",
-                      marginBottom: 24,
-                    }}
-                  >
+                  <div className="problem-card-label" style={{ color: "rgba(255,255,255,0.3)" }}>
                     Others
                   </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 14,
-                      flex: 1,
-                    }}
-                  >
+                  <div className="problem-card-list">
                     {[
                       "Advice only",
                       "Multiple contacts",
@@ -1641,14 +1690,7 @@ export default function HomePage() {
                       "Reactive support",
                       "Task completion unclear",
                     ].map((item) => (
-                      <div
-                        key={item}
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 10,
-                        }}
-                      >
+                      <div key={item} className="problem-card-row">
                         <XCircle
                           style={{
                             width: 14,
@@ -1658,7 +1700,6 @@ export default function HomePage() {
                             marginTop: 2,
                           }}
                         />
-
                         <span
                           style={{
                             fontFamily: "var(--sans)",
@@ -1677,18 +1718,12 @@ export default function HomePage() {
 
                 {/* NYAYMITRA */}
                 <div
+                  className="problem-card"
                   style={{
                     background: "rgba(201,168,76,0.07)",
                     border: "1.5px solid rgba(201,168,76,0.4)",
-                    borderRadius: "var(--radius-lg)",
-                    padding: "34px 28px 32px",
                     position: "relative",
                     boxShadow: "0 0 40px rgba(201,168,76,0.08)",
-
-                    /* FIXES */
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
                   }}
                 >
                   {/* Gold accent line */}
@@ -1706,27 +1741,11 @@ export default function HomePage() {
                     }}
                   />
 
-                  <div
-                    style={{
-                      fontFamily: "var(--mono)",
-                      fontSize: "9px",
-                      letterSpacing: "0.22em",
-                      color: "var(--gold)",
-                      textTransform: "uppercase",
-                      marginBottom: 24,
-                    }}
-                  >
+                  <div className="problem-card-label" style={{ color: "var(--gold)" }}>
                     NyayMitra
                   </div>
 
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 14,
-                      flex: 1,
-                    }}
-                  >
+                  <div className="problem-card-list">
                     {[
                       "Ownership of execution",
                       "One dedicated coordinator",
@@ -1734,14 +1753,7 @@ export default function HomePage() {
                       "Execution, not just advice",
                       "Accountability until closure",
                     ].map((item) => (
-                      <div
-                        key={item}
-                        style={{
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 10,
-                        }}
-                      >
+                      <div key={item} className="problem-card-row">
                         <CheckCircle
                           style={{
                             width: 14,
@@ -1751,7 +1763,6 @@ export default function HomePage() {
                             marginTop: 2,
                           }}
                         />
-
                         <span
                           style={{
                             fontFamily: "var(--sans)",
@@ -2278,11 +2289,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
+            <div className="footer-bottom">
               <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.08em" }}>
                 © 2026 NyayMitra Tech Pvt Ltd. All rights reserved.
               </p>
-              <p style={{ fontFamily: "var(--sans)", fontSize: "10.5px", color: "rgba(255,255,255,0.28)", maxWidth: 520, lineHeight: 1.8, textAlign: "right", fontWeight: 300 }}>
+              <p className="footer-disclaimer" style={{ fontFamily: "var(--sans)", fontSize: "10.5px", color: "rgba(255,255,255,0.28)", lineHeight: 1.8, fontWeight: 300 }}>
                 <span style={{ color: "rgba(192,57,43,0.9)", fontWeight: 600 }}>Disclaimer: </span>
                 NyayMitra is a legal operations &amp; compliance platform. Legal representation and advisory services are provided by licensed professionals registered with the Bar Council of India.
               </p>
