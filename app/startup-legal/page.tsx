@@ -596,7 +596,7 @@ export default function StartupLegalPage() {
                 .plan-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.1); }
                 .plan-card.popular { transform: translateY(-8px); box-shadow: 0 32px 80px rgba(0,0,0,0.14); }
                 .plan-card.popular:hover { transform: translateY(-14px); }
-                .plan-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; align-items: stretch; }
+                .plan-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; align-items: start; }
                 @media (max-width: 1024px) { .plan-grid { grid-template-columns: 1fr; gap: 2rem; } }
 
                 /* Services */
@@ -671,23 +671,15 @@ export default function StartupLegalPage() {
                 @media (max-width: 900px) { .responsive-hero { grid-template-columns: 1fr; } }
 
                 /* Plan expand - overlay so it doesn't affect sibling card heights via grid stretch */
-                .plan-expand {
-                    overflow: hidden;
-                    transition: max-height 0.4s ease, opacity 0.3s ease;
-                }
-                .plan-expand.is-open {
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    top: 100%;
-                    z-index: 20;
-                    border-radius: 0 0 24px 24px;
-                    box-shadow: 0 24px 48px rgba(0,0,0,0.12);
-                    border: 1px solid rgba(0,0,0,0.08);
-                    border-top: none;
-                    overflow: visible;
-                    max-height: none !important;
-                }
+               /* Plan expand - simple in-flow expand, works on all screen sizes */
+               .plan-expand {
+                 transition: max-height 0.4s ease, padding 0.3s ease;
+                    max-height: 0;
+            }
+// .plan-expand.is-open {
+//     max-height: 2000px;
+//     overflow: visible;
+// }
 
                 /* Risk card */
                 .risk-card { transition: transform 0.2s, border-left-color 0.2s; }
@@ -1220,7 +1212,7 @@ export default function StartupLegalPage() {
                                         </div>
 
                                         {/* Spacer pushes Price/CTA/footer to bottom uniformly across cards */}
-                                        <div style={{ flex: 1 }} />
+                                        <div style={{ marginTop: 'auto' }} />
 
                                         {/* Price */}
                                         <div style={{ marginBottom: 16, minHeight: 72 }}>
@@ -1289,11 +1281,9 @@ export default function StartupLegalPage() {
                                         <div
                                             className={`plan-expand ${isExpanded ? 'is-open' : ''}`}
                                             style={{
-                                                maxHeight: isExpanded ? undefined : 0,
-                                                background: isExpanded ? (plan.popular ? '#000' : '#fff') : 'transparent',
-                                                border: isExpanded ? `1px solid ${plan.popular ? '#000' : 'rgba(0,0,0,0.08)'}` : undefined,
-                                                borderTop: isExpanded ? 'none' : undefined,
-                                                padding: isExpanded ? (plan.popular ? '0 1.75rem 2rem' : '0 1.75rem 1.75rem') : undefined,
+                                                maxHeight: isExpanded ? 2000 : 0,
+                                                overflow: 'hidden',
+                                                padding: isExpanded ? (plan.popular ? '0 0 1rem' : '0 0 0.75rem') : undefined,
                                             }}
                                         >
                                             <div style={{ paddingTop: 4 }}>
@@ -1439,7 +1429,7 @@ export default function StartupLegalPage() {
                                             {plans.map(p => (
                                                 <td key={p.id} style={{ background: p.popular ? 'rgba(217,119,6,0.1)' : undefined }}>
                                                     <a href={p.whatsapp} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', padding: '6px 14px', borderRadius: 20, background: p.popular ? '#D97706' : 'rgba(255,255,255,0.1)', color: p.popular ? '#000' : '#fff', fontSize: 11, fontWeight: 700, textDecoration: 'none' }}>
-                                                        {p.id === 'fractional' ? '₹39,999+' : `₹${(isYearly ? p.yearlyPrice : p.price).toLocaleString()}`}
+                                                        {p.id === 'fractional' ? '₹29,999+' : `₹${(isYearly ? p.yearlyPrice : p.price).toLocaleString()}`}
                                                     </a>
                                                 </td>
                                             ))}
@@ -1671,11 +1661,11 @@ export default function StartupLegalPage() {
                             </div>
                         </div>
 
-                        <div style={{ borderTop: '1px solid rgba(0,0,0,0.07)', paddingTop: 20, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
-                            <p style={{ fontSize: 10, color: '#a1a1aa' }}>© 2026 NyayMitra Technologies Private Limited · CIN: U69100BR2026PTC082217</p>
-                            <p style={{ fontSize: 10, color: '#a1a1aa', maxWidth: 480, textAlign: 'right', lineHeight: 1.5, flex: '1 1 auto' }}>
+                        <div className="footer-bottom" style={{ borderTop: '1px solid rgba(0,0,0,0.07)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                            <p style={{ fontSize: 10, color: '#a1a1aa', textAlign: 'left', lineHeight: 1.5 }}>
                                 <span style={{ color: '#71717a', fontWeight: 600 }}>Disclaimer: </span>{t.disclaimer}
                             </p>
+                            <p style={{ fontSize: 10, color: '#a1a1aa', textAlign: 'left' }}>© 2026 NyayMitra Technologies Private Limited · CIN: U69100BR2026PTC082217</p>
                         </div>
                     </div>
                 </footer>
