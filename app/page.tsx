@@ -1138,8 +1138,8 @@ export default function HomePage() {
     <>
       <GlobalStyles />
       <Head>
-        <title>NyayMitra | Startup Legal Operations & Compliance Partner in India</title>
-        <meta name="description" content="NyayMitra helps startups and growing businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner. Works with your existing CA and lawyers." />
+        <title>NyayMitra | Compliance & Legal Operations Partner for Businesses</title>
+        <meta name="description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner. Works with your existing CA and lawyers." />
         <meta name="keywords" content="startup legal operations India, legal operations partner India, outsourced legal team India, compliance partner India, fractional legal team India, contract management for startups, startup documentation support, legal infrastructure for startups, startup compliance management, founder legal support" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow" />
@@ -1147,16 +1147,16 @@ export default function HomePage() {
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nyaymitra.tech" />
-        <meta property="og:title" content="NyayMitra | Startup Legal Operations & Compliance Partner in India" />
-        <meta property="og:description" content="NyayMitra helps startups and growing businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
+        <meta property="og:title" content="NyayMitra | Compliance & Legal Operations Partner for Businesses" />
+        <meta property="og:description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
         <meta property="og:image" content="https://nyaymitra.tech/og-image.png" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="NyayMitra" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@nyaymitra" />
-        <meta name="twitter:title" content="NyayMitra | Startup Legal Operations & Compliance Partner in India" />
-        <meta name="twitter:description" content="NyayMitra helps startups and growing businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
+        <meta name="twitter:title" content="NyayMitra | Business Legal Operations & Compliance Partner in India" />
+        <meta name="twitter:description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
         <meta name="twitter:image" content="https://nyaymitra.tech/og-image.png" />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
@@ -1182,7 +1182,7 @@ export default function HomePage() {
           }} />
           <span style={{ color: "rgba(255,255,255,0.55)" }}>🇮🇳</span>{" "}
           <span style={{ color: "rgba(255,255,255,0.7)" }}>
-            Your outsourced legal operations partner for startups &amp; growing businesses
+            Your Compliance & Legal Operations Partner for Businesses
           </span>
           &nbsp;·&nbsp;
           <a href={waAssessment} target="_blank" rel="noopener noreferrer"
@@ -1397,7 +1397,7 @@ export default function HomePage() {
                     }} />
                   </div>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
-                    Built to simplify legal operations for startups &amp; growing businesses
+                    Built for businesses that need better compliance,contract, and legal coordination.
                   </span>
                 </div>
 
@@ -1422,7 +1422,7 @@ export default function HomePage() {
                     fontWeight: 400, color: "var(--ink-3)", letterSpacing: "-0.01em",
                     borderLeft: "3px solid var(--gold)", paddingLeft: "16px",
                   }}>
-                    India's Legal Operations Partner for Startups and Growing Businesses.
+                    India's Compliance & Legal Operations Partner for Growing Businesses
                   </span>
                 </div>
 
@@ -1438,18 +1438,32 @@ export default function HomePage() {
                   color: "var(--ink-4)", lineHeight: 1.85,
                   maxWidth: 520, marginBottom: 36, fontWeight: 300,
                 }}>
-                  NyayMitra coordinates contracts, compliance, registrations, and legal documentation through one dedicated legal operations layer so founders can focus on building.
+                  NyayMitra coordinates compliance, contracts, registrations, and legal documentation through one dedicated legal operations layer, helping businesses stay organized, compliant, and focused on growth.
                 </p>
 
                 {/* CTAs per spec */}
-                <div className="hero-ctas" style={{ marginBottom: 20 }}>
-                  <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
+                <div
+                  className="hero-ctas"
+                  style={{
+                    marginBottom: 20,
+                    display: "flex",
+                    width: "100%",
+                  }}
+                >
+                  <a
+                    href={waAssessment}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-gold"
+                    style={{
+                      gap: 9,
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                  >
                     <Sparkles style={{ width: 14, height: 14 }} />
                     Talk to Legal Ops
                   </a>
-                  <Link href="/startup-legal" className="btn btn-ink" style={{ textDecoration: "none" }}>
-                    Explore Startup Plans →
-                  </Link>
                 </div>
 
                 {/* Hero Trust Signals per spec */}
@@ -1662,7 +1676,7 @@ export default function HomePage() {
                   <span className="gold-text" style={{ fontWeight: 300, fontStyle: "italic" }}>It's Getting Things Done.</span>
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "rgba(255,255,255,0.55)", fontWeight: 300, marginTop: 20, maxWidth: 560, margin: "20px auto 0" }}>
-                  Most founders already know a CA or lawyer. The real challenge is ensuring contracts, registrations, compliance, and documentation actually move forward without becoming another item on the founder's plate.
+                  Most businesses already have a CA or lawyer. The real challenge is ensuring contracts, registrations, compliance, and documentation move forward efficiently without becoming another operational burden.
                 </p>
               </div>
             </Reveal>
@@ -1815,7 +1829,7 @@ export default function HomePage() {
                 </div>
                 <div>
                   <p style={{ fontFamily: "var(--serif)", fontSize: "17px", fontStyle: "italic", fontWeight: 400, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 12 }}>
-                    "We realised founders didn't need another lawyer directory.
+                    "We realised businesses didn't need another lawyer directory.
                     They needed someone to own execution."
                   </p>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold-dk)", letterSpacing: "0.16em", textTransform: "uppercase" }}>
@@ -2110,7 +2124,7 @@ export default function HomePage() {
                   <span className="eyebrow">FAQ</span>
                 </div>
                 <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px, 3.8vw, 46px)", fontWeight: 600, letterSpacing: "-0.022em", color: "var(--ink)", marginBottom: 10 }}>
-                  Questions founders ask us.
+                  Questions businesses ask us.
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300 }}>
                   Everything you need to know before working with NyayMitra.
@@ -2147,7 +2161,7 @@ export default function HomePage() {
                 </span>
               </h2>
               <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.9, maxWidth: 520, margin: "0 auto 40px", fontWeight: 300 }}>
-                Get the support of a startup-focused legal arm without hiring an in-house legal team.
+                GAccess compliance, contracts, and legal coordination expertise without the cost of building an in house team.
               </p>
               <div className="cta-row">
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 10 }}>
@@ -2196,7 +2210,7 @@ export default function HomePage() {
                   </div>
                 </Link>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "rgba(255,255,255,0.35)", lineHeight: 1.75, maxWidth: 240, marginBottom: 22, fontWeight: 300 }}>
-                  The legal operations and compliance execution layer for startups and growing businesses in India.
+                  Coordinating compliance, contracts, and legal execution for growing businesses.
                 </p>
                 <address style={{ fontStyle: "normal" }}>
                   {[
