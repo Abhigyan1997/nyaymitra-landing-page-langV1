@@ -4,9 +4,32 @@
 import { useState, useEffect, useRef, type ReactNode, type CSSProperties } from "react"
 import Link from "next/link"
 import {
-  Scale, Shield, Eye, Target, ArrowRight, AlertCircle,
-  Sparkles, CheckCircle, Users, Zap, BadgeCheck,
-  TrendingUp, Star, ArrowLeft, ChevronRight, Menu, X, Crown,
+  Scale,
+  Shield,
+  Eye,
+  Target,
+  ArrowRight,
+  AlertCircle,
+  Sparkles,
+  CheckCircle,
+  Users,
+  Zap,
+  BadgeCheck,
+  TrendingUp,
+  Star,
+  ArrowLeft,
+  ChevronRight,
+  Menu,
+  X,
+  Crown,
+  Layers,
+  FileText,
+  GitBranch,
+  Clock,
+  Coffee,
+  Briefcase,
+  Building,
+  Network,
 } from "lucide-react"
 
 /* ─── GLOBAL STYLES ─────────────────────────────────────────────────────────── */
@@ -287,6 +310,8 @@ const GlobalStyles = () => (
       .mission-card { padding: 28px 22px !important; }
       .cta-btns { flex-direction: column !important; }
       .cta-btns a { justify-content: center !important; }
+      .learnings-grid { grid-template-columns: 1fr !important; }
+      .building-grid { grid-template-columns: 1fr !important; }
     }
     @media (max-width: 480px) {
       .values-grid { grid-template-columns: 1fr !important; }
@@ -322,32 +347,36 @@ const OrnamentLine = () => (
 
 /* ─── DATA ───────────────────────────────────────────────────────────────────── */
 const STATS = [
-  { value: "100+", labelEn: "Active Users" },
-  { value: "60+", labelEn: "Verified Lawyers" },
-  { value: "95%", labelEn: "Client Satisfaction" },
-  { value: "24/7", labelEn: "AI Support Available" },
+  { value: "100+", labelEn: "Founder Conversations" },
+  { value: "65+", labelEn: "Legal Experts" },
+  { value: "Pan India", labelEn: "Coverage" },
+  { value: "Growing", labelEn: "Compliance Infrastructure" },
 ]
 
 const VALUES = [
   {
-    n: "01", title: "Accessibility",
-    desc: "Making legal help accessible to every Indian, regardless of location or economic background.",
+    n: "01",
+    title: "Accessibility",
+    desc: "Making legal operations simple and accessible for every business, regardless of size or location.",
     icon: Users,
   },
   {
-    n: "02", title: "Transparency",
-    desc: "Clear, honest communication about legal processes, costs, and expected outcomes.",
+    n: "02",
+    title: "Transparency",
+    desc: "Clear, honest communication about compliance requirements, costs, and expected outcomes.",
     icon: Eye,
   },
   {
-    n: "03", title: "Quality",
-    desc: "Maintaining the highest standards in legal advice and our lawyer verification process.",
-    icon: BadgeCheck,
+    n: "03",
+    title: "Execution",
+    desc: "Moving beyond advice to actual execution of compliance, documentation, and legal workflows.",
+    icon: CheckCircle,
   },
   {
-    n: "04", title: "Innovation",
-    desc: "Leveraging cutting-edge AI to revolutionise legal services for a billion people.",
-    icon: Zap,
+    n: "04",
+    title: "Coordination",
+    desc: "Orchestrating legal professionals, documents, deadlines, and tasks into a seamless operation.",
+    icon: Network,
   },
 ]
 
@@ -356,10 +385,10 @@ const TEAM = [
     initials: "AA",
     name: "Alok Abhigyan",
     role: "Founder & CEO",
-    image: "/images/alok.jpg",   // ← added
+    image: "/images/alok.jpg",
     roleIcon: Crown,
     tags: ["Full Stack", "Product Strategy"],
-    bio: "Building technology that makes legal help simple and accessible for every Indian.",
+    bio: "Building technology that makes legal and compliance operations simple for every business.",
     accentColor: "var(--ink)",
     avatarBg: "var(--ink-9)",
     avatarColor: "var(--gold)",
@@ -369,14 +398,69 @@ const TEAM = [
     name: "Bharat Rajak",
     role: "Director of Legal Affairs",
     image: null,
-    roleIcon: Scale,         // ← no image, uses initials
+    roleIcon: Scale,
     tags: ["Civil Law", "Criminal Law"],
-    bio: "25+ years in law, ensuring every lawyer meets the highest standards.",
+    bio: "25+ years in law, ensuring every lawyer and legal process meets the highest standards.",
     accentColor: "var(--green)",
     avatarBg: "#f0fdf4",
     avatarColor: "var(--green)",
   },
-  // Twinkle removed ✓
+]
+
+const LEARNINGS = [
+  {
+    icon: Briefcase,
+    title: "Businesses Have Lawyers",
+    desc: "Most businesses already work with legal professionals.",
+  },
+  {
+    icon: Coffee,
+    title: "Businesses Have CAs",
+    desc: "Chartered Accountants are already part of the ecosystem.",
+  },
+  {
+    icon: Users,
+    title: "Businesses Have Consultants",
+    desc: "Advisors and consultants are already engaged.",
+  },
+  {
+    icon: AlertCircle,
+    title: "Businesses Still Struggle",
+    desc: "Despite having experts, coordination remains broken.",
+  },
+]
+
+const BUILDING = [
+  {
+    icon: FileText,
+    title: "Compliance Operations",
+    desc: "Streamlined compliance tracking and execution.",
+  },
+  {
+    icon: GitBranch,
+    title: "Contract Management",
+    desc: "End-to-end contract lifecycle management.",
+  },
+  {
+    icon: Layers,
+    title: "Documentation Infrastructure",
+    desc: "Centralized document repository and workflows.",
+  },
+  {
+    icon: Clock,
+    title: "Legal Workflow Tracking",
+    desc: "Real-time visibility into legal operations.",
+  },
+  {
+    icon: Users,
+    title: "Advisor Coordination",
+    desc: "Seamless collaboration with legal professionals.",
+  },
+  {
+    icon: Building,
+    title: "Business Compliance Platform",
+    desc: "A single platform for all compliance needs.",
+  },
 ]
 
 /* ─── PAGE ───────────────────────────────────────────────────────────────────── */
@@ -574,7 +658,7 @@ export default function AboutPage() {
                   }} />
                 </div>
                 <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
-                  Empowering Legal Access Since 2025
+                  India's Compliance & Legal Operations Infrastructure
                 </span>
               </div>
 
@@ -586,9 +670,9 @@ export default function AboutPage() {
                 letterSpacing: "-0.03em",
                 color: "var(--ink)", marginBottom: 0,
               }}>
-                Justice, made<br />
+                Building The Operating Layer<br />
                 <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.3 }}>
-                  accessible for all.
+                  For Legal & Compliance Execution.
                 </span>
               </h1>
 
@@ -597,19 +681,18 @@ export default function AboutPage() {
               <p style={{
                 fontFamily: "var(--sans)", fontSize: "15.5px",
                 color: "var(--ink-4)", lineHeight: 1.85,
-                maxWidth: 500, fontWeight: 300,
+                maxWidth: 560, fontWeight: 300,
               }}>
-                Democratising legal access across India through AI-powered technology, verified expertise,
-                and a commitment to every citizen's right to understand the law.
+                NyayMitra helps businesses coordinate compliance, contracts, registrations, documentation and legal workflows through one operational layer.
               </p>
 
               {/* Trust pills */}
               <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 32 }}>
                 {[
-                  { icon: BadgeCheck, text: "Bar Council Verified Lawyers" },
-                  { icon: Star, text: "4.9★ Rated Platform" },
-                  { icon: Zap, text: "AI-Powered Legal Guidance" },
-                  { icon: TrendingUp, text: "Startup & MSME Friendly" },
+                  { icon: BadgeCheck, text: "100+ Founder Conversations" },
+                  { icon: Star, text: "65+ Legal Experts" },
+                  { icon: Zap, text: "Pan India Network" },
+                  { icon: TrendingUp, text: "Compliance & Legal Operations" },
                 ].map(({ icon: Icon, text }) => (
                   <div key={text} style={{
                     display: "flex", alignItems: "center", gap: 7,
@@ -656,14 +739,16 @@ export default function AboutPage() {
               }}>
                 {[
                   {
-                    num: "01", icon: Target,
+                    num: "01",
+                    icon: Target,
                     title: "Our Mission",
-                    body: "To bridge the gap between ordinary citizens and legal help offering a platform that simplifies legal access using AI, real lawyers, and regional language support. Starting minimal, driven by a big purpose.",
+                    body: "Our mission is to simplify how businesses manage compliance, contracts, documentation and legal execution by creating a single operational layer between business owners and legal professionals.",
                   },
                   {
-                    num: "02", icon: Eye,
+                    num: "02",
+                    icon: Eye,
                     title: "Our Vision",
-                    body: "To become the go to legal companion for every Indian especially those in Tier 2 and 3 cities making legal awareness a basic right, not a privilege. One click at a time.",
+                    body: "We envision a future where every business can manage legal and compliance operations with the same visibility and efficiency as finance or sales.",
                     right: true,
                   },
                 ].map(({ num, icon: Icon, title, body, right }) => (
@@ -784,8 +869,8 @@ export default function AboutPage() {
                     fontWeight: 600, letterSpacing: "-0.02em",
                     color: "var(--ink)", lineHeight: 1.15,
                   }}>
-                    The story<br />behind<br />
-                    <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>NyayMitra.</span>
+                    The story behind<br />
+                    <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>NyayMitra's evolution.</span>
                   </h2>
                 </div>
               </Reveal>
@@ -794,14 +879,13 @@ export default function AboutPage() {
               <Reveal delay={80}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                   {[
-                    "NyayMitra was launched in August 2025 with a simple belief legal help should not feel confusing, intimidating, or out of reach for ordinary people and growing businesses.",
-                    null, // blockquote
-                    "The idea came from repeatedly seeing how individuals and startups struggle to navigate legal processes, compliance requirements, documentation, and access to trustworthy guidance at the right time.",
-                    "What started as an early legal assistance platform is now gradually evolving into a legal operations and compliance ecosystem connecting users, startups, and businesses with verified legal professionals across multiple cities.",
-                    "Today, NyayMitra is building toward a future where legal support feels more accessible, transparent, operationally efficient, and truly human.",
+                    "NyayMitra began with a vision to simplify access to legal help. But as we spoke with founders and business owners, we discovered a deeper problem.",
+                    null,
+                    "Businesses already had lawyers and CAs. The challenge wasn't finding legal experts — it was coordination. Missed deadlines. Scattered documents. Manual follow-ups. Compliance confusion.",
+                    "The insight was clear: the missing layer was not access to legal professionals, but an operational layer to coordinate legal and compliance work.",
+                    "In 2026, NyayMitra began evolving into a Compliance & Legal Operations platform — building the infrastructure that connects businesses with the legal ecosystem through seamless workflows.",
                   ].map((para, i) => (
                     para === null ? (
-                      /* Blockquote */
                       <div key="bq" style={{
                         borderLeft: "3px solid var(--gold)",
                         paddingLeft: 24, paddingTop: 12, paddingBottom: 12,
@@ -813,7 +897,7 @@ export default function AboutPage() {
                           fontStyle: "italic", fontWeight: 400,
                           color: "var(--ink)", lineHeight: 1.7,
                         }}>
-                          "Legal awareness should be a fundamental service, not a privilege reserved for the few."
+                          "The problem isn't finding experts. It's making them work together effectively."
                         </p>
                       </div>
                     ) : (
@@ -824,7 +908,6 @@ export default function AboutPage() {
                     )
                   ))}
 
-                  {/* Milestones */}
                   <div style={{ marginTop: 8 }}>
                     <div style={{
                       fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--ink-5)",
@@ -833,10 +916,10 @@ export default function AboutPage() {
                     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
                       {[
                         { year: "Aug 2025", event: "NyayMitra platform officially launched" },
-                        { year: "Oct 2025", event: "Verified lawyers onboarded across multiple cities" },
-                        { year: "Feb 2026", event: "Compliance & startup legal plans introduced" },
-                        { year: "May 2026", event: "Started handling multi city business compliance workflows" },
-                        { year: "2026 →", event: "Scaling legal operations support across India" },
+                        { year: "Oct 2025", event: "100+ founder conversations began" },
+                        { year: "Feb 2026", event: "Pivot to Compliance & Legal Operations" },
+                        { year: "May 2026", event: "65+ legal experts onboarded" },
+                        { year: "2026 →", event: "Building India's compliance infrastructure" },
                       ].map(({ year, event }, i, arr) => (
                         <div key={year} style={{
                           display: "flex", gap: 20, alignItems: "flex-start",
@@ -860,6 +943,93 @@ export default function AboutPage() {
                 </div>
               </Reveal>
             </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════════════════════
+            WHAT WE LEARNED
+        ══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          padding: "96px 28px",
+          background: "var(--white)",
+          borderBottom: "1px solid var(--ink-7)",
+        }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">What We Learned</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(28px, 4vw, 52px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.1,
+                }}>
+                  The Problem Isn't<br />
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>Finding Experts.</span>
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="learnings-grid" style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: 16,
+              marginBottom: 48,
+            }}>
+              {LEARNINGS.map((item, i) => (
+                <Reveal key={item.title} delay={i * 60}>
+                  <div className="value-card" style={{ padding: "28px 24px" }}>
+                    <div style={{
+                      width: 42, height: 42, borderRadius: 11,
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--gold-dk)", marginBottom: 16,
+                    }}>
+                      <item.icon style={{ width: 18, height: 18 }} />
+                    </div>
+                    <h4 style={{
+                      fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600,
+                      color: "var(--ink)", marginBottom: 6, letterSpacing: "-0.01em",
+                    }}>{item.title}</h4>
+                    <p style={{
+                      fontFamily: "var(--sans)", fontSize: "12.5px",
+                      color: "var(--ink-5)", lineHeight: 1.75, fontWeight: 300,
+                    }}>{item.desc}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal>
+              <div style={{
+                textAlign: "center",
+                maxWidth: 560,
+                margin: "0 auto",
+                padding: "32px 24px",
+                border: "1px solid var(--gold)",
+                borderRadius: "var(--radius-lg)",
+                background: "var(--gold-pale)",
+              }}>
+                <p style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(18px, 2.5vw, 24px)",
+                  fontWeight: 500,
+                  color: "var(--ink)",
+                  lineHeight: 1.6,
+                }}>
+                  The missing layer is coordination.
+                </p>
+                <p style={{
+                  fontFamily: "var(--sans)",
+                  fontSize: "14px",
+                  color: "var(--ink-4)",
+                  marginTop: 8,
+                }}>
+                  That's what NyayMitra is building.
+                </p>
+              </div>
+            </Reveal>
           </div>
         </section>
 
@@ -895,7 +1065,6 @@ export default function AboutPage() {
               {VALUES.map((v, i) => (
                 <Reveal key={v.n} delay={i * 70}>
                   <div className="value-card">
-                    {/* Ghost number */}
                     <div style={{
                       fontFamily: "var(--serif)", fontSize: "56px", lineHeight: 1,
                       color: "rgba(12,11,9,0.04)", userSelect: "none",
@@ -957,14 +1126,51 @@ export default function AboutPage() {
                   fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.1,
                 }}>
                   The people behind<br />
-                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>the platform.</span>
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>the infrastructure.</span>
                 </h2>
                 <p style={{
                   fontFamily: "var(--sans)", fontSize: "14px",
                   color: "var(--ink-5)", fontWeight: 300, marginTop: 14,
                   maxWidth: 400, margin: "14px auto 0",
                 }}>
-                  Legal experts and technologists committed to making justice accessible for all.
+                  Legal experts and technologists building India's compliance operations layer.
+                </p>
+              </div>
+            </Reveal>
+
+            {/* Founder Note */}
+            <Reveal delay={40}>
+              <div style={{
+                maxWidth: 640,
+                margin: "0 auto 48px",
+                padding: "24px 28px",
+                borderLeft: "3px solid var(--gold)",
+                background: "var(--white)",
+                borderRadius: "0 var(--radius) var(--radius) 0",
+                border: "1px solid var(--ink-7)",
+                borderLeftWidth: "3px",
+              }}>
+                <p style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(15px, 1.8vw, 18px)",
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  color: "var(--ink-3)",
+                  lineHeight: 1.7,
+                  textAlign: "center",
+                }}>
+                  "After speaking with over 100 founders and business owners, we realised legal challenges rarely come from lack of experts. They come from lack of coordination. NyayMitra is being built to solve that."
+                </p>
+                <p style={{
+                  marginTop: 12,
+                  fontFamily: "var(--sans)",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  color: "var(--gold-dk)",
+                  textAlign: "center",
+                  letterSpacing: "0.06em",
+                }}>
+                  — Alok Abhigyan, Founder & CEO
                 </p>
               </div>
             </Reveal>
@@ -978,7 +1184,6 @@ export default function AboutPage() {
 
                     <div style={{ padding: "32px 28px" }}>
                       {/* Avatar */}
-                      {/* Avatar — shows photo if available, else initials */}
                       {member.image ? (
                         <img
                           src={member.image}
@@ -1049,6 +1254,69 @@ export default function AboutPage() {
         </section>
 
         {/* ══════════════════════════════════════════════════════════════════════
+            WHAT WE ARE BUILDING
+        ══════════════════════════════════════════════════════════════════════ */}
+        <section className="section-pad" style={{
+          padding: "96px 28px",
+          background: "var(--white)",
+          borderBottom: "1px solid var(--ink-7)",
+        }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">What We Are Building</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)",
+                  fontSize: "clamp(28px, 4vw, 52px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.1,
+                }}>
+                  More Than<br />
+                  <span style={{ fontStyle: "italic", fontWeight: 300, color: "var(--ink-3)" }}>Legal Services.</span>
+                </h2>
+                <p style={{
+                  fontFamily: "var(--sans)", fontSize: "14px",
+                  color: "var(--ink-5)", fontWeight: 300, marginTop: 14,
+                  maxWidth: 480, margin: "14px auto 0",
+                }}>
+                  These are the future pillars of India's compliance and legal operations infrastructure.
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="building-grid" style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: 16,
+            }}>
+              {BUILDING.map((item, i) => (
+                <Reveal key={item.title} delay={i * 50}>
+                  <div className="value-card" style={{ padding: "28px 24px" }}>
+                    <div style={{
+                      width: 42, height: 42, borderRadius: 11,
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--gold-dk)", marginBottom: 16,
+                    }}>
+                      <item.icon style={{ width: 18, height: 18 }} />
+                    </div>
+                    <h4 style={{
+                      fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600,
+                      color: "var(--ink)", marginBottom: 6, letterSpacing: "-0.01em",
+                    }}>{item.title}</h4>
+                    <p style={{
+                      fontFamily: "var(--sans)", fontSize: "12.5px",
+                      color: "var(--ink-5)", lineHeight: 1.75, fontWeight: 300,
+                    }}>{item.desc}</p>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ══════════════════════════════════════════════════════════════════════
             CTA
         ══════════════════════════════════════════════════════════════════════ */}
         <section style={{
@@ -1098,9 +1366,9 @@ export default function AboutPage() {
                     fontWeight: 600, color: "white",
                     letterSpacing: "-0.025em", lineHeight: 1.1, marginBottom: 16,
                   }}>
-                    Ready for the legal help{" "}
+                    Ready To Stop Managing<br />
                     <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300 }}>
-                      you deserve?
+                      Compliance Manually?
                     </span>
                   </h2>
 
@@ -1111,15 +1379,15 @@ export default function AboutPage() {
                     color: "rgba(255,255,255,0.45)", lineHeight: 1.85,
                     marginBottom: 36, fontWeight: 300,
                   }}>
-                    Join thousands of Indians who trust NyayMitra for clear, accessible, and verified legal guidance.
+                    NyayMitra helps businesses coordinate compliance, contracts and legal operations while they focus on growth.
                   </p>
 
                   <div className="cta-btns" style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-                    <Link href="/legal-ai" className="btn-gold">
-                      <Sparkles style={{ width: 14, height: 14 }} />
-                      Ask Legal AI
+                    <Link href="/contact" className="btn-gold">
+                      <Users style={{ width: 14, height: 14 }} />
+                      Talk To Our Team
                     </Link>
-                    <Link href="/lawyers" className="btn-gw" style={{
+                    <Link href="/compliance" className="btn-gw" style={{
                       display: "inline-flex", alignItems: "center", gap: 8,
                       background: "transparent", color: "rgba(255,255,255,0.65)",
                       fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 500,
@@ -1136,7 +1404,7 @@ export default function AboutPage() {
                         a.style.borderColor = "rgba(255,255,255,0.15)"; a.style.color = "rgba(255,255,255,0.65)"; a.style.transform = ""
                       }}
                     >
-                      Find Lawyers
+                      Explore Compliance Solutions
                       <ArrowRight style={{ width: 14, height: 14 }} />
                     </Link>
                   </div>
@@ -1162,10 +1430,10 @@ export default function AboutPage() {
 
                     <div style={{ padding: "8px 0" }}>
                       {[
-                        { icon: BadgeCheck, text: "Bar Council verified lawyers only", sub: "Every lawyer undergoes rigorous verification" },
-                        { icon: Shield, text: "Transparent pricing, always", sub: "No hidden fees. What you see is what you pay" },
-                        { icon: Zap, text: "AI guidance in under 2 minutes", sub: "Instant clarity on any legal situation" },
-                        { icon: Star, text: "4.9 star rated by real users", sub: "Consistently rated top legal platform" },
+                        { icon: BadgeCheck, text: "65+ verified legal experts", sub: "Every professional undergoes rigorous verification" },
+                        { icon: Shield, text: "Transparent operations, always", sub: "No hidden costs. Clear compliance roadmaps" },
+                        { icon: Zap, text: "Built from founder feedback", sub: "100+ conversations shaped our infrastructure" },
+                        { icon: Network, text: "Pan India coverage", sub: "Legal operations support across the country" },
                       ].map(({ icon: Icon, text, sub }, i, arr) => (
                         <div key={text} style={{
                           padding: "18px 24px", display: "flex", gap: 14, alignItems: "flex-start",
@@ -1196,7 +1464,7 @@ export default function AboutPage() {
                       <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em" }}>
                         Available 24/7 · Pan India
                       </span>
-                      <Link href="/lawyers" style={{
+                      <Link href="/compliance" style={{
                         display: "flex", alignItems: "center", gap: 5,
                         fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 600,
                         color: "var(--gold-lt)", textDecoration: "none", letterSpacing: "0.08em",
