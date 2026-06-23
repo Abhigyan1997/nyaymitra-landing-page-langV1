@@ -14,6 +14,8 @@ import {
   Store, HardHat, ShieldCheck, Network, Workflow, Globe,
   Target, Award, Cpu, XCircle, DollarSign, Timer, UserCheck,
   TriangleAlert, BookOpen, Lightbulb, CreditCard, Headset,
+  Factory, Stethoscope, Megaphone, Search, Bell, Folder,
+  TrendingDown, AlarmClock, FilePlus, FolderCheck, LayoutDashboard,
 } from "lucide-react"
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -599,10 +601,9 @@ const GlobalStyles = () => (
 
     .why-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 16px;
     }
-    @media (max-width: 860px) { .why-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px) { .why-grid { grid-template-columns: 1fr; } }
 
     .biz-services-grid {
@@ -617,7 +618,7 @@ const GlobalStyles = () => (
       grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
-    @media (max-width: 860px) { .biz-outcomes-grid { grid-template-columns: repeat(2, 1fr)); } }
+    @media (max-width: 860px) { .biz-outcomes-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px) { .biz-outcomes-grid { grid-template-columns: 1fr; } }
 
     @media (max-width: 900px) {
@@ -703,10 +704,6 @@ const GlobalStyles = () => (
     .b2c-section {
       background: var(--white);
     }
-      /* B2C section lighter treatment */
-    .b2c-section {
-      background: var(--white);
-    }
 
     /* ── Problem comparison grid (Others vs NyayMitra) ── */
     .problem-compare-grid {
@@ -781,6 +778,224 @@ const GlobalStyles = () => (
         text-align: left;
       }
     }
+
+    /* ── NEW: Pillar cards (You have a CA / lawyer / consultants / manage manually) ── */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 920px) { .pillar-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .pillar-grid { grid-template-columns: 1fr; } }
+
+    .pillar-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 26px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.26s cubic-bezier(0.16,1,0.3,1);
+      position: relative;
+    }
+    .pillar-card.is-last {
+      background: rgba(201,168,76,0.07);
+      border: 1.5px solid rgba(201,168,76,0.35);
+    }
+    .pillar-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(201,168,76,0.3);
+    }
+
+    /* ── NEW: Operations 6-card grid ── */
+    .ops-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 920px) { .ops-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .ops-grid { grid-template-columns: 1fr; } }
+
+    /* ── NEW: Dashboard mock ── */
+    .dash-shell {
+      background: var(--ink);
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(201,168,76,0.18);
+      overflow: hidden;
+      box-shadow: 0 50px 120px rgba(12,11,9,0.35), 0 0 0 1px rgba(255,255,255,0.02) inset;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+    }
+    @media (max-width: 860px) {
+      .dash-shell { grid-template-columns: 1fr; }
+    }
+
+    .dash-sidebar {
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      padding: 22px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    @media (max-width: 860px) { .dash-sidebar { display: none; } }
+
+    .dash-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.45);
+      cursor: default;
+      transition: all 0.18s;
+    }
+    .dash-nav-item.active {
+      background: rgba(201,168,76,0.12);
+      color: var(--gold-lt);
+    }
+
+    .dash-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      width: 100%;
+    }
+    @media (max-width: 1040px) {
+      .dash-metrics-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .dash-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 360px) {
+      .dash-metrics-grid { grid-template-columns: 1fr; }
+    }
+
+    .dash-metric-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .dash-panels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 14px;
+      width: 100%;
+    }
+    @media (max-width: 700px) {
+      .dash-panels-grid { grid-template-columns: 1fr; }
+    }
+
+    .dash-panel {
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 18px;
+      min-width: 0;
+      max-width: 100%;
+      overflow: hidden;
+    }
+
+    .dash-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .dash-row:last-child { border-bottom: none; }
+
+    .dash-status-badge {
+      font-family: var(--mono);
+      font-size: 8.5px;
+      letter-spacing: 0.08em;
+      padding: 4px 9px;
+      border-radius: 100px;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .dash-progress-track {
+      width: 100%;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+    .dash-progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold-dk), var(--gold));
+    }
+
+    /* ── NEW: Workflow ladder (vertical) ── */
+    .workflow-ladder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+    .workflow-ladder-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 26px;
+      border: 1px solid var(--ink-7);
+      border-radius: var(--radius-lg);
+      background: var(--white);
+      min-width: 280px;
+      justify-content: center;
+    }
+    .workflow-ladder-item.is-accent {
+      background: var(--ink);
+      border-color: transparent;
+    }
+    .workflow-ladder-arrow {
+      padding: 6px 0;
+      color: var(--gold-dk);
+    }
+    @media (max-width: 480px) {
+      .workflow-ladder-item { min-width: 220px; padding: 14px 18px; }
+    }
+
+    /* ── NEW: Solutions hub grid ── */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 920px) { .solutions-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .solutions-grid { grid-template-columns: 1fr; } }
+
+    /* ── NEW: Served-by grid (8 cards, startups last) ── */
+    .served-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 920px) { .served-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .served-grid { grid-template-columns: 1fr; } }
+
+    /* ── NEW: Stat counters ── */
+    .stat-counter-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 920px) { .stat-counter-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .stat-counter-grid { grid-template-columns: 1fr; } }
   `}</style>
 )
 
@@ -866,6 +1081,51 @@ function FaqItem({ q, a }: { q: string; a: string }) {
           dangerouslySetInnerHTML={{ __html: a }}
         />
       </div>
+    </div>
+  )
+}
+
+/* ─── NEW HELPER: Animated stat counter ─────────────────────────────────────── */
+function StatCounter({ end, suffix = "", label, prefix = "" }: { end: number; suffix?: string; label: string; prefix?: string }) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const started = useRef(false)
+
+  useEffect(() => {
+    const el = ref.current; if (!el) return
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !started.current) {
+        started.current = true
+        const duration = 1400
+        const startTime = performance.now()
+        const tick = (now: number) => {
+          const progress = Math.min((now - startTime) / duration, 1)
+          const eased = 1 - Math.pow(1 - progress, 3)
+          setCount(Math.round(eased * end))
+          if (progress < 1) requestAnimationFrame(tick)
+        }
+        requestAnimationFrame(tick)
+        obs.disconnect()
+      }
+    }, { threshold: 0.3 })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [end])
+
+  return (
+    <div ref={ref} style={{ textAlign: "center" }}>
+      <div style={{
+        fontFamily: "var(--serif)", fontSize: "clamp(30px, 4vw, 44px)", fontWeight: 600,
+        color: "var(--ink)", letterSpacing: "-0.02em", lineHeight: 1,
+      }}>
+        <span className="gold-text">{prefix}{count}{suffix}</span>
+      </div>
+      <p style={{
+        fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)",
+        letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5,
+      }}>
+        {label}
+      </p>
     </div>
   )
 }
@@ -1012,6 +1272,22 @@ export default function HomePage() {
       q: "How do I get started?",
       a: "Click <strong>'Talk to Legal Ops'</strong> on this page, share your business details on WhatsApp, and we'll schedule a 15-min discovery call. We'll identify gaps and recommend the right plan <strong>no obligation.</strong>",
     },
+    {
+      q: "What is Legal Operations?",
+      a: "Legal Operations is the <strong>discipline of managing legal work like a system</strong> tracking deadlines, coordinating documents, and ensuring follow-through instead of treating every contract or filing as a one-off fire drill.",
+    },
+    {
+      q: "Why not just use a CA?",
+      a: "A CA handles <strong>accounting and tax compliance</strong>, not contracts, registrations, or legal documentation. NyayMitra coordinates across all of these and your CA, so nothing falls in the gaps between professionals.",
+    },
+    {
+      q: "Why not just use a lawyer?",
+      a: "A lawyer gives <strong>advice on a specific matter</strong> when you bring it to them. NyayMitra tracks everything that's pending, due, or moving across your business, and brings the right professional in at the right time.",
+    },
+    {
+      q: "Do you replace advisors?",
+      a: "No. NyayMitra is built to <strong>work alongside your existing CA, CS, and lawyers</strong>, not replace them. We become the coordination layer that keeps their work, and yours, moving.",
+    },
   ]
 
   // JSON-LD Schemas (updated descriptions)
@@ -1022,7 +1298,7 @@ export default function HomePage() {
     "alternateName": "NyayMitra Technologies Pvt Ltd",
     "url": "https://nyaymitra.tech",
     "logo": "https://nyaymitra.tech/logo.png",
-    "description": "NyayMitra is India's startup legal operations and compliance infrastructure platform. Contracts, compliance, registrations, and legal documentation managed through one dedicated legal operations partner. Works alongside your existing CA and lawyers.",
+    "description": "NyayMitra is India's compliance and legal operations partner for businesses. Contracts, compliance, registrations, and legal documentation managed through one dedicated operational layer. Works alongside your existing CA, CS and lawyers.",
     "foundingDate": "2025",
     "areaServed": "IN",
     "address": {
@@ -1062,7 +1338,7 @@ export default function HomePage() {
     "url": "https://nyaymitra.tech",
     "telephone": "+91-79705-96183",
     "priceRange": "₹₹",
-    "description": "Startup legal operations and compliance management partner in India. Services include contract management, POSH compliance, FSSAI registration, MSME registration, founder documentation, and business legal coordination.",
+    "description": "Compliance and legal operations partner for businesses across India. Services include compliance tracking, contract management, registration coordination, founder documentation, and advisor coordination.",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Koramangala",
@@ -1083,7 +1359,7 @@ export default function HomePage() {
       "closes": "23:59"
     },
     "areaServed": { "@type": "Country", "name": "India" },
-    "serviceType": ["Legal Operations", "Compliance Management", "Contract Drafting", "POSH Compliance", "FSSAI Registration", "MSME Registration", "Startup Legal Support", "Fractional Legal Team"]
+    "serviceType": ["Legal Operations", "Compliance Management", "Contract Coordination", "POSH Compliance", "FSSAI Registration", "MSME Registration", "Startup Legal Support", "Fractional Legal Team"]
   }
 
   const websiteSchema = {
@@ -1114,21 +1390,22 @@ export default function HomePage() {
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "serviceType": "Startup Legal Operations and Compliance Management",
+    "serviceType": "Compliance and Legal Operations Management",
     "provider": { "@type": "Organization", "name": "NyayMitra" },
     "areaServed": "India",
-    "description": "NyayMitra provides startup legal operations, outsourced legal team services, contract management, compliance coordination, and legal infrastructure for startups and growing businesses across India.",
+    "description": "NyayMitra provides compliance tracking, contract management, registration coordination, documentation control, and legal operations infrastructure for businesses across India.",
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
-      "name": "NyayMitra Legal Services",
+      "name": "NyayMitra Legal Operations Services",
       "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Startup Legal Operations" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Compliance Tracking" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contract Management" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Documentation Control" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Registration Coordination" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "POSH Compliance" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "FSSAI Registration" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "MSME Registration" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Contract Drafting and Review" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Legal Consultation" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Fractional Legal Team India" } }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Startup Legal Operations" } }
       ]
     }
   }
@@ -1139,8 +1416,8 @@ export default function HomePage() {
       <GlobalStyles />
       <Head>
         <title>NyayMitra | Compliance & Legal Operations Partner for Businesses</title>
-        <meta name="description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner. Works with your existing CA and lawyers." />
-        <meta name="keywords" content="startup legal operations India, legal operations partner India, outsourced legal team India, compliance partner India, fractional legal team India, contract management for startups, startup documentation support, legal infrastructure for startups, startup compliance management, founder legal support" />
+        <meta name="description" content="NyayMitra helps businesses coordinate compliance, contracts, registrations, and legal documentation through one dedicated legal operations partner. Works with your existing CA, CS and lawyers." />
+        <meta name="keywords" content="compliance and legal operations India, legal operations partner India, outsourced legal team India, compliance partner India, fractional legal team India, contract management for businesses, startup documentation support, legal infrastructure for businesses, startup compliance management, founder legal support" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://nyaymitra.tech" />
@@ -1148,15 +1425,15 @@ export default function HomePage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://nyaymitra.tech" />
         <meta property="og:title" content="NyayMitra | Compliance & Legal Operations Partner for Businesses" />
-        <meta property="og:description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
+        <meta property="og:description" content="NyayMitra helps businesses coordinate compliance, contracts, registrations, and legal documentation through one dedicated legal operations partner." />
         <meta property="og:image" content="https://nyaymitra.tech/og-image.png" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="NyayMitra" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@nyaymitra" />
-        <meta name="twitter:title" content="NyayMitra | Business Legal Operations & Compliance Partner in India" />
-        <meta name="twitter:description" content="NyayMitra helps businesses coordinate contracts, compliance, registrations, and legal documentation through one dedicated legal operations partner." />
+        <meta name="twitter:title" content="NyayMitra | Compliance & Legal Operations Partner for Businesses" />
+        <meta name="twitter:description" content="NyayMitra helps businesses coordinate compliance, contracts, registrations, and legal documentation through one dedicated legal operations partner." />
         <meta name="twitter:image" content="https://nyaymitra.tech/og-image.png" />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
@@ -1397,21 +1674,21 @@ export default function HomePage() {
                     }} />
                   </div>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
-                    Built for businesses that need better compliance,contract, and legal coordination.
+                    Built for businesses that need better compliance, contract, and legal coordination.
                   </span>
                 </div>
 
                 {/* UPDATED H1 per spec */}
                 <h1 style={{
                   fontFamily: "var(--serif)",
-                  fontSize: "clamp(40px, 6vw, 72px)",
+                  fontSize: "clamp(38px, 5.6vw, 66px)",
                   fontWeight: 600, lineHeight: 1.15,
                   letterSpacing: "-0.03em", color: "var(--ink)",
                   marginBottom: 0, paddingTop: "0.3rem", overflow: "visible",
                 }}>
-                  Stop Managing Legal<br />
+                  One Place to Manage<br />
                   <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.35, overflow: "visible" }}>
-                    Chaos Yourself.
+                    Compliance, Contracts & Legal Operations.
                   </span>
                 </h1>
 
@@ -1422,7 +1699,7 @@ export default function HomePage() {
                     fontWeight: 400, color: "var(--ink-3)", letterSpacing: "-0.01em",
                     borderLeft: "3px solid var(--gold)", paddingLeft: "16px",
                   }}>
-                    India's Compliance & Legal Operations Partner for Growing Businesses
+                    India's Compliance & Legal Operations Partner for Businesses
                   </span>
                 </div>
 
@@ -1436,9 +1713,19 @@ export default function HomePage() {
                 <p style={{
                   fontFamily: "var(--sans)", fontSize: "15.5px",
                   color: "var(--ink-4)", lineHeight: 1.85,
-                  maxWidth: 520, marginBottom: 36, fontWeight: 300,
+                  maxWidth: 540, marginBottom: 14, fontWeight: 300,
                 }}>
-                  NyayMitra coordinates compliance, contracts, registrations, and legal documentation through one dedicated legal operations layer, helping businesses stay organized, compliant, and focused on growth.
+                  Stop chasing lawyers, CAs and consultants across emails, WhatsApp and spreadsheets. NyayMitra gives your business one operational layer to coordinate compliance, contracts, registrations, documentation and legal workflows.
+                </p>
+
+                <p style={{
+                  fontFamily: "var(--sans)", fontSize: "13.5px",
+                  color: "var(--gold-dk)", lineHeight: 1.7,
+                  maxWidth: 520, marginBottom: 32, fontWeight: 600,
+                  display: "flex", alignItems: "center", gap: 8,
+                }}>
+                  <Handshake style={{ width: 14, height: 14, flexShrink: 0 }} />
+                  We work alongside your existing CA, CS and lawyers.
                 </p>
 
                 {/* CTAs per spec */}
@@ -1462,17 +1749,18 @@ export default function HomePage() {
                     }}
                   >
                     <Sparkles style={{ width: 14, height: 14 }} />
-                    Talk to Legal Ops
+                    Book Free Assessment
                   </a>
                 </div>
 
                 {/* Hero Trust Signals per spec */}
                 <div style={{ marginBottom: 32, marginTop: 4 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
                     {[
-                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "Works alongside your CA and lawyers" },
-                      { icon: <Zap style={{ width: 10, height: 10 }} />, text: "WhatsApp-first support" },
-                      { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan-India execution support" },
+                      { icon: <Users style={{ width: 10, height: 10 }} />, text: "65+ Legal Experts" },
+                      { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan India Coverage" },
+                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "Dedicated Coordination" },
+                      { icon: <Handshake style={{ width: 10, height: 10 }} />, text: "Works With Existing Advisors" },
                     ].map(t => (
                       <div key={t.text} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
                         <span style={{ color: "var(--gold-dk)" }}>{t.icon}</span>
@@ -1552,7 +1840,6 @@ export default function HomePage() {
                       padding: "13px 22px", background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)",
                       display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
-                      {/* Updated per spec: removed "Available 24/7" */}
                       <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
                         One accountable team · WhatsApp first
                       </span>
@@ -1579,7 +1866,6 @@ export default function HomePage() {
                     <Shield style={{ width: 12, height: 12, color: "var(--gold)" }} />
                     Works with your existing CA/Lawyer
                   </div>
-                  {/* Removed unverifiable rating badge per spec */}
                   <div style={{
                     position: "absolute", top: -16, right: -16,
                     background: "var(--gold-pale)", border: "1px solid var(--gold)",
@@ -1628,21 +1914,21 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* ── Metrics Marquee (adjusted items per spec, removed unverifiable stats) ───────────────────────────────────── */}
+        {/* ── Metrics Marquee ───────────────────────────────────── */}
         <div style={{
           borderBottom: "1px solid var(--ink-7)", padding: "11px 0", overflow: "hidden",
           background: "linear-gradient(90deg, var(--ink-9) 0%, var(--white) 50%, var(--ink-9) 100%)",
         }}>
           <div className="mq-track">
             {[...Array(3)].flatMap(() => [
-              { val: "One team", text: "one accountable coordinator" },
+              { val: "65+", text: "legal experts in the network" },
               { val: "Fast", text: "NDA reviewed & ready" },
               { val: "WhatsApp", text: "first. Fast responses." },
               { val: "Pan India", text: "execution support" },
               { val: "Fixed price", text: "no hourly billing" },
               { val: "POSH", text: "compliance executed" },
-              { val: "Works with", text: "your existing CA & lawyer" },
-              { val: "Startup", text: "legal infrastructure partner" },
+              { val: "Works with", text: "your existing CA, CS & lawyer" },
+              { val: "One layer", text: "for compliance & legal ops" },
             ]).map((item, i) => (
               <span key={i} className="trust-pill">
                 <span style={{ fontFamily: "var(--serif)", fontSize: "13.5px", fontWeight: 600, color: "var(--gold-dk)" }}>{item.val}</span>
@@ -1654,9 +1940,9 @@ export default function HomePage() {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            PROBLEM SECTION (BLACK) Updated copy per spec. KEPT DESIGN.
+            SECTION 2 — THE PROBLEM ISN'T FINDING EXPERTS (BLACK) per spec
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="The problem with legal execution" className="section-pad" style={{ background: "var(--ink)", position: "relative", overflow: "hidden" }}>
+        <section aria-label="Why businesses struggle" className="section-pad" style={{ background: "var(--ink)", position: "relative", overflow: "hidden" }}>
           <div style={{
             position: "absolute", inset: 0,
             backgroundImage: "linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px)",
@@ -1664,142 +1950,67 @@ export default function HomePage() {
           }} />
           <div className="max-w" style={{ padding: "0 28px", position: "relative", zIndex: 1 }}>
             <Reveal>
-              <div style={{ textAlign: "center", marginBottom: 60 }}>
+              <div style={{ textAlign: "center", marginBottom: 52 }}>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
-                  <span className="eyebrow" style={{ color: "var(--gold)" }}>The real problem</span>
+                  <span className="eyebrow" style={{ color: "var(--gold)" }}>Why businesses struggle</span>
                 </div>
                 <h2 style={{
                   fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 52px)",
                   fontWeight: 600, letterSpacing: "-0.025em", color: "white", lineHeight: 1.1,
                 }}>
-                  The Problem Isn't Finding Lawyers.<br />
-                  <span className="gold-text" style={{ fontWeight: 300, fontStyle: "italic" }}>It's Getting Things Done.</span>
+                  The Problem Isn't Finding Experts.
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "rgba(255,255,255,0.55)", fontWeight: 300, marginTop: 20, maxWidth: 560, margin: "20px auto 0" }}>
-                  Most businesses already have a CA or lawyer. The real challenge is ensuring contracts, registrations, compliance, and documentation move forward efficiently without becoming another operational burden.
+                  Most businesses already have advisors. The challenge is coordinating everything efficiently.
                 </p>
               </div>
             </Reveal>
 
-            {/* Comparison: Why NyayMitra */}
-            <Reveal delay={80}>
-              <div className="problem-compare-grid">
-                {/* OTHERS */}
-                <div
-                  className="problem-card"
-                  style={{
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                >
-                  <div className="problem-card-label" style={{ color: "rgba(255,255,255,0.3)" }}>
-                    Others
-                  </div>
-
-                  <div className="problem-card-list">
-                    {[
-                      "Advice only",
-                      "Multiple contacts",
-                      "Founder follows up",
-                      "Reactive support",
-                      "Task completion unclear",
-                    ].map((item) => (
-                      <div key={item} className="problem-card-row">
-                        <XCircle
-                          style={{
-                            width: 14,
-                            height: 14,
-                            color: "#f87171",
-                            flexShrink: 0,
-                            marginTop: 2,
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontFamily: "var(--sans)",
-                            fontSize: "13px",
-                            lineHeight: 1.6,
-                            color: "rgba(255,255,255,0.45)",
-                            fontWeight: 300,
-                          }}
-                        >
-                          {item}
-                        </span>
+            {/* 4 pillar cards per spec */}
+            <Reveal delay={70}>
+              <div className="pillar-grid" style={{ marginBottom: 44 }}>
+                {[
+                  { icon: <Landmark style={{ width: 18, height: 18 }} />, title: "You Have A CA", desc: "Handling accounting and tax filings." },
+                  { icon: <Gavel style={{ width: 18, height: 18 }} />, title: "You Have A Lawyer", desc: "Available for advice when you reach out." },
+                  { icon: <Users style={{ width: 18, height: 18 }} />, title: "You Have Consultants", desc: "Helping with specific registrations." },
+                  { icon: <AlertCircle style={{ width: 18, height: 18 }} />, title: "You Still Manage Everything Manually", desc: "Chasing updates, tracking deadlines, chasing again.", isLast: true },
+                ].map(p => (
+                  <div key={p.title} className={`pillar-card${p.isLast ? " is-last" : ""}`}>
+                    <div style={{
+                      width: 38, height: 38, borderRadius: 10,
+                      background: p.isLast ? "rgba(201,168,76,0.15)" : "rgba(255,255,255,0.05)",
+                      border: `1px solid ${p.isLast ? "rgba(201,168,76,0.3)" : "rgba(255,255,255,0.08)"}`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: p.isLast ? "var(--gold)" : "rgba(255,255,255,0.5)",
+                    }}>
+                      {p.icon}
+                    </div>
+                    <div>
+                      <div style={{ fontFamily: "var(--serif)", fontSize: "16px", fontWeight: 600, color: p.isLast ? "var(--gold-lt)" : "white", lineHeight: 1.3, marginBottom: 6 }}>
+                        {p.title}
                       </div>
-                    ))}
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,0.45)", lineHeight: 1.6, fontWeight: 300 }}>
+                        {p.desc}
+                      </p>
+                    </div>
                   </div>
-                </div>
-
-                {/* NYAYMITRA */}
-                <div
-                  className="problem-card"
-                  style={{
-                    background: "rgba(201,168,76,0.07)",
-                    border: "1.5px solid rgba(201,168,76,0.4)",
-                    position: "relative",
-                    boxShadow: "0 0 40px rgba(201,168,76,0.08)",
-                  }}
-                >
-                  {/* Gold accent line */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      height: 2,
-                      background:
-                        "linear-gradient(90deg, var(--gold-dk), var(--gold), var(--gold-lt))",
-                      borderTopLeftRadius: "var(--radius-lg)",
-                      borderTopRightRadius: "var(--radius-lg)",
-                    }}
-                  />
-
-                  <div className="problem-card-label" style={{ color: "var(--gold)" }}>
-                    NyayMitra
-                  </div>
-
-                  <div className="problem-card-list">
-                    {[
-                      "Ownership of execution",
-                      "One dedicated coordinator",
-                      "We follow up proactively",
-                      "Execution, not just advice",
-                      "Accountability until closure",
-                    ].map((item) => (
-                      <div key={item} className="problem-card-row">
-                        <CheckCircle
-                          style={{
-                            width: 14,
-                            height: 14,
-                            color: "var(--gold)",
-                            flexShrink: 0,
-                            marginTop: 2,
-                          }}
-                        />
-                        <span
-                          style={{
-                            fontFamily: "var(--sans)",
-                            fontSize: "13px",
-                            lineHeight: 1.6,
-                            color: "rgba(255,255,255,0.88)",
-                            fontWeight: 500,
-                          }}
-                        >
-                          {item}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
             </Reveal>
 
-            <Reveal delay={100}>
+            <Reveal delay={110}>
+              <div style={{ textAlign: "center", maxWidth: 620, margin: "0 auto 36px" }}>
+                <p style={{ fontFamily: "var(--serif)", fontSize: "19px", fontStyle: "italic", fontWeight: 400, color: "var(--gold-lt)", lineHeight: 1.6 }}>
+                  NyayMitra brings compliance, contracts, documentation and legal workflows into one operational system.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={140}>
               <div style={{ textAlign: "center" }}>
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                   <Sparkles style={{ width: 14, height: 14, flexShrink: 0 }} />
-                  Talk to Legal Ops
+                  Book Free Assessment
                 </a>
               </div>
             </Reveal>
@@ -1807,122 +2018,48 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            FOUNDER INSIGHT CARD New section per spec
+            SECTION 3 — WHAT NYAYMITRA DOES (6 cards) per spec
         ═══════════════════════════════════════════════════════════════════════ */}
-        <div style={{ background: "var(--white)", borderBottom: "1px solid var(--ink-7)", padding: "40px 28px" }}>
-          <div style={{ maxWidth: 700, margin: "0 auto" }}>
-            <Reveal>
-              <div style={{
-                background: "var(--ink-9)",
-                border: "1.5px solid var(--gold)",
-                borderRadius: "var(--radius-lg)",
-                padding: "28px 32px",
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 20,
-              }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: "50%", flexShrink: 0,
-                  background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <Lightbulb style={{ width: 16, height: 16, color: "var(--gold)" }} />
-                </div>
-                <div>
-                  <p style={{ fontFamily: "var(--serif)", fontSize: "17px", fontStyle: "italic", fontWeight: 400, color: "var(--ink-2)", lineHeight: 1.65, marginBottom: 12 }}>
-                    "We realised businesses didn't need another lawyer directory.
-                    They needed someone to own execution."
-                  </p>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--gold-dk)", letterSpacing: "0.16em", textTransform: "uppercase" }}>
-                    Team NyayMitra
-                  </span>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-
-        {/* ═══════════════════════════════════════════════════════════════════════
-            BUSINESS SERVICES 3 cards only per spec
-        ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="How we support growing businesses" className="section-pad" style={{ background: "var(--white)" }}>
+        <section aria-label="What NyayMitra manages" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 56 }}>
                 <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
-                  <span className="eyebrow">For founders &amp; growing businesses</span>
+                  <span className="eyebrow">What we manage</span>
                 </div>
                 <h2 style={{
-                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 52px)",
-                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.1,
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
                 }}>
-                  How We Support Growing Businesses
+                  Everything Your Business Needs To Stay On Track
                 </h2>
               </div>
             </Reveal>
 
-            {/* SPEC: Only 3 cards */}
-            <div className="biz-services-grid">
+            <div className="ops-grid">
               {[
-                {
-                  icon: <Workflow style={{ width: 24, height: 24 }} />,
-                  title: "Startup Legal Ops",
-                  desc: "One team coordinating contracts, compliance, and execution. You stop chasing. We start delivering.",
-                  dark: true,
-                  href: "/startup-legal",
-                },
-                {
-                  icon: <ClipboardList style={{ width: 24, height: 24 }} />,
-                  title: "Compliance Coordination",
-                  desc: "Registrations and compliance managed across India POSH, FSSAI, MSME, multi-city execution.",
-                  dark: false,
-                  href: "/compliance",
-                },
-                {
-                  icon: <FileSignature style={{ width: 24, height: 24 }} />,
-                  title: "Founder & Investor Documentation",
-                  desc: "NDAs, founder agreements, and investor readiness support structured, reviewed, and delivered.",
-                  dark: false,
-                  href: "/startup-legal",
-                },
+                { icon: <ClipboardList style={{ width: 22, height: 22 }} />, title: "Compliance Tracking", desc: "Every filing, renewal, and deadline mapped and monitored so nothing slips through unnoticed." },
+                { icon: <FileSignature style={{ width: 22, height: 22 }} />, title: "Contract Management", desc: "NDAs, vendor agreements, and employment contracts drafted, reviewed, and tracked end to end." },
+                { icon: <Folder style={{ width: 22, height: 22 }} />, title: "Documentation Control", desc: "Corporate records, agreements, and filings organised in one place instead of scattered inboxes." },
+                { icon: <FileCheck style={{ width: 22, height: 22 }} />, title: "Registration Coordination", desc: "MSME, FSSAI, POSH, and Shop & Establishment registrations coordinated across states." },
+                { icon: <Headset style={{ width: 22, height: 22 }} />, title: "Advisor Follow-Ups", desc: "We chase your CA, CS, and lawyers on your behalf so you're not the one sending reminders." },
+                { icon: <AlarmClock style={{ width: 22, height: 22 }} />, title: "Deadline Monitoring", desc: "A live view of what's due, what's pending, and what needs attention before it becomes urgent." },
               ].map((card, i) => (
-                <Reveal key={card.title} delay={i * 80}>
-                  <div style={{
-                    background: card.dark ? "var(--ink)" : "var(--white)",
-                    border: `1px solid ${card.dark ? "transparent" : "var(--ink-7)"}`,
-                    borderRadius: "var(--radius-lg)",
-                    padding: "36px 32px",
-                    display: "flex", flexDirection: "column", gap: 20,
-                    height: "100%", position: "relative", overflow: "hidden",
-                    transition: "all 0.28s cubic-bezier(0.16,1,0.3,1)",
-                    cursor: "default",
-                  }}
-                    onMouseEnter={e => {
-                      const el = e.currentTarget as HTMLDivElement
-                      el.style.transform = "translateY(-4px)"
-                      el.style.boxShadow = "0 24px 64px rgba(12,11,9,0.1)"
-                    }}
-                    onMouseLeave={e => {
-                      const el = e.currentTarget as HTMLDivElement
-                      el.style.transform = ""
-                      el.style.boxShadow = ""
-                    }}>
-                    {card.dark && (
-                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%)", pointerEvents: "none" }} />
-                    )}
+                <Reveal key={card.title} delay={i * 60}>
+                  <div className="why-card" style={{ height: "100%" }}>
                     <div style={{
-                      width: 52, height: 52, borderRadius: 14, flexShrink: 0,
-                      background: card.dark ? "rgba(201,168,76,0.1)" : "var(--ink-9)",
-                      border: `1px solid ${card.dark ? "rgba(201,168,76,0.2)" : "var(--ink-7)"}`,
+                      width: 48, height: 48, borderRadius: 12,
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
                       display: "flex", alignItems: "center", justifyContent: "center",
-                      color: card.dark ? "var(--gold)" : "var(--gold-dk)",
+                      color: "var(--gold-dk)",
                     }}>
                       {card.icon}
                     </div>
                     <div>
-                      <h3 style={{ fontFamily: "var(--serif)", fontSize: "22px", fontWeight: 600, color: card.dark ? "white" : "var(--ink)", lineHeight: 1.25, letterSpacing: "-0.015em", marginBottom: 10 }}>
+                      <h3 style={{ fontFamily: "var(--serif)", fontSize: "19px", fontWeight: 600, color: "var(--ink)", marginBottom: 8, lineHeight: 1.3 }}>
                         {card.title}
                       </h3>
-                      <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: card.dark ? "rgba(255,255,255,0.55)" : "var(--ink-5)", lineHeight: 1.75, fontWeight: 300 }}>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "var(--ink-5)", lineHeight: 1.75, fontWeight: 300 }}>
                         {card.desc}
                       </p>
                     </div>
@@ -1930,49 +2067,414 @@ export default function HomePage() {
                 </Reveal>
               ))}
             </div>
+          </div>
+        </section>
 
-            <Reveal delay={120}>
-              <div style={{ textAlign: "center", marginTop: 44 }}>
-                <Link href="/startup-legal" className="btn btn-ink" style={{ textDecoration: "none" }}>
-                  Explore Startup Legal <ArrowRight style={{ width: 14, height: 14 }} />
-                </Link>
+        {/* ═══════════════════════════════════════════════════════════════════════
+            SECTION 4 — COMPLIANCE COMMAND CENTER (dashboard preview) per spec
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="Platform preview" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 48 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">Platform preview</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15, marginBottom: 14,
+                }}>
+                  Your Compliance Command Center
+                </h2>
+                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 560, margin: "0 auto" }}>
+                  Track compliance, contracts, registrations, documentation and legal workflows from one place.
+                </p>
               </div>
+            </Reveal>
+
+            <div className="dash-shell">
+              {/* Sidebar */}
+              <div className="dash-sidebar">
+                <div style={{ display: "flex", alignItems: "center", gap: 9, padding: "8px 12px 18px" }}>
+                  <Scale style={{ width: 14, height: 14, color: "var(--gold)" }} />
+                  <span style={{ fontFamily: "var(--serif)", fontSize: "14px", fontWeight: 600, color: "white" }}>NyayMitra</span>
+                </div>
+                {[
+                  { icon: <LayoutDashboard style={{ width: 13, height: 13 }} />, label: "Overview", active: true },
+                  { icon: <ClipboardList style={{ width: 13, height: 13 }} />, label: "Compliance" },
+                  { icon: <FileSignature style={{ width: 13, height: 13 }} />, label: "Contracts" },
+                  { icon: <Folder style={{ width: 13, height: 13 }} />, label: "Documents" },
+                  { icon: <Users style={{ width: 13, height: 13 }} />, label: "Advisors" },
+                ].map(item => (
+                  <div key={item.label} className={`dash-nav-item${item.active ? " active" : ""}`}>
+                    {item.icon}
+                    {item.label}
+                  </div>
+                ))}
+              </div>
+
+              {/* Main panel */}
+              <div style={{ padding: "20px 22px 26px", display: "flex", flexDirection: "column", gap: 18, minWidth: 0 }}>
+                {/* Top bar: search + notification */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+                  <div style={{
+                    display: "flex", alignItems: "center", gap: 9,
+                    background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                    borderRadius: 8, padding: "9px 14px", flex: 1, minWidth: 160, maxWidth: 320,
+                  }}>
+                    <Search style={{ width: 13, height: 13, color: "rgba(255,255,255,0.3)" }} />
+                    <span style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.3)" }}>Search compliance, contracts...</span>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <div style={{
+                      width: 34, height: 34, borderRadius: "50%", position: "relative",
+                      background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <Bell style={{ width: 13, height: 13, color: "rgba(255,255,255,0.5)" }} />
+                      <span style={{ position: "absolute", top: 6, right: 7, width: 6, height: 6, borderRadius: "50%", background: "var(--gold)" }} />
+                    </div>
+                    <div style={{
+                      width: 34, height: 34, borderRadius: "50%",
+                      background: "var(--gold-pale)", display: "flex", alignItems: "center", justifyContent: "center",
+                    }}>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: "10px", fontWeight: 700, color: "var(--gold-dk)" }}>NM</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Row 1: top metrics */}
+                <div className="dash-metrics-grid">
+                  {[
+                    { label: "Compliance Health Score", value: "92%", icon: <ShieldCheck style={{ width: 14, height: 14 }} />, trend: "up" },
+                    { label: "Active Contracts", value: "24", icon: <FileSignature style={{ width: 14, height: 14 }} /> },
+                    { label: "Pending Tasks", value: "7", icon: <AlarmClock style={{ width: 14, height: 14 }} /> },
+                    { label: "Upcoming Deadlines", value: "12", icon: <Clock style={{ width: 14, height: 14 }} /> },
+                    { label: "Recent Documents", value: "156", icon: <Folder style={{ width: 14, height: 14 }} /> },
+                  ].map(m => (
+                    <div key={m.label} className="dash-metric-card">
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ color: "var(--gold)" }}>{m.icon}</span>
+                        {m.trend === "up" && <TrendingUp style={{ width: 11, height: 11, color: "#4ade80" }} />}
+                      </div>
+                      <div style={{ fontFamily: "var(--serif)", fontSize: "26px", fontWeight: 600, color: "white", lineHeight: 1 }}>
+                        {m.value}
+                      </div>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: "10px", color: "rgba(255,255,255,0.4)", fontWeight: 400 }}>
+                        {m.label}
+                      </div>
+                      {m.label === "Compliance Health Score" && (
+                        <div className="dash-progress-track" style={{ marginTop: 2 }}>
+                          <div className="dash-progress-fill" style={{ width: "92%" }} />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Row 2 & 3: Compliance Timeline + Contract Management */}
+                <div className="dash-panels-grid">
+                  <div className="dash-panel">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                      <span style={{ fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 600, color: "white" }}>Compliance Timeline</span>
+                      <ClipboardList style={{ width: 13, height: 13, color: "var(--gold)" }} />
+                    </div>
+                    {[
+                      { name: "GST Filing", status: "Completed", color: "#4ade80", bg: "rgba(74,222,128,0.12)" },
+                      { name: "MSME Renewal", status: "Due in 7 Days", color: "#facc15", bg: "rgba(250,204,21,0.12)" },
+                      { name: "FSSAI Renewal", status: "Due in 18 Days", color: "var(--gold-lt)", bg: "rgba(201,168,76,0.12)" },
+                      { name: "POSH Filing", status: "Completed", color: "#4ade80", bg: "rgba(74,222,128,0.12)" },
+                    ].map(row => (
+                      <div key={row.name} className="dash-row">
+                        <span style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.65)" }}>{row.name}</span>
+                        <span className="dash-status-badge" style={{ color: row.color, background: row.bg }}>{row.status}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="dash-panel">
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+                      <span style={{ fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 600, color: "white" }}>Contract Management</span>
+                      <FileSignature style={{ width: 13, height: 13, color: "var(--gold)" }} />
+                    </div>
+                    {[
+                      { name: "Vendor Agreement", status: "Review Pending", color: "#facc15", bg: "rgba(250,204,21,0.12)" },
+                      { name: "Employment Contract", status: "Approved", color: "#4ade80", bg: "rgba(74,222,128,0.12)" },
+                      { name: "NDA", status: "Completed", color: "#4ade80", bg: "rgba(74,222,128,0.12)" },
+                    ].map(row => (
+                      <div key={row.name} className="dash-row">
+                        <span style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "rgba(255,255,255,0.65)" }}>{row.name}</span>
+                        <span className="dash-status-badge" style={{ color: row.color, background: row.bg }}>{row.status}</span>
+                      </div>
+                    ))}
+                    <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: "12.5px", fontWeight: 600, color: "white", marginBottom: 10, display: "flex", alignItems: "center", gap: 7 }}>
+                        <ArrowUpRight style={{ width: 12, height: 12, color: "var(--gold)" }} />
+                        Recent Activities
+                      </div>
+                      {[
+                        { text: "Contract Uploaded", icon: <FilePlus style={{ width: 11, height: 11 }} /> },
+                        { text: "Compliance Reminder Sent", icon: <Bell style={{ width: 11, height: 11 }} /> },
+                        { text: "Registration Submitted", icon: <FileCheck style={{ width: 11, height: 11 }} /> },
+                        { text: "Document Approved", icon: <FolderCheck style={{ width: 11, height: 11 }} /> },
+                      ].map(act => (
+                        <div key={act.text} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0" }}>
+                          <span style={{ color: "var(--gold-dk)" }}>{act.icon}</span>
+                          <span style={{ fontFamily: "var(--sans)", fontSize: "10.5px", color: "rgba(255,255,255,0.45)" }}>{act.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            SECTION 5 — HOW NYAYMITRA WORKS (vertical ladder) per spec
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="How NyayMitra works" className="section-pad" style={{ background: "var(--white)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 56 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">How it works</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  Your Legal Operations Team
+                </h2>
+              </div>
+            </Reveal>
+
+            <Reveal delay={60}>
+              <div className="workflow-ladder">
+                {[
+                  { label: "Business Owner", icon: <Briefcase style={{ width: 16, height: 16 }} />, accent: false },
+                  { label: "NyayMitra", icon: <Scale style={{ width: 16, height: 16 }} />, accent: true },
+                  { label: "CA · CS · Lawyer", icon: <Users style={{ width: 16, height: 16 }} />, accent: false },
+                  { label: "Execution Completed", icon: <CheckCircle style={{ width: 16, height: 16 }} />, accent: false },
+                ].map((step, i, arr) => (
+                  <div key={step.label} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                    <div className={`workflow-ladder-item${step.accent ? " is-accent" : ""}`}>
+                      <span style={{ color: step.accent ? "var(--gold)" : "var(--gold-dk)" }}>{step.icon}</span>
+                      <span style={{
+                        fontFamily: "var(--sans)", fontSize: "14px", fontWeight: 600,
+                        color: step.accent ? "white" : "var(--ink)",
+                      }}>
+                        {step.label}
+                      </span>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="workflow-ladder-arrow">
+                        <ChevronDown style={{ width: 18, height: 18 }} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+
+            <Reveal delay={100}>
+              <p style={{
+                fontFamily: "var(--sans)", fontSize: "14.5px", color: "var(--ink-5)",
+                lineHeight: 1.9, maxWidth: 600, margin: "40px auto 0", textAlign: "center", fontWeight: 300,
+              }}>
+                Most businesses already have legal and compliance professionals. NyayMitra acts as the coordination layer that ensures work gets completed, tracked and managed efficiently.
+              </p>
             </Reveal>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            B2C SECTION Lighter treatment per spec
+            SECTION 6 — WHY BUSINESSES CHOOSE NYAYMITRA (4 cards) per spec
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Personal legal help" className="section-pad b2c-section" style={{ borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+        <section aria-label="Why businesses choose NyayMitra" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
-              <div style={{ marginBottom: 40 }}>
-                <div style={{ marginBottom: 16 }}>
+              <div style={{ textAlign: "center", marginBottom: 52 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">Why NyayMitra</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  Why Businesses Choose NyayMitra
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="why-grid">
+              {[
+                { icon: <Landmark style={{ width: 20, height: 20 }} />, title: "We Don't Replace Your CA", desc: "Your CA continues handling accounting and tax. We coordinate around them." },
+                { icon: <Gavel style={{ width: 20, height: 20 }} />, title: "We Don't Replace Your Lawyer", desc: "Your lawyer continues advising on matters. We track and follow through." },
+                { icon: <Network style={{ width: 20, height: 20 }} />, title: "We Coordinate Everything", desc: "One dedicated point of contact across every advisor and workflow." },
+                { icon: <ShieldCheck style={{ width: 20, height: 20 }} />, title: "We Ensure Execution", desc: "Tasks are tracked until closure, not just assigned and forgotten." },
+              ].map((card, i) => (
+                <Reveal key={card.title} delay={i * 60}>
+                  <div className="why-card" style={{ height: "100%" }}>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: 11,
+                      background: "var(--white)", border: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--gold-dk)",
+                    }}>
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h3 style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "var(--ink)", marginBottom: 7, lineHeight: 1.3 }}>
+                        {card.title}
+                      </h3>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.7, fontWeight: 300 }}>
+                        {card.desc}
+                      </p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            SECTION 7 — WHO WE SERVE (8 cards, startups last) per spec
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="Who we serve" className="section-pad" style={{ background: "var(--white)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 52 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">Who we serve</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  Built For Growing Businesses
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="served-grid">
+              {[
+                { icon: <Store style={{ width: 20, height: 20 }} />, label: "MSMEs" },
+                { icon: <Factory style={{ width: 20, height: 20 }} />, label: "Manufacturing" },
+                { icon: <Sparkles style={{ width: 20, height: 20 }} />, label: "D2C Brands" },
+                { icon: <Megaphone style={{ width: 20, height: 20 }} />, label: "Agencies" },
+                { icon: <Cpu style={{ width: 20, height: 20 }} />, label: "IT Companies" },
+                { icon: <Stethoscope style={{ width: 20, height: 20 }} />, label: "Healthcare" },
+                { icon: <Briefcase style={{ width: 20, height: 20 }} />, label: "Professional Firms" },
+                { icon: <Lightbulb style={{ width: 20, height: 20 }} />, label: "Startups" },
+              ].map((item, i) => (
+                <Reveal key={item.label} delay={i * 40}>
+                  <div className="audience-card" style={{ padding: "26px 20px", alignItems: "center", textAlign: "center", gap: 14 }}>
+                    <div style={{
+                      width: 46, height: 46, borderRadius: 12,
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--gold-dk)",
+                    }}>
+                      {item.icon}
+                    </div>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: "15.5px", fontWeight: 600, color: "var(--ink)" }}>
+                      {item.label}
+                    </span>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            SECTION 8 — EXPLORE SOLUTIONS (navigation hub) per spec
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="Explore solutions" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 48 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">Explore</span>
+                </div>
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  Explore Solutions
+                </h2>
+              </div>
+            </Reveal>
+
+            <div className="solutions-grid">
+              {[
+                { icon: <ClipboardList style={{ width: 22, height: 22 }} />, title: "Compliance Services", desc: "Registrations, renewals, and filings coordinated end to end.", href: "/compliance" },
+                { icon: <Workflow style={{ width: 22, height: 22 }} />, title: "Startup Legal", desc: "Founder documents, contracts, and compliance for early-stage teams.", href: "/startup-legal" },
+                { icon: <Scale style={{ width: 22, height: 22 }} />, title: "Find Lawyers", desc: "Verified advocates across India for personal and business matters.", href: "/lawyers" },
+                { icon: <Bot style={{ width: 22, height: 22 }} />, title: "Legal AI", desc: "Plain-language answers to legal and compliance questions.", href: "/legal-ai" },
+              ].map((card, i) => (
+                <Reveal key={card.title} delay={i * 60}>
+                  <Link href={card.href} className="action-card" style={{ height: "100%" }}>
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 12,
+                      background: "var(--white)", border: "1px solid var(--ink-7)",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      color: "var(--gold-dk)",
+                    }}>
+                      {card.icon}
+                    </div>
+                    <div>
+                      <h3 style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "var(--ink)", marginBottom: 7, lineHeight: 1.3 }}>
+                        {card.title}
+                      </h3>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.7, fontWeight: 300 }}>
+                        {card.desc}
+                      </p>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", color: "var(--gold-dk)", fontFamily: "var(--sans)", fontSize: "12px", fontWeight: 600 }}>
+                      Explore <ArrowRight style={{ width: 12, height: 12 }} />
+                    </div>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            SECTION 9 — INDIVIDUAL LEGAL SERVICES (kept, smaller) per spec
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="Personal legal help" className="section-pad b2c-section" style={{ borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)", paddingTop: 72, paddingBottom: 72 }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ marginBottom: 32 }}>
+                <div style={{ marginBottom: 14 }}>
                   <span className="eyebrow">Personal legal help</span>
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20 }}>
-                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px, 3.5vw, 44px)", fontWeight: 600, letterSpacing: "-0.022em", color: "var(--ink)", lineHeight: 1.2 }}>
-                    Need Help With a Personal Legal Matter?
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 18 }}>
+                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, letterSpacing: "-0.02em", color: "var(--ink)", lineHeight: 1.25 }}>
+                    Legal Help For Individuals
                   </h2>
-                  <p style={{ fontFamily: "var(--sans)", fontSize: "13.5px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 320, lineHeight: 1.75 }}>
-                    Connect with verified lawyers across India.
+                  <p style={{ fontFamily: "var(--sans)", fontSize: "13px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 320, lineHeight: 1.75 }}>
+                    Need help with affidavits, notices, notary services or personal legal matters? NyayMitra can help.
                   </p>
                 </div>
               </div>
             </Reveal>
 
-            {/* SPEC: 3 cards Find a Lawyer, Legal AI Guidance, Book Consultation */}
             <Reveal delay={50}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 40 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14, marginBottom: 32 }}>
                 {[
-                  { icon: <Scale style={{ width: 20, height: 20 }} />, label: "Find a Lawyer", desc: "Verified advocates across India.", href: "/lawyers" },
-                  { icon: <Bot style={{ width: 20, height: 20 }} />, label: "Legal AI Guidance", desc: "AI-powered answers in plain language.", href: "/legal-ai" },
-                  { icon: <CalendarCheck style={{ width: 20, height: 20 }} />, label: "Book Consultation", desc: "Speak to an expert in 30 minutes.", href: "/lawyers" },
+                  { icon: <Scale style={{ width: 18, height: 18 }} />, label: "Find a Lawyer", desc: "Verified advocates across India.", href: "/lawyers" },
+                  { icon: <Bot style={{ width: 18, height: 18 }} />, label: "Legal AI Guidance", desc: "AI-powered answers in plain language.", href: "/legal-ai" },
+                  { icon: <CalendarCheck style={{ width: 18, height: 18 }} />, label: "Book Consultation", desc: "Speak to an expert in 30 minutes.", href: "/lawyers" },
                 ].map(card => (
                   <Link key={card.label} href={card.href} style={{
-                    display: "flex", flexDirection: "column", gap: 12,
-                    padding: "24px 22px",
+                    display: "flex", flexDirection: "column", gap: 10,
+                    padding: "20px 20px",
                     background: "var(--ink-9)",
                     border: "1px solid var(--ink-7)",
                     borderRadius: "var(--radius-lg)",
@@ -1991,22 +2493,21 @@ export default function HomePage() {
                       el.style.borderColor = "var(--ink-7)"
                       el.style.boxShadow = ""
                     }}>
-                    <div style={{ width: 44, height: 44, borderRadius: 12, background: "var(--white)", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold-dk)" }}>
+                    <div style={{ width: 38, height: 38, borderRadius: 10, background: "var(--white)", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold-dk)" }}>
                       {card.icon}
                     </div>
                     <div>
-                      <div style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "var(--ink)", marginBottom: 4 }}>{card.label}</div>
-                      <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.6, fontWeight: 300 }}>{card.desc}</p>
+                      <div style={{ fontFamily: "var(--serif)", fontSize: "15.5px", fontWeight: 600, color: "var(--ink)", marginBottom: 3 }}>{card.label}</div>
+                      <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.6, fontWeight: 300 }}>{card.desc}</p>
                     </div>
                   </Link>
                 ))}
               </div>
             </Reveal>
 
-            {/* Issues picker */}
             <Reveal delay={80}>
-              <div style={{ padding: "24px 28px", border: "1px solid var(--ink-7)", borderRadius: "var(--radius-xl)", background: "var(--ink-9)" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
+              <div style={{ padding: "20px 24px", border: "1px solid var(--ink-7)", borderRadius: "var(--radius-xl)", background: "var(--ink-9)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.18em", textTransform: "uppercase" }}>Select your issue → get WhatsApp guidance</span>
                   <div style={{ flex: 1, height: 1, background: "var(--ink-7)" }} />
                 </div>
@@ -2026,7 +2527,7 @@ export default function HomePage() {
             </Reveal>
 
             <Reveal delay={100}>
-              <div style={{ textAlign: "center", marginTop: 36 }}>
+              <div style={{ textAlign: "center", marginTop: 30 }}>
                 <Link href="/lawyers" className="btn btn-ghost" style={{ textDecoration: "none" }}>
                   Get Legal Help →
                 </Link>
@@ -2036,79 +2537,47 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            EXECUTION PROOF Replaces testimonials per spec
+            SECTION 10 — SOCIAL PROOF (animated counters) per spec
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Execution proof" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+        <section aria-label="Social proof" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 52 }}>
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-                  <span className="eyebrow">Execution over promises</span>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}>
+                  <span className="eyebrow">Built on real conversations</span>
                 </div>
-                <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(26px, 3.8vw, 48px)", fontWeight: 600, letterSpacing: "-0.022em", color: "var(--ink)", marginBottom: 10 }}>
-                  Execution Over Promises.
+                <h2 style={{
+                  fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
+                  fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
+                }}>
+                  Built Around Real Business Problems
                 </h2>
-                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 500, margin: "0 auto" }}>
-                  Representative examples of outcomes coordinated through NyayMitra.
-                </p>
               </div>
             </Reveal>
 
-            {/* SPEC: 4 outcome cards */}
-            <div className="proof-grid">
-              {[
-                {
-                  headline: "Multi state registrations coordinated",
-                  outcome: "Documentation completed smoothly across jurisdictions.",
-                  icon: <Globe style={{ width: 18, height: 18 }} />,
-                },
-                {
-                  headline: "Legal notice responses coordinated",
-                  outcome: "Reduced panic and faster action.",
-                  icon: <FileWarning style={{ width: 18, height: 18 }} />,
-                },
-                {
-                  headline: "Founder agreements structured early",
-                  outcome: "Prevented future disputes and confusion.",
-                  icon: <FileSignature style={{ width: 18, height: 18 }} />,
-                },
-                {
-                  headline: "Contracts reviewed before signing",
-                  outcome: "Potential risks identified before execution.",
-                  icon: <ShieldCheck style={{ width: 18, height: 18 }} />,
-                },
-              ].map((item, i) => (
-                <Reveal key={item.headline} delay={i * 70}>
-                  <div className="outcome-card" style={{ height: "100%" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 40, height: 40, borderRadius: 10, background: "var(--white)", border: "1px solid var(--ink-7)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold-dk)", flexShrink: 0 }}>
-                        {item.icon}
-                      </div>
-                      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                        <CheckCircle style={{ width: 13, height: 13, color: "var(--green)" }} />
-                        <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--green)", letterSpacing: "0.12em", fontWeight: 500 }}>COORDINATED</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div style={{ fontFamily: "var(--serif)", fontSize: "17px", fontWeight: 600, color: "var(--ink)", lineHeight: 1.3, marginBottom: 8 }}>
-                        {item.headline}
-                      </div>
-                      <div style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
-                        <ArrowRight style={{ width: 12, height: 12, color: "var(--gold-dk)", flexShrink: 0, marginTop: 3 }} />
-                        <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "var(--ink-4)", lineHeight: 1.65, fontWeight: 300 }}>
-                          <strong>Outcome:</strong> {item.outcome}
-                        </p>
-                      </div>
-                    </div>
+            <Reveal delay={60}>
+              <div className="stat-counter-grid">
+                <StatCounter end={100} suffix="+" label="Founder & Business Conversations" />
+                <StatCounter end={65} suffix="+" label="Legal Experts" />
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
+                    <span className="gold-text">Pan India</span>
                   </div>
-                </Reveal>
-              ))}
-            </div>
-
-            <Reveal delay={120}>
-              <p style={{ textAlign: "center", marginTop: 32, fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", fontStyle: "italic" }}>
-                Representative examples based on legal operations scenarios handled through the NyayMitra network.
-              </p>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5 }}>Coverage</p>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
+                    <span className="gold-text">Dedicated</span>
+                  </div>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5 }}>Coordination Layer</p>
+                </div>
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
+                    <span className="gold-text">Growing</span>
+                  </div>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5 }}>Compliance Infrastructure</p>
+                </div>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -2116,7 +2585,7 @@ export default function HomePage() {
         {/* ═══════════════════════════════════════════════════════════════════════
             FAQ Updated, trimmed, bolded, accordions per spec
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Frequently asked questions" className="section-pad" style={{ background: "var(--white)", borderTop: "1px solid var(--ink-7)" }}>
+        <section aria-label="Frequently asked questions" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)" }}>
           <div style={{ maxWidth: 780, margin: "0 auto", padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 56 }}>
@@ -2154,19 +2623,19 @@ export default function HomePage() {
                   Stop chasing. Start building.
                 </span>
               </div>
-              <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(32px, 5.5vw, 60px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.028em", lineHeight: 1.2, marginBottom: 18 }}>
-                Focus on Building Your Business.<br />
+              <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(32px, 5.5vw, 58px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.028em", lineHeight: 1.2, marginBottom: 18 }}>
+                Stop Chasing Compliance.<br />
                 <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.4, paddingTop: "0.1rem" }}>
-                  We'll Handle the Legal Coordination Behind the Scenes.
+                  Focus On Growth.
                 </span>
               </h2>
               <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.9, maxWidth: 520, margin: "0 auto 40px", fontWeight: 300 }}>
-                GAccess compliance, contracts, and legal coordination expertise without the cost of building an in house team.
+                NyayMitra helps businesses manage compliance, contracts and legal operations while they focus on running the business.
               </p>
               <div className="cta-row">
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 10 }}>
                   <Sparkles style={{ width: 14, height: 14 }} />
-                  Talk to Legal Ops
+                  Book Free Assessment
                 </a>
                 <a href={waGeneral} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                   <WaSvg size={14} />
@@ -2265,7 +2734,6 @@ export default function HomePage() {
                     { href: "/cancellation", label: "Cancellation & Refund" },
                     { href: "/Shipping&DeliveryPolicy", label: "Shipping & Delivery" },
                     { href: "/contact", label: "Contact Us" },
-                    // { href: "/blog", label: "Blog" },
                   ].map(l => (
                     <li key={l.href} style={{ marginBottom: 10 }}>
                       <Link href={l.href} style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "rgba(255,255,255,0.35)", textDecoration: "none", transition: "color 0.18s", fontWeight: 300 }}
@@ -2297,7 +2765,7 @@ export default function HomePage() {
                     onMouseEnter={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = "translateY(-1px)"; a.style.boxShadow = "0 8px 24px rgba(201,168,76,0.3)" }}
                     onMouseLeave={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = ""; a.style.boxShadow = "" }}>
                     <WaSvg size={13} />
-                    Talk to Legal Ops
+                    Book Free Assessment
                   </a>
                 </div>
               </div>
