@@ -6,85 +6,65 @@ import {
     ArrowRight, ChevronDown, Zap, Plus, Minus,
     CheckCircle2, AlertTriangle, X, ArrowUpRight,
     Globe, FileText, Network, BarChart3, Users,
-    BadgeCheck, ChevronRight, Shield, Clock, TrendingUp, Building
+    BadgeCheck, ChevronRight, Shield, Clock, TrendingUp, Building,
+    Bell, RefreshCw, Eye, Activity, CheckCheck, AlertCircle,
+    Upload, Calendar, Briefcase
 } from "lucide-react";
 
 const WA_TEAM = `https://wa.me/917970596183?text=${encodeURIComponent("Hi NyayMitra! I'd like to discuss compliance for my business.")}`;
 const WA_ASSESS = `https://wa.me/917970596183?text=${encodeURIComponent("Hi NyayMitra! I'd like to check my compliance status.")}`;
 
-const SERVICES = [
+const SERVICES_GROUPED = [
     {
-        name: "Shop & Establishment Registration",
-        price: "Starting from ₹9,999",
-        icon: "🏢"
+        category: "Business Setup",
+        icon: "🏢",
+        items: [
+            { name: "GST Registration", desc: "End-to-end GST registration and ongoing filing coordination" },
+            { name: "MSME Registration", desc: "Udyam registration with documentation and verification support" },
+            { name: "Shop & Establishment", desc: "State-specific registration executed across all operating cities" },
+            { name: "Company Incorporation", desc: "Incorporation support with documentation and MCA coordination" },
+        ]
     },
     {
-        name: "Startup Compliance Support",
-        price: "Starting from ₹14,999",
-        icon: "🚀"
+        category: "Workforce Compliance",
+        icon: "👥",
+        items: [
+            { name: "POSH Policy & ICC Setup", desc: "Policy creation, ICC formation, and periodic review coordination" },
+            { name: "Labour Law Compliance", desc: "Factory Act, Shops Act, and statutory labour filings" },
+            { name: "Employment Documentation", desc: "Offer letters, employment agreements, HR policy framework" },
+        ]
     },
     {
-        name: "GST & MSME Coordination",
-        price: "Starting from ₹7,499",
-        icon: "📊"
+        category: "Licenses & Certifications",
+        icon: "📋",
+        items: [
+            { name: "FSSAI License Management", desc: "New license, renewals, and modifications for food businesses" },
+            { name: "BIS Certification", desc: "End-to-end BIS coordination for products requiring certification" },
+            { name: "Trade Licenses", desc: "Municipal and state-level trade license execution" },
+        ]
     },
     {
-        name: "Trademark & IP Coordination",
-        price: "Starting from ₹14,999",
-        icon: "™️"
+        category: "Legal Documentation",
+        icon: "📝",
+        items: [
+            { name: "Vendor & Supplier Agreements", desc: "Contracts that protect your business relationships" },
+            { name: "Employment Contracts", desc: "Role-specific agreements with IP and confidentiality clauses" },
+            { name: "NDAs & Service Agreements", desc: "Standardised documentation workflows for your business" },
+            { name: "Trademark & IP Coordination", desc: "Filing, follow-up, and status tracking with IP professionals" },
+        ]
     },
-    {
-        name: "Legal Documentation Workflows",
-        price: "Starting from ₹9,999",
-        icon: "📋"
-    },
-    {
-        name: "Vendor & Employment Agreements",
-        price: "Starting from ₹7,999",
-        icon: "🤝"
-    },
-    {
-        name: "Multi City Compliance Execution",
-        price: "Starting from ₹24,999",
-        icon: "🗺️"
-    },
-    {
-        name: "Operational Legal Support",
-        price: "Starting from ₹19,999",
-        icon: "⚖️"
-    },
-    {
-        name: "FSSAI License Management",
-        price: "Starting from ₹9,999",
-        icon: "🍽️"
-    },
-    {
-        name: "BIS Certification Coordination",
-        price: "Starting from ₹24,999",
-        icon: "✅"
-    },
-    {
-        name: "POSH Policy & ICC Setup",
-        price: "Starting from ₹14,999",
-        icon: "👥"
-    },
-    {
-        name: "Factory Act & Labour Compliance",
-        price: "Starting from ₹19,999",
-        icon: "⚙️"
-    }
 ];
 
 const STEPS = [
     { num: "01", title: "Understanding Your Business", desc: "We start by understanding your business structure, team size, operating cities, and industry. This helps us map every compliance obligation that applies to you not a generic checklist.", tags: ["Business Structure", "City Mapping", "Obligation Audit"] },
     { num: "02", title: "Collecting Your Documents", desc: "We tell you exactly what documents are needed and guide you through collection. No back-and-forth confusion just a clear list of what we need from you to get started.", tags: ["Doc Collection", "Verification", "Clear Checklists"] },
     { num: "03", title: "Connecting the Right Experts", desc: "Based on your compliance needs, we connect you with the right professional a CA, CS, lawyer, or specialist. You don't have to find them. We route your work to the right person.", tags: ["CA / CS Routing", "Legal Specialists", "Expert Allocation"] },
-    { num: "04", title: "Handling the Filing & Registration", desc: "We coordinate submissions with government bodies, follow up on approvals, and track progress across every city. You stay informed without having to chase anyone.", tags: ["Government Filing", "Status Tracking", "Multi city Execution"] },
+    { num: "04", title: "Handling the Filing & Registration", desc: "We coordinate submissions with government bodies, follow up on approvals, and track progress across every city. You stay informed without having to chase anyone.", tags: ["Government Filing", "Status Tracking", "Multi-city Execution"] },
     { num: "05", title: "Staying Compliant Long-Term", desc: "Once initial compliance is in place, we track renewals, alert you before deadlines, and handle updates as regulations or your business changes. Compliance doesn't stop at registration.", tags: ["Renewal Alerts", "Regulatory Updates", "Long-term Support"] },
 ];
 
 const DIFFERENTIATORS = [
-    { icon: <Globe size={18} />, title: "Multi city Compliance Support", desc: "Growing across cities means different registrations, different state rules, and different timelines. We coordinate compliance across Bangalore, Mumbai, Delhi, and beyond from a single point of contact." },
+    { icon: <Globe size={18} />, title: "Multi-city Compliance Support", desc: "Growing across cities means different registrations, different state rules, and different timelines. We coordinate compliance across Bangalore, Mumbai, Delhi, and beyond from a single point of contact." },
     { icon: <FileText size={18} />, title: "Documentation Management", desc: "We collect, verify, organise, and manage every document your compliance requires. No chasing emails, no lost files a structured process from start to approval." },
     { icon: <Network size={18} />, title: "Access to the Right Professionals", desc: "Our network includes chartered accountants, company secretaries, and lawyers. We match your compliance need to the right professional and coordinate the work on your behalf." },
     { icon: <BarChart3 size={18} />, title: "Registration Execution", desc: "We handle government portal submissions, follow up on pending approvals, and communicate status updates. You focus on your business while we get the registrations done." },
@@ -97,7 +77,7 @@ const AUDIENCES = [
     { title: "MSMEs", icon: "🏭", desc: "Stop spending time on labour law, factory registrations, and licensing. We manage the compliance so you can focus on production and growth." },
     { title: "D2C Brands", icon: "📦", desc: "Protect your brand name, stay GST compliant, and ensure your vendor and marketplace agreements are in order without needing an in-house legal team." },
     { title: "Agencies", icon: "💼", desc: "Employment agreements, POSH compliance, vendor onboarding the documentation that keeps your team and client relationships legally sound." },
-    { title: "Multi city Businesses", icon: "🗺️", desc: "Opening offices or operations in new cities? We handle state specific registrations and compliance requirements so expansion doesn't become a compliance headache." },
+    { title: "Multi-city Businesses", icon: "🗺️", desc: "Opening offices or operations in new cities? We handle state-specific registrations and compliance requirements so expansion doesn't become a compliance headache." },
     { title: "Manufacturing", icon: "⚙️", desc: "Factory act, BIS certifications, FSSAI, pollution clearances complex licensing managed end to end so production doesn't get held up." },
 ];
 
@@ -129,7 +109,7 @@ const COMPLIANCE_GAPS = [
 
 const TRUST_POINTS = [
     { icon: <Globe size={14} />, label: "PAN India Support" },
-    { icon: <BadgeCheck size={14} />, label: "Multi city Compliance Expertise" },
+    { icon: <BadgeCheck size={14} />, label: "Multi-city Compliance Expertise" },
     { icon: <TrendingUp size={14} />, label: "Startup Friendly" },
     { icon: <Users size={14} />, label: "Dedicated Compliance Coordination" },
     { icon: <Network size={14} />, label: "Verified Professional Network" },
@@ -138,27 +118,51 @@ const TRUST_POINTS = [
 
 const ONGOING_SUPPORT = [
     { icon: "🔔", title: "Renewal Tracking", desc: "We monitor every renewal date across your registrations and alert you well before deadlines so nothing lapses while you're focused on the business." },
-    { icon: "📋", title: "Registration Updates", desc: "When your business changes new city, new employees, new product we update registrations to reflect the current reality of your operations." },
-    { icon: "🔍", title: "Compliance Reviews", desc: "Periodic reviews to check whether new regulations apply to your business and whether existing compliance needs updating." },
-    { icon: "⚖️", title: "Labour Law Coordination", desc: "Labour law requirements evolve. We keep your employment documentation, POSH setup, and statutory filings current as rules change." },
-    { icon: "🗂", title: "Documentation Updates", desc: "Contracts, agreements, and policies that were created at incorporation often need updating as the business grows. We manage that lifecycle." },
+    { icon: "📅", title: "Compliance Calendar", desc: "A structured calendar of all your compliance deadlines filings, renewals, reviews so you always know what's coming up without having to track it yourself." },
     { icon: "📡", title: "Regulatory Alerts", desc: "New rules, amended regulations, or government notifications that affect your business we flag them and advise on what action is needed." },
+    { icon: "🗂", title: "Documentation Updates", desc: "Contracts, agreements, and policies that were created at incorporation often need updating as the business grows. We manage that lifecycle." },
+    { icon: "🔍", title: "Periodic Compliance Reviews", desc: "Periodic reviews to check whether new regulations apply to your business and whether existing compliance needs updating." },
+    { icon: "🗺️", title: "Multi-City Compliance Monitoring", desc: "Operations across states means multiple registrations to track. We monitor all of them from a single coordination point so nothing slips through." },
 ];
 
 const FAQS = [
-    { q: "What compliances apply to my business?", a: "The compliances that apply depend on your business type, industry, team size, and operating cities. A food business needs FSSAI. A company with 10+ employees needs POSH. A business in multiple states needs state specific Shop & Establishment registrations. NyayMitra starts every engagement with a compliance mapping exercise to identify exactly what applies to your business." },
-    { q: "Do I need registrations in every city where I operate?", a: "Generally, yes. Shop & Establishment registration, professional tax, and some labour law compliance requirements are state and city-specific. If you're operating in Bangalore, Mumbai, and Delhi, you typically need separate registrations in each location. We coordinate all of them through one engagement." },
-    { q: "Can NyayMitra handle multi-state compliance?", a: "Yes. Multi city and multi state compliance coordination is one of our core services. We have handled compliance execution across Bangalore, Mumbai, and Delhi simultaneously for clients like StampMyVisa, managing state specific documentation and filing requirements through a single point of coordination." },
-    { q: "Do you provide ongoing compliance support?", a: "Yes. Most businesses don't need a one time filing they need renewals tracked, regulations monitored, and documentation updated as the business evolves. We offer ongoing compliance support that covers renewal management, regulatory alerts, documentation updates, and periodic compliance reviews." },
-    { q: "How are government fees charged?", a: "Government fees, statutory charges, and regulatory approval costs are billed separately from our service fees. Our pricing covers expert coordination, documentation management, and execution support. Any government fee payable to a statutory body is passed through to you at actual cost there is no markup on government fees." },
-    { q: "Can you coordinate with lawyers, CAs, and CS professionals?", a: "Yes. Our professional network includes chartered accountants, company secretaries, and lawyers. When your compliance requirement needs a specific professional, we route the work to the right person and coordinate their involvement. You don't need to find or manage professionals separately." },
+    { q: "Why do I need NyayMitra if I already have a CA?", a: "Your CA handles tax filings and accounting. But compliance spans much more POSH policies, labour law, FSSAI licences, shop and establishment registrations, vendor agreements, trademark filings, multi-state registrations. NyayMitra coordinates all of this alongside your CA, not instead of them. We handle the operational layer: collecting documents, routing to the right professional, tracking deadlines, and making sure nothing falls through the gaps." },
+    { q: "Do you replace my lawyer?", a: "No. NyayMitra works alongside your existing lawyers and advisors. If you already have a lawyer for specific matters, we coordinate with them. If you need a specialist for something outside their scope, we route that work to the right professional in our network. The goal is to be the coordination layer not to replace the experts you already trust." },
+    { q: "How does NyayMitra work with existing advisors?", a: "We plug into your existing advisory relationships. If you have a CA managing GST and a lawyer handling contracts, NyayMitra coordinates the documentation, follow-ups, and execution around them. You don't have to manage multiple advisors separately we act as the single operational point of contact across all of them." },
+    { q: "Can you manage compliance across multiple states?", a: "Yes. Multi-city and multi-state compliance coordination is one of our core capabilities. We have handled compliance execution across Bangalore, Mumbai, and Delhi simultaneously for clients like StampMyVisa, managing state-specific documentation and filing requirements through a single point of coordination. If you're operating in or expanding to new states, we map the requirements and handle execution." },
+    { q: "What happens after registrations are completed?", a: "This is where most compliance services stop and where we keep going. After initial registrations are in place, NyayMitra continues to track renewals, alert you before deadlines, update documentation as your business changes, and monitor for any new regulatory requirements that apply to your business. Compliance doesn't end at registration." },
+    { q: "How do you track renewals and deadlines?", a: "We maintain a compliance calendar for your business covering every registration, licence, and filing that requires renewal or periodic action. We send alerts well before deadlines and coordinate the renewal process documentation, professional routing, and submission without you having to initiate anything. You get notified when something is coming up, and we handle the rest." },
 ];
 
 const STATS = [
     { value: "12+", label: "Compliance Categories Covered" },
-    { value: "3", label: "Multicity Workflows Executed" },
+    { value: "3", label: "Multi-city Workflows Executed" },
     { value: "50+", label: "Businesses Supported" },
-    // { value: "15+", label: "Verified Professionals Network" },
+];
+
+const PRICING_TIERS = [
+    {
+        label: "One-Time Execution",
+        icon: "⚡",
+        desc: "For specific registrations, licences, or documentation needs.",
+        items: ["Business Registrations", "Licenses & Certifications", "Legal Documentation", "One-time Filing Support"],
+        cta: "Get Started",
+    },
+    {
+        label: "Ongoing Compliance Management",
+        icon: "🔄",
+        desc: "For businesses that need continuous compliance coverage.",
+        items: ["Renewal Tracking & Alerts", "Compliance Calendar", "Monthly Coordination", "Documentation Updates", "Regulatory Monitoring"],
+        cta: "Discuss Plan",
+        featured: true,
+    },
+    {
+        label: "Compliance Operations Partner",
+        icon: "🏢",
+        desc: "For growing businesses that need an operational compliance team.",
+        items: ["Dedicated Compliance Manager", "Multi-City Compliance", "Expert Network Coordination", "End-to-End Ownership", "Priority Response"],
+        cta: "Talk to Team",
+    },
 ];
 
 function useInView(threshold = 0.1) {
@@ -210,6 +214,109 @@ function OutlineBtn({ label, href, light = false }: { label: string; href: strin
     );
 }
 
+function ComplianceDashboard() {
+    const deadlines = [
+        { name: "GST Filing", due: "Due in 7 Days", urgency: "high" },
+        { name: "POSH Review", due: "Due in 12 Days", urgency: "medium" },
+        { name: "FSSAI Renewal", due: "Due in 18 Days", urgency: "low" },
+    ];
+    const experts = [
+        { role: "CA Review", status: "In Progress", dot: "#F59E0B" },
+        { role: "Lawyer Review", status: "Completed", dot: "#22C55E" },
+        { role: "Documentation", status: "Pending", dot: "#EF4444" },
+    ];
+    const activity = [
+        { icon: <Upload size={11} />, label: "Document Uploaded", time: "2m ago" },
+        { icon: <Bell size={11} />, label: "Renewal Reminder Sent", time: "1h ago" },
+        { icon: <CheckCheck size={11} />, label: "Registration Approved", time: "3h ago" },
+        { icon: <CheckCircle2 size={11} />, label: "Compliance Task Completed", time: "Yesterday" },
+    ];
+
+    const urgencyColor = (u: string) => u === "high" ? "#EF4444" : u === "medium" ? "#F59E0B" : "#22C55E";
+
+    return (
+        <div style={{ background: "rgba(255,255,255,0.04)", backdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14, padding: "clamp(20px,3vw,32px)", position: "relative", overflow: "hidden" }}>
+            {/* Top bar */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, transparent, #B89440, #D4AF5A, #B89440, transparent)" }} />
+
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+                <div>
+                    <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(184,148,64,0.7)", marginBottom: 4, fontWeight: 600 }}>Compliance Operations</div>
+                    <div style={{ fontFamily: "var(--nm-serif)", fontStyle: "italic", fontSize: 18, fontWeight: 600, color: "#fff" }}>Command Center</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", background: "rgba(34,197,94,0.1)", border: "1px solid rgba(34,197,94,0.2)", borderRadius: 20 }}>
+                    <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E" }} />
+                    <span style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: "rgba(34,197,94,0.9)", fontWeight: 600 }}>All Systems Active</span>
+                </div>
+            </div>
+
+            {/* Metrics Row */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 8, marginBottom: 16 }}>
+                {[
+                    { label: "Health Score", value: "92%", sub: "Compliance", accent: "#22C55E" },
+                    { label: "Pending", value: "7", sub: "Tasks", accent: "#F59E0B" },
+                    { label: "Renewals", value: "12", sub: "Upcoming", accent: "#B89440" },
+                    { label: "Active", value: "24", sub: "Registrations", accent: "#B89440" },
+                    { label: "Documents", value: "156", sub: "Stored", accent: "#B89440" },
+                ].map((m, i) => (
+                    <div key={i} style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "12px 10px", textAlign: "center" }}>
+                        <div style={{ fontFamily: "var(--nm-serif)", fontStyle: "italic", fontSize: 20, fontWeight: 700, color: m.accent, lineHeight: 1, marginBottom: 4 }}>{m.value}</div>
+                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 8, color: "rgba(255,255,255,0.35)", textTransform: "uppercase", letterSpacing: "0.08em", lineHeight: 1.3, fontWeight: 600 }}>{m.sub}</div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Second Row: Deadlines + Expert */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 8 }}>
+                <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "14px 16px" }}>
+                    <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                        <Calendar size={10} style={{ color: "#B89440" }} /> Upcoming Deadlines
+                    </div>
+                    {deadlines.map((d, i) => (
+                        <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < deadlines.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                            <span style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "rgba(255,255,255,0.75)", fontWeight: 400 }}>{d.name}</span>
+                            <span style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: urgencyColor(d.urgency), fontWeight: 600 }}>{d.due}</span>
+                        </div>
+                    ))}
+                </div>
+                <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "14px 16px" }}>
+                    <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                        <Briefcase size={10} style={{ color: "#B89440" }} /> Expert Coordination
+                    </div>
+                    {experts.map((e, i) => (
+                        <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 0", borderBottom: i < experts.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none" }}>
+                            <span style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "rgba(255,255,255,0.75)", fontWeight: 400 }}>{e.role}</span>
+                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                                <div style={{ width: 5, height: 5, borderRadius: "50%", background: e.dot }} />
+                                <span style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: "rgba(255,255,255,0.45)", fontWeight: 400 }}>{e.status}</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Activity Feed */}
+            <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "14px 16px" }}>
+                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.3)", textTransform: "uppercase", letterSpacing: "0.12em", fontWeight: 600, marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+                    <Activity size={10} style={{ color: "#B89440" }} /> Recent Activity
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                    {activity.map((a, i) => (
+                        <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "7px 10px", background: "rgba(255,255,255,0.03)", borderRadius: 5 }}>
+                            <span style={{ color: "#B89440", flexShrink: 0 }}>{a.icon}</span>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: "rgba(255,255,255,0.65)", fontWeight: 400, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{a.label}</div>
+                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 1 }}>{a.time}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 export default function NyayMitraCompliance() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileNav, setMobileNav] = useState(false);
@@ -252,6 +359,11 @@ export default function NyayMitraCompliance() {
           .nm-hide-mobile { display: none !important; }
           .nm-steps-layout { grid-template-columns: 1fr !important; }
           .nm-footer-grid { grid-template-columns: 1fr !important; }
+          .nm-dash-metrics { grid-template-columns: repeat(3,1fr) !important; }
+          .nm-dash-row { grid-template-columns: 1fr !important; }
+          .nm-dash-activity { grid-template-columns: 1fr !important; }
+          .nm-pricing-grid { grid-template-columns: 1fr !important; }
+          .nm-problem-grid { grid-template-columns: 1fr 1fr !important; }
         }
         @media (min-width: 769px) { .nm-show-mobile { display: none !important; } }
       `}</style>
@@ -263,11 +375,11 @@ export default function NyayMitraCompliance() {
                         <div style={{ width: 34, height: 34, borderRadius: 6, background: "#0A0A0A", display: "flex", alignItems: "center", justifyContent: "center" }}><Scale size={15} style={{ color: "#B89440" }} /></div>
                         <div>
                             <div style={{ fontFamily: "var(--nm-serif)", fontWeight: 600, fontSize: 17, color: "#0A0A0A", letterSpacing: "-0.01em", lineHeight: 1 }}>NyayMitra</div>
-                            <div style={{ fontFamily: "var(--nm-sans)", fontSize: 8, color: "#B89440", letterSpacing: "0.14em", textTransform: "uppercase", lineHeight: 1.4, fontWeight: 500 }}>Legal Operations</div>
+                            <div style={{ fontFamily: "var(--nm-sans)", fontSize: 8, color: "#B89440", letterSpacing: "0.14em", textTransform: "uppercase", lineHeight: 1.4, fontWeight: 500 }}>Compliance Operations</div>
                         </div>
                     </a>
                     <div className="nm-nav-links" style={{ display: "flex", gap: 36, alignItems: "center" }}>
-                        {[["Services", "#services"], ["How It Works", "#process"], ["FAQ", "#faq"], ["About", "#about"]].map(([l, h]) => (
+                        {[["Platform", "#platform"], ["Services", "#services"], ["How It Works", "#process"], ["FAQ", "#faq"], ["About", "#about"]].map(([l, h]) => (
                             <a key={l} href={h} style={{ fontFamily: "var(--nm-sans)", fontSize: 13, fontWeight: 400, color: "#555", textDecoration: "none", transition: "color 0.15s" }}
                                 onMouseEnter={e => (e.currentTarget.style.color = "#0A0A0A")} onMouseLeave={e => (e.currentTarget.style.color = "#555")}>{l}</a>
                         ))}
@@ -279,12 +391,12 @@ export default function NyayMitraCompliance() {
                 </div>
                 {mobileNav && (
                     <div style={{ background: "#fff", borderTop: "1px solid var(--nm-border)", padding: "20px 5% 28px" }}>
-                        {[["Services", "#services"], ["How It Works", "#process"], ["FAQ", "#faq"], ["About", "#about"]].map(([l, h]) => (
+                        {[["Platform", "#platform"], ["Services", "#services"], ["How It Works", "#process"], ["FAQ", "#faq"], ["About", "#about"]].map(([l, h]) => (
                             <a key={l} href={h} onClick={() => setMobileNav(false)} style={{ display: "block", fontFamily: "var(--nm-sans)", fontSize: 15, color: "#222", textDecoration: "none", padding: "12px 0", borderBottom: "1px solid #F0EDE6" }}>{l}</a>
                         ))}
                         <div style={{ display: "flex", gap: 10, marginTop: 20, flexWrap: "wrap" }}>
                             <PrimaryBtn label="Talk to Team" href={WA_TEAM} />
-                            <OutlineBtn label="Check My Status" href={WA_ASSESS} />
+                            <OutlineBtn label="Get Assessment" href={WA_ASSESS} />
                         </div>
                     </div>
                 )}
@@ -297,25 +409,28 @@ export default function NyayMitraCompliance() {
                 <div style={{ maxWidth: 1200, margin: "0 auto", width: "100%", position: "relative", zIndex: 1 }}>
                     <div className="nm-hero-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 0.9fr", gap: 80, alignItems: "center" }}>
                         <div>
-                            <Reveal><EyebrowLabel>Compliance & Legal Operations</EyebrowLabel></Reveal>
+                            <Reveal><EyebrowLabel>Compliance Operations & Management</EyebrowLabel></Reveal>
                             <Reveal delay={0.05}>
                                 <h1 style={{ fontFamily: "var(--nm-serif)", fontWeight: 600, fontStyle: "italic", fontSize: "clamp(38px,5.2vw,64px)", lineHeight: 1.06, color: "#0A0A0A", letterSpacing: "-0.02em", marginBottom: 28 }}>
-                                    Take compliance<br />
-                                    <span className="nm-gold-shimmer">off your plate.</span>
+                                    Compliance Managed.<br />
+                                    <span className="nm-gold-shimmer">Business Uninterrupted.</span>
                                 </h1>
                             </Reveal>
                             <Reveal delay={0.1}>
-                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 16, color: "#555", lineHeight: 1.85, maxWidth: 520, marginBottom: 16, fontWeight: 400 }}>
-                                    NyayMitra handles registrations, documentation, renewals, and legal coordination for growing businesses so founders spend time building, not managing compliance.
+                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 16, color: "#555", lineHeight: 1.85, maxWidth: 520, marginBottom: 12, fontWeight: 400 }}>
+                                    Most businesses already have a CA, CS, or lawyer. The challenge is coordinating registrations, documentation, compliance deadlines, filings, and follow-ups.
                                 </p>
-                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 14, color: "#888", lineHeight: 1.75, maxWidth: 480, marginBottom: 40, fontWeight: 300 }}>
-                                    Startups · MSMEs · D2C Brands · Multi city Businesses
+                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", lineHeight: 1.8, maxWidth: 500, marginBottom: 12, fontWeight: 400 }}>
+                                    NyayMitra acts as your dedicated compliance operations partner.
+                                </p>
+                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#B89440", lineHeight: 1.75, maxWidth: 480, marginBottom: 40, fontWeight: 500, fontStyle: "italic" }}>
+                                    We work alongside your existing CA, CS and lawyers.
                                 </p>
                             </Reveal>
                             <Reveal delay={0.15}>
                                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 56 }}>
                                     <PrimaryBtn label="Talk to Compliance Team" href={WA_TEAM} />
-                                    <OutlineBtn label="Check My Compliance Status" href={WA_ASSESS} />
+                                    <OutlineBtn label="Get Compliance Assessment" href={WA_ASSESS} />
                                 </div>
                             </Reveal>
                             <Reveal delay={0.2}>
@@ -332,9 +447,9 @@ export default function NyayMitraCompliance() {
                         <Reveal delay={0.12}>
                             <div style={{ background: "#0A0A0A", borderRadius: 12, padding: "clamp(24px,4vw,40px)", position: "relative", overflow: "hidden" }}>
                                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, transparent, #B89440, #D4AF5A, #B89440, transparent)" }} />
-                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(184,148,64,0.7)", marginBottom: 20, fontWeight: 600 }}>What We Handle For You</div>
+                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(184,148,64,0.7)", marginBottom: 20, fontWeight: 600 }}>What We Manage For You</div>
                                 <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                                    {["Business Registrations & Licenses", "Documentation Collection & Management", "Expert Coordination (CA / CS / Lawyers)", "Multi city Filing & Execution", "Renewals & Ongoing Compliance"].map(item => (
+                                    {["Coordination Across CA, CS & Lawyers", "Documentation Collection & Management", "Multi-city Filing & Execution", "Deadline Tracking & Renewal Alerts", "Compliance Visibility & Status Updates"].map(item => (
                                         <div key={item} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 16px", borderRadius: 6, background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
                                             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                                 <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#22C55E", flexShrink: 0 }} />
@@ -346,8 +461,8 @@ export default function NyayMitraCompliance() {
                                 </div>
                                 <div style={{ marginTop: 24, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                     <div>
-                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4, fontWeight: 600 }}>How It Works</div>
-                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "rgba(255,255,255,0.6)", fontWeight: 300 }}>One contact. All compliance. Fully managed.</div>
+                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 4, fontWeight: 600 }}>Our Role</div>
+                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "rgba(255,255,255,0.6)", fontWeight: 300 }}>The operational layer that keeps compliance moving.</div>
                                     </div>
                                     <BadgeCheck size={20} style={{ color: "#B89440", flexShrink: 0 }} />
                                 </div>
@@ -355,8 +470,8 @@ export default function NyayMitraCompliance() {
                         </Reveal>
                     </div>
                     <div style={{ display: "flex", justifyContent: "center", marginTop: 64 }}>
-                        <a href="#gaps" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, textDecoration: "none", opacity: 0.35 }}>
-                            <span style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "#666", fontWeight: 500 }}>See What You Might Be Missing</span>
+                        <a href="#problem" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, textDecoration: "none", opacity: 0.35 }}>
+                            <span style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "#666", fontWeight: 500 }}>See Why Businesses Struggle</span>
                             <ChevronDown size={14} style={{ color: "#666" }} />
                         </a>
                     </div>
@@ -367,7 +482,7 @@ export default function NyayMitraCompliance() {
             <div style={{ background: "#0A0A0A", overflow: "hidden", padding: "12px 0", borderTop: "1px solid #111", borderBottom: "1px solid #111" }}>
                 <div className="nm-marquee">
                     {[...Array(2)].map((_, ri) =>
-                        ["Shop & Establishment", "GST Registration", "MSME Registration", "Trademark Filing", "FSSAI License", "POSH Compliance", "Labour Law", "Multi city Compliance", "BIS Certification", "Employment Agreements", "Vendor Contracts", "Company Incorporation"].map((t, i) => (
+                        ["Compliance Coordination", "Deadline Management", "Documentation Workflows", "Expert Routing", "Renewal Tracking", "Multi-city Execution", "CA Coordination", "CS Coordination", "Regulatory Monitoring", "Registration Execution", "Status Visibility", "Compliance Operations"].map((t, i) => (
                             <span key={`${ri}-${i}`} style={{ fontFamily: "var(--nm-sans)", fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", padding: "0 28px", whiteSpace: "nowrap", fontWeight: 500 }}>
                                 <span style={{ color: "#B89440", marginRight: 28 }}>◆</span>{t}
                             </span>
@@ -376,37 +491,73 @@ export default function NyayMitraCompliance() {
                 </div>
             </div>
 
-            {/* COMPLIANCE GAPS */}
-            <section id="gaps" style={{ padding: "clamp(72px,10vw,120px) 0", background: "#FAFAF7", borderBottom: "1px solid var(--nm-border)" }}>
+            {/* WHY BUSINESSES STRUGGLE */}
+            <section id="problem" style={{ padding: "clamp(72px,10vw,120px) 0", background: "#FAFAF7", borderBottom: "1px solid var(--nm-border)" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
                     <Reveal>
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)", maxWidth: 640 }}>
-                            <EyebrowLabel>Compliance Gaps</EyebrowLabel>
+                            <EyebrowLabel>Why Businesses Struggle</EyebrowLabel>
                             <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 16 }}>
-                                Common compliance gaps businesses miss.
+                                The Problem Isn't Finding Experts
                             </h2>
                             <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", lineHeight: 1.8, fontWeight: 300 }}>
-                                Most businesses discover compliance issues only when facing penalties, audits, investor due diligence, customer onboarding requirements, or government notices. By then, the cost of fixing them is far higher than getting them right early.
+                                Most businesses already have advisors. The challenge is coordinating compliance execution across multiple stakeholders and that coordination gap is where things fall through.
                             </p>
                         </div>
                     </Reveal>
-                    <Reveal delay={0.08}>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10, marginBottom: 40 }}>
-                            {COMPLIANCE_GAPS.map((gap, i) => (
-                                <div key={gap} style={{ padding: "14px 18px", background: "#fff", border: "1px solid var(--nm-border)", borderRadius: 8, display: "flex", alignItems: "center", gap: 10, transition: "all 0.18s" }}
-                                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(184,148,64,0.45)"; (e.currentTarget as HTMLElement).style.background = "#FBF6E8"; }}
-                                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "var(--nm-border)"; (e.currentTarget as HTMLElement).style.background = "#fff"; }}>
-                                    <div style={{ width: 22, height: 22, borderRadius: "50%", background: "rgba(184,148,64,0.12)", border: "1px solid rgba(184,148,64,0.25)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                                        <CheckCircle2 size={11} style={{ color: "#B89440" }} />
+                    <div className="nm-problem-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 40 }}>
+                        {[
+                            { icon: "✓", label: "You Have A CA", color: "#22C55E", bg: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.2)", desc: "Handling tax filings and accounting for your business." },
+                            { icon: "✓", label: "You Have A Lawyer", color: "#22C55E", bg: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.2)", desc: "Advising on contracts and legal matters when needed." },
+                            { icon: "✓", label: "You Have Consultants", color: "#22C55E", bg: "rgba(34,197,94,0.08)", border: "rgba(34,197,94,0.2)", desc: "Domain specialists for specific compliance areas." },
+                            { icon: "✗", label: "You're Still Managing Everything Yourself", color: "#EF4444", bg: "rgba(239,68,68,0.06)", border: "rgba(239,68,68,0.2)", desc: "Chasing follow-ups, tracking deadlines, and coordinating across advisors." },
+                        ].map((card, i) => (
+                            <Reveal key={card.label} delay={i * 0.07}>
+                                <div style={{ padding: "22px 20px", background: card.bg, border: `1px solid ${card.border}`, borderRadius: 10, height: "100%" }}>
+                                    <div style={{ width: 32, height: 32, background: card.color === "#22C55E" ? "rgba(34,197,94,0.15)" : "rgba(239,68,68,0.12)", borderRadius: 6, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14, fontFamily: "var(--nm-sans)", fontSize: 16, fontWeight: 700, color: card.color }}>
+                                        {card.icon}
                                     </div>
-                                    <span style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#333", fontWeight: 400 }}>{gap}</span>
+                                    <div style={{ fontFamily: "var(--nm-sans)", fontSize: 14, fontWeight: 600, color: "#0A0A0A", marginBottom: 8 }}>{card.label}</div>
+                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#666", lineHeight: 1.7, fontWeight: 300 }}>{card.desc}</p>
                                 </div>
-                            ))}
+                            </Reveal>
+                        ))}
+                    </div>
+                    <Reveal delay={0.2}>
+                        <div style={{ padding: "24px 28px", background: "#0A0A0A", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 20 }}>
+                            <div>
+                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(184,148,64,0.7)", marginBottom: 8, fontWeight: 600 }}>The NyayMitra Role</div>
+                                <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.75)", lineHeight: 1.7, maxWidth: 580, fontWeight: 300 }}>
+                                    NyayMitra becomes the <strong style={{ color: "#D4AF5A", fontWeight: 600 }}>single point of coordination</strong> managing documentation, routing to the right experts, tracking deadlines, and keeping everything moving without you having to manage it.
+                                </p>
+                            </div>
+                            <PrimaryBtn label="See How It Works" href="#process" dark={false} />
                         </div>
                     </Reveal>
-                    <Reveal delay={0.15}>
-                        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-                            <PrimaryBtn label="Check My Compliance Status" href={WA_ASSESS} />
+                </div>
+            </section>
+
+            {/* PLATFORM DASHBOARD */}
+            <section id="platform" style={{ padding: "clamp(72px,10vw,120px) 0", background: "#0A0A0A", borderBottom: "1px solid #111" }}>
+                <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
+                    <Reveal>
+                        <div style={{ marginBottom: "clamp(40px,5vw,60px)", maxWidth: 640 }}>
+                            <EyebrowLabel light>Platform Preview</EyebrowLabel>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#fff", lineHeight: 1.1, letterSpacing: "-0.02em", marginBottom: 16 }}>
+                                Your Compliance Command Center
+                            </h2>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.4)", lineHeight: 1.8, fontWeight: 300 }}>
+                                Track compliance, registrations, documentation and legal workflows from one place. No more chasing emails or missing deadlines.
+                            </p>
+                        </div>
+                    </Reveal>
+                    <Reveal delay={0.1}>
+                        <ComplianceDashboard />
+                    </Reveal>
+                    <Reveal delay={0.2}>
+                        <div style={{ marginTop: 32, textAlign: "center" }}>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "rgba(255,255,255,0.3)", marginBottom: 20, fontStyle: "italic" }}>We work alongside your existing CA, CS and lawyers coordinating everything from one place.</p>
+                            <PrimaryBtn label="Talk to Compliance Team" href={WA_TEAM} dark={false} />
                         </div>
                     </Reveal>
                 </div>
@@ -444,8 +595,8 @@ export default function NyayMitraCompliance() {
                     <Reveal>
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)" }}>
                             <EyebrowLabel>Why NyayMitra</EyebrowLabel>
-                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 560 }}>More than just filing. A compliance partner.</h2>
-                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 540, lineHeight: 1.8, fontWeight: 300 }}>We don't just submit documents. We manage the coordination, documentation, expert routing, and follow-up so compliance actually gets done and stays done.</p>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 560 }}>More than filing. An operations partner.</h2>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 540, lineHeight: 1.8, fontWeight: 300 }}>We don't replace your CA or lawyer. We handle the coordination, documentation, expert routing, and follow-up so compliance actually gets done and stays done alongside your existing advisors.</p>
                         </div>
                     </Reveal>
                     <div className="nm-two-col" style={{ display: "grid", gridTemplateColumns: "280px 1fr", gap: 0, alignItems: "start" }}>
@@ -515,7 +666,7 @@ export default function NyayMitraCompliance() {
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)" }}>
                             <EyebrowLabel>How It Works</EyebrowLabel>
                             <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em" }}>Simple from start to finish.</h2>
-                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 480, lineHeight: 1.8, fontWeight: 300 }}>You tell us about your business. We handle the rest from identifying what you need to getting it done and keeping it current.</p>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 480, lineHeight: 1.8, fontWeight: 300 }}>You tell us about your business. We handle the rest from identifying what you need to getting it done and keeping it current. We coordinate with your existing CA, CS and lawyers throughout.</p>
                         </div>
                     </Reveal>
                     <div className="nm-steps-layout" style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 48, alignItems: "start" }}>
@@ -556,27 +707,35 @@ export default function NyayMitraCompliance() {
                 </div>
             </section>
 
-            {/* SERVICES */}
+            {/* COMPLIANCE OPERATIONS COVERAGE (SERVICES) */}
             <section id="services" style={{ padding: "clamp(72px,10vw,120px) 0", background: "#fff", borderBottom: "1px solid var(--nm-border)" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
                     <Reveal>
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)" }}>
-                            <EyebrowLabel>Services</EyebrowLabel>
-                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 540 }}>Compliance services we handle.</h2>
+                            <EyebrowLabel>Compliance Operations Coverage</EyebrowLabel>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 540 }}>What we manage for your business.</h2>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 500, lineHeight: 1.8, fontWeight: 300 }}>Every compliance area managed from a single coordination point no need to track separate advisors for each category.</p>
                         </div>
                     </Reveal>
-                    <div className="nm-two-col" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0, border: "1px solid var(--nm-border)", borderRadius: 10, overflow: "hidden" }}>
-                        {SERVICES.map((svc, i) => (
-                            <Reveal key={svc.name} delay={Math.min(i * 0.04, 0.3)}>
-                                <div style={{ padding: "18px 24px", display: "flex", alignItems: "center", gap: 14, cursor: "pointer", borderBottom: "1px solid var(--nm-border)", borderRight: i % 2 === 0 ? "1px solid var(--nm-border)" : "none", background: "#fff", transition: "background 0.15s" }}
-                                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "#FBF6E8"}
-                                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "#fff"}>
-                                    <span style={{ fontSize: 18, flexShrink: 0 }}>{svc.icon}</span>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 13, fontWeight: 500, color: "#111" }}>{svc.name}</div>
-                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: "#B89440", marginTop: 3, letterSpacing: "0.04em", fontWeight: 500 }}>{svc.price} + Govt. Fees</div>
+                    <div className="nm-two-col" style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+                        {SERVICES_GROUPED.map((group, gi) => (
+                            <Reveal key={group.category} delay={gi * 0.08}>
+                                <div style={{ background: "#FAFAF7", border: "1px solid var(--nm-border)", borderRadius: 12, overflow: "hidden" }}>
+                                    <div style={{ padding: "18px 24px", background: "#0A0A0A", display: "flex", alignItems: "center", gap: 10 }}>
+                                        <span style={{ fontSize: 18 }}>{group.icon}</span>
+                                        <span style={{ fontFamily: "var(--nm-sans)", fontSize: 12, fontWeight: 700, color: "#fff", letterSpacing: "0.06em", textTransform: "uppercase" }}>{group.category}</span>
                                     </div>
-                                    <ArrowUpRight size={13} style={{ color: "#B89440", flexShrink: 0 }} />
+                                    {group.items.map((item, ii) => (
+                                        <div key={item.name} style={{ padding: "14px 20px", display: "flex", alignItems: "flex-start", gap: 12, borderBottom: ii < group.items.length - 1 ? "1px solid var(--nm-border)" : "none", background: "#fff", transition: "background 0.15s" }}
+                                            onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = "#FBF6E8"}
+                                            onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = "#fff"}>
+                                            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#B89440", marginTop: 7, flexShrink: 0 }} />
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 13, fontWeight: 500, color: "#111", marginBottom: 3 }}>{item.name}</div>
+                                                <div style={{ fontFamily: "var(--nm-sans)", fontSize: 11, color: "#888", lineHeight: 1.5, fontWeight: 300 }}>{item.desc}</div>
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </Reveal>
                         ))}
@@ -586,7 +745,7 @@ export default function NyayMitraCompliance() {
                             <AlertTriangle size={13} style={{ color: "#B89440", flexShrink: 0, marginTop: 2 }} />
                             <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#888", lineHeight: 1.65, fontWeight: 300 }}>
                                 <strong style={{ fontWeight: 600, color: "#555" }}>Fee Note: </strong>
-                                Government fees, statutory charges, regulatory approvals, and third party professional fees are billed separately where applicable. Service pricing reflects coordination, documentation, and execution support only.
+                                Government fees, statutory charges, regulatory approvals, and third-party professional fees are billed separately where applicable. Service pricing reflects coordination, documentation, and execution support only.
                             </p>
                         </div>
                     </Reveal>
@@ -599,20 +758,57 @@ export default function NyayMitraCompliance() {
                 </div>
             </section>
 
-            {/* COMPLIANCE COVERAGE MATRIX */}
+            {/* BUSINESS MODEL / PRICING TIERS */}
             <section style={{ padding: "clamp(72px,10vw,120px) 0", background: "#FAFAF7", borderBottom: "1px solid var(--nm-border)" }}>
+                <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
+                    <Reveal>
+                        <div style={{ marginBottom: "clamp(40px,5vw,60px)", textAlign: "center" }}>
+                            <EyebrowLabel>Support Levels</EyebrowLabel>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em" }}>Choose The Right Level Of Support</h2>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 500, margin: "16px auto 0", lineHeight: 1.8, fontWeight: 300 }}>From one-time registrations to full compliance operations we scale with your business.</p>
+                        </div>
+                    </Reveal>
+                    <div className="nm-pricing-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
+                        {PRICING_TIERS.map((tier, i) => (
+                            <Reveal key={tier.label} delay={i * 0.08}>
+                                <div style={{ padding: "32px 28px", background: tier.featured ? "#0A0A0A" : "#fff", border: tier.featured ? "1px solid rgba(184,148,64,0.4)" : "1px solid var(--nm-border)", borderRadius: 12, height: "100%", position: "relative", overflow: "hidden" }}>
+                                    {tier.featured && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg, transparent, #B89440, #D4AF5A, #B89440, transparent)" }} />}
+                                    {tier.featured && (
+                                        <div style={{ position: "absolute", top: 16, right: 16, fontFamily: "var(--nm-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#8B6510", background: "#FBF6E8", padding: "3px 10px", borderRadius: 20 }}>Most Popular</div>
+                                    )}
+                                    <div style={{ fontSize: 24, marginBottom: 14 }}>{tier.icon}</div>
+                                    <div style={{ fontFamily: "var(--nm-sans)", fontSize: 15, fontWeight: 700, color: tier.featured ? "#fff" : "#0A0A0A", marginBottom: 10, letterSpacing: "-0.01em" }}>{tier.label}</div>
+                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: tier.featured ? "rgba(255,255,255,0.45)" : "#888", lineHeight: 1.7, fontWeight: 300, marginBottom: 24 }}>{tier.desc}</p>
+                                    <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 28 }}>
+                                        {tier.items.map(item => (
+                                            <div key={item} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                                                <CheckCircle2 size={13} style={{ color: tier.featured ? "#B89440" : "#22C55E", flexShrink: 0 }} />
+                                                <span style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: tier.featured ? "rgba(255,255,255,0.7)" : "#444", fontWeight: 300 }}>{item}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <PrimaryBtn label={tier.cta} href={WA_TEAM} dark={!tier.featured} />
+                                </div>
+                            </Reveal>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* COMPLIANCE COVERAGE MATRIX */}
+            <section style={{ padding: "clamp(72px,10vw,120px) 0", background: "#fff", borderBottom: "1px solid var(--nm-border)" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
                     <Reveal>
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)" }}>
                             <EyebrowLabel>Coverage</EyebrowLabel>
                             <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 540 }}>Compliance categories we support.</h2>
-                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 480, lineHeight: 1.8, fontWeight: 300 }}>From incorporation to IP, labour law to licensing a comprehensive view of what NyayMitra covers.</p>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "#666", marginTop: 16, maxWidth: 480, lineHeight: 1.8, fontWeight: 300 }}>From incorporation to IP, labour law to licensing a comprehensive view of what NyayMitra covers alongside your existing advisors.</p>
                         </div>
                     </Reveal>
                     <div className="nm-five-col" style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12 }}>
                         {COVERAGE_MATRIX.map((col, i) => (
                             <Reveal key={col.category} delay={i * 0.07}>
-                                <div style={{ padding: "22px 20px", background: "#fff", border: "1px solid var(--nm-border)", borderRadius: 10, height: "100%" }}>
+                                <div style={{ padding: "22px 20px", background: "#FAFAF7", border: "1px solid var(--nm-border)", borderRadius: 10, height: "100%" }}>
                                     <div style={{ fontSize: 22, marginBottom: 12 }}>{col.icon}</div>
                                     <div style={{ fontFamily: "var(--nm-sans)", fontSize: 12, fontWeight: 700, color: "#0A0A0A", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 14, paddingBottom: 12, borderBottom: "1px solid var(--nm-border)" }}>{col.category}</div>
                                     {col.items.map(item => (
@@ -628,14 +824,14 @@ export default function NyayMitraCompliance() {
                 </div>
             </section>
 
-            {/* ONGOING SUPPORT */}
+            {/* ONGOING MANAGEMENT */}
             <section style={{ padding: "clamp(72px,10vw,120px) 0", background: "#0A0A0A", borderBottom: "1px solid #111" }}>
                 <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 5%" }}>
                     <Reveal>
                         <div style={{ marginBottom: "clamp(40px,5vw,60px)" }}>
-                            <EyebrowLabel light>Ongoing Support</EyebrowLabel>
-                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#fff", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 560 }}>Compliance doesn't end at registration.</h2>
-                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.4)", marginTop: 16, maxWidth: 540, lineHeight: 1.8, fontWeight: 300 }}>Most businesses need ongoing compliance management, not just one-time filings. NyayMitra stays with you as your business grows tracking renewals, updating registrations, and alerting you to changes before they become problems.</p>
+                            <EyebrowLabel light>Ongoing Management</EyebrowLabel>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#fff", lineHeight: 1.1, letterSpacing: "-0.02em", maxWidth: 560 }}>Compliance Doesn't End After Registration.</h2>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.4)", marginTop: 16, maxWidth: 540, lineHeight: 1.8, fontWeight: 300 }}>Most compliance services stop after the initial filing. NyayMitra stays with you tracking renewals, monitoring regulations, and keeping your compliance current as your business evolves.</p>
                         </div>
                     </Reveal>
                     <div className="nm-three-col" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
@@ -653,7 +849,7 @@ export default function NyayMitraCompliance() {
                     </div>
                     <Reveal delay={0.3}>
                         <div style={{ marginTop: 48, textAlign: "center" }}>
-                            <PrimaryBtn label="Explore Ongoing Support" href={WA_TEAM} dark={false} />
+                            <PrimaryBtn label="Explore Ongoing Management" href={WA_TEAM} dark={false} />
                         </div>
                     </Reveal>
                 </div>
@@ -665,30 +861,47 @@ export default function NyayMitraCompliance() {
                     <Reveal>
                         <div style={{ marginBottom: 48 }}>
                             <EyebrowLabel>Case Study</EyebrowLabel>
-                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em" }}>Multi city compliance execution.</h2>
+                            <h2 style={{ fontFamily: "var(--nm-serif)", fontSize: "clamp(28px,4vw,50px)", fontWeight: 600, fontStyle: "italic", color: "#0A0A0A", lineHeight: 1.1, letterSpacing: "-0.02em" }}>Multi-city compliance execution.</h2>
                         </div>
                     </Reveal>
                     <Reveal delay={0.1}>
                         <div style={{ background: "#FAFAF7", border: "1px solid var(--nm-border)", borderRadius: 12, padding: "clamp(28px,5vw,52px)", position: "relative", overflow: "hidden" }}>
                             <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, transparent, #B89440, transparent)" }} />
-                            <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                            <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                                 <div style={{ fontFamily: "var(--nm-serif)", fontStyle: "italic", fontSize: 26, fontWeight: 600, color: "#0A0A0A" }}>StampMyVisa</div>
                                 {["Bangalore", "Mumbai", "Delhi"].map(city => (
                                     <span key={city} style={{ fontFamily: "var(--nm-sans)", fontSize: 11, color: "#8B6510", background: "#FBF6E8", border: "1px solid rgba(184,148,64,0.3)", borderRadius: 3, padding: "3px 10px", fontWeight: 500 }}>{city}</span>
                                 ))}
                             </div>
-                            <div className="nm-three-col" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 }}>
+
+                            {/* Metrics */}
+                            <div className="nm-four-col" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 28 }}>
+                                {[
+                                    { value: "3", label: "Cities Managed", sub: "Simultaneously" },
+                                    { value: "1", label: "Coordination Point", sub: "For All Compliance" },
+                                    { value: "0", label: "Missed Deadlines", sub: "Across All Cities" },
+                                    { value: "∞", label: "Ongoing Coverage", sub: "Post Registration" },
+                                ].map((m, i) => (
+                                    <div key={i} style={{ padding: "20px 16px", background: i === 2 ? "#0A0A0A" : "#fff", border: i === 2 ? "1px solid rgba(184,148,64,0.3)" : "1px solid var(--nm-border)", borderRadius: 8, textAlign: "center" }}>
+                                        <div style={{ fontFamily: "var(--nm-serif)", fontStyle: "italic", fontSize: 36, fontWeight: 700, color: i === 2 ? "#22C55E" : "#B89440", lineHeight: 1, marginBottom: 8 }}>{m.value}</div>
+                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 12, fontWeight: 600, color: i === 2 ? "#fff" : "#111", marginBottom: 4 }}>{m.label}</div>
+                                        <div style={{ fontFamily: "var(--nm-sans)", fontSize: 10, color: i === 2 ? "rgba(255,255,255,0.4)" : "#999", fontWeight: 300 }}>{m.sub}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="nm-three-col" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
                                 <div style={{ padding: "22px 20px", background: "#fff", border: "1px solid var(--nm-border)", borderRadius: 8 }}>
                                     <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "#DC2626", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10, fontWeight: 700 }}>Challenge</div>
-                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#555", lineHeight: 1.75, fontWeight: 300 }}>A growing business operating across Bangalore, Mumbai, and Delhi needed coordinated compliance execution across multiple jurisdictions without the bandwidth to manage it internally.</p>
+                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#555", lineHeight: 1.75, fontWeight: 300 }}>A growing business operating across three cities needed coordinated compliance execution across multiple jurisdictions without the bandwidth to manage it internally.</p>
                                 </div>
                                 <div style={{ padding: "22px 20px", background: "#fff", border: "1px solid var(--nm-border)", borderRadius: 8 }}>
                                     <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "#B89440", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10, fontWeight: 700 }}>Solution</div>
-                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#555", lineHeight: 1.75, fontWeight: 300 }}>NyayMitra managed documentation collection, state specific requirements, expert routing, and execution tracking through a single workflow one point of contact for all three cities.</p>
+                                    <p style={{ fontFamily: "var(--nm-sans)", fontSize: 13, color: "#555", lineHeight: 1.75, fontWeight: 300 }}>NyayMitra managed documentation collection, state-specific requirements, expert routing, and execution tracking one contact for all three cities, working alongside their existing advisors.</p>
                                 </div>
                                 <div style={{ padding: "22px 20px", background: "#FBF6E8", border: "1px solid rgba(184,148,64,0.3)", borderRadius: 8 }}>
                                     <div style={{ fontFamily: "var(--nm-sans)", fontSize: 9, color: "#8B6510", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 10, fontWeight: 700 }}>Outcome</div>
-                                    {["Single point coordination across 3 cities", "Reduced founder involvement in compliance", "All registrations completed in one engagement", "Ongoing renewal management now in place"].map(o => (
+                                    {["Single coordination point across 3 cities", "Reduced founder involvement in compliance", "All registrations completed in one engagement", "Ongoing renewal management now in place"].map(o => (
                                         <div key={o} style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
                                             <CheckCircle2 size={12} style={{ color: "#B89440", flexShrink: 0, marginTop: 2 }} />
                                             <span style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#555", lineHeight: 1.6, fontWeight: 300 }}>{o}</span>
@@ -779,14 +992,14 @@ export default function NyayMitraCompliance() {
                     <Reveal>
                         <div style={{ marginBottom: 20 }}><EyebrowLabel light>Get Started</EyebrowLabel></div>
                         <h2 style={{ fontFamily: "var(--nm-serif)", fontWeight: 600, fontStyle: "italic", fontSize: "clamp(28px,4.5vw,56px)", color: "#fff", letterSpacing: "-0.02em", lineHeight: 1.08, marginBottom: 20 }}>
-                            Stop managing compliance.<br /><span className="nm-gold-shimmer">Let us handle it.</span>
+                            Stop Managing Compliance Manually.<br /><span className="nm-gold-shimmer">Let us coordinate it.</span>
                         </h2>
-                        <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.4)", maxWidth: 480, margin: "0 auto 44px", lineHeight: 1.85, fontWeight: 300 }}>
-                            Talk to our compliance team today. We'll map what applies to your business, identify any gaps, and tell you exactly what needs to be done.
+                        <p style={{ fontFamily: "var(--nm-sans)", fontSize: 15, color: "rgba(255,255,255,0.4)", maxWidth: 500, margin: "0 auto 44px", lineHeight: 1.85, fontWeight: 300 }}>
+                            Let NyayMitra coordinate registrations, documentation, deadlines and compliance execution while you focus on growing the business. We work alongside your existing CA, CS and lawyers.
                         </p>
                         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
                             <PrimaryBtn label="Talk to Compliance Team" href={WA_TEAM} dark={false} />
-                            <OutlineBtn label="Check My Compliance Status" href={WA_ASSESS} light />
+                            <OutlineBtn label="Get Compliance Assessment" href={WA_ASSESS} light />
                         </div>
                     </Reveal>
                 </div>
@@ -801,8 +1014,8 @@ export default function NyayMitraCompliance() {
                                 <div style={{ width: 28, height: 28, background: "#0A0A0A", borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center" }}><Scale size={12} style={{ color: "#B89440" }} /></div>
                                 <span style={{ fontFamily: "var(--nm-serif)", fontWeight: 600, fontSize: 15, color: "#0A0A0A" }}>NyayMitra</span>
                             </div>
-                            <div style={{ fontFamily: "var(--nm-sans)", fontSize: 8, color: "#B89440", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 16, fontWeight: 600 }}>Legal Operations</div>
-                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#999", maxWidth: 260, lineHeight: 1.75, marginBottom: 20, fontWeight: 300 }}>Compliance and legal operations for growing Indian startups and MSMEs. One contact. All compliance. Fully managed.</p>
+                            <div style={{ fontFamily: "var(--nm-sans)", fontSize: 8, color: "#B89440", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: 16, fontWeight: 600 }}>Compliance Operations</div>
+                            <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#999", maxWidth: 260, lineHeight: 1.75, marginBottom: 20, fontWeight: 300 }}>Compliance operations and management for growing Indian startups and MSMEs. We work alongside your existing CA, CS and lawyers.</p>
                             {[
                                 { icon: <MapPin size={10} />, text: "Koramangala, Bengaluru – 560034" },
                                 { icon: <Mail size={10} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
@@ -827,7 +1040,7 @@ export default function NyayMitraCompliance() {
                         <div>
                             <h4 style={{ fontFamily: "var(--nm-sans)", fontSize: 9, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "#CCC", marginBottom: 18 }}>What We Do</h4>
                             <ul style={{ listStyle: "none" }}>
-                                {["Compliance Mapping", "Documentation Management", "Registration Execution", "Renewal Management", "Multi city Compliance", "Expert Coordination"].map(l => (
+                                {["Compliance Coordination", "Documentation Management", "Expert Routing (CA/CS/Lawyers)", "Registration Execution", "Renewal Management", "Multi-city Compliance"].map(l => (
                                     <li key={l} style={{ marginBottom: 10 }}>
                                         <a href={WA_TEAM} style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#888", textDecoration: "none", transition: "color 0.15s", fontWeight: 300 }}
                                             onMouseEnter={e => (e.currentTarget.style.color = "#B89440")} onMouseLeave={e => (e.currentTarget.style.color = "#888")}>{l}</a>
