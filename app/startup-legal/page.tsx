@@ -7,7 +7,8 @@ import {
     Award, ThumbsUp, Sparkles, Menu, X, Instagram, Linkedin,
     MapPin, Mail, PhoneCall, ChevronRight, Gavel, Bot, XCircle,
     Briefcase, FileCheck, Users2, Lock, Target, ChevronDown, Building, Users as UsersIcon, IndianRupee,
-    Handshake
+    Handshake, BarChart3, FolderOpen, Calendar, CheckCircle2, Activity, FileSignature, RefreshCcw,
+    Layers, GitMerge, Workflow
 } from "lucide-react"
 
 // ─── TRANSLATIONS ────────────────────────────────────────────────────────────
@@ -23,9 +24,9 @@ const t = {
     startupsProtected: "Helping startups across India simplify legal operations.",
     heroHeadline: "Stop Managing Lawyers,",
     heroHeadlineGold: "CAs & Compliance Yourself.",
-    heroDesc: "NyayMitra acts as your startup's outsourced legal operations team coordinating filings, contracts, compliance, and follow ups so you can focus on building.",
-    heroPrice: "Legal Operations Support Starting at ₹6,999/month",
-    heroTrust: "Already working with a CA or lawyer? Great. We coordinate with them too.",
+    heroDesc: "Most startups already have access to lawyers and CAs. The challenge is coordinating contracts, compliance, documentation, investor requirements and follow ups. NyayMitra becomes your startup's outsourced legal operations team.",
+    heroPrice: "Dedicated Startup Legal Operations Support",
+    heroTrust: "We work alongside your existing lawyers, CAs and consultants.",
     bullet1: "Save time on legal coordination",
     bullet2: "Stay compliant without the stress",
     bullet3: "One accountable team for everything legal",
@@ -36,7 +37,7 @@ const t = {
     aiPowered: "AI powered · 24/7 · Hindi & English",
     verifiedLawyers: "65+ Verified Lawyers",
     avgResponse: "Avg response < 2 hours",
-    heroNewDesc: "Trusted by founders to coordinate lawyers, CAs, compliance and documentation without hiring an in house legal team.",
+    heroNewDesc: "Trusted by founders to coordinate lawyers, CAs, compliance and documentation without hiring an in-house legal team.",
 
     // Who Is This For
     whoHeading: "Is this for you?",
@@ -45,8 +46,8 @@ const t = {
     earlyStageItems: ["Doing compliance themselves", "Unsure what matters", "No legal structure"],
     growingStartups: "Growing Startups",
     growingItems: ["Vendor contracts", "HR documentation", "Investor readiness"],
-    msme: "MSMEs & Multi City Businesses",
-    msmeItems: ["Multi state execution", "Compliance coordination", "One accountable team"],
+    msme: "MSMEs & Multi-City Businesses",
+    msmeItems: ["Multi-state execution", "Compliance coordination", "One accountable team"],
 
     // Pain Section
     painBadge: "THE REAL PROBLEM",
@@ -109,10 +110,10 @@ const t = {
     faqHeadline: "Common questions answered.",
 
     // Final CTA
-    finalHeading: "Focus on building your business.",
-    finalHeadingGold: "We'll handle the legal coordination behind the scenes.",
-    finalDesc: "Get the support of a startup-focused legal arm without hiring an in house legal team.",
-    ctaFinal: "Talk to Legal Ops",
+    finalHeading: "Your Startup Shouldn't Need A Full-Time Legal Team.",
+    finalHeadingGold: "Get the support of a dedicated legal operations partner without hiring lawyers, compliance managers or internal legal staff.",
+    finalDesc: "Works alongside your existing lawyers, CAs and consultants.",
+    ctaFinal: "Talk To Legal Ops",
     noCard: "No lock-ins. Works with your existing CA and lawyers.",
 
     // Services
@@ -124,12 +125,12 @@ const t = {
     howItWorksSub: "Your operational legal infrastructure",
     step1Title: "Legal Intake & Risk Mapping",
     step1Desc: "We understand your business operations, legal gaps, documentation needs, and compliance exposure.",
-    step1Detail: "AI pre analysis in 30 seconds",
+    step1Detail: "AI pre-analysis in 30 seconds",
     step2Title: "Operational Coordination",
     step2Desc: "NyayMitra coordinates documentation, filings, workflows, and partner professionals.",
     step2Detail: "Expert matched in < 2 hours",
     step3Title: "Execution & Ongoing Support",
-    step3Desc: "We ensure operational follow through across legal, compliance, and business workflows.",
+    step3Desc: "We ensure operational follow-through across legal, compliance, and business workflows.",
     step3Detail: "Resolution in 24–48 hours",
 
     // Trust
@@ -142,7 +143,7 @@ const t = {
     verified: "Verified",
 
     // Footer
-    disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third party professionals.",
+    disclaimer: "NyayMitra is a technology platform. We do not act as a law firm. All consultations are delivered by licensed third-party professionals.",
     quickLinks: "Quick Links",
     legal: "Legal",
 
@@ -153,9 +154,9 @@ const t = {
 
 // ─── WHATSAPP ────────────────────────────────────────────────────────────────
 const WA = "919661644025"
-const waLite = `https://wa.me/${WA}?text=I%20want%20the%20Founder%20Essentials%20plan`
-const waOps = `https://wa.me/${WA}?text=I%20want%20the%20Startup%20Legal%20Ops%20plan`
-const waFractional = `https://wa.me/${WA}?text=I%20want%20to%20discuss%20the%20Fractional%20Legal%20Department%20plan`
+const waLite = `https://wa.me/${WA}?text=I%20want%20the%20Founder%20Compliance%20Desk%20plan`
+const waOps = `https://wa.me/${WA}?text=I%20want%20the%20Legal%20Operations%20Partner%20plan`
+const waFractional = `https://wa.me/${WA}?text=I%20want%20to%20discuss%20the%20Fractional%20Legal%20%26%20Compliance%20Office%20plan`
 const waGeneral = `https://wa.me/${WA}?text=I%20need%20startup%20legal%20help`
 const waStrategy = `https://wa.me/${WA}?text=I%20want%20to%20book%20a%20strategy%20call`
 
@@ -166,19 +167,16 @@ const risks = [
     { icon: <TrendingUp className="w-5 h-5" />, title: "Ignoring legal notice", consequence: "Escalation to court", outcome: "Resolution without litigation" },
 ]
 
-// ─── PLAN DATA (RESTRUCTURED) ─────────────────────────────────────────────────
-// Each plan now has:
-// - Visible-by-default fields: positioningLabel, name, tagline, bestFor, outcomes, price, billingNote, cta, trustBadge, premiumNote, badge
-// - Hidden-by-default (in "View Details"): problems, benefits, upgradeWhen
+// ─── PLAN DATA (RENAMED PER BRIEF) ────────────────────────────────────────────
 const plans = [
     {
         id: "lite",
-        name: "Founder Essentials",
+        name: "Founder Compliance Desk",
         tagline: "Stay protected while you focus on building.",
         price: 6999,
         yearlyPrice: 5599,
-        priceDisplay: null as string | null, // null => use numeric price
-        bestFor: "Solopreneurs and early stage startups.",
+        priceDisplay: null as string | null,
+        bestFor: "Solopreneurs and early-stage startups.",
         billingNote: "Billed monthly.",
         outcomes: [
             "Know exactly what's pending.",
@@ -211,7 +209,7 @@ const plans = [
     },
     {
         id: "ops",
-        name: "Startup Legal Ops",
+        name: "Legal Operations Partner",
         tagline: "Your startup's legal arm without hiring a legal team.",
         price: 17999,
         yearlyPrice: 14399,
@@ -252,15 +250,15 @@ const plans = [
     },
     {
         id: "fractional",
-        name: "Fractional Legal Department",
-        tagline: "Operate with the confidence of an in house legal team.",
+        name: "Fractional Legal & Compliance Office",
+        tagline: "Operate with the confidence of an in-house legal team.",
         price: 29999,
         yearlyPrice: 23999,
         priceDisplay: "Starting at ₹29,999",
-        bestFor: "Scaling startups and multi state businesses.",
+        bestFor: "Scaling startups and multi-state businesses.",
         billingNote: "Custom pricing available.",
         outcomes: [
-            "Board level peace of mind.",
+            "Board-level peace of mind.",
             "Full visibility into legal obligations.",
             "Faster execution across teams.",
             "Stronger investor readiness.",
@@ -274,13 +272,13 @@ const plans = [
         problems: [
             "Founders becoming the bottleneck.",
             "Investor due diligence stress.",
-            "Multi state compliance chaos.",
+            "Multi-state compliance chaos.",
             "No visibility into legal risks.",
             "Growing teams without legal structure.",
         ],
         benefits: [
             { title: "Investor & Due Diligence Readiness", desc: "Never scramble for documents during fundraising." },
-            { title: "Multi State Execution Management", desc: "One team coordinates everything." },
+            { title: "Multi-State Execution Management", desc: "One team coordinates everything." },
             { title: "Board & Leadership Documentation Support", desc: "Maintain governance as you grow." },
             { title: "Legal Operations Manager", desc: "A single accountable owner." },
             { title: "Quarterly Risk Reviews", desc: "Identify vulnerabilities before they escalate." },
@@ -300,24 +298,23 @@ const matrixRows = [
     { label: "Compliance reminders", lite: true, ops: true, frac: true },
     { label: "Document support", lite: true, ops: true, frac: true },
     { label: "Founder strategy calls", lite: false, ops: "Monthly", frac: "Monthly" },
-    { label: "Multi state coordination", lite: false, ops: false, frac: true },
+    { label: "Multi-state coordination", lite: false, ops: false, frac: true },
     { label: "Priority turnaround", lite: false, ops: true, frac: true },
     { label: "Legal operations manager", lite: false, ops: false, frac: true },
     { label: "Execution credits (annual)", lite: "₹5,000", ops: "₹15,000", frac: "₹30,000" },
 ]
 
 const services = [
-    { id: "shop", title: "Shop & Establishment Registration", desc: "State specific compliance. End to end coordination.", price: "Starting from ₹9,999 + Govt Fees", icon: <Briefcase className="w-5 h-5" />, highlight: false, showOnPage: false },
+    { id: "shop", title: "Shop & Establishment Registration", desc: "State-specific compliance. End-to-end coordination.", price: "Starting from ₹9,999 + Govt Fees", icon: <Briefcase className="w-5 h-5" />, highlight: false, showOnPage: false },
     { id: "startup-docs", title: "Startup Foundation", desc: "Founder agreements, contracts, documentation and compliance roadmap.", price: "Starting from ₹19,999 + Govt Fees", icon: <FileCheck className="w-5 h-5" />, highlight: true, showOnPage: true },
     { id: "employment", title: "Employment & HR Documentation", desc: "Offer letters, employment agreements, HR policies.", price: "Starting from ₹14,999", icon: <Users2 className="w-5 h-5" />, highlight: false, showOnPage: false },
     { id: "notices", title: "Legal Notices & Recovery", desc: "Lawyer-reviewed notices, recovery strategy and dispute support.", price: "Starting from ₹9,999", icon: <MessageCircle className="w-5 h-5" />, highlight: false, showOnPage: false },
     { id: "trademark", title: "Trademark & IP Coordination", desc: "Protect your brand with expert filing coordination.", price: "Starting from ₹14,999 + Govt Fees", icon: <Shield className="w-5 h-5" />, highlight: false, showOnPage: false },
     { id: "vendor", title: "Contract Support", desc: "Vendor contracts, client agreements, commercial documentation review and turnaround.", price: "Starting from ₹9,999", icon: <FileText className="w-5 h-5" />, highlight: false, showOnPage: true },
-    { id: "audit", title: "Compliance Coordination", desc: "Comprehensive legal audit, compliance tracking, and ongoing follow ups.", price: "Starting from ₹39,999", icon: <Check className="w-5 h-5" />, highlight: false, showOnPage: true },
-    { id: "multi-city", title: "Investor Readiness", desc: "Due diligence preparation, documentation organization and multi state coordination.", price: "Starting from ₹19,999", icon: <MapPin className="w-5 h-5" />, highlight: false, showOnPage: true },
+    { id: "audit", title: "Compliance Coordination", desc: "Comprehensive legal audit, compliance tracking, and ongoing follow-ups.", price: "Starting from ₹39,999", icon: <Check className="w-5 h-5" />, highlight: false, showOnPage: true },
+    { id: "multi-city", title: "Investor Readiness", desc: "Due diligence preparation, documentation organization and multi-state coordination.", price: "Starting from ₹19,999", icon: <MapPin className="w-5 h-5" />, highlight: false, showOnPage: true },
 ]
 
-// Services shown on this landing page (subset, to reduce distraction from retainer focus)
 const visibleServices = services.filter(s => s.showOnPage)
 
 const steps = [
@@ -326,11 +323,10 @@ const steps = [
     { icon: <Check className="w-6 h-6" />, number: "03", title: t.step3Title, description: t.step3Desc, detail: t.step3Detail },
 ]
 
-// "What Happens After You Join" steps
 const onboardingSteps = [
     { icon: <MessageCircle className="w-6 h-6" />, number: "01", title: "Message Us on WhatsApp", description: "Tell us what you're dealing with and share relevant documents.", detail: "Response within hours" },
-    { icon: <UsersIcon className="w-6 h-6" />, number: "02", title: "Get Your Dedicated Coordinator", description: "A single point of contact manages timelines, updates and follow ups.", detail: "One accountable owner" },
-    { icon: <Scale className="w-6 h-6" />, number: "03", title: "We Coordinate Everything", description: "We work with lawyers, CAs and other professionals until the task moves forward.", detail: "End to end ownership" },
+    { icon: <UsersIcon className="w-6 h-6" />, number: "02", title: "Get Your Dedicated Coordinator", description: "A single point of contact manages timelines, updates and follow-ups.", detail: "One accountable owner" },
+    { icon: <Scale className="w-6 h-6" />, number: "03", title: "We Coordinate Everything", description: "We work with lawyers, CAs and other professionals until the task moves forward.", detail: "End-to-end ownership" },
 ]
 
 const trustProofs = [
@@ -340,7 +336,6 @@ const trustProofs = [
     { text: "Stopped payment delay with a legal demand letter", icon: <Clock className="w-4 h-4" />, time: "Client paid in 7 days" },
 ]
 
-// Execution Proof — replaces named-founder testimonials with representative scenarios
 const executionProofs = [
     {
         text: "Multi-state registration coordinated without founder follow-ups",
@@ -364,7 +359,6 @@ const executionProofs = [
     },
 ]
 
-// Why Founders Choose NyayMitra — comparison table rows (Others vs NyayMitra)
 const whyChooseRows = [
     { others: "Advice only", nyay: "End-to-end coordination" },
     { others: "Multiple contacts", nyay: "One dedicated coordinator" },
@@ -374,46 +368,47 @@ const whyChooseRows = [
     { others: "Legal jargon", nyay: "Founder-friendly communication" },
 ]
 
+// ─── UPDATED FAQ (per brief) ──────────────────────────────────────────────────
 const faqs = [
     {
-        q: "What is legal operations?",
-        a: "Legal operations is the coordination layer between you and your legal professionals lawyers, CAs, and CSs. Instead of you chasing updates, managing documents, and tracking filings, NyayMitra handles all of that coordination so founders can focus on building.",
+        q: "What is Startup Legal Operations?",
+        a: "Startup Legal Operations is the coordination layer between you and your legal professionals — lawyers, CAs, and CSs. Instead of you chasing updates, managing documents, and tracking filings, NyayMitra handles all of that coordination so founders can focus on building. It's the difference between having advisors and having a system that makes them work together.",
     },
     {
-        q: "Do I still need NyayMitra if I already have a CA?",
-        a: "Yes and your CA will thank you. NyayMitra works with your existing CA. We handle coordination, reminders, document management and follow ups so your CA can focus on their core work and you don't have to project-manage the entire relationship.",
+        q: "Why not just hire a lawyer?",
+        a: "Lawyers are essential — but they're not project managers. They draft, review, and advise. They don't follow up on compliance deadlines, coordinate with your CA, or track your documentation vault. NyayMitra fills that operational gap so your lawyer can focus on high-value legal work instead of chasing paperwork.",
     },
     {
-        q: "Do I still need NyayMitra if I already have a lawyer?",
-        a: "Absolutely. Having a lawyer doesn't solve the coordination problem. NyayMitra acts as the operations layer between you and your lawyer managing timelines, documents, follow ups, and execution so nothing falls through the cracks.",
+        q: "Why not just hire a CA?",
+        a: "CAs are critical for accounting and taxation. But most compliance, contracts, and legal coordination falls outside their scope. NyayMitra coordinates the legal operations layer — ensuring filings happen, contracts move forward, and you're not the one holding everything together.",
     },
     {
-        q: "How is NyayMitra different from IndiaFilings?",
-        a: "IndiaFilings is a compliance filing platform. NyayMitra is a legal operations partner. We don't just file documents we coordinate end-to-end legal execution, work with your existing CA and lawyer, provide a dedicated coordinator, WhatsApp support, and ongoing compliance tracking. We're accountable for outcomes, not just transactions.",
+        q: "How do you work with our existing advisors?",
+        a: "NyayMitra works alongside your existing CA, lawyer, or CS — not instead of them. We act as the operational interface: collecting documents, tracking timelines, following up, and ensuring nothing falls through the cracks. Your advisors do their work; we make sure that work actually gets done.",
     },
     {
-        q: "What happens during fundraising?",
-        a: "During fundraising, we coordinate due diligence requests, organize your legal documents, review term sheets with your existing lawyers, and manage the documentation workflow. You focus on the pitch we handle the legal ops.",
+        q: "How do you help during fundraising?",
+        a: "During fundraising, we coordinate due diligence requests, organize your legal documents, review term sheets with your existing lawyers, and manage the documentation workflow. You focus on the pitch — we handle the legal ops.",
+    },
+    {
+        q: "Do startups need a full-time legal team?",
+        a: "Most early-stage and growth-stage startups don't. A full-time legal hire costs ₹80,000–₹1,25,000/month in salary alone — before overheads. NyayMitra gives you the operational coverage of a legal team at a fraction of that cost, scaling as you grow.",
+    },
+    {
+        q: "Can you coordinate multiple professionals?",
+        a: "Yes — that's exactly what we're built for. NyayMitra coordinates across your CA, CS, lawyer, and any other professional involved in your legal and compliance work. We manage timelines, documentation, and follow-ups across all of them so you don't have to.",
     },
     {
         q: "Can startups outside Bengaluru use NyayMitra?",
-        a: "Yes. NyayMitra supports startups across India including multi-state registration, compliance coordination, and remote-first legal operations. Our Fractional Legal Department plan includes explicit multi-city coordination.",
+        a: "Yes. NyayMitra supports startups across India including multi-state registration, compliance coordination, and remote-first legal operations. Our Fractional Legal & Compliance Office plan includes explicit multi-city coordination.",
     },
     {
         q: "Are government fees included?",
         a: "Government fees, statutory charges, and filing fees are billed separately at actuals. Your plan covers legal coordination, document review, compliance tracking, and operations support.",
     },
     {
-        q: "Is litigation included?",
-        a: "Litigation and court representation are not included in retainer plans. NyayMitra can coordinate and connect you with the right litigation support through our lawyer network as an add-on service.",
-    },
-    {
         q: "Can I cancel anytime?",
         a: "Yes. Monthly plans can be cancelled before the next billing cycle. There are no lock-in periods or cancellation fees.",
-    },
-    {
-        q: "Can I upgrade my plan later?",
-        a: "Yes. You can upgrade at any time and we'll pro-rate the difference. Most founders start on Founder Essentials and upgrade to Startup Legal Ops as their team and compliance needs grow.",
     },
 ]
 
@@ -454,36 +449,30 @@ export default function StartupLegalPage() {
         </svg>
     )
 
-    // Cell helper for matrix
     const MatrixCell = ({ val, popular }: { val: boolean | string; popular: boolean }) => {
         if (val === false) return <span style={{ color: '#d1d5db', fontSize: 14 }}>—</span>
         if (val === true) return <Check style={{ width: 16, height: 16, color: popular ? '#D97706' : '#10b981' }} />
         return <span style={{ fontSize: 11, fontWeight: 600, color: popular ? '#FCD34D' : '#D97706' }}>{val}</span>
     }
 
-    // Who Is This For cards data
     const whoCards = [
         {
             title: t.earlyStage,
             icon: <UsersIcon className="w-5 h-5" />,
             items: t.earlyStageItems,
-            bg: "from-amber-900/20 to-transparent"
         },
         {
             title: t.growingStartups,
             icon: <TrendingUp className="w-5 h-5" />,
             items: t.growingItems,
-            bg: "from-amber-800/20 to-transparent"
         },
         {
             title: t.msme,
             icon: <Building className="w-5 h-5" />,
             items: t.msmeItems,
-            bg: "from-amber-700/20 to-transparent"
         }
     ]
 
-    // Transparency cards (compact, includes all 4 items per spec)
     const transparencyItems = [
         { icon: <IndianRupee className="w-5 h-5" />, title: "Government fees billed separately" },
         { icon: <Gavel className="w-5 h-5" />, title: "Court representation excluded" },
@@ -491,12 +480,49 @@ export default function StartupLegalPage() {
         { icon: <Scale className="w-5 h-5" />, title: "Specialist litigation available separately" },
     ]
 
-    // ROI cards
     const roiCards = [
-        { label: "In House Legal Hire", price: "₹80,000–₹1,25,000/month", sub: "Salary + benefits + overheads", highlight: false },
+        { label: "In-House Legal Hire", price: "₹80,000–₹1,25,000/month", sub: "Salary + benefits + overheads", highlight: false },
         { label: "Traditional Retainers", price: "₹25,000–₹60,000/month", sub: "Monthly retainer with limited scope", highlight: false },
         { label: "Compliance Mistakes", price: "₹25,000–₹5,00,000+", sub: "Per notice or filing missed", highlight: false },
         { label: "NyayMitra", price: "Starting at ₹6,999/month", sub: "Full legal operations coordination", highlight: true },
+    ]
+
+    // NEW: "Why Founders Struggle" four cards
+    const struggleCards = [
+        { title: "You Have A CA", desc: "For tax, accounting and filings. But contract reviews, legal coordination and compliance tracking? Still falls on you.", icon: <Award className="w-5 h-5" /> },
+        { title: "You Have A Lawyer", desc: "For drafting and advice. But follow-ups, document management, and deadline tracking? Still your problem.", icon: <Scale className="w-5 h-5" /> },
+        { title: "You Have Consultants", desc: "For specific deliverables. But coordinating across all of them, managing timelines? That's you.", icon: <Users className="w-5 h-5" /> },
+        { title: "You're Still Managing Everything Yourself", desc: "Every founder knows this feeling. You're the legal coordinator, compliance tracker and follow-up machine.", icon: <AlertCircle className="w-5 h-5" />, highlight: true },
+    ]
+
+    // NEW: "What We Actually Do" six cards
+    const whatWeDoCards = [
+        { title: "Compliance Coordination", desc: "Track filings, deadlines and obligations across your CA, CS and legal counsel.", icon: <CheckCircle2 className="w-5 h-5" /> },
+        { title: "Contract Management", desc: "Move contracts forward. Coordinate reviews, approvals, and execution without founder bottlenecks.", icon: <FileSignature className="w-5 h-5" /> },
+        { title: "Founder Documentation", desc: "Agreements, NDAs, HR policies, and compliance records — organized and accessible.", icon: <FolderOpen className="w-5 h-5" /> },
+        { title: "Investor Readiness", desc: "Prepare your due diligence folder before investors ask. Always fundraising-ready.", icon: <BarChart3 className="w-5 h-5" /> },
+        { title: "Legal Workflow Tracking", desc: "Every task, every professional, every deadline — visible in one place.", icon: <Workflow className="w-5 h-5" /> },
+        { title: "Multi-Stakeholder Follow-Ups", desc: "We chase your lawyers, CAs and consultants so you never have to.", icon: <RefreshCcw className="w-5 h-5" /> },
+    ]
+
+    // NEW: Investor Readiness checklist items
+    const investorReadinessItems = [
+        { title: "Founder Agreements", desc: "Co-founder equity splits and vesting.", icon: <Users className="w-4 h-4" /> },
+        { title: "Cap Table Documentation", desc: "Clean, investor-ready ownership records.", icon: <BarChart3 className="w-4 h-4" /> },
+        { title: "Due Diligence Folder", desc: "All documents organized before they're requested.", icon: <FolderOpen className="w-4 h-4" /> },
+        { title: "ESOP Documentation", desc: "Employee option pool properly structured.", icon: <Users2 className="w-4 h-4" /> },
+        { title: "Compliance Records", desc: "Filings, registrations and statutory records.", icon: <FileCheck className="w-4 h-4" /> },
+        { title: "Contract Repository", desc: "All vendor, client and partner agreements.", icon: <FileText className="w-4 h-4" /> },
+    ]
+
+    // NEW: Benefits why startups choose NyayMitra
+    const benefitCards = [
+        { title: "One Dedicated Coordinator", desc: "A single accountable point of contact who owns your legal operations end-to-end.", icon: <UsersIcon className="w-5 h-5" /> },
+        { title: "Works With Existing Advisors", desc: "We coordinate alongside your CA, lawyer and CS — not instead of them.", icon: <Handshake className="w-5 h-5" /> },
+        { title: "Founder Time Saved", desc: "5–10 hours per month returned to you. Every month.", icon: <Clock className="w-5 h-5" /> },
+        { title: "Compliance Visibility", desc: "Know what's pending, what's filed, and what's coming — without chasing anyone.", icon: <Activity className="w-5 h-5" /> },
+        { title: "Investor Readiness", desc: "Your due diligence folder is always ready. Fundraise from a position of strength.", icon: <TrendingUp className="w-5 h-5" /> },
+        { title: "Multi-State Support", desc: "One team coordinates compliance and execution across states.", icon: <MapPin className="w-5 h-5" /> },
     ]
 
     return (
@@ -518,7 +544,7 @@ export default function StartupLegalPage() {
                         {
                             "@type": "LocalBusiness",
                             name: "NyayMitra",
-                            description: "Outsourced legal operations and compliance execution partner for Indian startups and MSMEs.",
+                            description: "Outsourced startup legal operations and compliance execution partner for Indian startups and MSMEs.",
                             address: { "@type": "PostalAddress", streetAddress: "Koramangala", addressLocality: "Bengaluru", addressRegion: "Karnataka", postalCode: "560034", addressCountry: "IN" },
                             telephone: "+91-79705-96183",
                             url: "https://nyaymitra.com",
@@ -527,7 +553,7 @@ export default function StartupLegalPage() {
                             "@type": "BreadcrumbList",
                             itemListElement: [
                                 { "@type": "ListItem", position: 1, name: "Home", item: "https://nyaymitra.com" },
-                                { "@type": "ListItem", position: 2, name: "Startup Legal Plans", item: "https://nyaymitra.com/startup-legal-plans" },
+                                { "@type": "ListItem", position: 2, name: "Startup Legal Operations", item: "https://nyaymitra.com/startup-legal-plans" },
                             ],
                         },
                         {
@@ -574,6 +600,12 @@ export default function StartupLegalPage() {
                 @media (max-width: 900px) { .nm-grid-3 { grid-template-columns: 1fr; } }
                 .nm-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
                 @media (max-width: 640px) { .nm-grid-2 { grid-template-columns: 1fr; } }
+                .nm-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+                @media (max-width: 900px) { .nm-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 500px) { .nm-grid-4 { grid-template-columns: 1fr; } }
+                .nm-grid-6 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+                @media (max-width: 900px) { .nm-grid-6 { grid-template-columns: repeat(2, 1fr); } }
+                @media (max-width: 500px) { .nm-grid-6 { grid-template-columns: 1fr; } }
 
                 /* Nav */
                 .nm-hide-mobile { display: flex !important; }
@@ -591,6 +623,27 @@ export default function StartupLegalPage() {
                 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
                 .marquee-track { animation: marquee 28s linear infinite; display: flex; }
 
+                /* Dashboard glassmorphism */
+                .glass-card {
+                    background: rgba(255,255,255,0.04);
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 16px;
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
+                }
+                .dash-metric {
+                    background: rgba(255,255,255,0.05);
+                    border: 1px solid rgba(255,255,255,0.08);
+                    border-radius: 14px;
+                    padding: 1rem 1.25rem;
+                    transition: border-color 0.2s;
+                }
+                .dash-metric:hover { border-color: rgba(217,119,6,0.4); }
+                .dash-grid-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+                @media (max-width: 640px) { .dash-grid-metrics { grid-template-columns: repeat(2, 1fr); } }
+                .dash-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; }
+                @media (max-width: 640px) { .dash-panels { grid-template-columns: 1fr; } }
+
                 /* Plan cards */
                 .plan-card { transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s ease; border-radius: 24px; display: flex; flex-direction: column; }
                 .plan-card:hover { transform: translateY(-6px); box-shadow: 0 24px 64px rgba(0,0,0,0.1); }
@@ -607,43 +660,39 @@ export default function StartupLegalPage() {
                 .service-tile.highlight { border: 2px solid #D97706; background: linear-gradient(135deg, rgba(254,243,199,0.3),#fff); }
 
                 /* Compare */
-                .compare-col { border-radius: 20px; padding: 1.75rem; }
-                .compare-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.875rem; }
-                .compare-item:last-child { border-bottom: none; }
+                .compare-table { width: 100%; border-collapse: collapse; }
+                .compare-table th, .compare-table td { padding: 14px 16px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); }
+                .compare-table thead tr { background: #000; }
+                .compare-table tbody tr:last-child td { border-bottom: none; }
+                @media (max-width: 640px) { .compare-table th, .compare-table td { padding: 10px 8px; font-size: 12px; } }
 
-                /* Matrix table */
+                /* Matrix */
                 .matrix-table { width: 100%; border-collapse: collapse; }
                 .matrix-table th, .matrix-table td { padding: 12px 16px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.05); }
                 .matrix-table th:first-child, .matrix-table td:first-child { text-align: left; }
                 .matrix-table thead th { font-size: 12px; font-weight: 700; letter-spacing: 0.05em; padding-bottom: 16px; }
                 .matrix-table tbody tr:hover { background: rgba(0,0,0,0.015); }
-                @media (max-width: 640px) {
-                    .matrix-table th, .matrix-table td { padding: 10px 6px; font-size: 11px; }
-                    .matrix-table th:first-child, .matrix-table td:first-child { font-size: 11.5px; }
-                }
-                @media (max-width: 400px) {
-                    .matrix-table th, .matrix-table td { padding: 8px 4px; font-size: 10px; }
-                }
-
-                /* Why Founders Choose comparison table */
-                .compare-table { width: 100%; border-collapse: collapse; }
-                .compare-table th, .compare-table td { padding: 14px 16px; text-align: center; border-bottom: 1px solid rgba(0,0,0,0.06); }
-                .compare-table thead tr { background: #000; }
-                .compare-table tbody tr:last-child td { border-bottom: none; }
-                @media (max-width: 640px) {
-                    .compare-table th, .compare-table td { padding: 10px 8px; font-size: 12px; }
-                }
+                @media (max-width: 640px) { .matrix-table th, .matrix-table td { padding: 10px 6px; font-size: 11px; } .matrix-table th:first-child, .matrix-table td:first-child { font-size: 11.5px; } }
+                @media (max-width: 400px) { .matrix-table th, .matrix-table td { padding: 8px 4px; font-size: 10px; } }
 
                 /* ROI */
                 .roi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
                 @media (max-width: 900px) { .roi-grid { grid-template-columns: repeat(2,1fr); } }
                 @media (max-width: 480px) { .roi-grid { grid-template-columns: 1fr; } }
 
-                /* Testimonials */
-                .testimonial-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
-                @media (max-width: 900px) { .testimonial-grid { grid-template-columns: 1fr; } }
+                /* Proof grid */
                 .proof-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1.5rem; }
                 @media (max-width: 768px) { .proof-grid { grid-template-columns: 1fr; } }
+
+                /* Investor readiness grid */
+                .investor-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+                @media (max-width: 768px) { .investor-grid { grid-template-columns: repeat(2,1fr); } }
+                @media (max-width: 480px) { .investor-grid { grid-template-columns: 1fr; } }
+
+                /* Benefits grid */
+                .benefits-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+                @media (max-width: 900px) { .benefits-grid { grid-template-columns: repeat(2,1fr); } }
+                @media (max-width: 500px) { .benefits-grid { grid-template-columns: 1fr; } }
 
                 /* FAQ */
                 .faq-item { border: 1px solid rgba(0,0,0,0.08); border-radius: 14px; overflow: hidden; transition: border-color 0.2s; }
@@ -655,37 +704,10 @@ export default function StartupLegalPage() {
                 @keyframes stepBar { from { width: 0; } to { width: 100%; } }
                 .step-bar { animation: stepBar 2.8s linear forwards; height: 100%; background: #D97706; border-radius: 2px; }
 
-                /* Instead strip */
-                .instead-strip { background: linear-gradient(135deg,#000,#1a1a1a); padding: 2rem 1.5rem; margin: 2.5rem 0; border-radius: 24px; border: 1px solid rgba(217,119,6,0.2); }
-                .instead-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: center; }
-                @media (max-width: 768px) { .instead-grid { grid-template-columns: 1fr; gap: 1.25rem; } }
-                .instead-divider { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-                @media (max-width: 768px) { .instead-divider { flex-direction: row; justify-content: center; } }
-                .instead-col { display: flex; flex-direction: column; gap: 10px; }
-                .instead-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; }
-
-                /* Trust */
-                .responsive-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
-                @media (max-width: 768px) { .responsive-trust { grid-template-columns: 1fr; } }
-                .responsive-hero { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: center; }
-                @media (max-width: 900px) { .responsive-hero { grid-template-columns: 1fr; } }
-
-                /* Plan expand - overlay so it doesn't affect sibling card heights via grid stretch */
-               /* Plan expand - simple in-flow expand, works on all screen sizes */
-               .plan-expand {
-                 transition: max-height 0.4s ease, padding 0.3s ease;
-                    max-height: 0;
-            }
-// .plan-expand.is-open {
-//     max-height: 2000px;
-//     overflow: visible;
-// }
-
                 /* Risk card */
                 .risk-card { transition: transform 0.2s, border-left-color 0.2s; }
                 .risk-card:hover { transform: translateX(4px); border-left-color: #D97706; }
 
-                /* Gold text */
                 .gold-text { color: #D97706; font-style: italic; }
                 .hero-headline { font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: -0.02em; }
 
@@ -701,9 +723,15 @@ export default function StartupLegalPage() {
                 .view-details-btn { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 10px 0; background: transparent; border: 1px dashed; border-radius: 12px; font-size: 0.78rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
                 .view-details-btn:hover { background: rgba(217,119,6,0.06); }
 
-                /* Existing advisors strip */
+                /* Advisors strip */
                 .advisors-strip { display: flex; align-items: center; gap: 14px; padding: 1rem 1.5rem; border-radius: 16px; background: #fafafa; border: 1px solid rgba(0,0,0,0.07); margin-bottom: 2rem; flex-wrap: wrap; }
                 @media (max-width: 600px) { .advisors-strip { flex-direction: column; text-align: center; align-items: center; } }
+
+                .responsive-hero { display: grid; grid-template-columns: 1fr 380px; gap: 2rem; align-items: center; }
+                @media (max-width: 900px) { .responsive-hero { grid-template-columns: 1fr; } }
+
+                .plan-expand { transition: max-height 0.4s ease, padding 0.3s ease; max-height: 0; overflow: hidden; }
+                .plan-expand.is-open { max-height: 2000px; }
 
                 @media (prefers-reduced-motion: reduce) {
                     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
@@ -784,12 +812,11 @@ export default function StartupLegalPage() {
                                 </h1>
 
                                 <p className="anim-3" style={{ fontSize: 'clamp(0.875rem, 3vw, 1rem)', color: '#52525b', lineHeight: 1.65, maxWidth: 500, marginBottom: 20 }}>
-                                    {t.heroDesc}{" "}
-                                    <strong style={{ color: '#D97706' }}>{t.heroPrice}.</strong>
+                                    {t.heroDesc}
                                 </p>
 
-                                <p className="anim-3" style={{ fontSize: '0.875rem', color: '#52525b', lineHeight: 1.65, marginBottom: 20 }}>
-                                    {t.heroNewDesc}
+                                <p className="anim-3" style={{ fontSize: '0.9rem', color: '#27272a', fontWeight: 600, marginBottom: 20, lineHeight: 1.5 }}>
+                                    {t.heroPrice}.
                                 </p>
 
                                 {/* Trust statement */}
@@ -812,7 +839,7 @@ export default function StartupLegalPage() {
 
                                 {/* Mini badges */}
                                 <div className="anim-3" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
-                                    {["✓ Works with your existing CA", "✓ Works with your existing lawyer", "✓ WhatsApp first coordination", "✓ Multi state execution support"].map(badge => (
+                                    {["✓ Founder Focused", "✓ Works With Existing Advisors", "✓ Multi-State Support", "✓ Dedicated Coordinator"].map(badge => (
                                         <span key={badge} style={{ fontSize: '0.7rem', padding: '4px 10px', background: '#f4f4f5', borderRadius: 99, color: '#3f3f46' }}>{badge}</span>
                                     ))}
                                 </div>
@@ -881,11 +908,50 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ WHO IS THIS FOR SECTION ════════════════════════════════════ */}
+                {/* ══ NEW: WHY FOUNDERS STRUGGLE ════════════════════════════════ */}
+                <section className="nm-section" style={{ background: '#fafafa' }}>
+                    <div className="nm-container">
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
+                            <span className="brand-line">WHY FOUNDERS STRUGGLE</span>
+                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
+                                The Problem Isn't Finding Advisors
+                            </h2>
+                            <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+                                Most founders already have a CA, a lawyer, and several consultants. The problem is who coordinates all of them.
+                            </p>
+                        </div>
+                        <div className="nm-grid-4" style={{ marginBottom: 32 }}>
+                            {struggleCards.map((card, idx) => (
+                                <div key={idx} style={{
+                                    borderRadius: 20, padding: '1.5rem',
+                                    border: card.highlight ? '2px solid #D97706' : '1px solid rgba(0,0,0,0.08)',
+                                    background: card.highlight ? '#000' : '#fff',
+                                    transition: 'transform 0.2s, border-color 0.2s',
+                                }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; if (!card.highlight) e.currentTarget.style.borderColor = 'rgba(0,0,0,0.2)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; if (!card.highlight) e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: 10, background: card.highlight ? 'rgba(217,119,6,0.2)' : '#FEF3C7', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, color: '#D97706' }}>
+                                        {card.icon}
+                                    </div>
+                                    <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: card.highlight ? '#fff' : '#0a0a0a', marginBottom: 8, lineHeight: 1.3 }}>{card.title}</h3>
+                                    <p style={{ fontSize: '0.78rem', color: card.highlight ? 'rgba(255,255,255,0.6)' : '#71717a', lineHeight: 1.6 }}>{card.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{ textAlign: 'center', padding: '1.25rem 2rem', borderRadius: 16, background: 'rgba(217,119,6,0.06)', border: '1px solid rgba(217,119,6,0.15)', maxWidth: 640, margin: '0 auto' }}>
+                            <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#0a0a0a', lineHeight: 1.5 }}>
+                                Founders unintentionally become legal project managers.<br />
+                                <span style={{ color: '#D97706' }}>NyayMitra removes that burden.</span>
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══ WHO IS THIS FOR ══════════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
-                            <span className="brand-line">{t.whoHeading}</span>
+                            <span className="brand-line">IS THIS FOR YOU</span>
                             <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>{t.whoHeading}</h2>
                             <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 500, margin: '0 auto' }}>{t.whoSub}</p>
                         </div>
@@ -930,7 +996,7 @@ export default function StartupLegalPage() {
                     </div>
                 </div>
 
-                {/* ══ FOUNDER PAIN SECTION ═════════════════════════════════════ */}
+                {/* ══ FOUNDER PAIN ═════════════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#000', color: '#fff', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', top: -80, left: -80, width: 400, height: 400, background: 'radial-gradient(circle, rgba(217,119,6,0.06) 0%, transparent 65%)', pointerEvents: 'none' }} />
@@ -961,6 +1027,41 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
+                {/* ══ NEW: WHAT WE ACTUALLY DO ══════════════════════════════════ */}
+                <section className="nm-section" style={{ background: '#fff' }}>
+                    <div className="nm-container">
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
+                            <span className="brand-line">WHAT WE ACTUALLY DO</span>
+                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
+                                We Don't Replace Your Lawyers.<br />
+                                <span className="gold-text" style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic' }}>We Make Them Easier To Work With.</span>
+                            </h2>
+                            <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 540, margin: '0 auto', lineHeight: 1.6 }}>
+                                NyayMitra works alongside your existing lawyers, CAs and consultants. We coordinate execution so founders don't have to.
+                            </p>
+                        </div>
+                        <div className="nm-grid-6">
+                            {whatWeDoCards.map((card, idx) => (
+                                <div key={idx} style={{ borderRadius: 18, padding: '1.5rem', border: '1px solid rgba(0,0,0,0.08)', background: '#fff', transition: 'transform 0.2s, border-color 0.2s, box-shadow 0.2s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#D97706'; e.currentTarget.style.boxShadow = '0 12px 40px rgba(217,119,6,0.1)'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                                    <div style={{ width: 40, height: 40, borderRadius: 10, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, color: '#D97706' }}>
+                                        {card.icon}
+                                    </div>
+                                    <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0a0a0a', marginBottom: 6, lineHeight: 1.3 }}>{card.title}</h3>
+                                    <p style={{ fontSize: '0.75rem', color: '#71717a', lineHeight: 1.6 }}>{card.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{ marginTop: 32, padding: '1rem 1.5rem', borderRadius: 14, background: '#fafafa', border: '1px solid rgba(0,0,0,0.07)', maxWidth: 680, margin: '32px auto 0', textAlign: 'center' }}>
+                            <p style={{ fontSize: '0.875rem', color: '#52525b', lineHeight: 1.65 }}>
+                                <span style={{ fontWeight: 700, color: '#0a0a0a' }}>The positioning: </span>
+                                NyayMitra is a <span style={{ color: '#D97706', fontWeight: 600 }}>startup legal operations platform</span> — not a law firm, not a compliance filing site, not a lawyer marketplace.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 {/* ══ RISK SECTION ═════════════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fafafa' }}>
                     <div className="nm-container">
@@ -987,7 +1088,7 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ WHY NYAYMITRA ════════════════════════════════════════════ */}
+                {/* ══ WHY NYAYMITRA (3-COL COMPARISON) ════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
@@ -996,7 +1097,6 @@ export default function StartupLegalPage() {
                             <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 500, margin: '0 auto' }}>{t.whySub}</p>
                         </div>
 
-                        {/* 3-column comparison - FULLY RESPONSIVE */}
                         <div className="nm-grid-3" style={{ gap: '1.25rem' }}>
                             {[
                                 {
@@ -1027,17 +1127,16 @@ export default function StartupLegalPage() {
                                     icon: <Scale style={{ width: 16, height: 16, color: '#D97706' }} />,
                                     items: [
                                         ["One accountable team", true],
-                                        ["Founder first execution", true],
+                                        ["Founder-first execution", true],
                                         ["WhatsApp support", true],
-                                        ["Multi city coordination", true],
+                                        ["Multi-city coordination", true],
                                         ["Works with existing advisors", true],
-                                        ["End to end ownership", true],
+                                        ["End-to-end ownership", true],
                                     ],
                                 },
                             ].map((col, ci) => (
                                 <div key={ci} style={{
-                                    borderRadius: 20,
-                                    padding: '1.75rem',
+                                    borderRadius: 20, padding: '1.75rem',
                                     background: col.dark ? '#000' : '#fafafa',
                                     border: col.dark ? '2px solid rgba(217,119,6,0.3)' : '1px solid rgba(0,0,0,0.07)',
                                 }}>
@@ -1088,7 +1187,7 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ WHY FOUNDERS CHOOSE NYAYMITRA (COMPARISON TABLE) ═════════ */}
+                {/* ══ FOUNDER COMPARISON TABLE ═════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fff' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3rem)' }}>
@@ -1130,6 +1229,199 @@ export default function StartupLegalPage() {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══ NEW: PLATFORM DASHBOARD PREVIEW ══════════════════════════ */}
+                <section className="nm-section" style={{ background: '#000', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', top: -100, right: -100, width: 500, height: 500, background: 'radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 65%)', pointerEvents: 'none' }} />
+                    <div style={{ position: 'absolute', bottom: -100, left: -100, width: 400, height: 400, background: 'radial-gradient(circle, rgba(217,119,6,0.05) 0%, transparent 65%)', pointerEvents: 'none' }} />
+
+                    <div className="nm-container" style={{ position: 'relative' }}>
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
+                            <span className="brand-line" style={{ color: '#D97706' }}>PLATFORM PREVIEW</span>
+                            <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.75rem,5vw,2.75rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.15, marginBottom: 12 }}>
+                                Your Startup Legal Command Center
+                            </h2>
+                            <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.5)', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+                                Track contracts, compliance, due diligence, documentation and legal workflows from one place.
+                            </p>
+                        </div>
+
+                        {/* Dashboard Shell */}
+                        <div style={{ borderRadius: 24, border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(20px)' }}>
+                            {/* Title bar */}
+                            <div style={{ padding: '12px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                                <div style={{ display: 'flex', gap: 6 }}>
+                                    {['rgba(255,255,255,0.15)', 'rgba(255,255,255,0.15)', 'rgba(217,119,6,0.6)'].map((c, i) => <div key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
+                                </div>
+                                <span style={{ fontSize: 11, fontWeight: 600, color: '#D97706', letterSpacing: '0.1em' }}>NYAYMITRA LEGAL OPS DASHBOARD</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                                    <div className="amber-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                                    <span style={{ fontSize: 10, color: '#10b981', fontWeight: 600 }}>LIVE</span>
+                                </div>
+                            </div>
+
+                            <div style={{ padding: 'clamp(1rem,3vw,1.5rem)' }}>
+                                {/* Metric cards row */}
+                                <div className="dash-grid-metrics" style={{ marginBottom: '0.75rem' }}>
+                                    {[
+                                        { label: "Compliance Health", value: "92%", sub: "3 actions due", icon: <Activity style={{ width: 14, height: 14 }} />, accent: '#10b981' },
+                                        { label: "Active Contracts", value: "7", sub: "2 under review", icon: <FileText style={{ width: 14, height: 14 }} />, accent: '#D97706' },
+                                        { label: "Pending Tasks", value: "4", sub: "1 urgent", icon: <Clock style={{ width: 14, height: 14 }} />, accent: '#f59e0b' },
+                                        { label: "Due Diligence", value: "78%", sub: "Ready for investors", icon: <BarChart3 style={{ width: 14, height: 14 }} />, accent: '#6366f1' },
+                                        { label: "Upcoming Filings", value: "3", sub: "Next: 15 Jul", icon: <Calendar style={{ width: 14, height: 14 }} />, accent: '#ec4899' },
+                                        { label: "Stored Documents", value: "42", sub: "All secured", icon: <FolderOpen style={{ width: 14, height: 14 }} />, accent: '#D97706' },
+                                    ].map((m, mi) => (
+                                        <div key={mi} className="dash-metric">
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+                                                <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{m.label}</span>
+                                                <span style={{ color: m.accent, opacity: 0.8 }}>{m.icon}</span>
+                                            </div>
+                                            <div style={{ fontSize: 'clamp(1.25rem,4vw,1.75rem)', fontWeight: 700, color: '#fff', lineHeight: 1, marginBottom: 4 }}>{m.value}</div>
+                                            <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>{m.sub}</div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* Lower panels */}
+                                <div className="dash-panels">
+                                    {/* Contract Tracker */}
+                                    <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                                            <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.08em' }}>CONTRACT TRACKER</span>
+                                            <span style={{ fontSize: 9, color: '#D97706', fontWeight: 600 }}>7 ACTIVE</span>
+                                        </div>
+                                        {[
+                                            { name: "Vendor Agreement — TechCo", status: "Under Review", color: '#f59e0b' },
+                                            { name: "Client MSA — RetailBrand", status: "Signed", color: '#10b981' },
+                                            { name: "Employment Agreement — 3 Hires", status: "Drafting", color: '#6366f1' },
+                                            { name: "Freelancer NDA", status: "Pending Signature", color: '#D97706' },
+                                        ].map((c, ci) => (
+                                            <div key={ci} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: ci < 3 ? '1px solid rgba(255,255,255,0.05)' : 'none' }}>
+                                                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', flex: 1, marginRight: 8, lineHeight: 1.4 }}>{c.name}</span>
+                                                <span style={{ fontSize: 9, fontWeight: 700, color: c.color, background: `${c.color}18`, padding: '2px 7px', borderRadius: 999, whiteSpace: 'nowrap' }}>{c.status}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Investor Readiness Checklist */}
+                                    <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                                            <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.08em' }}>INVESTOR READINESS</span>
+                                            <span style={{ fontSize: 9, color: '#10b981', fontWeight: 600 }}>78% READY</span>
+                                        </div>
+                                        {/* Progress bar */}
+                                        <div style={{ height: 4, background: 'rgba(255,255,255,0.08)', borderRadius: 2, marginBottom: 14, overflow: 'hidden' }}>
+                                            <div style={{ height: '100%', width: '78%', background: 'linear-gradient(90deg, #D97706, #FCD34D)', borderRadius: 2 }} />
+                                        </div>
+                                        {[
+                                            { label: "Founder agreements", done: true },
+                                            { label: "Cap table documentation", done: true },
+                                            { label: "Compliance records", done: true },
+                                            { label: "ESOP documentation", done: false },
+                                            { label: "Due diligence folder", done: false },
+                                        ].map((item, ii) => (
+                                            <div key={ii} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', borderBottom: ii < 4 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                                                <div style={{ width: 16, height: 16, borderRadius: '50%', background: item.done ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.06)', border: `1px solid ${item.done ? '#10b981' : 'rgba(255,255,255,0.1)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                    {item.done && <Check style={{ width: 8, height: 8, color: '#10b981' }} />}
+                                                </div>
+                                                <span style={{ fontSize: 11, color: item.done ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.3)', lineHeight: 1.4 }}>{item.label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Recent Activity */}
+                                    <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
+                                        <div style={{ marginBottom: 14 }}>
+                                            <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.08em' }}>RECENT ACTIVITIES</span>
+                                        </div>
+                                        {[
+                                            { text: "GST compliance reminder sent to CA", time: "2h ago", color: '#D97706' },
+                                            { text: "Vendor NDA reviewed and sent for signing", time: "Yesterday", color: '#10b981' },
+                                            { text: "Shop & Establishment filed — Karnataka", time: "2 days ago", color: '#6366f1' },
+                                            { text: "Due diligence folder updated", time: "3 days ago", color: '#f59e0b' },
+                                        ].map((a, ai) => (
+                                            <div key={ai} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: ai < 3 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                                                <div style={{ width: 6, height: 6, borderRadius: '50%', background: a.color, flexShrink: 0, marginTop: 5 }} />
+                                                <div>
+                                                    <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', lineHeight: 1.4, marginBottom: 2 }}>{a.text}</p>
+                                                    <span style={{ fontSize: 9, color: 'rgba(255,255,255,0.3)' }}>{a.time}</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Compliance Timeline */}
+                                    <div className="glass-card" style={{ padding: '1rem 1.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+                                            <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.7)', letterSpacing: '0.08em' }}>COMPLIANCE TIMELINE</span>
+                                            <span style={{ fontSize: 9, color: '#D97706', fontWeight: 600 }}>3 UPCOMING</span>
+                                        </div>
+                                        {[
+                                            { label: "GST Return Filing", date: "15 Jul 2026", urgent: true },
+                                            { label: "TDS Payment", date: "7 Aug 2026", urgent: false },
+                                            { label: "ROC Annual Filing", date: "30 Sep 2026", urgent: false },
+                                            { label: "PF/ESI Monthly", date: "15 Aug 2026", urgent: false },
+                                        ].map((f, fi) => (
+                                            <div key={fi} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 0', borderBottom: fi < 3 ? '1px solid rgba(255,255,255,0.04)' : 'none' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                                    <Calendar style={{ width: 11, height: 11, color: f.urgent ? '#D97706' : 'rgba(255,255,255,0.3)', flexShrink: 0 }} />
+                                                    <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)' }}>{f.label}</span>
+                                                </div>
+                                                <span style={{ fontSize: 9, fontWeight: 600, color: f.urgent ? '#D97706' : 'rgba(255,255,255,0.35)', whiteSpace: 'nowrap' }}>{f.date}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style={{ padding: '10px 20px', borderTop: '1px solid rgba(255,255,255,0.06)', background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <Bot style={{ width: 11, height: 11, color: '#D97706' }} />
+                                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>Powered by NyayMitra AI · Updated in real time</span>
+                                </div>
+                                <a href={waGeneral} target="_blank" rel="noopener noreferrer" style={{ fontSize: 10, fontWeight: 700, color: '#D97706', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                    Get early access <ArrowRight style={{ width: 10, height: 10 }} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══ NEW: INVESTOR READINESS SECTION ══════════════════════════ */}
+                <section className="nm-section" style={{ background: '#fafafa' }}>
+                    <div className="nm-container">
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
+                            <span className="brand-line">FUNDRAISING SUPPORT</span>
+                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
+                                Fundraising Ready. Always.
+                            </h2>
+                            <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 500, margin: '0 auto', lineHeight: 1.6 }}>
+                                Prepare for investors before investors ask. NyayMitra keeps your due diligence documentation in order so you can move fast when the time comes.
+                            </p>
+                        </div>
+                        <div className="investor-grid">
+                            {investorReadinessItems.map((item, idx) => (
+                                <div key={idx} style={{ borderRadius: 18, padding: '1.25rem 1.5rem', border: '1px solid rgba(0,0,0,0.08)', background: '#fff', display: 'flex', alignItems: 'flex-start', gap: 14, transition: 'transform 0.2s, border-color 0.2s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.borderColor = '#D97706'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; }}>
+                                    <div style={{ width: 36, height: 36, borderRadius: 10, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D97706', flexShrink: 0 }}>
+                                        {item.icon}
+                                    </div>
+                                    <div>
+                                        <h3 style={{ fontSize: '0.875rem', fontWeight: 700, color: '#0a0a0a', marginBottom: 4 }}>{item.title}</h3>
+                                        <p style={{ fontSize: '0.75rem', color: '#71717a', lineHeight: 1.5 }}>{item.desc}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <div style={{ textAlign: 'center', marginTop: 32 }}>
+                            <a href={waStrategy} target="_blank" rel="noopener noreferrer" className="btn-primary">
+                                Prepare for fundraising <ArrowRight style={{ width: 13, height: 13 }} />
+                            </a>
                         </div>
                     </div>
                 </section>
@@ -1211,7 +1503,6 @@ export default function StartupLegalPage() {
                                             ))}
                                         </div>
 
-                                        {/* Spacer pushes Price/CTA/footer to bottom uniformly across cards */}
                                         <div style={{ marginTop: 'auto' }} />
 
                                         {/* Price */}
@@ -1247,7 +1538,6 @@ export default function StartupLegalPage() {
                                             <span style={{ fontSize: '0.72rem', fontWeight: 600, color: plan.popular ? 'rgba(255,255,255,0.65)' : '#52525b', lineHeight: 1.5 }}>{plan.trustBadge}</span>
                                         </div>
 
-                                        {/* Premium Note - reserved height for alignment even when absent */}
                                         <div style={{ minHeight: plan.premiumNote ? undefined : 0, marginBottom: plan.premiumNote ? 12 : 0 }}>
                                             {plan.premiumNote && (
                                                 <p style={{ fontSize: '0.72rem', color: plan.popular ? '#FCD34D' : '#92400E', fontStyle: 'italic', lineHeight: 1.5 }}>
@@ -1267,7 +1557,7 @@ export default function StartupLegalPage() {
                                             onClick={() => setExpandedPlan(isExpanded ? null : plan.id)}
                                             className="view-details-btn"
                                             style={{
-                                                color: plan.popular ? '#D97706' : '#D97706',
+                                                color: '#D97706',
                                                 borderColor: plan.popular ? 'rgba(217,119,6,0.4)' : 'rgba(217,119,6,0.35)',
                                                 marginBottom: isExpanded ? 16 : 0,
                                             }}
@@ -1278,16 +1568,9 @@ export default function StartupLegalPage() {
                                         </button>
 
                                         {/* Expandable section */}
-                                        <div
-                                            className={`plan-expand ${isExpanded ? 'is-open' : ''}`}
-                                            style={{
-                                                maxHeight: isExpanded ? 2000 : 0,
-                                                overflow: 'hidden',
-                                                padding: isExpanded ? (plan.popular ? '0 0 1rem' : '0 0 0.75rem') : undefined,
-                                            }}
-                                        >
+                                        <div className={`plan-expand ${isExpanded ? 'is-open' : ''}`}
+                                            style={{ padding: isExpanded ? (plan.popular ? '0 0 1rem' : '0 0 0.75rem') : undefined }}>
                                             <div style={{ paddingTop: 4 }}>
-                                                {/* Problems We Solve */}
                                                 <div style={{ marginBottom: 18 }}>
                                                     <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 8 }}>PROBLEMS WE SOLVE</p>
                                                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -1300,7 +1583,6 @@ export default function StartupLegalPage() {
                                                     </div>
                                                 </div>
 
-                                                {/* Benefits / Features */}
                                                 <div style={{ marginBottom: 16 }}>
                                                     <p style={{ fontSize: 9, fontWeight: 700, color: plan.popular ? '#D97706' : '#a1a1aa', letterSpacing: '0.12em', marginBottom: 8 }}>BENEFITS</p>
                                                     <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -1325,7 +1607,6 @@ export default function StartupLegalPage() {
                                                     </div>
                                                 )}
 
-                                                {/* Upgrade indicator */}
                                                 <div style={{ padding: '10px 12px', borderRadius: 10, background: plan.popular ? 'rgba(255,255,255,0.04)' : '#fafafa', border: `1px solid ${plan.popular ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)'}` }}>
                                                     <p style={{ fontSize: '0.72rem', color: plan.popular ? 'rgba(255,255,255,0.4)' : '#a1a1aa', lineHeight: 1.5, fontStyle: 'italic' }}>
                                                         <span style={{ color: '#D97706', fontStyle: 'normal', fontWeight: 600 }}>Upgrade when: </span>
@@ -1343,6 +1624,34 @@ export default function StartupLegalPage() {
                             <p style={{ fontSize: '0.7rem', color: '#a1a1aa', maxWidth: 700, margin: '0 auto', fontStyle: 'italic' }}>
                                 <strong style={{ color: '#0a0a0a' }}>Important:</strong> Government fees, statutory charges, litigation, court representation, and external professional services are billed separately where applicable.
                             </p>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ══ NEW: WHY STARTUPS CHOOSE NYAYMITRA (BENEFITS) ════════════ */}
+                <section className="nm-section" style={{ background: '#fafafa' }}>
+                    <div className="nm-container">
+                        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem,6vw,3.5rem)' }}>
+                            <span className="brand-line">WHY NYAYMITRA</span>
+                            <h2 style={{ fontSize: 'clamp(1.5rem,4vw,2.25rem)', fontWeight: 700, color: '#0a0a0a', letterSpacing: '-0.02em', lineHeight: 1.2, marginBottom: 12 }}>
+                                Why Startups Choose NyayMitra
+                            </h2>
+                            <p style={{ fontSize: '0.9rem', color: '#71717a', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+                                NyayMitra works alongside your existing lawyers, CAs and consultants. We coordinate execution so founders don't have to.
+                            </p>
+                        </div>
+                        <div className="benefits-grid">
+                            {benefitCards.map((card, idx) => (
+                                <div key={idx} style={{ borderRadius: 18, padding: '1.5rem', border: '1px solid rgba(0,0,0,0.08)', background: '#fff', transition: 'transform 0.2s, border-color 0.2s' }}
+                                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#D97706'; }}
+                                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = 'rgba(0,0,0,0.08)'; }}>
+                                    <div style={{ width: 44, height: 44, borderRadius: 12, background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14, color: '#D97706' }}>
+                                        {card.icon}
+                                    </div>
+                                    <h3 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#0a0a0a', marginBottom: 6, lineHeight: 1.3 }}>{card.title}</h3>
+                                    <p style={{ fontSize: '0.8rem', color: '#71717a', lineHeight: 1.6 }}>{card.desc}</p>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>
@@ -1374,7 +1683,7 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ TRANSPARENCY SECTION (moved directly below pricing) ═══════ */}
+                {/* ══ TRANSPARENCY SECTION ═════════════════════════════════════ */}
                 <section className="nm-section" style={{ background: '#fafafa', paddingTop: 'clamp(2.5rem,6vw,3.5rem)' }}>
                     <div className="nm-container">
                         <div style={{ textAlign: 'center', marginBottom: 'clamp(1.5rem,5vw,2.5rem)' }}>
@@ -1569,7 +1878,7 @@ export default function StartupLegalPage() {
                     </div>
                 </section>
 
-                {/* ══ FINAL CTA ════════════════════════════════════════════════ */}
+                {/* ══ FINAL CTA (UPDATED COPY) ══════════════════════════════════ */}
                 <section style={{ background: '#000', padding: 'clamp(3rem,8vw,5rem) 1.5rem', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)', backgroundSize: '48px 48px', pointerEvents: 'none' }} />
                     <div style={{ position: 'absolute', top: -100, left: '50%', transform: 'translateX(-50%)', width: 600, height: 600, background: 'radial-gradient(circle, rgba(217,119,6,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
@@ -1578,13 +1887,13 @@ export default function StartupLegalPage() {
                             <MessageCircle style={{ width: 10, height: 10, color: '#D97706' }} />
                             <span style={{ fontSize: 9, fontWeight: 700, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.14em' }}>ONE ACCOUNTABLE TEAM</span>
                         </div>
-                        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,6vw,3.5rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 8 }}>
+                        <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,6vw,3.5rem)', fontWeight: 700, color: '#fff', letterSpacing: '-0.025em', lineHeight: 1.15, marginBottom: 16 }}>
                             {t.finalHeading}
                         </h2>
-                        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1.25rem,4vw,2rem)', fontWeight: 600, fontStyle: 'italic', color: '#D97706', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: 20 }}>
+                        <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(1rem,3vw,1.5rem)', fontWeight: 600, fontStyle: 'italic', color: 'rgba(255,255,255,0.6)', letterSpacing: '-0.01em', lineHeight: 1.4, maxWidth: 600, margin: '0 auto 24px' }}>
                             {t.finalHeadingGold}
                         </h3>
-                        <p style={{ fontSize: '0.9375rem', color: 'rgba(255,255,255,0.5)', maxWidth: 460, margin: '0 auto 36px', lineHeight: 1.65 }}>{t.finalDesc}</p>
+                        <p style={{ fontSize: '0.875rem', color: 'rgba(255,255,255,0.5)', maxWidth: 460, margin: '0 auto 36px', lineHeight: 1.65 }}>{t.finalDesc}</p>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center', marginBottom: 20 }}>
                             <a href={waOps} target="_blank" rel="noopener noreferrer" className="btn-amber">
                                 {t.ctaFinal} <ArrowRight style={{ width: 13, height: 13 }} />
@@ -1632,7 +1941,6 @@ export default function StartupLegalPage() {
                                 </div>
                             </div>
 
-                            {/* Quick Links */}
                             <div>
                                 <h4 style={{ fontSize: 9, fontWeight: 700, color: '#a1a1aa', letterSpacing: '0.15em', marginBottom: 14, textTransform: 'uppercase' }}>{t.quickLinks}</h4>
                                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -1646,7 +1954,6 @@ export default function StartupLegalPage() {
                                 </ul>
                             </div>
 
-                            {/* Legal Links */}
                             <div>
                                 <h4 style={{ fontSize: 9, fontWeight: 700, color: '#a1a1aa', letterSpacing: '0.15em', marginBottom: 14, textTransform: 'uppercase' }}>{t.legal}</h4>
                                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -1661,7 +1968,7 @@ export default function StartupLegalPage() {
                             </div>
                         </div>
 
-                        <div className="footer-bottom" style={{ borderTop: '1px solid rgba(0,0,0,0.07)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                        <div style={{ borderTop: '1px solid rgba(0,0,0,0.07)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
                             <p style={{ fontSize: 10, color: '#a1a1aa', textAlign: 'left', lineHeight: 1.5 }}>
                                 <span style={{ color: '#71717a', fontWeight: 600 }}>Disclaimer: </span>{t.disclaimer}
                             </p>
