@@ -1460,7 +1460,7 @@ export default function HomePage() {
       <div style={{ minHeight: "100vh", background: "var(--white)" }}>
 
         {/* ── Announcement Bar ─────────────────────────────────────────────────── */}
-        <div role="banner" style={{
+        {/* <div role="banner" style={{
           background: "linear-gradient(90deg, var(--ink) 0%, var(--ink-2) 40%, var(--ink-3) 100%)",
           color: "white", textAlign: "center", padding: "9px 16px",
           fontSize: "11px", fontFamily: "var(--mono)", letterSpacing: "0.1em",
@@ -1480,7 +1480,7 @@ export default function HomePage() {
             style={{ color: "var(--gold-lt)", textDecoration: "none", fontWeight: 600, letterSpacing: "0.12em" }}>
             Book Free Assessment →
           </a>
-        </div>
+        </div> */}
 
         {/* ── Navbar ─────────────────────────────────────────────────────────── */}
         <nav aria-label="Main navigation" style={{
