@@ -1688,7 +1688,7 @@ export default function HomePage() {
                     }} />
                   </div>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
-                    Fractional Legal & Compliance Desk · Built for Indian Businesses
+                    Legal Operations Partner · Built for Growing Businesses
                   </span>
                 </div>
 
@@ -1700,9 +1700,9 @@ export default function HomePage() {
                   letterSpacing: "-0.03em", color: "var(--ink)",
                   marginBottom: 0, paddingTop: "0.3rem", overflow: "visible",
                 }}>
-                  Your Outsourced<br />
+                  Your Legal Operations Team.<br />
                   <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.35, overflow: "visible" }}>
-                    Legal & Compliance Team.
+                    Without Hiring One.
                   </span>
                 </h1>
 
@@ -1713,7 +1713,7 @@ export default function HomePage() {
                     fontWeight: 400, color: "var(--ink-3)", letterSpacing: "-0.01em",
                     borderLeft: "3px solid var(--gold)", paddingLeft: "16px",
                   }}>
-                    India's Fractional Legal & Compliance Desk for Growing Businesses
+                    The Legal Operations Partner for Startups & Growing Businesses
                   </span>
                 </div>
 
@@ -1724,12 +1724,13 @@ export default function HomePage() {
                 </div>
 
                 {/* SUBHEADLINE */}
+
                 <p style={{
                   fontFamily: "var(--sans)", fontSize: "15.5px",
                   color: "var(--ink-4)", lineHeight: 1.85,
                   maxWidth: 540, marginBottom: 14, fontWeight: 300,
                 }}>
-                  Most businesses already have a CA, lawyer, or consultant. NyayMitra becomes the single coordination layer that manages contracts, compliance, documentation, registrations, and legal execution so founders can focus on growth.
+                  NyayMitra becomes your dedicated legal operations team working alongside your existing advisors so legal work gets done while you focus on growing your business.
                 </p>
 
                 <p style={{
@@ -1739,18 +1740,18 @@ export default function HomePage() {
                   display: "flex", alignItems: "center", gap: 8,
                 }}>
                   <Handshake style={{ width: 14, height: 14, flexShrink: 0 }} />
-                  Think fractional CFO but for legal & compliance operations.
+                  We don't replace your lawyers. We coordinate them.
                 </p>
 
                 {/* CTAs */}
                 <div className="hero-ctas" style={{ marginBottom: 20 }}>
                   <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                     <Sparkles style={{ width: 14, height: 14 }} />
-                    Book Compliance Assessment
+                    Book Free Legal Operations Assessment
                   </a>
                   <a href={waLegalOps} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                     <Headset style={{ width: 14, height: 14 }} />
-                    Talk to Legal Ops Team
+                    Talk to Legal Ops
                   </a>
                 </div>
 
@@ -1758,10 +1759,10 @@ export default function HomePage() {
                 <div style={{ marginBottom: 32, marginTop: 4 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
                     {[
-                      { icon: <Users style={{ width: 10, height: 10 }} />, text: "65+ Legal Experts" },
-                      { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan India Coverage" },
-                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "Dedicated Legal Ops" },
-                      { icon: <Handshake style={{ width: 10, height: 10 }} />, text: "Works With Existing Advisors" },
+                      { icon: <Shield style={{ width: 10, height: 10 }} />, text: "Works With Your Existing CA & Lawyers" },
+                      { icon: <Users style={{ width: 10, height: 10 }} />, text: "65+ Legal Professionals" },
+                      { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan-India Execution" },
+                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "WhatsApp-First Support" },
                     ].map(t => (
                       <div key={t.text} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
                         <span style={{ color: "var(--gold-dk)" }}>{t.icon}</span>
@@ -1782,12 +1783,12 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* ── Right column: How It Works card ── */}
+              {/* ── Right column: Legal Ops Dashboard card ── */}
               <div style={{ animation: "fadeUp 0.82s 0.12s cubic-bezier(0.16,1,0.3,1) both" }}>
                 <div style={{ animation: "floatSlow 9s ease-in-out infinite", position: "relative" }}>
                   <div className="card" style={{ overflow: "hidden", boxShadow: "0 40px 80px rgba(12,11,9,0.1), 0 8px 24px rgba(12,11,9,0.06), 0 0 0 1px rgba(12,11,9,0.03)" }}>
                     <div style={{
-                      background: "var(--ink)", padding: "16px 22px",
+                      background: "var(--ink)", padding: "18px 24px",
                       display: "flex", alignItems: "center", justifyContent: "space-between",
                       position: "relative", overflow: "hidden",
                     }}>
@@ -1795,7 +1796,7 @@ export default function HomePage() {
                       <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
                         <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--gold)", boxShadow: "0 0 12px rgba(201,168,76,0.6)", animation: "glowPulse 2.5s ease-in-out infinite" }} />
                         <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.5)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                          NyayMitra · Your Legal Ops Partner
+                          Legal Operations Desk
                         </span>
                       </div>
                       <div style={{ display: "flex", gap: 5, position: "relative", zIndex: 1 }}>
@@ -1805,11 +1806,11 @@ export default function HomePage() {
                       </div>
                     </div>
 
-                    <div style={{ padding: "4px 0" }}>
+                    <div style={{ padding: "8px 0" }}>
                       {flowSteps.map((step, i) => (
                         <div key={step.n}
                           style={{
-                            padding: "20px 24px", display: "flex", gap: 16, alignItems: "flex-start",
+                            padding: "24px 26px", display: "flex", gap: 18, alignItems: "flex-start",
                             borderBottom: i < 2 ? "1px solid var(--ink-8)" : "none",
                             transition: "background 0.2s", cursor: "default",
                             background: i === 2 ? "var(--gold-pale)" : "transparent",
@@ -1817,7 +1818,7 @@ export default function HomePage() {
                           onMouseEnter={e => { if (i !== 2) (e.currentTarget as HTMLDivElement).style.background = "var(--ink-9)" }}
                           onMouseLeave={e => { if (i !== 2) (e.currentTarget as HTMLDivElement).style.background = "" }}>
                           <div style={{
-                            width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+                            width: 40, height: 40, borderRadius: 10, flexShrink: 0,
                             background: i === 2 ? "var(--ink)" : "var(--ink-9)",
                             border: `1px solid ${i === 2 ? "transparent" : "var(--ink-7)"}`,
                             display: "flex", alignItems: "center", justifyContent: "center",
@@ -1826,19 +1827,19 @@ export default function HomePage() {
                           }}>
                             {step.icon}
                           </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 4 }}>
+                          <div style={{ flex: 1, paddingTop: 1 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 5 }}>
                               <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold)", letterSpacing: "0.12em" }}>{step.n}</span>
-                              <span style={{ fontFamily: "var(--sans)", fontSize: "13px", fontWeight: 600, color: "var(--ink)" }}>{step.title}</span>
+                              <span style={{ fontFamily: "var(--sans)", fontSize: "13.5px", fontWeight: 600, color: "var(--ink)" }}>{step.title}</span>
                             </div>
-                            <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.6 }}>{step.desc}</p>
+                            <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.65 }}>{step.desc}</p>
                           </div>
                         </div>
                       ))}
                     </div>
 
                     <div style={{
-                      padding: "13px 22px", background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)",
+                      padding: "14px 24px", background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)",
                       display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
                       <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
@@ -1864,8 +1865,8 @@ export default function HomePage() {
                     display: "flex", alignItems: "center", gap: 8,
                     animation: "float 7s 1s ease-in-out infinite",
                   }}>
-                    <Shield style={{ width: 12, height: 12, color: "var(--gold)" }} />
-                    Works with your existing CA/Lawyer
+                    <Handshake style={{ width: 12, height: 12, color: "var(--gold)" }} />
+                    Works Alongside Your Existing Advisors
                   </div>
                   <div style={{
                     position: "absolute", top: -16, right: -16,
@@ -1877,7 +1878,7 @@ export default function HomePage() {
                     animation: "float 8s 0.5s ease-in-out infinite",
                   }}>
                     <Zap style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
-                    Not a lawyer. Your legal ops team.
+                    Legal Work. Actually Done.
                   </div>
                 </div>
               </div>
