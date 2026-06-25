@@ -2854,22 +2854,22 @@ export default function HomePage() {
               <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", border: "1px solid var(--gold)", borderRadius: 100, marginBottom: 32, background: "var(--gold-pale)" }}>
                 <Sparkles style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
                 <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--gold-dk)", letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}>
-                  Outsourced Legal Operations · India
+                  Legal Operations Partner · India
                 </span>
               </div>
               <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(32px, 5.5vw, 58px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.028em", lineHeight: 1.2, marginBottom: 18 }}>
-                Stop Managing Legal.<br />
+                Stop Coordinating Legal.<br />
                 <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.4, paddingTop: "0.1rem" }}>
-                  Start Delegating It.
+                  Let Us Run It.
                 </span>
               </h2>
               <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.9, maxWidth: 540, margin: "0 auto 40px", fontWeight: 300 }}>
-                NyayMitra is your Fractional Legal & Compliance Desk one team that manages contracts, compliance, registrations, documentation and legal workflows while you focus on running the business.
+                NyayMitra becomes your legal operations team coordinating advisors, tracking compliance, managing contracts, and ensuring every task is completed while you run the business.
               </p>
               <div className="cta-row">
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 10 }}>
                   <Sparkles style={{ width: 14, height: 14 }} />
-                  Book Compliance Assessment
+                  Book Legal Ops Assessment
                 </a>
                 <a href={waLegalOps} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                   <Headset style={{ width: 14, height: 14 }} />
@@ -2877,13 +2877,13 @@ export default function HomePage() {
                 </a>
               </div>
               <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", marginTop: 20, fontWeight: 300 }}>
-                No obligation. We'll help you identify what's worth fixing first.
+                Free 15-minute discovery call. We'll identify the gaps and tell you exactly how we can help.
               </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, marginTop: 28, flexWrap: "wrap" }}>
                 {[
-                  { icon: <Headset style={{ width: 10, height: 10 }} />, text: "Dedicated Legal Ops" },
+                  { icon: <Headset style={{ width: 10, height: 10 }} />, text: "Dedicated Legal Ops Team" },
                   { icon: <Zap style={{ width: 10, height: 10 }} />, text: "WhatsApp-first" },
-                  { icon: <CheckCircle style={{ width: 10, height: 10 }} />, text: "Works with your CA/Lawyer" },
+                  { icon: <CheckCircle style={{ width: 10, height: 10 }} />, text: "Works with your CA & Lawyer" },
                   { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan-India" },
                 ].map(t => (
                   <div key={t.text} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
