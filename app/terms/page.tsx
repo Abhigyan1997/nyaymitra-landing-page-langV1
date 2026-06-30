@@ -942,9 +942,9 @@ export default function TermsPage() {
                                     }}>
                                         {[
                                             {
-                                                href: "mailto:support@nyaymitra.tech",
+                                                href: "mailto:support@mynyaymitra.in",
                                                 icon: Mail, label: "Email",
-                                                value: "support@nyaymitra.tech",
+                                                value: "support@mynyaymitra.in",
                                             },
                                             {
                                                 href: "tel:+917970596183",

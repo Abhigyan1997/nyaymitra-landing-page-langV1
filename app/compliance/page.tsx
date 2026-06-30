@@ -1018,7 +1018,7 @@ export default function NyayMitraCompliance() {
                             <p style={{ fontFamily: "var(--nm-sans)", fontSize: 12, color: "#999", maxWidth: 260, lineHeight: 1.75, marginBottom: 20, fontWeight: 300 }}>Compliance operations and management for growing Indian startups and MSMEs. We work alongside your existing CA, CS and lawyers.</p>
                             {[
                                 { icon: <MapPin size={10} />, text: "Koramangala, Bengaluru – 560034" },
-                                { icon: <Mail size={10} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
+                                { icon: <Mail size={10} />, text: "support@mynyaymitra.in", href: "mailto:support@mynyaymitra.in" },
                                 { icon: <PhoneCall size={10} />, text: "+91 79705 96183", href: "tel:+917970596183" },
                             ].map((row, i) => (
                                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, fontSize: 11, fontFamily: "var(--nm-sans)", color: "#AAA", fontWeight: 300 }}>
@@ -1027,7 +1027,7 @@ export default function NyayMitraCompliance() {
                                 </div>
                             ))}
                             <div style={{ display: "flex", gap: 8, marginTop: 16 }}>
-                                {[{ icon: <Instagram size={12} />, href: "https://www.instagram.com/nyaymitra.tech" }, { icon: <Linkedin size={12} />, href: "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" }].map((s, i) => (
+                                {[{ icon: <Instagram size={12} />, href: "https://www.instagram.com/mynyaymitra.in" }, { icon: <Linkedin size={12} />, href: "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" }].map((s, i) => (
                                     <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
                                         style={{ width: 30, height: 30, borderRadius: 5, border: "1px solid var(--nm-border)", display: "flex", alignItems: "center", justifyContent: "center", color: "#AAA", textDecoration: "none", transition: "all 0.15s" }}
                                         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "#B89440"; (e.currentTarget as HTMLElement).style.color = "#B89440"; }}

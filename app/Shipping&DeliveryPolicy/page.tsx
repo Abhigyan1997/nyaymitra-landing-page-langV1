@@ -1104,7 +1104,7 @@ export default function ShippingPolicyPage() {
                                         gap: 12, padding: "24px 28px 28px",
                                         background: "var(--ink-2)",
                                     }}>
-                                        <a href="mailto:support@nyaymitra.tech" style={{
+                                        <a href="mailto:support@mynyaymitra.in" style={{
                                             display: "flex", alignItems: "center", gap: 14,
                                             padding: "16px 20px",
                                             border: "1px solid rgba(255,255,255,0.08)",
@@ -1141,7 +1141,7 @@ export default function ShippingPolicyPage() {
                                                 <p style={{
                                                     fontFamily: "var(--sans)", fontSize: "13px",
                                                     color: "rgba(255,255,255,0.65)", fontWeight: 400,
-                                                }}>support@nyaymitra.tech</p>
+                                                }}>support@mynyaymitra.in</p>
                                             </div>
                                         </a>
                                         <a href="tel:+917970596183" style={{

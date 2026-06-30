@@ -833,7 +833,7 @@ function Footer() {
                     </p>
                     <div style={{ marginTop: 14, display: "flex", gap: 10 }}>
                         <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,.2)", letterSpacing: ".12em" }}>
-                            support@nyaymitra.tech
+                            support@mynyaymitra.in
                         </span>
                     </div>
                 </div>

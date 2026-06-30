@@ -2919,7 +2919,7 @@ export default function HomePage() {
                 <address style={{ fontStyle: "normal" }}>
                   {[
                     { icon: <MapPin style={{ width: 10, height: 10 }} />, text: "Koramangala, Bengaluru 560034, Karnataka" },
-                    { icon: <Mail style={{ width: 10, height: 10 }} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
+                    { icon: <Mail style={{ width: 10, height: 10 }} />, text: "support@mynyaymitra.in", href: "mailto:support@mynyaymitra.in" },
                     { icon: <PhoneCall style={{ width: 10, height: 10 }} />, text: "+91 79705 96183", href: "tel:+917970596183" },
                   ].map((item, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 9, marginBottom: 9 }}>

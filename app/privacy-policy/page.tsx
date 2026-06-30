@@ -1134,14 +1134,14 @@ export default function PrivacyPage() {
                                     }}>
                                         {[
                                             {
-                                                href: "mailto:privacy@nyaymitra.tech",
+                                                href: "mailto:privacy@mynyaymitra.in",
                                                 icon: Mail, label: "Email",
-                                                value: "privacy@nyaymitra.tech",
+                                                value: "privacy@mynyaymitra.in",
                                             },
                                             {
-                                                href: "mailto:support@nyaymitra.tech",
+                                                href: "mailto:support@mynyaymitra.in",
                                                 icon: Mail, label: "Support",
-                                                value: "support@nyaymitra.tech",
+                                                value: "support@mynyaymitra.in",
                                             },
                                         ].map(({ href, icon: Icon, label, value }) => (
                                             <a key={href} href={href} className="contact-row" style={{

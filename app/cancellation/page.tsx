@@ -1018,7 +1018,7 @@ export default function CancellationPage() {
                                         padding: "24px 28px 28px", background: "var(--ink-2)",
                                     }}>
                                         {[
-                                            { href: "mailto:support@nyaymitra.tech", icon: Mail, label: "Email", value: "support@nyaymitra.tech" },
+                                            { href: "mailto:support@mynyaymitra.in", icon: Mail, label: "Email", value: "support@mynyaymitra.in" },
                                             { href: "tel:+917970596183", icon: Phone, label: "Phone", value: "+91 79705 96183" },
                                         ].map(({ href, icon: Icon, label, value }) => (
                                             <a key={href} href={href} className="contact-row" style={{

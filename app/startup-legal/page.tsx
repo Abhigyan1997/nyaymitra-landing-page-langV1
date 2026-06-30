@@ -539,7 +539,7 @@ export default function StartupLegalPage() {
                             url: "https://nyaymitra.com",
                             logo: "https://nyaymitra.com/logo.png",
                             contactPoint: { "@type": "ContactPoint", telephone: "+91-79705-96183", contactType: "customer support" },
-                            sameAs: ["https://www.instagram.com/nyaymitra.tech", "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd"],
+                            sameAs: ["https://www.instagram.com/mynyaymitra.in", "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd"],
                         },
                         {
                             "@type": "LocalBusiness",
@@ -769,7 +769,7 @@ export default function StartupLegalPage() {
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                                 <div className="nm-hide-mobile" style={{ display: 'flex', gap: 6 }}>
-                                    <a href="https://www.instagram.com/nyaymitra.tech" target="_blank" rel="noopener noreferrer" style={{ padding: 6, borderRadius: '50%', color: '#a1a1aa', textDecoration: 'none', display: 'flex', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#000'} onMouseLeave={e => e.currentTarget.style.color = '#a1a1aa'}><Instagram style={{ width: 16, height: 16 }} /></a>
+                                    <a href="https://www.instagram.com/mynyaymitra.in" target="_blank" rel="noopener noreferrer" style={{ padding: 6, borderRadius: '50%', color: '#a1a1aa', textDecoration: 'none', display: 'flex', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#000'} onMouseLeave={e => e.currentTarget.style.color = '#a1a1aa'}><Instagram style={{ width: 16, height: 16 }} /></a>
                                     <a href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" target="_blank" rel="noopener noreferrer" style={{ padding: 6, borderRadius: '50%', color: '#a1a1aa', textDecoration: 'none', display: 'flex', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#000'} onMouseLeave={e => e.currentTarget.style.color = '#a1a1aa'}><Linkedin style={{ width: 16, height: 16 }} /></a>
                                 </div>
                                 <button onClick={() => setIsMenuOpen(v => !v)} style={{ padding: 8, background: 'rgba(0,0,0,0.05)', border: 'none', borderRadius: 8, cursor: 'pointer' }} className="nm-show-mobile">
@@ -1921,7 +1921,7 @@ export default function StartupLegalPage() {
                                 <address style={{ fontStyle: 'normal' }}>
                                     {[
                                         { icon: <MapPin style={{ width: 11, height: 11 }} />, text: "Koramangala, Bengaluru – 560034", href: null },
-                                        { icon: <Mail style={{ width: 11, height: 11 }} />, text: "support@nyaymitra.tech", href: "mailto:support@nyaymitra.tech" },
+                                        { icon: <Mail style={{ width: 11, height: 11 }} />, text: "support@mynyaymitra.in", href: "mailto:support@mynyaymitra.in" },
                                         { icon: <PhoneCall style={{ width: 11, height: 11 }} />, text: "+91 79705 96183", href: "tel:+917970596183" },
                                     ].map((row, i) => (
                                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, color: '#71717a', fontSize: 11 }}>
@@ -1933,7 +1933,7 @@ export default function StartupLegalPage() {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginTop: 16 }}>
                                     <span style={{ fontSize: 10, color: '#a1a1aa', marginRight: 4 }}>Follow us</span>
                                     {[
-                                        { icon: <Instagram style={{ width: 13, height: 13 }} />, href: "https://www.instagram.com/nyaymitra.tech", label: "Instagram" },
+                                        { icon: <Instagram style={{ width: 13, height: 13 }} />, href: "https://www.instagram.com/mynyaymitra.in", label: "Instagram" },
                                         { icon: <Linkedin style={{ width: 13, height: 13 }} />, href: "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd", label: "LinkedIn" },
                                     ].map(s => (
                                         <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ width: 28, height: 28, borderRadius: 8, border: '1px solid rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#a1a1aa', textDecoration: 'none' }}>{s.icon}</a>

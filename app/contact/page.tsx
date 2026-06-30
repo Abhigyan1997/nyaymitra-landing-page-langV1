@@ -262,7 +262,7 @@ const CONTACT_INFO = [
   { icon: MapPin, title: "Office Address", lines: ["NyayMitra Technologies Pvt. Ltd.", "Koramangala, 5th Block", "Bangalore, Karnataka – 560095"] },
   { icon: MapPin, title: "Registered Address", lines: ["NyayMitra Technologies Pvt. Ltd.", "Bhagalpur, Bihar, India"] },
   { icon: Phone, title: "Emergency Line", lines: ["+91 79705 96183"], href: "tel:+917970596183" },
-  { icon: Mail, title: "Email", lines: ["support@nyaymitra.tech"], href: "mailto:support@nyaymitra.tech" },
+  { icon: Mail, title: "Email", lines: ["support@mynyaymitra.in"], href: "mailto:support@mynyaymitra.in" },
   { icon: Clock, title: "Business Hours", lines: ["Mon–Fri: 9 AM – 8 PM", "Sat: 10 AM – 6 PM", "Sun: 10 AM – 4 PM"] },
 ]
 

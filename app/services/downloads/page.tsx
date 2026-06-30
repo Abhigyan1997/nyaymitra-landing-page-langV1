@@ -838,7 +838,7 @@ export default function InstantDownloadPage() {
                                     Contact Us
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "12px", color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>
-                                    <Mail size={13} color="var(--gold)" /> support@nyaymitra.tech
+                                    <Mail size={13} color="var(--gold)" /> support@mynyaymitra.in
                                 </div>
                                 <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>
                                     <Phone size={13} color="var(--gold)" /> +91 79705 96183
