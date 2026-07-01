@@ -2,18 +2,18 @@
 > Online legal services platform for India. AI-powered legal guidance, verified lawyers, affidavit drafting. Available in Hindi and English.
 
 ## Key pages
-- https://nyaymitra.tech/ : Homepage — overview of all services
-- https://nyaymitra.tech/legal-gpt : Legal AI chat trained on Indian law
-- https://nyaymitra.tech/affidavit-online-india : Online affidavit drafting from ₹999
-- https://nyaymitra.tech/lawyers : Find verified lawyers across India
-- https://nyaymitra.tech/services : All legal document and drafting services
-- https://nyaymitra.tech/about : About NyayMitra
-- https://nyaymitra.tech/contact : Contact and support
+- https://mynyaymitra.in/ : Homepage — overview of all services
+- https://mynyaymitra.in/legal-gpt : Legal AI chat trained on Indian law
+- https://mynyaymitra.in/affidavit-online-india : Online affidavit drafting from ₹999
+- https://mynyaymitra.in/lawyers : Find verified lawyers across India
+- https://mynyaymitra.in/services : All legal document and drafting services
+- https://mynyaymitra.in/about : About NyayMitra
+- https://mynyaymitra.in/contact : Contact and support
 
 ## About
 - Founded: 2024
 - Headquarters: Koramangala, Bengaluru, Karnataka 560034, India
-- Contact: support@nyaymitra.tech | +91 79705 96183
+- Contact: support@mynyaymitra.in | +91 79705 96183
 - Languages: Hindi, English
 - Coverage: All India — Patna, Lucknow, Indore, Jaipur, Ranchi, Bengaluru, Delhi, Mumbai
 

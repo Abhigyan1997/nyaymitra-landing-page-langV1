@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   ],
 
   // ✅ FIXED (removed www)
-  metadataBase: new URL("https://nyaymitra.tech"),
+  metadataBase: new URL("https://mynyaymitra.in"),
 
   alternates: {
     canonical: "/",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
       "NyayMitra – Legal Operations & Compliance Support for Growing Businesses",
     description:
       "Helping startups, MSMEs, and businesses manage compliance, contracts, registrations, documentation, trademarks, legal notices, and business execution.",
-    url: "https://nyaymitra.tech",
+    url: "https://mynyaymitra.in",
     siteName: "NyayMitra",
     images: [
       {
@@ -105,7 +105,7 @@ export default function RootLayout({
             "@context": "https://schema.org",
             "@type": "LegalService",
             name: "NyayMitra",
-            url: "https://nyaymitra.tech",
+            url: "https://mynyaymitra.in",
             description:
               "Legal Operations & Compliance Support Platform for Startups, MSMEs and Growing Businesses.",
             areaServed: "India",

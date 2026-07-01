@@ -476,18 +476,18 @@ export default function PartnersPage() {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "NyayMitra",
-        "url": "https://nyaymitra.tech",
-        "logo": "https://nyaymitra.tech/logo.png",
-        "sameAs": ["https://www.instagram.com/nyaymitra.tech", "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd"]
+        "url": "https://mynyaymitra.in",
+        "logo": "https://mynyaymitra.in/logo.png",
+        "sameAs": ["https://www.instagram.com/nyaymitra.in", "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd"]
     }
 
     const webPageSchema = {
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "NyayMitra Partner Program",
-        "url": "https://nyaymitra.tech/partners",
+        "url": "https://mynyaymitra.in/partners",
         "description": "Join the NyayMitra Partner Program. Refer startups and businesses for legal operations, compliance, documentation, and registrations. Earn rewards for successful referrals.",
-        "isPartOf": { "@type": "WebSite", "name": "NyayMitra", "url": "https://nyaymitra.tech" }
+        "isPartOf": { "@type": "WebSite", "name": "NyayMitra", "url": "https://mynyaymitra.in" }
     }
 
     const faqData = [
@@ -519,12 +519,12 @@ export default function PartnersPage() {
                 <meta name="description" content="Join the NyayMitra Partner Program. Refer startups and businesses for legal operations, compliance, documentation, and registrations. Earn rewards for successful referrals." />
                 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
                 <meta name="robots" content="index, follow" />
-                <link rel="canonical" href="https://nyaymitra.tech/partners" />
+                <link rel="canonical" href="https://mynyaymitra.in/partners" />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://nyaymitra.tech/partners" />
+                <meta property="og:url" content="https://mynyaymitra.in/partners" />
                 <meta property="og:title" content="NyayMitra Partner Program | Refer Businesses & Earn Rewards" />
                 <meta property="og:description" content="Refer startups and businesses for legal operations, compliance, documentation, and registrations. Earn rewards for successful referrals." />
-                <meta property="og:image" content="https://nyaymitra.tech/og-image.png" />
+                <meta property="og:image" content="https://mynyaymitra.in/og-image.png" />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }} />
                 <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
@@ -560,7 +560,7 @@ export default function PartnersPage() {
 
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
                             <div className="desk-only" style={{ alignItems: "center", gap: 7 }}>
-                                <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                                <SocialIcon href="https://www.instagram.com/mynyaymitra.in" icon={Instagram} label="Instagram" />
                                 <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                                 <div style={{ width: 1, height: 18, background: "var(--ink-7)", margin: "0 2px" }} />
                                 <Link href="/auth/login" className="nav-link">Login</Link>
@@ -1248,7 +1248,7 @@ export default function PartnersPage() {
                                     Legal Operations &amp; Compliance Infrastructure for Startups, MSMEs &amp; Businesses.
                                 </p>
                                 <div style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 16 }}>
-                                    <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                                    <SocialIcon href="https://www.instagram.com/mynyaymitra.in" icon={Instagram} label="Instagram" />
                                     <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                                 </div>
                             </div>

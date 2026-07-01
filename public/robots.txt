@@ -4,4 +4,4 @@ Disallow: /auth/
 Disallow: /api/
 Disallow: /all-bookings
  
-Sitemap: https://nyaymitra.tech/sitemap.xml
+Sitemap: https://mynyaymitra.in/sitemap.xml

@@ -1305,8 +1305,8 @@ export default function HomePage() {
     "@type": "Organization",
     "name": "NyayMitra",
     "alternateName": "NyayMitra Technologies Pvt Ltd",
-    "url": "https://nyaymitra.tech",
-    "logo": "https://nyaymitra.tech/logo.png",
+    "url": "https://mynyaymitra.in",
+    "logo": "https://mynyaymitra.in/logo.png",
     "description": "NyayMitra is India's Fractional Legal & Compliance Desk for startups, MSMEs and growing businesses. We manage contracts, compliance, registrations, documentation and legal workflows through one dedicated operational layer working alongside your existing CA, CS and lawyers.",
     "foundingDate": "2025",
     "areaServed": "IN",
@@ -1333,7 +1333,7 @@ export default function HomePage() {
       }
     ],
     "sameAs": [
-      "https://www.instagram.com/nyaymitra.tech",
+      "https://www.instagram.com/nyaymitra.in",
       "https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd"
     ]
   }
@@ -1342,9 +1342,9 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@type": "LegalService",
     "name": "NyayMitra Fractional Legal & Compliance Desk",
-    "image": "https://nyaymitra.tech/logo.png",
-    "@id": "https://nyaymitra.tech",
-    "url": "https://nyaymitra.tech",
+    "image": "https://mynyaymitra.in/logo.png",
+    "@id": "https://mynyaymitra.in",
+    "url": "https://mynyaymitra.in",
     "telephone": "+91-79705-96183",
     "priceRange": "₹₹",
     "description": "Fractional Legal & Compliance Desk for startups, MSMEs and growing businesses across India. Services include compliance management, contract coordination, documentation governance, registration coordination, advisor coordination, and legal operations infrastructure.",
@@ -1380,10 +1380,10 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "NyayMitra",
-    "url": "https://nyaymitra.tech",
+    "url": "https://mynyaymitra.in",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://nyaymitra.tech/search?q={search_term_string}",
+      "target": "https://mynyaymitra.in/search?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   }
@@ -1434,13 +1434,13 @@ export default function HomePage() {
         <meta name="keywords" content="fractional legal team India, outsourced legal function India, legal operations partner India, compliance management India, contract management startups India, legal ops startup India, outsourced compliance team India, MSME legal support, startup legal operations, compliance infrastructure India" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://nyaymitra.tech" />
+        <link rel="canonical" href="https://mynyaymitra.in" />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://nyaymitra.tech" />
+        <meta property="og:url" content="https://mynyaymitra.in" />
         <meta property="og:title" content="NyayMitra | Fractional Legal & Compliance Desk for Startups & MSMEs" />
         <meta property="og:description" content="NyayMitra manages contracts, compliance, registrations and legal workflows for growing businesses so founders can focus on growth, not paperwork." />
-        <meta property="og:image" content="https://nyaymitra.tech/og-image.png" />
+        <meta property="og:image" content="https://mynyaymitra.in/og-image.png" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="NyayMitra" />
 
@@ -1448,7 +1448,7 @@ export default function HomePage() {
         <meta name="twitter:site" content="@nyaymitra" />
         <meta name="twitter:title" content="NyayMitra | Fractional Legal & Compliance Desk for Startups & MSMEs" />
         <meta name="twitter:description" content="NyayMitra manages contracts, compliance, registrations and legal workflows for growing businesses so founders can focus on growth, not paperwork." />
-        <meta name="twitter:image" content="https://nyaymitra.tech/og-image.png" />
+        <meta name="twitter:image" content="https://mynyaymitra.in/og-image.png" />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }} />
@@ -1515,7 +1515,7 @@ export default function HomePage() {
 
             <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
               <div className="desk-only" style={{ alignItems: "center", gap: 7 }}>
-                <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                <SocialIcon href="https://www.instagram.com/mynyaymitra.in" icon={Instagram} label="Instagram" />
                 <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                 <div style={{ width: 1, height: 18, background: "var(--ink-7)", margin: "0 2px" }} />
               </div>
@@ -2934,7 +2934,7 @@ export default function HomePage() {
                 </address>
                 <div style={{ display: "flex", alignItems: "center", gap: 9, marginTop: 18 }}>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "7.5px", color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Follow</span>
-                  <SocialIcon href="https://www.instagram.com/nyaymitra.tech" icon={Instagram} label="Instagram" />
+                  <SocialIcon href="https://www.instagram.com/mynyaymitra.in" icon={Instagram} label="Instagram" />
                   <SocialIcon href="https://www.linkedin.com/company/nyaymitra-tech-pvt-ltd" icon={Linkedin} label="LinkedIn" />
                 </div>
               </div>

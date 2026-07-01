@@ -230,7 +230,7 @@ const PaymentReceiptPDF = ({ data }: { data: any }) => (
                         <Text>|</Text>
                         <Text>+91 7970596183</Text>
                         <Text>|</Text>
-                        <Text>www.nyaymitra.tech/contact</Text>
+                        <Text>www.mynyaymitra.in/contact</Text>
                     </View>
                 </View>
             </View>
