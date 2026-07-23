@@ -1188,7 +1188,7 @@ export default function HomePage() {
 
   const navLinks = [
     { key: "home", label: "Home", href: "/" },
-    { key: "startup-legal", label: "Startup Legal", href: "/startup-legal" },
+    { key: "startup-legal", label: "Business Legal", href: "/startup-legal" },
     { key: "lawyers", label: "Find Lawyers", href: "/lawyers" },
     { key: "legalGPT", label: "Legal AI", href: "/legal-ai" },
     { key: "about", label: "About", href: "/about" },
