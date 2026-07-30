@@ -484,7 +484,7 @@ export default function StartupLegalPage() {
         { label: "In-House Legal Hire", price: "₹80,000–₹1,25,000/month", sub: "Salary + benefits + overheads", highlight: false },
         { label: "Traditional Retainers", price: "₹25,000–₹60,000/month", sub: "Monthly retainer with limited scope", highlight: false },
         { label: "Compliance Mistakes", price: "₹25,000–₹5,00,000+", sub: "Per notice or filing missed", highlight: false },
-        { label: "NyayMitra", price: "Starting at ₹15,000/month", sub: "Full legal operations coordination", highlight: true },
+        { label: "NyayMitra", price: "Starting at ₹25,000/month", sub: "Full legal operations coordination", highlight: true },
     ]
 
     // NEW: "Why Founders Struggle" four cards
