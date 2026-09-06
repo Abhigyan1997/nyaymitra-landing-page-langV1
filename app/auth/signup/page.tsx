@@ -405,7 +405,7 @@ export default function SignupPage() {
         subscribeNewsletter,
       }
 
-      url = `${BASE_API_URL}/register-business`
+      url = "https://nyaymitra-backend-production.up.railway.app/api/v1/business/register"
     } else if (userType === "lawyer") {
       data = { ...lawyer, experience: Number(lawyer.experience) }
       url = `${BASE_API_URL}/register-lawyer`
