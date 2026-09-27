@@ -154,9 +154,9 @@ const t = {
 
 // ─── WHATSAPP ────────────────────────────────────────────────────────────────
 const WA = "919661644025"
-const waLite = `https://wa.me/${WA}?text=I%20want%20the%20Founder%20Compliance%20Desk%20plan`
-const waOps = `https://wa.me/${WA}?text=I%20want%20the%20Legal%20Operations%20Partner%20plan`
-const waFractional = `https://wa.me/${WA}?text=I%20want%20to%20discuss%20the%20Fractional%20Legal%20%26%20Compliance%20Office%20plan`
+const waLite = `https://wa.me/${WA}?text=I%20want%20the%20Startup%20Legal%20Essentials%20plan`
+const waOps = `https://wa.me/${WA}?text=I%20want%20the%20Startup%20Legal%20Operations%20plan`
+const waFractional = `https://wa.me/${WA}?text=I%20want%20the%20Fractional%20Legal%20Ops%20Desk%20plan`
 const waGeneral = `https://wa.me/${WA}?text=I%20need%20startup%20legal%20help`
 const waStrategy = `https://wa.me/${WA}?text=I%20want%20to%20book%20a%20strategy%20call`
 
@@ -167,54 +167,57 @@ const risks = [
     { icon: <TrendingUp className="w-5 h-5" />, title: "Ignoring legal notice", consequence: "Escalation to court", outcome: "Resolution without litigation" },
 ]
 
-// ─── PLAN DATA (RENAMED PER BRIEF) ────────────────────────────────────────────
+// ─── PLAN DATA (NEW RETAINER MODEL) ──────────────────────────────────────────
 const plans = [
     {
         id: "lite",
-        name: "Business Legal Essentials",
-        tagline: "Core legal support for growing businesses.",
+        name: "Startup Legal Essentials",
+        tagline: "Core legal operations for early-stage startups.",
         price: 25000,
         yearlyPrice: 20000,
         priceDisplay: null as string | null,
-        bestFor: "Small businesses and professional services firms.",
+        bestFor: "Early-stage startups and small businesses.",
         billingNote: "Billed monthly.",
         outcomes: [
-            "Know what compliance matters for your business.",
-            "Avoid costly legal surprises.",
-            "Save 5–8 business hours every month.",
-            "Build with legal confidence.",
+            "Track compliance deadlines and obligations.",
+            "Organize legal documents in one place.",
+            "Know what your business needs legally.",
+            "Save 5–8 hours monthly on legal coordination.",
         ],
         cta: "Get Started",
         whatsapp: waLite,
         popular: false,
-        positioningLabel: "Business Foundation",
+        positioningLabel: "Startup Foundation",
         trustBadge: "WhatsApp response within 24 hours.",
         premiumNote: null as string | null,
         problems: [
-            "Unsure about compliance requirements for your industry.",
-            "Signing contracts without legal review.",
-            "Missing important regulatory deadlines.",
-            "Unclear on data privacy and legal obligations.",
+            "Unsure about compliance requirements.",
+            "No centralized document repository.",
+            "Missing filing deadlines.",
+            "Unclear CA/lawyer coordination.",
             "No visibility into pending legal work.",
         ],
         benefits: [
-            { title: "Business Legal Hotline (WhatsApp)", desc: "Expert guidance on legal decisions before you commit." },
-            { title: "Contract & Agreement Review", desc: "Avoid signing agreements that expose your business." },
-            { title: "Compliance Calendar & Alerts", desc: "Never miss regulatory filing deadlines." },
-            { title: "Legal Documentation Repository", desc: "Keep all critical contracts organized and accessible." },
-            { title: "Regulatory Roadmap", desc: "Understand compliance obligations as you grow." },
+            { title: "Legal Ops Workspace", desc: "Centralized hub for all legal & compliance work." },
+            { title: "Legal Health Tracking", desc: "Monitor compliance status and obligations." },
+            { title: "Compliance Calendar & Alerts", desc: "Automated deadline reminders across all areas." },
+            { title: "Document Vault", desc: "Secure repository for all legal documents." },
+            { title: "Contract Repository", desc: "All contracts organized and searchable." },
+            { title: "Up to 3 Contract Reviews/Month", desc: "Avoid bad agreements before signing." },
+            { title: "Basic CA/CS/Lawyer Coordination", desc: "We help align advisors on your legal needs." },
+            { title: "Monthly Legal Health Report", desc: "Track progress and compliance status." },
         ],
-        upgradeWhen: "When entering new markets, hiring expands, or operations scale.",
-        bonus: "₹10,000 execution credits annually.",
+        upgradeWhen: "When contracts increase, hiring begins, or operations expand.",
+        bonus: "Monthly legal health report + standard turnaround.",
     },
     {
         id: "ops",
-        name: "Business Legal Operations",
-        tagline: "Full-service legal coordination for scaling businesses.",
+        name: "Startup Legal Operations",
+        tagline: "Full-service legal coordination for scaling startups.",
         price: 50000,
         yearlyPrice: 40000,
         priceDisplay: null as string | null,
-        bestFor: "Mid-market businesses and growing enterprises.",
+        bestFor: "Growing startups and scaling businesses.",
         billingNote: "Billed monthly.",
         outcomes: [
             "Save 10–15 business hours every month.",
@@ -230,33 +233,35 @@ const plans = [
         trustBadge: "WhatsApp response within 4 business hours.",
         premiumNote: "We onboard a limited number of retainer clients each month to maintain service quality.",
         problems: [
-            "Chasing multiple legal professionals for updates.",
+            "Managing multiple contracts simultaneously.",
             "Unclear on business legal obligations.",
             "Contracts take too long to execute.",
             "Multi-jurisdiction compliance complexity.",
             "Leadership distraction from core business.",
         ],
         benefits: [
-            { title: "Dedicated Legal Operations Manager", desc: "One accountable point of contact for all legal matters." },
-            { title: "Contract & Agreement Management", desc: "Reduce delays in vendor, client and partner agreements." },
-            { title: "Business Decision Support", desc: "Legal guidance before major business decisions." },
-            { title: "Regulatory & Compliance Ownership", desc: "We handle compliance tracking so you focus on growth." },
-            { title: "Notice & Dispute Management", desc: "Structured response to legal notices and disputes." },
-            { title: "Multi-Jurisdiction Coordination", desc: "Handle compliance across multiple states/countries." },
-            { title: "Document & Workflow Management", desc: "Organized legal infrastructure for scaling teams." },
+            { title: "Legal Ops Workspace", desc: "Complete legal operations management platform." },
+            { title: "Dedicated Legal Ops Contact", desc: "One accountable point of contact for all matters." },
+            { title: "Up to 8 Contract Reviews/Month", desc: "Reduce delays in vendor, client & partner agreements." },
+            { title: "Up to 4 Standard Drafts/Month", desc: "Custom agreements for your business needs." },
+            { title: "Priority CA/CS/Lawyer Coordination", desc: "We own alignment across all your advisors." },
+            { title: "Legal & Compliance Coordination", desc: "End-to-end execution on all legal workflows." },
+            { title: "Twice-Monthly Founder Review", desc: "Strategic alignment on legal & compliance." },
+            { title: "Priority Turnaround", desc: "Faster resolution on legal matters." },
+            { title: "Employee/Vendor Legal Workflows", desc: "HR documentation and vendor agreement support." },
         ],
-        upgradeWhen: "When expanding operations, entering new markets, or operations go multi-state.",
-        bonus: "₹30,000 execution credits annually.",
+        upgradeWhen: "When scaling operations, entering new markets, or multi-state execution needed.",
+        bonus: "Priority turnaround + twice-monthly reviews + full coordination.",
     },
     {
         id: "fractional",
-        name: "Custom Enterprise Legal Operations",
-        tagline: "Bespoke legal operations for your specific business needs.",
-        price: 80000,
-        yearlyPrice: 64000,
-        priceDisplay: "Starting at ₹80,000",
-        bestFor: "Large enterprises with complex, multi-jurisdictional needs.",
-        billingNote: "Custom pricing available. Minimum ₹80,000/month.",
+        name: "Fractional Legal Ops Desk",
+        tagline: "Dedicated legal operations for funded & high-activity startups.",
+        price: 90000,
+        yearlyPrice: 72000,
+        priceDisplay: "Starting at ₹90,000",
+        bestFor: "Funded startups and high-activity companies.",
+        billingNote: "Custom pricing available. Starting at ₹90,000/month.",
         outcomes: [
             "Board-level legal oversight and readiness.",
             "Full visibility into all legal obligations.",
@@ -277,31 +282,35 @@ const plans = [
             "Growing teams without proper legal structure.",
         ],
         benefits: [
-            { title: "Strategic Legal Partnership", desc: "Board-level legal guidance and oversight." },
-            { title: "Multi-Jurisdiction Management", desc: "Coordinated execution across regions and countries." },
-            { title: "Governance & Compliance Framework", desc: "Enterprise-grade legal infrastructure." },
             { title: "Dedicated Legal Operations Director", desc: "Senior-level strategic ownership and accountability." },
-            { title: "Quarterly Risk & Compliance Reviews", desc: "Proactive identification of legal vulnerabilities." },
-            { title: "Escalation & Crisis Management", desc: "Structured support for urgent legal issues." },
-            { title: "Custom Legal Operations Stack", desc: "Tailored systems and processes for your business." },
+            { title: "Custom Legal Ops Workflows", desc: "Tailored systems and processes for your business." },
+            { title: "Custom Contract Reviews & Drafting", desc: "Full-volume support for all legal needs." },
+            { title: "Weekly/Biweekly Founder Review", desc: "Strategic legal partnership with leadership." },
+            { title: "Board/Investor Documentation Coordination", desc: "Full due diligence and fundraising support." },
+            { title: "Employee/Vendor Legal Workflows", desc: "Complete HR and vendor agreement management." },
+            { title: "Custom Volume Support", desc: "Whatever your legal ops volume requires." },
+            { title: "Multi-Jurisdiction Management", desc: "Coordinated execution across regions." },
+            { title: "Priority SLA", desc: "Guaranteed response and turnaround times." },
         ],
-        upgradeWhen: "For enterprises requiring comprehensive, strategic legal operations support.",
-        bonus: "₹50,000+ execution credits annually.",
+        upgradeWhen: "For funded startups requiring comprehensive, strategic legal operations.",
+        bonus: "Weekly/biweekly reviews + custom contracts + dedicated director.",
     },
 ]
 
 const matrixRows = [
-    { label: "Dedicated coordinator", lite: true, ops: true, frac: true },
-    { label: "WhatsApp support", lite: true, ops: true, frac: true },
-    { label: "Contract reviews", lite: "2/month", ops: "Unlimited", frac: "Unlimited" },
-    { label: "Legal queries", lite: "Basic", ops: "Unlimited", frac: "Unlimited" },
-    { label: "Compliance reminders", lite: true, ops: true, frac: true },
-    { label: "Document support", lite: true, ops: true, frac: true },
-    { label: "Founder strategy calls", lite: false, ops: "Monthly", frac: "Monthly" },
-    { label: "Multi-state coordination", lite: false, ops: false, frac: true },
-    { label: "Priority turnaround", lite: false, ops: true, frac: true },
-    { label: "Legal operations manager", lite: false, ops: false, frac: true },
-    { label: "Execution credits (annual)", lite: "₹5,000", ops: "₹15,000", frac: "₹30,000" },
+    { label: "Legal Ops Workspace", lite: true, ops: true, frac: true },
+    { label: "Legal Health Tracking", lite: true, ops: true, frac: true },
+    { label: "Compliance Calendar & Alerts", lite: true, ops: true, frac: true },
+    { label: "Document Vault", lite: true, ops: true, frac: true },
+    { label: "Contract Repository", lite: true, ops: true, frac: true },
+    { label: "Contract Reviews/Month", lite: "3", ops: "8", frac: "Custom" },
+    { label: "Standard Drafting/Month", lite: "—", ops: "4", frac: "Custom" },
+    { label: "CA/CS/Lawyer Coordination", lite: "Basic", ops: "Priority", frac: "Priority" },
+    { label: "Dedicated Legal Contact", lite: false, ops: true, frac: true },
+    { label: "Founder Reviews", lite: "Monthly", ops: "Twice Monthly", frac: "Weekly/Biweekly" },
+    { label: "Employee/Vendor Workflows", lite: false, ops: true, frac: true },
+    { label: "Board/Investor Documentation", lite: false, ops: "Limited", frac: true },
+    { label: "Turnaround Time", lite: "Standard", ops: "Priority", frac: "Priority SLA" },
 ]
 
 const services = [
@@ -368,7 +377,6 @@ const whyChooseRows = [
     { others: "Legal jargon", nyay: "Founder-friendly communication" },
 ]
 
-// ─── UPDATED FAQ (per brief) ──────────────────────────────────────────────────
 const faqs = [
     {
         q: "What is Startup Legal Operations?",
@@ -400,7 +408,7 @@ const faqs = [
     },
     {
         q: "Can startups outside Bengaluru use NyayMitra?",
-        a: "Yes. NyayMitra supports startups across India including multi-state registration, compliance coordination, and remote-first legal operations. Our Fractional Legal & Compliance Office plan includes explicit multi-city coordination.",
+        a: "Yes. NyayMitra supports startups across India including multi-state registration, compliance coordination, and remote-first legal operations. Our Fractional Legal Ops Desk plan includes explicit multi-city coordination.",
     },
     {
         q: "Are government fees included?",
@@ -487,7 +495,6 @@ export default function StartupLegalPage() {
         { label: "NyayMitra", price: "Starting at ₹25,000/month", sub: "Full legal operations coordination", highlight: true },
     ]
 
-    // NEW: "Why Founders Struggle" four cards
     const struggleCards = [
         { title: "You Have A CA", desc: "For tax, accounting and filings. But contract reviews, legal coordination and compliance tracking? Still falls on you.", icon: <Award className="w-5 h-5" /> },
         { title: "You Have A Lawyer", desc: "For drafting and advice. But follow-ups, document management, and deadline tracking? Still your problem.", icon: <Scale className="w-5 h-5" /> },
@@ -495,7 +502,6 @@ export default function StartupLegalPage() {
         { title: "You're Still Managing Everything Yourself", desc: "Every founder knows this feeling. You're the legal coordinator, compliance tracker and follow-up machine.", icon: <AlertCircle className="w-5 h-5" />, highlight: true },
     ]
 
-    // NEW: "What We Actually Do" six cards
     const whatWeDoCards = [
         { title: "Compliance Coordination", desc: "Track filings, deadlines and obligations across your CA, CS and legal counsel.", icon: <CheckCircle2 className="w-5 h-5" /> },
         { title: "Contract Management", desc: "Move contracts forward. Coordinate reviews, approvals, and execution without founder bottlenecks.", icon: <FileSignature className="w-5 h-5" /> },
@@ -505,7 +511,6 @@ export default function StartupLegalPage() {
         { title: "Multi-Stakeholder Follow-Ups", desc: "We chase your lawyers, CAs and consultants so you never have to.", icon: <RefreshCcw className="w-5 h-5" /> },
     ]
 
-    // NEW: Investor Readiness checklist items
     const investorReadinessItems = [
         { title: "Founder Agreements", desc: "Co-founder equity splits and vesting.", icon: <Users className="w-4 h-4" /> },
         { title: "Cap Table Documentation", desc: "Clean, investor-ready ownership records.", icon: <BarChart3 className="w-4 h-4" /> },
@@ -515,7 +520,6 @@ export default function StartupLegalPage() {
         { title: "Contract Repository", desc: "All vendor, client and partner agreements.", icon: <FileText className="w-4 h-4" /> },
     ]
 
-    // NEW: Benefits why startups choose NyayMitra
     const benefitCards = [
         { title: "One Dedicated Coordinator", desc: "A single accountable point of contact who owns your legal operations end-to-end.", icon: <UsersIcon className="w-5 h-5" /> },
         { title: "Works With Existing Advisors", desc: "We coordinate alongside your CA, lawyer and CS — not instead of them.", icon: <Handshake className="w-5 h-5" /> },
