@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useState, useEffect, useRef, useCallback, Children } from "react"
 import {
   BarChart2, CalendarCheck, Smartphone, IndianRupee, LogOut,
   User, Scale, FileWarning, Star, Menu, X,
@@ -43,7 +43,7 @@ const GlobalStyles = () => (
       --white:      #fffefb;
       --gold:       #c9a84c;
       --gold-lt:    #e2c87a;
-      --gold-dk:    #8b6d22;
+      --gold-dk:    #765a17;
       --gold-pale:  #fdf6e0;
       --gold-rich:  #d4a843;
       --red:        #c0392b;
@@ -86,7 +86,7 @@ const GlobalStyles = () => (
     .reveal.is-on { opacity:1 !important; transform:translateY(0) !important; }
 
     .gold-text {
-      background: linear-gradient(115deg, var(--gold-dk) 0%, var(--gold) 30%, var(--gold-lt) 52%, var(--gold) 70%, var(--gold-dk) 100%);
+      background: linear-gradient(115deg, #5e4710 0%, #7a5f1a 30%, #94741f 52%, #7a5f1a 70%, #5e4710 100%);
       background-size: 300% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -1013,6 +1013,11 @@ const GlobalStyles = () => (
     }
     @media (max-width: 920px) { .when-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 480px) { .when-grid { grid-template-columns: 1fr; } }
+
+    @keyframes slMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .sl-scroll::-webkit-scrollbar { display: none; }
+    .sl-arrow:not(:disabled):hover { border-color: var(--gold) !important; color: var(--gold-dk) !important; }
+    @media (prefers-reduced-motion: reduce) { .sl-track { animation: none !important; } }
   `}</style>
 )
 
@@ -1146,6 +1151,159 @@ function StatCounter({ end, suffix = "", label, prefix = "" }: { end: number; su
   )
 }
 
+/* ─── SLIDER (4 styles: snap, paged, focus, marquee) ─────────────────────────── */
+type SliderProps = {
+  children: React.ReactNode
+  variant?: "snap" | "paged" | "focus" | "marquee"
+  cols?: number
+  dark?: boolean
+  reverse?: boolean
+  speed?: number
+  autoplay?: number
+  itemW?: number
+  style?: React.CSSProperties
+}
+
+function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = false, speed = 45, autoplay = 0, itemW = 270, style }: SliderProps) {
+  const items = Children.toArray(children)
+  const n = items.length
+  const GAP = 16
+  const wrap = useRef<HTMLDivElement>(null)
+  const scroller = useRef<HTMLDivElement>(null)
+  const touchX = useRef<number | null>(null)
+  const [w, setW] = useState(1000)
+  const [idx, setIdx] = useState(0)
+  const [paused, setPaused] = useState(false)
+
+  useEffect(() => {
+    const calc = () => setW(wrap.current?.clientWidth || 1000)
+    calc()
+    window.addEventListener("resize", calc)
+    return () => window.removeEventListener("resize", calc)
+  }, [])
+
+  const per = w < 560 ? 1 : w < 900 ? Math.min(2, cols) : cols
+  const cardW = per === 1 ? Math.round(w * 0.86) : Math.floor((w - GAP * (per - 1)) / per)
+  const focusW = per === 1 ? Math.round(w * 0.78) : Math.min(360, Math.round(w / 2.7))
+  const maxIdx = variant === "focus" ? n - 1 : Math.max(0, n - per)
+
+  useEffect(() => {
+    if (!autoplay || paused || variant === "snap" || variant === "marquee") return
+    const t = setInterval(() => setIdx(i => (i >= maxIdx ? 0 : i + 1)), autoplay)
+    return () => clearInterval(t)
+  }, [autoplay, paused, maxIdx, variant])
+
+  const go = (d: number) => {
+    if (variant === "snap") scroller.current?.scrollBy({ left: d * (cardW + GAP), behavior: "smooth" })
+    else setIdx(i => Math.min(maxIdx, Math.max(0, i + d)))
+  }
+  const jump = (i: number) => {
+    if (variant === "snap") scroller.current?.scrollTo({ left: i * (cardW + GAP), behavior: "smooth" })
+    else setIdx(i)
+  }
+
+  const ink = dark ? "#fff" : "var(--ink)"
+  const line = dark ? "rgba(255,255,255,0.28)" : "var(--ink-6)"
+  const accent = dark ? "var(--gold)" : "var(--gold-dk)"
+  const dim = dark ? "rgba(255,255,255,0.22)" : "var(--ink-7)"
+  const arrow = (dir: 1 | -1) => (
+    <button className="sl-arrow" aria-label={dir === 1 ? "Next" : "Previous"} onClick={() => go(dir)}
+      disabled={dir === 1 ? idx >= maxIdx : idx <= 0}
+      style={{
+        width: 38, height: 38, borderRadius: "50%", border: `1.5px solid ${line}`, background: "transparent",
+        color: ink, display: "flex", alignItems: "center", justifyContent: "center",
+        cursor: "pointer", transition: "all 0.2s", opacity: (dir === 1 ? idx >= maxIdx : idx <= 0) ? 0.35 : 1,
+      }}>
+      <ChevronRight style={{ width: 15, height: 15, transform: dir === -1 ? "rotate(180deg)" : "none" }} />
+    </button>
+  )
+  const controls = maxIdx > 0 && (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, marginTop: 24 }}>
+      {arrow(-1)}
+      <div style={{ display: "flex", gap: 7 }}>
+        {Array.from({ length: maxIdx + 1 }).map((_, i) => (
+          <button key={i} aria-label={`Go to slide ${i + 1}`} onClick={() => jump(i)}
+            style={{ width: i === idx ? 24 : 7, height: 7, borderRadius: 7, border: "none", cursor: "pointer", background: i === idx ? accent : dim, transition: "all 0.3s" }} />
+        ))}
+      </div>
+      {arrow(1)}
+    </div>
+  )
+  const swipe = {
+    onTouchStart: (e: React.TouchEvent) => { touchX.current = e.touches[0].clientX },
+    onTouchEnd: (e: React.TouchEvent) => {
+      if (touchX.current == null) return
+      const dx = e.changedTouches[0].clientX - touchX.current
+      if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1)
+      touchX.current = null
+    },
+  }
+
+  if (variant === "marquee") {
+    const row = (k: string) => items.map((it, i) => (
+      <div key={k + i} style={{ flex: `0 0 ${itemW}px`, marginRight: GAP, display: "flex" }}>{it}</div>
+    ))
+    return (
+      <div ref={wrap} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
+        style={{ overflow: "hidden", padding: "6px 0", WebkitMaskImage: "linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent)", maskImage: "linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent)", ...style }}>
+        <div className="sl-track" style={{ display: "flex", width: "max-content", animation: `slMarquee ${speed}s linear infinite ${reverse ? "reverse" : "normal"}`, animationPlayState: paused ? "paused" : "running" }}>
+          {row("a")}{row("b")}
+        </div>
+      </div>
+    )
+  }
+
+  if (variant === "snap") {
+    return (
+      <div ref={wrap} style={style}>
+        <div ref={scroller} className="sl-scroll"
+          onScroll={e => setIdx(Math.min(maxIdx, Math.round(e.currentTarget.scrollLeft / (cardW + GAP))))}
+          style={{ display: "flex", gap: GAP, overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", padding: "4px 2px 8px" }}>
+          {items.map((it, i) => (
+            <div key={i} style={{ flex: `0 0 ${cardW}px`, scrollSnapAlign: "start", display: "flex" }}>{it}</div>
+          ))}
+        </div>
+        {controls}
+      </div>
+    )
+  }
+
+  if (variant === "paged") {
+    return (
+      <div ref={wrap} style={style} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} {...swipe}>
+        <div style={{ overflow: "hidden", padding: "4px 2px 8px" }}>
+          <div style={{ display: "flex", gap: GAP, transform: `translateX(${-idx * (cardW + GAP)}px)`, transition: "transform 0.85s cubic-bezier(0.16,1,0.3,1)" }}>
+            {items.map((it, i) => (
+              <div key={i} style={{ flex: `0 0 ${cardW}px`, display: "flex" }}>{it}</div>
+            ))}
+          </div>
+        </div>
+        {controls}
+      </div>
+    )
+  }
+
+  // focus: centred active card, neighbours scaled down
+  return (
+    <div ref={wrap} style={style} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} {...swipe}>
+      <div style={{ overflow: "hidden", padding: "18px 0 22px" }}>
+        <div style={{ display: "flex", gap: GAP, transform: `translateX(${w / 2 - (idx * (focusW + GAP) + focusW / 2)}px)`, transition: "transform 0.9s cubic-bezier(0.16,1,0.3,1)" }}>
+          {items.map((it, i) => (
+            <div key={i}
+              onClickCapture={e => { if (i !== idx) { e.preventDefault(); e.stopPropagation(); setIdx(i) } }}
+              style={{
+                flex: `0 0 ${focusW}px`, display: "flex",
+                transform: i === idx ? "scale(1)" : "scale(0.9)", opacity: i === idx ? 1 : 0.5,
+                transition: "transform 0.6s cubic-bezier(0.16,1,0.3,1), opacity 0.6s", cursor: i === idx ? "default" : "pointer",
+              }}>{it}</div>
+          ))}
+        </div>
+      </div>
+      {controls}
+    </div>
+  )
+}
+
 interface Profile { id: string; name: string; email: string; role: "lawyer" | "user"; avatar?: string; phoneNumber?: string }
 
 /* ─── MAIN ───────────────────────────────────────────────────────────────────── */
@@ -1169,8 +1327,9 @@ export default function HomePage() {
 
   const waBase = "https://wa.me/919661644025?text="
   const waGeneral = waBase + encodeURIComponent("I need legal help.")
-  const waAssessment = waBase + encodeURIComponent("I'd like a free compliance assessment for my business.")
+  const waAssessment = waBase + encodeURIComponent("I'd like a free walkthrough of NyayMitra for my business.")
   const waLegalOps = waBase + encodeURIComponent("I'd like to talk to the NyayMitra Legal Ops team.")
+  const waLitigation = waBase + encodeURIComponent("I need help with a litigation or court representation matter.")
 
   const waProblems: Record<string, string> = {
     money: waBase + encodeURIComponent("I need help recovering money that was not returned to me."),
@@ -1188,7 +1347,7 @@ export default function HomePage() {
 
   const navLinks = [
     { key: "home", label: "Home", href: "/" },
-    { key: "startup-legal", label: "Business Legal", href: "/startup-legal" },
+    { key: "startup-legal", label: "Legal Ops Plans", href: "/startup-legal" },
     { key: "lawyers", label: "Find Lawyers", href: "/lawyers" },
     { key: "legalGPT", label: "Legal AI", href: "/legal-ai" },
     { key: "about", label: "About", href: "/about" },
@@ -1210,25 +1369,33 @@ export default function HomePage() {
   const flowSteps = [
     {
       n: "01", icon: <FileCheck style={{ width: 16, height: 16 }} />,
-      title: "Compliance & Legal Intake",
-      desc: "Share your contracts, compliance gaps, and documentation needs. We map the full picture.",
+      title: "Share Your Requirement",
+      desc: "Contracts, compliance, a notice or a dispute. Tell us what you need on WhatsApp.",
     },
     {
       n: "02", icon: <Workflow style={{ width: 16, height: 16 }} />,
-      title: "Coordination & Execution",
-      desc: "NyayMitra runs the entire workflow advisors, filings, documents, deadlines.",
+      title: "We Coordinate and Track",
+      desc: "Requests, documents and deadlines move through one workspace with the right professionals.",
     },
     {
       n: "03", icon: <CheckCircle style={{ width: 16, height: 16 }} />,
-      title: "Ongoing Legal Operations",
-      desc: "Continuous compliance monitoring and legal ops support through one team.",
+      title: "Work Gets Done, You Stay Informed",
+      desc: "Clear status, organised records and reports, without chasing anyone.",
     },
   ]
 
   const faqs = [
     {
-      q: "What is a Fractional Legal & Compliance Desk?",
-      a: "Think of it like a <strong>fractional CFO or outsourced HR, but for legal and compliance</strong>. NyayMitra manages contracts, compliance, registrations, documentation, and legal workflows through one dedicated operational layer without you hiring a full-time legal team.",
+      q: "What is NyayMitra?",
+      a: "NyayMitra is a <strong>legal operations platform</strong>. You get a workspace to track contracts, compliance and legal requests, plus a team that coordinates your CAs, CSs, lawyers and advocates. It works like a fractional CFO or outsourced HR, but for legal and compliance, without hiring a full time legal team.",
+    },
+    {
+      q: "Can NyayMitra help with litigation and court cases?",
+      a: "Yes, through coordination. We connect you with <strong>qualified advocates across India</strong>, run the intake, and manage documents, updates and follow ups. Each advocate independently assesses and accepts the case and confirms scope and fees. Litigation is <strong>not included in monthly plans</strong> and is quoted per matter. No outcome is ever guaranteed.",
+    },
+    {
+      q: "What do the monthly plans include?",
+      a: "Every plan includes the NyayMitra workspace, a set number of standard agreement drafts and reviews, consultation hours, and coordination with your existing advisors. Higher plans add contract lifecycle tracking, compliance ownership, risk tracking, reporting and dedicated coordination. Limits apply to standard work, and complex agreements may need separate scope.",
     },
     {
       q: "I already have a CA and a lawyer. Why do I need NyayMitra?",
@@ -1236,7 +1403,7 @@ export default function HomePage() {
     },
     {
       q: "How is NyayMitra different from a law firm or compliance agency?",
-      a: "Law firms give advice. Compliance agencies file specific forms. NyayMitra <strong>manages the entire legal operations function</strong> from contract tracking to advisor coordination to deadline monitoring through a fixed, accountable operational model. We're infrastructure, not a one-off service.",
+      a: "NyayMitra is a <strong>legal operations platform, not a law firm</strong>. We give you a workspace to track contracts, compliance and legal requests, plus a team that coordinates your CAs, CSs, lawyers and advocates. Professionals deliver the legal work, and we make sure it moves forward.",
     },
     {
       q: "Can NyayMitra work alongside my existing CA and CS?",
@@ -1256,7 +1423,7 @@ export default function HomePage() {
     },
     {
       q: "Does NyayMitra provide legal advice or representation?",
-      a: "NyayMitra is a <strong>legal operations platform, not a law firm</strong>. We coordinate execution. Legal advice and representation are provided by licensed advocates in our network. For court matters, we connect you with verified lawyers.",
+      a: "NyayMitra is a <strong>technology platform, not a law firm</strong>. Legal advice, filings and court representation are delivered by independent qualified professionals. For court matters we coordinate access to advocates across India, subject to advocate availability, case assessment and acceptance.",
     },
     {
       q: "What is POSH compliance and does my company need it?",
@@ -1272,7 +1439,7 @@ export default function HomePage() {
     },
     {
       q: "How much does legal ops support cost?",
-      a: "NyayMitra operates on <strong>transparent, fixed-price plans no hourly billing</strong>. Plans are designed for startups, MSMEs, and growing businesses. Book a free compliance assessment to find the right plan.",
+      a: "NyayMitra offers <strong>five monthly plans</strong>, each with clearly stated limits for agreement drafts, reviews and consultation hours. Nothing is unlimited. Share your requirement and we will recommend the right plan. Litigation, government fees and external professional fees are separate.",
     },
     {
       q: "What documents does a startup need at incorporation?",
@@ -1280,7 +1447,7 @@ export default function HomePage() {
     },
     {
       q: "How do I get started?",
-      a: "Click <strong>'Book Compliance Assessment'</strong> on this page. Share your business details on WhatsApp and we'll schedule a 15-min discovery call. We'll identify gaps and recommend the right plan <strong>no obligation</strong>.",
+      a: "Click <strong>'Book a Free Walkthrough'</strong> on this page. Share your business details on WhatsApp and we'll schedule a 15-min discovery call. We'll identify gaps and recommend the right plan <strong>no obligation</strong>.",
     },
     {
       q: "What is Legal Operations?",
@@ -1307,7 +1474,7 @@ export default function HomePage() {
     "alternateName": "NyayMitra Technologies Pvt Ltd",
     "url": "https://mynyaymitra.in",
     "logo": "https://mynyaymitra.in/logo.png",
-    "description": "NyayMitra is India's Fractional Legal & Compliance Desk for startups, MSMEs and growing businesses. We manage contracts, compliance, registrations, documentation and legal workflows through one dedicated operational layer working alongside your existing CA, CS and lawyers.",
+    "description": "NyayMitra is a technology enabled legal operations platform for startups, MSMEs and growing businesses across India. It is not a law firm. Qualified professionals deliver legal work, coordinated through one workspace and team.",
     "foundingDate": "2025",
     "areaServed": "IN",
     "address": {
@@ -1340,14 +1507,14 @@ export default function HomePage() {
 
   const localBusinessSchema = {
     "@context": "https://schema.org",
-    "@type": "LegalService",
-    "name": "NyayMitra Fractional Legal & Compliance Desk",
+    "@type": "ProfessionalService",
+    "name": "NyayMitra Legal Operations Platform",
     "image": "https://mynyaymitra.in/logo.png",
     "@id": "https://mynyaymitra.in",
     "url": "https://mynyaymitra.in",
     "telephone": "+91-79705-96183",
     "priceRange": "₹₹",
-    "description": "Fractional Legal & Compliance Desk for startups, MSMEs and growing businesses across India. Services include compliance management, contract coordination, documentation governance, registration coordination, advisor coordination, and legal operations infrastructure.",
+    "description": "Legal operations platform for startups, MSMEs and growing businesses across India, covering contracts, compliance coordination, documentation and litigation support coordination.",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Koramangala",
@@ -1372,7 +1539,8 @@ export default function HomePage() {
       "Fractional Legal Team", "Legal Operations", "Compliance Management",
       "Contract Management", "Documentation Governance", "POSH Compliance",
       "FSSAI Registration", "MSME Registration", "Startup Legal Operations",
-      "Outsourced Legal Function", "Investor Due Diligence Preparation"
+      "Outsourced Legal Function", "Investor Due Diligence Preparation",
+      "Litigation Support Coordination"
     ]
   }
 
@@ -1404,10 +1572,10 @@ export default function HomePage() {
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    "serviceType": "Fractional Legal & Compliance Desk",
+    "serviceType": "Legal Operations Platform",
     "provider": { "@type": "Organization", "name": "NyayMitra" },
     "areaServed": "India",
-    "description": "NyayMitra provides outsourced legal operations, compliance management, contract coordination, documentation governance, and legal infrastructure for startups, MSMEs and growing businesses across India.",
+    "description": "NyayMitra provides a legal operations platform and coordination team covering contracts, compliance, documentation and litigation support coordination for businesses across India.",
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "NyayMitra Legal Operations Services",
@@ -1419,7 +1587,8 @@ export default function HomePage() {
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "POSH Compliance" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "FSSAI Registration" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "MSME Registration" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Investor Due Diligence Preparation" } }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Investor Due Diligence Preparation" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Litigation Support Coordination" } }
       ]
     }
   }
@@ -1429,25 +1598,25 @@ export default function HomePage() {
     <>
       <GlobalStyles />
       <Head>
-        <title>NyayMitra | Fractional Legal & Compliance Desk for Startups & MSMEs</title>
-        <meta name="description" content="NyayMitra is India's Fractional Legal & Compliance Desk. We manage contracts, compliance, registrations, documentation and legal workflows for startups, MSMEs and growing businesses working alongside your existing CA, CS and lawyers." />
-        <meta name="keywords" content="fractional legal team India, outsourced legal function India, legal operations partner India, compliance management India, contract management startups India, legal ops startup India, outsourced compliance team India, MSME legal support, startup legal operations, compliance infrastructure India" />
+        <title>NyayMitra | Legal Operations Platform for Startups & Businesses in India</title>
+        <meta name="description" content="NyayMitra is a legal operations platform for Indian businesses. Manage contracts, compliance and legal requests in one workspace, with a nationwide network of lawyers, CAs, CSs and advocates." />
+        <meta name="keywords" content="legal operations platform India, outsourced legal function India, legal operations partner India, compliance management India, contract management startups India, legal ops startup India, outsourced compliance team India, MSME legal support, startup legal operations, litigation support India" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://mynyaymitra.in" />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://mynyaymitra.in" />
-        <meta property="og:title" content="NyayMitra | Fractional Legal & Compliance Desk for Startups & MSMEs" />
-        <meta property="og:description" content="NyayMitra manages contracts, compliance, registrations and legal workflows for growing businesses so founders can focus on growth, not paperwork." />
+        <meta property="og:title" content="NyayMitra | Legal Operations Platform for Startups & Businesses in India" />
+        <meta property="og:description" content="Manage contracts, compliance and legal requests in one workspace, with a nationwide network of qualified professionals." />
         <meta property="og:image" content="https://mynyaymitra.in/og-image.png" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="NyayMitra" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@nyaymitra" />
-        <meta name="twitter:title" content="NyayMitra | Fractional Legal & Compliance Desk for Startups & MSMEs" />
-        <meta name="twitter:description" content="NyayMitra manages contracts, compliance, registrations and legal workflows for growing businesses so founders can focus on growth, not paperwork." />
+        <meta name="twitter:title" content="NyayMitra | Legal Operations Platform for Startups & Businesses in India" />
+        <meta name="twitter:description" content="Manage contracts, compliance and legal requests in one workspace, with a nationwide network of qualified professionals." />
         <meta name="twitter:image" content="https://mynyaymitra.in/og-image.png" />
 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }} />
@@ -1458,29 +1627,6 @@ export default function HomePage() {
       </Head>
 
       <div style={{ minHeight: "100vh", background: "var(--white)" }}>
-
-        {/* ── Announcement Bar ─────────────────────────────────────────────────── */}
-        {/* <div role="banner" style={{
-          background: "linear-gradient(90deg, var(--ink) 0%, var(--ink-2) 40%, var(--ink-3) 100%)",
-          color: "white", textAlign: "center", padding: "9px 16px",
-          fontSize: "11px", fontFamily: "var(--mono)", letterSpacing: "0.1em",
-          position: "relative", overflow: "hidden",
-        }}>
-          <div style={{
-            position: "absolute", inset: 0,
-            background: "linear-gradient(90deg, transparent 0%, rgba(201,168,76,0.06) 50%, transparent 100%)",
-            pointerEvents: "none",
-          }} />
-          <span style={{ color: "rgba(255,255,255,0.55)" }}>🇮🇳</span>{" "}
-          <span style={{ color: "rgba(255,255,255,0.7)" }}>
-            India's Fractional Legal & Compliance Desk for Startups, MSMEs & Growing Businesses
-          </span>
-          &nbsp;·&nbsp;
-          <a href={waAssessment} target="_blank" rel="noopener noreferrer"
-            style={{ color: "var(--gold-lt)", textDecoration: "none", fontWeight: 600, letterSpacing: "0.12em" }}>
-            Book Free Assessment →
-          </a>
-        </div> */}
 
         {/* ── Navbar ─────────────────────────────────────────────────────────── */}
         <nav aria-label="Main navigation" style={{
@@ -1688,7 +1834,7 @@ export default function HomePage() {
                     }} />
                   </div>
                   <span style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-4)", letterSpacing: "0.1em" }}>
-                    Legal Operations Partner · Built for Growing Businesses
+                    Legal Operations Platform for Indian Businesses
                   </span>
                 </div>
 
@@ -1700,9 +1846,9 @@ export default function HomePage() {
                   letterSpacing: "-0.03em", color: "var(--ink)",
                   marginBottom: 0, paddingTop: "0.3rem", overflow: "visible",
                 }}>
-                  Your Legal Operations Team.<br />
+                  The Operating System for<br />
                   <span className="gold-text" style={{ fontStyle: "italic", fontWeight: 300, display: "inline-block", lineHeight: 1.35, overflow: "visible" }}>
-                    Without Hiring One.
+                    Your Business Legal Work.
                   </span>
                 </h1>
 
@@ -1713,7 +1859,7 @@ export default function HomePage() {
                     fontWeight: 400, color: "var(--ink-3)", letterSpacing: "-0.01em",
                     borderLeft: "3px solid var(--gold)", paddingLeft: "16px",
                   }}>
-                    The Legal Operations Partner for Startups & Growing Businesses
+                    Contracts, Compliance and Disputes. One Workspace.
                   </span>
                 </div>
 
@@ -1730,7 +1876,7 @@ export default function HomePage() {
                   color: "var(--ink-4)", lineHeight: 1.85,
                   maxWidth: 540, marginBottom: 14, fontWeight: 300,
                 }}>
-                  NyayMitra becomes your dedicated legal operations team working alongside your existing advisors so legal work gets done while you focus on growing your business.
+                  NyayMitra is a legal operations platform. Track contracts, compliance and legal requests in one workspace, and tap into a nationwide network of lawyers, CAs, CSs and advocates whenever you need them.
                 </p>
 
                 <p style={{
@@ -1740,19 +1886,23 @@ export default function HomePage() {
                   display: "flex", alignItems: "center", gap: 8,
                 }}>
                   <Handshake style={{ width: 14, height: 14, flexShrink: 0 }} />
-                  We don't replace your lawyers. We coordinate them.
+                  Not a law firm. We work alongside your existing advisors.
                 </p>
 
                 {/* CTAs */}
                 <div className="hero-ctas" style={{ marginBottom: 20 }}>
                   <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                     <Sparkles style={{ width: 14, height: 14 }} />
-                    Book Free Legal Operations Assessment
+                    Book a Free Walkthrough
                   </a>
                   <a href={waLegalOps} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                     <Headset style={{ width: 14, height: 14 }} />
                     Talk to Legal Ops
                   </a>
+                  <Link href="/startup-legal#pricing" className="btn btn-ghost" style={{ gap: 9, textDecoration: "none" }}>
+                    <LayoutDashboard style={{ width: 14, height: 14 }} />
+                    Explore Plans
+                  </Link>
                 </div>
 
                 {/* Trust signals */}
@@ -1760,9 +1910,9 @@ export default function HomePage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
                     {[
                       { icon: <Shield style={{ width: 10, height: 10 }} />, text: "Works With Your Existing CA & Lawyers" },
-                      { icon: <Users style={{ width: 10, height: 10 }} />, text: "65+ Legal Professionals" },
-                      { icon: <Globe style={{ width: 10, height: 10 }} />, text: "Pan-India Execution" },
-                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "WhatsApp-First Support" },
+                      { icon: <Network style={{ width: 10, height: 10 }} />, text: "Nationwide Professional Network" },
+                      { icon: <IndianRupee style={{ width: 10, height: 10 }} />, text: "Simple Monthly Plans" },
+                      { icon: <Headset style={{ width: 10, height: 10 }} />, text: "WhatsApp First Support" },
                     ].map(t => (
                       <div key={t.text} style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--mono)", fontSize: "9px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
                         <span style={{ color: "var(--gold-dk)" }}>{t.icon}</span>
@@ -1780,10 +1930,14 @@ export default function HomePage() {
                   <Link href="/lawyers" style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--gold-dk)", fontWeight: 600, textDecoration: "none" }}>
                     Find a verified lawyer →
                   </Link>
+                  <span style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", fontWeight: 300 }}>{" "}· Facing a dispute?{" "}</span>
+                  <a href={waLitigation} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--gold-dk)", fontWeight: 600, textDecoration: "none" }}>
+                    Discuss litigation support →
+                  </a>
                 </div>
               </div>
 
-              {/* ── Right column: Legal Ops Dashboard card ── */}
+              {/* ── Right column: Legal Ops Workspace card ── */}
               <div style={{ animation: "fadeUp 0.82s 0.12s cubic-bezier(0.16,1,0.3,1) both" }}>
                 <div style={{ animation: "floatSlow 9s ease-in-out infinite", position: "relative" }}>
                   <div className="card" style={{ overflow: "hidden", boxShadow: "0 40px 80px rgba(12,11,9,0.1), 0 8px 24px rgba(12,11,9,0.06), 0 0 0 1px rgba(12,11,9,0.03)" }}>
@@ -1796,7 +1950,7 @@ export default function HomePage() {
                       <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
                         <div style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--gold)", boxShadow: "0 0 12px rgba(201,168,76,0.6)", animation: "glowPulse 2.5s ease-in-out infinite" }} />
                         <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,0.5)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                          Legal Operations Desk
+                          Legal Operations Workspace
                         </span>
                       </div>
                       <div style={{ display: "flex", gap: 5, position: "relative", zIndex: 1 }}>
@@ -1829,7 +1983,7 @@ export default function HomePage() {
                           </div>
                           <div style={{ flex: 1, paddingTop: 1 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 5 }}>
-                              <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold)", letterSpacing: "0.12em" }}>{step.n}</span>
+                              <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold-dk)", letterSpacing: "0.12em" }}>{step.n}</span>
                               <span style={{ fontFamily: "var(--sans)", fontSize: "13.5px", fontWeight: 600, color: "var(--ink)" }}>{step.title}</span>
                             </div>
                             <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", lineHeight: 1.65 }}>{step.desc}</p>
@@ -1843,7 +1997,7 @@ export default function HomePage() {
                       display: "flex", alignItems: "center", justifyContent: "space-between",
                     }}>
                       <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--ink-5)", letterSpacing: "0.08em" }}>
-                        One dedicated legal ops team · WhatsApp first
+                        One workspace · One team · WhatsApp first
                       </span>
                       <div style={{
                         display: "flex", alignItems: "center", gap: 5,
@@ -1851,7 +2005,7 @@ export default function HomePage() {
                         padding: "4px 10px", borderRadius: 100, color: "#15803d",
                       }}>
                         <WaSvg size={9} />
-                        <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 600 }}>Fast responses</span>
+                        <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", fontWeight: 600 }}>Monthly plans</span>
                       </div>
                     </div>
                   </div>
@@ -1878,7 +2032,7 @@ export default function HomePage() {
                     animation: "float 8s 0.5s ease-in-out infinite",
                   }}>
                     <Zap style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
-                    Legal Work. Actually Done.
+                    Legal Work. Tracked to Done.
                   </div>
                 </div>
               </div>
@@ -1894,10 +2048,10 @@ export default function HomePage() {
           <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}>
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "stretch" }}>
               {[
-                { icon: <Handshake style={{ width: 13, height: 13 }} />, label: "One Point of Accountability", sub: "Stop chasing. We own execution." },
-                { icon: <FileSignature style={{ width: 13, height: 13 }} />, label: "Fractional Legal Desk", sub: "Contracts, NDAs, agreements, governance" },
-                { icon: <ClipboardList style={{ width: 13, height: 13 }} />, label: "Compliance Operations", sub: "Proactive tracking, not reactive filing" },
-                { icon: <Network style={{ width: 13, height: 13 }} />, label: "Advisor Coordination", sub: "We coordinate your CA, CS & lawyers" },
+                { icon: <LayoutDashboard style={{ width: 13, height: 13 }} />, label: "One Legal Workspace", sub: "Requests, contracts and deadlines in one place" },
+                { icon: <FileSignature style={{ width: 13, height: 13 }} />, label: "Contracts and Documents", sub: "Drafting, review, repository, renewals" },
+                { icon: <ClipboardList style={{ width: 13, height: 13 }} />, label: "Compliance Tracking", sub: "Proactive calendar, not reactive filing" },
+                { icon: <Network style={{ width: 13, height: 13 }} />, label: "Nationwide Network", sub: "CAs, CSs, lawyers and advocates coordinated" },
               ].map((item, i) => (
                 <div key={item.label} className="trust-strip-item" style={{
                   display: "flex", alignItems: "center", gap: 11, padding: "16px 22px",
@@ -1923,14 +2077,14 @@ export default function HomePage() {
         }}>
           <div className="mq-track">
             {[...Array(3)].flatMap(() => [
-              { val: "Fractional", text: "Legal & Compliance Desk" },
-              { val: "65+", text: "legal experts in the network" },
-              { val: "One team", text: "coordinates everything" },
-              { val: "Pan India", text: "compliance coverage" },
-              { val: "Fixed price", text: "no hourly billing" },
+              { val: "Legal Operations", text: "Platform" },
+              { val: "One workspace", text: "for contracts, compliance and disputes" },
+              { val: "Nationwide", text: "professional network" },
+              { val: "Monthly plans", text: "with stated limits" },
+              { val: "Litigation", text: "coordination across India" },
               { val: "POSH · FSSAI", text: "· MSME · Shop & Establishment" },
               { val: "Works with", text: "your existing CA, CS & lawyer" },
-              { val: "Outsourced", text: "legal operations function" },
+              { val: "Limits stated", text: "on every plan, nothing unlimited" },
             ]).map((item, i) => (
               <span key={i} className="trust-pill">
                 <span style={{ fontFamily: "var(--serif)", fontSize: "13.5px", fontWeight: 600, color: "var(--gold-dk)" }}>{item.val}</span>
@@ -1970,7 +2124,7 @@ export default function HomePage() {
 
             {/* 4 pillar cards */}
             <Reveal delay={70}>
-              <div className="pillar-grid" style={{ marginBottom: 44 }}>
+              <Slider variant="snap" cols={3} dark style={{ marginBottom: 44 }}>
                 {[
                   { icon: <Landmark style={{ width: 18, height: 18 }} />, title: "You Have A CA", desc: "Handling accounting and tax filings. You still manage everything else." },
                   { icon: <Gavel style={{ width: 18, height: 18 }} />, title: "You Have A Lawyer", desc: "Available when you bring a matter to them. You still track what needs attention." },
@@ -1997,7 +2151,7 @@ export default function HomePage() {
                     </div>
                   </div>
                 ))}
-              </div>
+              </Slider>
             </Reveal>
 
             <Reveal delay={110}>
@@ -2012,7 +2166,7 @@ export default function HomePage() {
               <div style={{ textAlign: "center" }}>
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                   <Sparkles style={{ width: 14, height: 14, flexShrink: 0 }} />
-                  Book Compliance Assessment
+                  Book a Free Walkthrough
                 </a>
               </div>
             </Reveal>
@@ -2020,9 +2174,9 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            SECTION 3 BEYOND COMPLIANCE FILING (4 cards)
+            SECTION 3 WHAT WE DELIVER (4 cards)
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Beyond compliance filing" className="section-pad" style={{ background: "var(--white)" }}>
+        <section aria-label="What we deliver" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 56 }}>
@@ -2033,15 +2187,15 @@ export default function HomePage() {
                   fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
                   fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
                 }}>
-                  Beyond Compliance Filing
+                  More Than Filing. A Legal Operations Layer.
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 540, margin: "14px auto 0" }}>
-                  Most services file forms. NyayMitra manages your entire legal operations function.
+                  Most services file forms. NyayMitra runs the system behind your legal work.
                 </p>
               </div>
             </Reveal>
 
-            <div className="services-4-grid">
+            <Slider variant="paged" cols={2} autoplay={5200}>
               {[
                 {
                   icon: <Network style={{ width: 24, height: 24 }} />,
@@ -2068,7 +2222,7 @@ export default function HomePage() {
                   tags: ["Task Tracking", "Accountable Closure", "Progress Visibility"],
                 },
               ].map((card, i) => (
-                <Reveal key={card.title} delay={i * 70}>
+                <div key={card.title} style={{ display: "flex", width: "100%" }}>
                   <div className="why-card" style={{ height: "100%", padding: "32px 28px" }}>
                     <div style={{
                       width: 52, height: 52, borderRadius: 14,
@@ -2099,14 +2253,14 @@ export default function HomePage() {
                       ))}
                     </div>
                   </div>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Slider>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            SECTION 4 COMPLIANCE COMMAND CENTER (dashboard)
+            SECTION 4 LEGAL OPERATIONS WORKSPACE (dashboard)
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Platform preview" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
@@ -2119,10 +2273,10 @@ export default function HomePage() {
                   fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
                   fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15, marginBottom: 14,
                 }}>
-                  Your Compliance Operations Center
+                  Your Legal Operations Workspace
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 560, margin: "0 auto" }}>
-                  Track compliance health, contracts, registrations, documentation and legal workflows from one place.
+                  Track legal requests, contracts, compliance and documents from one place, so you always know what is pending, what is done and what is next. Illustrative preview with sample data.
                 </p>
               </div>
             </Reveal>
@@ -2137,6 +2291,7 @@ export default function HomePage() {
                 {[
                   { icon: <LayoutDashboard style={{ width: 13, height: 13 }} />, label: "Overview", active: true },
                   { icon: <ClipboardList style={{ width: 13, height: 13 }} />, label: "Compliance" },
+                  { icon: <Workflow style={{ width: 13, height: 13 }} />, label: "Requests" },
                   { icon: <FileSignature style={{ width: 13, height: 13 }} />, label: "Contracts" },
                   { icon: <Folder style={{ width: 13, height: 13 }} />, label: "Documents" },
                   { icon: <Users style={{ width: 13, height: 13 }} />, label: "Advisors" },
@@ -2183,7 +2338,7 @@ export default function HomePage() {
                     { label: "Active Contracts", value: "24", icon: <FileSignature style={{ width: 14, height: 14 }} /> },
                     { label: "Pending Tasks", value: "7", icon: <AlarmClock style={{ width: 14, height: 14 }} /> },
                     { label: "Upcoming Deadlines", value: "12", icon: <Clock style={{ width: 14, height: 14 }} /> },
-                    { label: "Recent Documents", value: "156", icon: <Folder style={{ width: 14, height: 14 }} /> },
+                    { label: "Open Legal Requests", value: "9", icon: <Workflow style={{ width: 14, height: 14 }} /> },
                   ].map(m => (
                     <div key={m.label} className="dash-metric-card">
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -2264,7 +2419,7 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
-            SECTION 5 SERVICES (4 categories)
+            SECTION 5 SERVICES (6 areas)
         ═══════════════════════════════════════════════════════════════════════ */}
         <section aria-label="Legal ops services" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
@@ -2277,74 +2432,54 @@ export default function HomePage() {
                   fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
                   fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
                 }}>
-                  One Desk. Full Coverage.
+                  Everything Legal. One Workspace.
                 </h2>
-                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 520, margin: "14px auto 0" }}>
-                  Four pillars that cover every legal and compliance need a growing business has.
+                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 560, margin: "14px auto 0" }}>
+                  Six service areas, delivered by qualified professionals and coordinated by NyayMitra. Government fees and specialist professional fees are billed separately.
                 </p>
               </div>
             </Reveal>
 
-            <div className="services-4-grid">
+            <Slider variant="focus" cols={3} autoplay={4800}>
               {[
                 {
                   icon: <FileSignature style={{ width: 22, height: 22 }} />,
                   num: "01",
-                  title: "Fractional Legal Desk",
-                  color: "var(--ink)",
-                  items: [
-                    "Contract review & drafting",
-                    "NDA management",
-                    "Vendor agreements",
-                    "Co-founder & shareholder agreements",
-                    "Employee offer letters & NDAs",
-                    "IP assignment documentation",
-                  ],
+                  title: "Contracts and Agreements",
+                  items: ["Vendor, client and service agreements", "NDAs and commercial agreements", "Founder and shareholder agreements", "Review, revision and negotiation support", "Contract repository and renewals"],
                 },
                 {
                   icon: <ClipboardList style={{ width: 22, height: 22 }} />,
                   num: "02",
-                  title: "Compliance Management",
-                  color: "var(--gold-dk)",
-                  items: [
-                    "Compliance calendar & tracking",
-                    "POSH implementation & training",
-                    "FSSAI, MSME, Shop & Establishment",
-                    "ROC filing coordination",
-                    "Labour compliance",
-                    "Multi-state regulatory coordination",
-                  ],
+                  title: "Compliance and Regulatory",
+                  items: ["Compliance calendar and deadline tracking", "MCA, GST and tax coordination via CAs and CSs", "POSH, FSSAI, MSME, Shop & Establishment", "Labour and employment compliance", "Documentation collection and follow ups"],
                 },
                 {
-                  icon: <Folder style={{ width: 22, height: 22 }} />,
+                  icon: <Building2 style={{ width: 22, height: 22 }} />,
                   num: "03",
-                  title: "Documentation & Governance",
-                  color: "var(--ink)",
-                  items: [
-                    "Investor due diligence preparation",
-                    "Data room readiness",
-                    "Corporate records management",
-                    "Board & shareholder resolutions",
-                    "Governance documentation",
-                    "Document version control",
-                  ],
+                  title: "Corporate and Business Legal",
+                  items: ["Company, LLP and partnership documentation", "Board resolutions and corporate records", "Restructuring coordination", "Investor due diligence preparation", "Data room readiness"],
                 },
                 {
                   icon: <Users style={{ width: 22, height: 22 }} />,
                   num: "04",
-                  title: "Expert Access",
-                  color: "var(--gold-dk)",
-                  items: [
-                    "Verified specialist lawyers",
-                    "CA coordination & follow-ups",
-                    "CS coordination for filings",
-                    "Domain-specific compliance experts",
-                    "On-call expert consultations",
-                    "Advisor workflow management",
-                  ],
+                  title: "Employment and HR Documents",
+                  items: ["Offer letters and employment agreements", "Consultant agreements", "HR and workplace policies", "Confidentiality agreements", "Employee exit documentation"],
+                },
+                {
+                  icon: <Shield style={{ width: 22, height: 22 }} />,
+                  num: "05",
+                  title: "IP and Brand Protection",
+                  items: ["Trademark search and filing coordination", "Copyright registration coordination", "IP assignment and licensing", "Software ownership documentation", "Brand protection support"],
+                },
+                {
+                  icon: <FileWarning style={{ width: 22, height: 22 }} />,
+                  num: "06",
+                  title: "Notices, Recovery and Disputes",
+                  items: ["Legal notice drafting and coordination", "Payment recovery notices", "Negotiation and settlement coordination", "Arbitration and mediation coordination", "Dispute documentation and case preparation"],
                 },
               ].map((svc, i) => (
-                <Reveal key={svc.title} delay={i * 60}>
+                <div key={svc.title} style={{ display: "flex", width: "100%" }}>
                   <div className="audience-card" style={{ padding: "32px 28px", gap: 18, height: "100%" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                       <div style={{
@@ -2356,7 +2491,7 @@ export default function HomePage() {
                         {svc.icon}
                       </div>
                       <div>
-                        <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold)", letterSpacing: "0.16em" }}>{svc.num}</span>
+                        <span style={{ fontFamily: "var(--mono)", fontSize: "8px", color: "var(--gold-dk)", letterSpacing: "0.16em" }}>{svc.num}</span>
                         <h3 style={{ fontFamily: "var(--serif)", fontSize: "20px", fontWeight: 600, color: "var(--ink)", lineHeight: 1.2 }}>{svc.title}</h3>
                       </div>
                     </div>
@@ -2369,8 +2504,48 @@ export default function HomePage() {
                       ))}
                     </ul>
                   </div>
-                </Reveal>
+                </div>
               ))}
+            </Slider>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
+            LITIGATION ACROSS INDIA
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section id="litigation" aria-label="Litigation support across India" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <div className="startup-grid">
+              <Reveal>
+                <div>
+                  <span className="eyebrow">Litigation support</span>
+                  <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 46px)", fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15, margin: "18px 0 16px" }}>
+                    Litigation and Legal Representation, Across India.
+                  </h2>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: "14.5px", color: "var(--ink-4)", lineHeight: 1.85, fontWeight: 300, marginBottom: 14 }}>
+                    Access qualified advocates for business and individual matters, wherever your case needs support. NyayMitra coordinates intake, documents, updates and follow ups, so you are never managing it alone.
+                  </p>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.75, fontWeight: 300, marginBottom: 26 }}>
+                    Delivered through a nationwide advocate network, subject to advocate availability, case assessment and acceptance. Every case is separately scoped and quoted. Advocates independently assess each matter, and no outcome is ever guaranteed.
+                  </p>
+                  <a href={waLitigation} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
+                    <Gavel style={{ width: 14, height: 14 }} /> Discuss Your Legal Matter
+                  </a>
+                </div>
+              </Reveal>
+              <Reveal delay={80}>
+                <div className="card" style={{ padding: "28px 26px" }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: "9px", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--gold-dk)", marginBottom: 16 }}>Matters we can coordinate</div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {["Civil", "Commercial disputes", "Cheque bounce", "Recovery", "Arbitration", "Company and shareholder", "Employment and labour", "IP disputes", "Consumer", "Property", "Criminal defence", "High Court", "District courts", "NCLT and tribunals", "Appeals"].map(c => (
+                      <span key={c} style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-3)", padding: "6px 12px", borderRadius: 100, border: "1px solid var(--ink-7)", background: "var(--ink-9)" }}>{c}</span>
+                    ))}
+                  </div>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "var(--ink-5)", marginTop: 18, lineHeight: 1.7, fontWeight: 300 }}>
+                    Litigation is not included in monthly plans. Advocate fees, court fees and case expenses are quoted and disclosed separately.
+                  </p>
+                </div>
+              </Reveal>
             </div>
           </div>
         </section>
@@ -2402,7 +2577,7 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <div className="when-grid">
+            <Slider variant="marquee" dark itemW={280} speed={55}>
               {[
                 { icon: <UserCheck style={{ width: 20, height: 20 }} />, title: "Hiring Employees", desc: "Offer letters, NDAs, IP assignment, and employment contracts coordinated and compliant." },
                 { icon: <Handshake style={{ width: 20, height: 20 }} />, title: "Signing Enterprise Clients", desc: "MSAs, SOWs, and vendor agreements reviewed and negotiated through your legal ops team." },
@@ -2410,10 +2585,10 @@ export default function HomePage() {
                 { icon: <Globe style={{ width: 20, height: 20 }} />, title: "Multi-City Expansion", desc: "State-wise registrations, Shop & Establishment licenses, and compliance managed centrally." },
                 { icon: <TrendingUp style={{ width: 20, height: 20 }} />, title: "Investor Due Diligence", desc: "Data room preparation, document audit trails, and compliance records ready for scrutiny." },
                 { icon: <ShieldCheck style={{ width: 20, height: 20 }} />, title: "Regulatory Compliance", desc: "POSH, FSSAI, MSME, and labour compliance tracked and executed before deadlines, not after." },
-                { icon: <FileSignature style={{ width: 20, height: 20 }} />, title: "Contract Management", desc: "A living repository of contracts version-controlled, renewal-tracked, and never lost." },
+                { icon: <FileWarning style={{ width: 20, height: 20 }} />, title: "Facing a Notice or Dispute", desc: "Notices, recovery and dispute resolution coordinated, with litigation support when it is needed." },
                 { icon: <Sparkles style={{ width: 20, height: 20 }} />, title: "Fundraising Readiness", desc: "Legal infrastructure that makes investors trust you and accelerates closing, not slows it." },
               ].map((card, i) => (
-                <Reveal key={card.title} delay={i * 45}>
+                <div key={card.title} style={{ display: "flex", width: "100%" }}>
                   <div className="pillar-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 40, height: 40, borderRadius: 10,
@@ -2432,15 +2607,15 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Slider>
 
             <Reveal delay={120}>
               <div style={{ textAlign: "center", marginTop: 48 }}>
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 9 }}>
                   <Sparkles style={{ width: 14, height: 14 }} />
-                  Book Compliance Assessment
+                  Book a Free Walkthrough
                 </a>
               </div>
             </Reveal>
@@ -2461,7 +2636,7 @@ export default function HomePage() {
                   fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)",
                   fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15,
                 }}>
-                  Your Outsourced Legal Ops Team
+                  Your Legal Operations Platform and Team
                 </h2>
               </div>
             </Reveal>
@@ -2469,10 +2644,10 @@ export default function HomePage() {
             <Reveal delay={60}>
               <div className="workflow-ladder">
                 {[
-                  { label: "Business Owner / Founder", icon: <Briefcase style={{ width: 16, height: 16 }} />, accent: false },
-                  { label: "NyayMitra Legal Ops Layer", icon: <Scale style={{ width: 16, height: 16 }} />, accent: true },
-                  { label: "CA · CS · Lawyer · Specialists", icon: <Users style={{ width: 16, height: 16 }} />, accent: false },
-                  { label: "Execution Completed", icon: <CheckCircle style={{ width: 16, height: 16 }} />, accent: false },
+                  { label: "Your Business", icon: <Briefcase style={{ width: 16, height: 16 }} />, accent: false },
+                  { label: "NyayMitra Legal Operations Platform", icon: <Scale style={{ width: 16, height: 16 }} />, accent: true },
+                  { label: "CAs · CSs · Lawyers · Advocates", icon: <Users style={{ width: 16, height: 16 }} />, accent: false },
+                  { label: "Work Done and Tracked", icon: <CheckCircle style={{ width: 16, height: 16 }} />, accent: false },
                 ].map((step, i, arr) => (
                   <div key={step.label} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                     <div className={`workflow-ladder-item${step.accent ? " is-accent" : ""}`}>
@@ -2499,16 +2674,56 @@ export default function HomePage() {
                 fontFamily: "var(--sans)", fontSize: "14.5px", color: "var(--ink-5)",
                 lineHeight: 1.9, maxWidth: 620, margin: "40px auto 0", textAlign: "center", fontWeight: 300,
               }}>
-                You already have advisors. NyayMitra is the coordination layer in between managing follow-ups, tracking deadlines, routing documents, and ensuring every task gets completed rather than just assigned.
+                You already have advisors. NyayMitra is the platform and team in between: tracking requests, routing documents, following up on deadlines and making sure every task reaches completion.
               </p>
             </Reveal>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
+            PLANS TEASER
+        ═══════════════════════════════════════════════════════════════════════ */}
+        <section aria-label="Plans" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+          <div className="max-w" style={{ padding: "0 28px" }}>
+            <Reveal>
+              <div style={{ textAlign: "center", marginBottom: 48 }}>
+                <div style={{ display: "flex", justifyContent: "center", marginBottom: 18 }}><span className="eyebrow">Plans</span></div>
+                <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(28px, 4vw, 50px)", fontWeight: 600, letterSpacing: "-0.025em", color: "var(--ink)", lineHeight: 1.15 }}>
+                  Pick the Capacity Your Business Needs
+                </h2>
+                <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300, maxWidth: 560, margin: "14px auto 0" }}>
+                  Five monthly plans with defined limits for drafting, review and consultation. Nothing is unlimited, and every limit is shown.
+                </p>
+              </div>
+            </Reveal>
+            <Slider variant="snap" cols={3}>
+              {[
+                { stage: "Early stage", name: "Legal Essentials", line: "Paperwork, deadlines and advisor coordination in one place.", popular: false },
+                { stage: "Growing", name: "Startup Legal Operations", line: "Contract register, compliance calendar and a monthly review.", popular: true },
+                { stage: "Scaling", name: "Business Legal Desk", line: "Contracts from intake to renewal, with escalation and reporting.", popular: false },
+                { stage: "Multi department", name: "Advanced Legal Operations", line: "Work coordinated across departments with a risk register.", popular: false },
+                { stage: "High growth", name: "Fractional Legal Operations Office", line: "A managed legal operations function with dedicated coordination.", popular: false },
+              ].map((p, i) => (
+                <div key={p.name} style={{ display: "flex", width: "100%" }}>
+                  <Link href="/startup-legal#pricing" className="action-card" style={{ height: "100%", borderColor: p.popular ? "var(--gold)" : undefined }}>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold-dk)" }}>{p.popular ? "Most popular · " : ""}{p.stage}</span>
+                    <h3 style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "var(--ink)", lineHeight: 1.25 }}>{p.name}</h3>
+                    <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "var(--ink-5)", lineHeight: 1.7, fontWeight: 300 }}>{p.line}</p>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", color: "var(--gold-dk)", fontFamily: "var(--sans)", fontSize: "12px", fontWeight: 600 }}>See what is included <ArrowRight style={{ width: 12, height: 12 }} /></div>
+                  </Link>
+                </div>
+              ))}
+            </Slider>
+            <p style={{ textAlign: "center", fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", marginTop: 26, fontWeight: 300 }}>
+              Litigation is separately quoted. Government fees, stamp duty and external professional fees are additional.
+            </p>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════════════════════
             SECTION 8 WHY BUSINESSES CHOOSE NYAYMITRA
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Why businesses choose NyayMitra" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+        <section aria-label="Why businesses choose NyayMitra" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -2527,7 +2742,7 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <div className="why-grid">
+            <Slider variant="paged" cols={3} autoplay={6000}>
               {[
                 {
                   icon: <Network style={{ width: 20, height: 20 }} />,
@@ -2560,11 +2775,11 @@ export default function HomePage() {
                   desc: "Transform ad-hoc legal handling into a system. Consistent, trackable, and scalable as you grow.",
                 },
               ].map((card, i) => (
-                <Reveal key={card.title} delay={i * 60}>
+                <div key={card.title} style={{ display: "flex", width: "100%" }}>
                   <div className="why-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 44, height: 44, borderRadius: 11,
-                      background: "var(--white)", border: "1px solid var(--ink-7)",
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       color: "var(--gold-dk)",
                     }}>
@@ -2579,16 +2794,16 @@ export default function HomePage() {
                       </p>
                     </div>
                   </div>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Slider>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
             SECTION 9 WHO WE SERVE (8 cards)
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Who we serve" className="section-pad" style={{ background: "var(--white)" }}>
+        <section aria-label="Who we serve" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -2607,7 +2822,7 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <div className="served-grid">
+            <Slider variant="marquee" reverse itemW={210} speed={38}>
               {[
                 { icon: <Store style={{ width: 20, height: 20 }} />, label: "MSMEs" },
                 { icon: <Factory style={{ width: 20, height: 20 }} />, label: "Manufacturing" },
@@ -2618,7 +2833,7 @@ export default function HomePage() {
                 { icon: <Briefcase style={{ width: 20, height: 20 }} />, label: "Professional Firms" },
                 { icon: <Lightbulb style={{ width: 20, height: 20 }} />, label: "Startups" },
               ].map((item, i) => (
-                <Reveal key={item.label} delay={i * 40}>
+                <div key={item.label} style={{ display: "flex", width: "100%" }}>
                   <div className="audience-card" style={{ padding: "26px 20px", alignItems: "center", textAlign: "center", gap: 14 }}>
                     <div style={{
                       width: 46, height: 46, borderRadius: 12,
@@ -2632,16 +2847,16 @@ export default function HomePage() {
                       {item.label}
                     </span>
                   </div>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Slider>
           </div>
         </section>
 
         {/* ═══════════════════════════════════════════════════════════════════════
             SECTION 10 EXPLORE SOLUTIONS (navigation hub)
         ═══════════════════════════════════════════════════════════════════════ */}
-        <section aria-label="Explore solutions" className="section-pad" style={{ background: "var(--ink-9)", borderTop: "1px solid var(--ink-7)", borderBottom: "1px solid var(--ink-7)" }}>
+        <section aria-label="Explore solutions" className="section-pad" style={{ background: "var(--white)" }}>
           <div className="max-w" style={{ padding: "0 28px" }}>
             <Reveal>
               <div style={{ textAlign: "center", marginBottom: 48 }}>
@@ -2657,18 +2872,18 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <div className="solutions-grid">
+            <Slider variant="snap" cols={4}>
               {[
                 { icon: <ClipboardList style={{ width: 22, height: 22 }} />, title: "Compliance Services", desc: "Registrations, renewals, and filings coordinated end to end across India.", href: "/compliance" },
-                { icon: <Workflow style={{ width: 22, height: 22 }} />, title: "Startup Legal Ops", desc: "Founder documents, contracts, and compliance managed as one function.", href: "/startup-legal" },
-                { icon: <Scale style={{ width: 22, height: 22 }} />, title: "Find Lawyers", desc: "Verified advocates across India for personal and business legal matters.", href: "/lawyers" },
+                { icon: <LayoutDashboard style={{ width: 22, height: 22 }} />, title: "Legal Ops Plans", desc: "Monthly plans for contracts, compliance and legal requests in one workspace.", href: "/startup-legal" },
+                { icon: <Gavel style={{ width: 22, height: 22 }} />, title: "Litigation Support", desc: "Access qualified advocates across India, scoped and quoted per matter.", href: waLitigation },
                 { icon: <Bot style={{ width: 22, height: 22 }} />, title: "Legal AI", desc: "Plain-language answers to legal and compliance questions, instantly.", href: "/legal-ai" },
               ].map((card, i) => (
-                <Reveal key={card.title} delay={i * 60}>
+                <div key={card.title} style={{ display: "flex", width: "100%" }}>
                   <Link href={card.href} className="action-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 48, height: 48, borderRadius: 12,
-                      background: "var(--white)", border: "1px solid var(--ink-7)",
+                      background: "var(--ink-9)", border: "1px solid var(--ink-7)",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       color: "var(--gold-dk)",
                     }}>
@@ -2686,9 +2901,9 @@ export default function HomePage() {
                       Explore <ArrowRight style={{ width: 12, height: 12 }} />
                     </div>
                   </Link>
-                </Reveal>
+                </div>
               ))}
-            </div>
+            </Slider>
           </div>
         </section>
 
@@ -2809,7 +3024,7 @@ export default function HomePage() {
                   <div style={{ fontFamily: "var(--serif)", fontSize: "clamp(20px, 2.6vw, 28px)", fontWeight: 600, color: "var(--ink)", lineHeight: 1 }}>
                     <span className="gold-text">Fixed</span>
                   </div>
-                  <p style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5 }}>Price. No Hourly Billing</p>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "9.5px", color: "var(--ink-5)", letterSpacing: "0.1em", textTransform: "uppercase", marginTop: 10, lineHeight: 1.5 }}>Monthly Plans. No Hourly Billing</p>
                 </div>
               </div>
             </Reveal>
@@ -2830,7 +3045,7 @@ export default function HomePage() {
                   Questions founders ask us.
                 </h2>
                 <p style={{ fontFamily: "var(--sans)", fontSize: "14px", color: "var(--ink-5)", fontWeight: 300 }}>
-                  Everything you need to know about working with a Fractional Legal & Compliance Desk.
+                  Everything you need to know about working with NyayMitra.
                 </p>
               </div>
             </Reveal>
@@ -2854,7 +3069,7 @@ export default function HomePage() {
               <div style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "6px 16px", border: "1px solid var(--gold)", borderRadius: 100, marginBottom: 32, background: "var(--gold-pale)" }}>
                 <Sparkles style={{ width: 11, height: 11, color: "var(--gold-dk)" }} />
                 <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", color: "var(--gold-dk)", letterSpacing: "0.2em", textTransform: "uppercase", fontWeight: 500 }}>
-                  Legal Operations Partner · India
+                  Legal Operations Platform · India
                 </span>
               </div>
               <h2 style={{ fontFamily: "var(--serif)", fontSize: "clamp(32px, 5.5vw, 58px)", fontWeight: 600, color: "var(--ink)", letterSpacing: "-0.028em", lineHeight: 1.2, marginBottom: 18 }}>
@@ -2864,20 +3079,24 @@ export default function HomePage() {
                 </span>
               </h2>
               <p style={{ fontFamily: "var(--sans)", fontSize: "15px", color: "var(--ink-4)", lineHeight: 1.9, maxWidth: 540, margin: "0 auto 40px", fontWeight: 300 }}>
-                NyayMitra becomes your legal operations team coordinating advisors, tracking compliance, managing contracts, and ensuring every task is completed while you run the business.
+                NyayMitra gives your business a legal operations platform and a team behind it, coordinating advisors, tracking compliance, managing contracts and supporting disputes, while you run the business.
               </p>
               <div className="cta-row">
                 <a href={waAssessment} target="_blank" rel="noopener noreferrer" className="btn btn-gold" style={{ gap: 10 }}>
                   <Sparkles style={{ width: 14, height: 14 }} />
-                  Book Legal Ops Assessment
+                  Book a Free Walkthrough
                 </a>
                 <a href={waLegalOps} target="_blank" rel="noopener noreferrer" className="btn btn-ink" style={{ gap: 9 }}>
                   <Headset style={{ width: 14, height: 14 }} />
                   Talk to Legal Ops Team
                 </a>
+                <Link href="/startup-legal#pricing" className="btn btn-ghost" style={{ textDecoration: "none" }}>
+                  <LayoutDashboard style={{ width: 14, height: 14 }} />
+                  Explore Plans
+                </Link>
               </div>
               <p style={{ fontFamily: "var(--sans)", fontSize: "11.5px", color: "var(--ink-5)", marginTop: 20, fontWeight: 300 }}>
-                Free 15-minute discovery call. We'll identify the gaps and tell you exactly how we can help.
+                Free 15 minute walkthrough. We will map your legal needs and recommend the right plan.
               </p>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, marginTop: 28, flexWrap: "wrap" }}>
                 {[
@@ -2912,9 +3131,8 @@ export default function HomePage() {
                     <div style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "white", lineHeight: 1, letterSpacing: "-0.02em" }}>NyayMitra</div>
                   </div>
                 </Link>
-                {/* UPDATED FOOTER TAGLINE */}
                 <p style={{ fontFamily: "var(--sans)", fontSize: "12.5px", color: "rgba(255,255,255,0.35)", lineHeight: 1.75, maxWidth: 260, marginBottom: 22, fontWeight: 300 }}>
-                  NyayMitra is a Fractional Legal & Compliance Desk helping startups, MSMEs and growing businesses manage contracts, compliance, documentation and legal operations through one coordinated support model.
+                  NyayMitra is a legal operations platform helping startups, MSMEs and growing businesses manage contracts, compliance, documentation and disputes through one workspace and a nationwide professional network.
                 </p>
                 <address style={{ fontStyle: "normal" }}>
                   {[
@@ -2944,7 +3162,7 @@ export default function HomePage() {
                 <ul style={{ listStyle: "none", padding: 0 }}>
                   {[
                     { href: "/about", label: "About NyayMitra" },
-                    { href: "/startup-legal", label: "Startup Legal Ops" },
+                    { href: "/startup-legal", label: "Legal Ops Plans" },
                     { href: "/compliance", label: "Compliance Services" },
                     { href: "/lawyers", label: "Find Lawyers" },
                     { href: "/auth/signup", label: "Get Started" },
@@ -3000,7 +3218,7 @@ export default function HomePage() {
                     onMouseEnter={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = "translateY(-1px)"; a.style.boxShadow = "0 8px 24px rgba(201,168,76,0.3)" }}
                     onMouseLeave={e => { const a = e.currentTarget as HTMLAnchorElement; a.style.transform = ""; a.style.boxShadow = "" }}>
                     <WaSvg size={13} />
-                    Book Compliance Assessment
+                    Book a Free Walkthrough
                   </a>
                 </div>
               </div>
@@ -3012,7 +3230,7 @@ export default function HomePage() {
               </p>
               <p className="footer-disclaimer" style={{ fontFamily: "var(--sans)", fontSize: "10.5px", color: "rgba(255,255,255,0.28)", lineHeight: 1.8, fontWeight: 300 }}>
                 <span style={{ color: "rgba(192,57,43,0.9)", fontWeight: 600 }}>Disclaimer: </span>
-                NyayMitra is a legal operations &amp; compliance platform. Legal representation and advisory services are provided by licensed professionals registered with the Bar Council of India.
+                NyayMitra is a technology platform and not a law firm. Legal advice, filings and representation are delivered by independent qualified professionals, including advocates, CAs and CSs, in accordance with applicable laws and professional rules. No legal outcome is guaranteed.
               </p>
             </div>
           </div>
