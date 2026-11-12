@@ -1014,7 +1014,27 @@ const GlobalStyles = () => (
     @media (max-width: 920px) { .when-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 480px) { .when-grid { grid-template-columns: 1fr; } }
 
+    /* ── Platform preview: responsive overrides ── */
+    .dash-shell { grid-template-columns: 200px minmax(0, 1fr); max-width: 100%; }
+    .dash-main { padding: 20px 22px 26px; display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+    .dash-metrics-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .dash-panels-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .dash-row > span:first-child { min-width: 0; overflow-wrap: anywhere; }
+    @media (min-width: 1180px) { .dash-metrics-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+    @media (max-width: 980px) { .dash-shell { grid-template-columns: minmax(0, 1fr); } .dash-sidebar { display: none; } }
+    @media (max-width: 760px) {
+      .dash-panels-grid { grid-template-columns: minmax(0, 1fr); }
+      .dash-metrics-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      .dash-main { padding: 14px 12px 18px; gap: 14px; }
+      .dash-panel { padding: 14px; }
+      .dash-metric-card { padding: 12px 14px; }
+      .dash-row { flex-wrap: wrap; gap: 6px; }
+    }
+    @media (max-width: 340px) { .dash-metrics-grid { grid-template-columns: minmax(0, 1fr); } }
     @keyframes slMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .sl-fill > * { flex: 1 1 0; min-width: 0; }
     .sl-scroll::-webkit-scrollbar { display: none; }
     .sl-arrow:not(:disabled):hover { border-color: var(--gold) !important; color: var(--gold-dk) !important; }
     @media (prefers-reduced-motion: reduce) { .sl-track { animation: none !important; } }
@@ -1161,13 +1181,14 @@ type SliderProps = {
   speed?: number
   autoplay?: number
   itemW?: number
+  gap?: number
   style?: React.CSSProperties
 }
 
-function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = false, speed = 45, autoplay = 0, itemW = 270, style }: SliderProps) {
+function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = false, speed = 45, autoplay = 0, itemW = 270, gap = 16, style }: SliderProps) {
   const items = Children.toArray(children)
   const n = items.length
-  const GAP = 16
+  const GAP = gap
   const wrap = useRef<HTMLDivElement>(null)
   const scroller = useRef<HTMLDivElement>(null)
   const touchX = useRef<number | null>(null)
@@ -1241,7 +1262,7 @@ function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = 
 
   if (variant === "marquee") {
     const row = (k: string) => items.map((it, i) => (
-      <div key={k + i} style={{ flex: `0 0 ${itemW}px`, marginRight: GAP, display: "flex" }}>{it}</div>
+      <div key={k + i} className="sl-fill" style={{ flex: `0 0 ${itemW}px`, marginRight: GAP, display: "flex" }}>{it}</div>
     ))
     return (
       <div ref={wrap} onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}
@@ -1260,7 +1281,7 @@ function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = 
           onScroll={e => setIdx(Math.min(maxIdx, Math.round(e.currentTarget.scrollLeft / (cardW + GAP))))}
           style={{ display: "flex", gap: GAP, overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none", padding: "4px 2px 8px" }}>
           {items.map((it, i) => (
-            <div key={i} style={{ flex: `0 0 ${cardW}px`, scrollSnapAlign: "start", display: "flex" }}>{it}</div>
+            <div key={i} className="sl-fill" style={{ flex: `0 0 ${cardW}px`, scrollSnapAlign: "start", display: "flex" }}>{it}</div>
           ))}
         </div>
         {controls}
@@ -1274,7 +1295,7 @@ function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = 
         <div style={{ overflow: "hidden", padding: "4px 2px 8px" }}>
           <div style={{ display: "flex", gap: GAP, transform: `translateX(${-idx * (cardW + GAP)}px)`, transition: "transform 0.85s cubic-bezier(0.16,1,0.3,1)" }}>
             {items.map((it, i) => (
-              <div key={i} style={{ flex: `0 0 ${cardW}px`, display: "flex" }}>{it}</div>
+              <div key={i} className="sl-fill" style={{ flex: `0 0 ${cardW}px`, display: "flex" }}>{it}</div>
             ))}
           </div>
         </div>
@@ -1289,7 +1310,7 @@ function Slider({ children, variant = "snap", cols = 3, dark = false, reverse = 
       <div style={{ overflow: "hidden", padding: "18px 0 22px" }}>
         <div style={{ display: "flex", gap: GAP, transform: `translateX(${w / 2 - (idx * (focusW + GAP) + focusW / 2)}px)`, transition: "transform 0.9s cubic-bezier(0.16,1,0.3,1)" }}>
           {items.map((it, i) => (
-            <div key={i}
+            <div key={i} className="sl-fill"
               onClickCapture={e => { if (i !== idx) { e.preventDefault(); e.stopPropagation(); setIdx(i) } }}
               style={{
                 flex: `0 0 ${focusW}px`, display: "flex",
@@ -2222,7 +2243,7 @@ export default function HomePage() {
                   tags: ["Task Tracking", "Accountable Closure", "Progress Visibility"],
                 },
               ].map((card, i) => (
-                <div key={card.title} style={{ display: "flex", width: "100%" }}>
+                <div key={card.title} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <div className="why-card" style={{ height: "100%", padding: "32px 28px" }}>
                     <div style={{
                       width: 52, height: 52, borderRadius: 14,
@@ -2304,7 +2325,7 @@ export default function HomePage() {
               </div>
 
               {/* Main panel */}
-              <div style={{ padding: "20px 22px 26px", display: "flex", flexDirection: "column", gap: 18, minWidth: 0 }}>
+              <div className="dash-main">
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
                   <div style={{
                     display: "flex", alignItems: "center", gap: 9,
@@ -2479,7 +2500,7 @@ export default function HomePage() {
                   items: ["Legal notice drafting and coordination", "Payment recovery notices", "Negotiation and settlement coordination", "Arbitration and mediation coordination", "Dispute documentation and case preparation"],
                 },
               ].map((svc, i) => (
-                <div key={svc.title} style={{ display: "flex", width: "100%" }}>
+                <div key={svc.title} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <div className="audience-card" style={{ padding: "32px 28px", gap: 18, height: "100%" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                       <div style={{
@@ -2577,7 +2598,7 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <Slider variant="marquee" dark itemW={280} speed={55}>
+            <Slider variant="marquee" dark itemW={280} speed={20}>
               {[
                 { icon: <UserCheck style={{ width: 20, height: 20 }} />, title: "Hiring Employees", desc: "Offer letters, NDAs, IP assignment, and employment contracts coordinated and compliant." },
                 { icon: <Handshake style={{ width: 20, height: 20 }} />, title: "Signing Enterprise Clients", desc: "MSAs, SOWs, and vendor agreements reviewed and negotiated through your legal ops team." },
@@ -2588,7 +2609,7 @@ export default function HomePage() {
                 { icon: <FileWarning style={{ width: 20, height: 20 }} />, title: "Facing a Notice or Dispute", desc: "Notices, recovery and dispute resolution coordinated, with litigation support when it is needed." },
                 { icon: <Sparkles style={{ width: 20, height: 20 }} />, title: "Fundraising Readiness", desc: "Legal infrastructure that makes investors trust you and accelerates closing, not slows it." },
               ].map((card, i) => (
-                <div key={card.title} style={{ display: "flex", width: "100%" }}>
+                <div key={card.title} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <div className="pillar-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 40, height: 40, borderRadius: 10,
@@ -2704,7 +2725,7 @@ export default function HomePage() {
                 { stage: "Multi department", name: "Advanced Legal Operations", line: "Work coordinated across departments with a risk register.", popular: false },
                 { stage: "High growth", name: "Fractional Legal Operations Office", line: "A managed legal operations function with dedicated coordination.", popular: false },
               ].map((p, i) => (
-                <div key={p.name} style={{ display: "flex", width: "100%" }}>
+                <div key={p.name} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <Link href="/startup-legal#pricing" className="action-card" style={{ height: "100%", borderColor: p.popular ? "var(--gold)" : undefined }}>
                     <span style={{ fontFamily: "var(--mono)", fontSize: "8.5px", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold-dk)" }}>{p.popular ? "Most popular · " : ""}{p.stage}</span>
                     <h3 style={{ fontFamily: "var(--serif)", fontSize: "18px", fontWeight: 600, color: "var(--ink)", lineHeight: 1.25 }}>{p.name}</h3>
@@ -2775,7 +2796,7 @@ export default function HomePage() {
                   desc: "Transform ad-hoc legal handling into a system. Consistent, trackable, and scalable as you grow.",
                 },
               ].map((card, i) => (
-                <div key={card.title} style={{ display: "flex", width: "100%" }}>
+                <div key={card.title} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <div className="why-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 44, height: 44, borderRadius: 11,
@@ -2822,7 +2843,7 @@ export default function HomePage() {
               </div>
             </Reveal>
 
-            <Slider variant="marquee" reverse itemW={210} speed={38}>
+            <Slider variant="marquee" reverse itemW={170} gap={10} speed={14}>
               {[
                 { icon: <Store style={{ width: 20, height: 20 }} />, label: "MSMEs" },
                 { icon: <Factory style={{ width: 20, height: 20 }} />, label: "Manufacturing" },
@@ -2833,8 +2854,8 @@ export default function HomePage() {
                 { icon: <Briefcase style={{ width: 20, height: 20 }} />, label: "Professional Firms" },
                 { icon: <Lightbulb style={{ width: 20, height: 20 }} />, label: "Startups" },
               ].map((item, i) => (
-                <div key={item.label} style={{ display: "flex", width: "100%" }}>
-                  <div className="audience-card" style={{ padding: "26px 20px", alignItems: "center", textAlign: "center", gap: 14 }}>
+                <div key={item.label} className="sl-fill" style={{ display: "flex", width: "100%" }}>
+                  <div className="audience-card" style={{ padding: "22px 14px", alignItems: "center", textAlign: "center", gap: 12 }}>
                     <div style={{
                       width: 46, height: 46, borderRadius: 12,
                       background: "var(--ink-9)", border: "1px solid var(--ink-7)",
@@ -2879,7 +2900,7 @@ export default function HomePage() {
                 { icon: <Gavel style={{ width: 22, height: 22 }} />, title: "Litigation Support", desc: "Access qualified advocates across India, scoped and quoted per matter.", href: waLitigation },
                 { icon: <Bot style={{ width: 22, height: 22 }} />, title: "Legal AI", desc: "Plain-language answers to legal and compliance questions, instantly.", href: "/legal-ai" },
               ].map((card, i) => (
-                <div key={card.title} style={{ display: "flex", width: "100%" }}>
+                <div key={card.title} className="sl-fill" style={{ display: "flex", width: "100%" }}>
                   <Link href={card.href} className="action-card" style={{ height: "100%" }}>
                     <div style={{
                       width: 48, height: 48, borderRadius: 12,
